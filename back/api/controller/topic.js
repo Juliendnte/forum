@@ -32,7 +32,7 @@ exports.getTopics = async (req, res) =>{
         }
     }catch (err){
         res.status(500).json({
-            message:err.sqlMessage,
+            message: err ,
             status:500
         });
     }
@@ -50,16 +50,93 @@ exports.getTopic = async (req , res) =>{
     })
 };
 
-exports.postTopic = (req,res)=>{
+exports.postTopic = async (req,res)=>{
+    const {Title, Description, Id_Status, Id_User} = req.body;
+    
+    if (!Title || !Description || !Id_Status || !Id_User){
+        return res.status(400).json({
+            message: "Tous les champs (Title, Description, Id_Status, Id_User) sont requis.",
+            status: 400
+        })
+    }
+    
+    try{
+        const NewTopic = await topic.createTopic({
+            Title,
+            Description,
+            Id_Status,
+            Id_User
+        });
 
+        return  res.status(201).json({
+            message: `Topic successfully created`,
+            status: 201,
+            NewTopic
+        });
+    }catch (err){
+        res.status(500).json({
+            message: err,
+            status: 500
+        });
+    }
 }
 
-exports.putTopic = (req,res)=>{
+exports.putTopic = async (req,res)=>{
+    const id = req.params.id;
+    const {Title, Description, Id_Status, Id_User} = req.body;
 
+    if (!Title || !Description || !Id_Status || !Id_User){
+        return res.status(400).json({
+            message: "Tous les champs (Title, Description, Id_Status, Id_User) sont requis.",
+            status: 400
+        })
+    }
+
+    try {
+        await topic.updatePutTopic(id, {
+            Title,
+            Description,
+            Id_Status,
+            Id_User
+        });
+
+        return res.status(200).json({
+            messge: `Topic with id ${id} successfully updated`,
+            status: 200
+        })
+    }catch (err) {
+        return res.status(500).json({
+            message: err,
+            status: 500
+        })
+    }
 }
 
-exports.patchTopic = (req,res)=>{
+exports.patchTopic = async (req,res)=>{
+    const id = req.params.id
+    const body = req.body;
 
+    //Check si une clé du body appartient a cette liste
+    if (!body || !Object.keys(body).some(key => ["Title", "Description", "Id_Status", "Id_User"].includes(key))) {
+        return res.status(400).json({
+            message: "Au moins un des champs (Title, Description, Id_Status, Id_User) doit être modifié",
+            status: 400
+        });
+    }
+
+    try{
+        await topic.updatePatchTopic(id, body);
+
+        return res.status(200).json({
+            message: `Topic with id ${id} successfully updated`,
+            status: 200,
+        });
+    }catch (err){
+        res.status(500).json({
+            message: err,
+            status:500
+        });
+    }
 }
 
 exports.deleteTopic = async (req,res)=>{
@@ -68,12 +145,12 @@ exports.deleteTopic = async (req,res)=>{
         await topic.deleteTopic(id);
 
         return res.status(200).json({
-            message: `User with id ${id} successfully delete`,
+            message: `Topic with id ${id} successfully delete`,
             status: 200
         })
     }catch (err){
         res.status(500).json({
-            message:err.sqlMessage,
+            message: err ,
             status:500
         });
     }

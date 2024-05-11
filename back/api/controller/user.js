@@ -32,7 +32,7 @@ exports.getUsers = async (req, res) =>{
         }
     }catch (err){
         res.status(500).json({
-            message:err.sqlMessage,
+            message: err,
             status:500
         });
     }
@@ -50,22 +50,95 @@ exports.getUser = async (req , res) =>{
     })
 };
 
-exports.postUser = (req,res)=>{
-    try{
+exports.postUser = async (req,res)=>{
+    const {Name, Biography, Email, Password, Id_roles} = req.body;
 
+    if (!Name || !Biography || !Email || !Password || !Id_roles){
+        return res.status(400).json({
+            message: "Tous les champs (Name, Biography, Email, Password, Id_roles) sont requis.",
+            status: 400
+        })
+    }
+
+    try {
+        const NewUser = await user.createUser({
+            Name,
+            Biography,
+            Email,
+            Password,
+            Id_roles
+        });
+        
+        return res.status(201).json({
+            message: 'User successfully created',
+            status: 201,
+            NewUser
+        })
     }catch (err){
         res.status(500).json({
-            message:err
+            message: err,
+            status:500
         })
     }
 }
 
-exports.putUser = (req,res)=>{
+exports.putUser = async (req,res)=>{
+    const id = req.params.id;
+    const {Name, Biography, Email, Password, Id_roles} = req.body;
 
+    if (!Name || !Biography || !Email || !Password || !Id_roles){
+        return res.status(400).json({
+            message: "Tous les champs (Name, Biography, Email, Password, Id_roles) sont requis.",
+            status: 400
+        })
+    }
+
+    try {
+        await user.updatePutUser({
+            Name,
+            Biography,
+            Email,
+            Password,
+            Id_roles
+        });
+
+        return res.status(200).json({
+            message: `User with id ${id} successfully updated`,
+            status: 200,
+        })
+    }catch (err){
+        res.status(500).json({
+            message: err,
+            status:500
+        })
+    }
 }
 
-exports.patchUser = (req,res)=>{
+exports.patchUser = async (req,res)=>{
+    const id = req.params.id
+    const body = req.body;
 
+    //Check si une clé du body appartient a cette liste
+    if (!body || !Object.keys(body).some(key => ["Name", "Biography", "Email", "Password", "Id_roles"].includes(key))) {
+        return res.status(400).json({
+            message: "Au moins un des champs (Name, Biography, Email, Password, Id_roles) doit être modifié",
+            status: 400
+        });
+    }
+
+    try{
+        await user.updatePatchUser(id, body);
+
+        return res.status(200).json({
+            message: `User with id ${id} successfully updated`,
+            status: 200,
+        });
+    }catch (err){
+        res.status(500).json({
+            message: err,
+            status:500
+        });
+    }
 }
 
 
