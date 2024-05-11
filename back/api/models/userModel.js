@@ -46,50 +46,54 @@ class UserModel{
 
     static createUser(newUser){
         return new Promise((resolve, reject) => {
-            const sql = `INSERT INTO users (Name, Biography, Email, Password, Id_roles) VALUES ?`;
+            const sql = `INSERT INTO users (Name, Biography, Email, Password, Id_roles) VALUES (?, ?, ?, ?, ?)`;
             connection.query(sql, [newUser.Name, newUser.Biography, newUser.Email, newUser.Password, newUser.Id_roles], (err, results)=> {
                 err ? reject(err) : resolve(results[0]);
             });
         });
     }
 
-    static updateUser(id, updateUser){
+    static updatePutUser(id, updateUser){
         return new Promise((resolve, reject) => {
+            const sql = `UPDATE article SET Name=?, Biography=?, Email=?, Password=?, Id_roles=? WHERE id=?`;
+            const values = [updateUser.Name, updateUser.Biography, updateUser.Email, updateUser.Password, updateUser.Id_roles, id];
 
-        })
+            connection.query(sql, values, (err, results) => err ? reject(err) : resolve(results[0]));
+        });
+    }
+
+    static updatePatchUser(id, updateUser){
+        return new Promise((resolve, reject) => {
+            let sql = `UPDATE users SET `;
+            const values = [];
+
+            /*
+            entries est l'objet en liste de liste
+            [
+                ["Name","Julien],
+                ["Project","Boutique"]
+            ]
+             */
+            Object.entries(updateUser).forEach(([key, value], index, entries) => {
+                sql += `${key}=?`;
+                values.push(value);
+                if (index < entries.length - 1) {
+                    sql += `, `;
+                }
+            });
+            sql += ` WHERE id=?`;
+            values.push(id);
+
+            connection.query(sql, values, (err, results) => err ? reject(err) : resolve(results[0]));
+        });
     }
 
     static deleteUser(id){
         return new Promise((resolve, reject) => {
             const sql = `DELETE FROM users WHERE Id=?`
-            connection.query(sql,[id], (err)=> {
-                if (err) reject(err)
-            })
+            connection.query(sql,[id], (err,results)=> err ? reject(err) : resolve(results[0]))
         })
     }
 }
 
 module.exports = UserModel;
-/*
-
-
-exports.updateUser= (req,res)=>{
-    const Id = req.params.id;
-    const updateUser = req.body;
-    const userIndex = getAllUser(res).findIndex(user => user.id === Id);
-    if (userIndex !== -1) {
-        const sql = `UPDATE users SET ${updateUser} WHERE Id=${Id} `;
-        connection.query(sql, (err, results)=> {
-            if(!err) {
-                return res(null, {message: "User updated successfully", status: 200, results});
-            } else {
-                console.error(`Erreur modif user ${Id} : ${error}`);
-                return res(true, {error: err, status: 500});
-            }
-        });
-    } else {
-        return res(true, {error:`User ${Id} not found`,status: 404});
-    }
-};
-
-*/

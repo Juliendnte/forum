@@ -48,25 +48,54 @@ class topicModel{
 
     static createTopic(newTopic){
         return new Promise((resolve, reject) => {
-            const sql = `INSERT INTO topic (Title, Description, Id_Status, Id_User) VALUES ?`;
+            const sql = `INSERT INTO topic (Title, Description, Id_Status, Id_User) VALUES (?, ?, ?, ?)`;
             connection.query(sql, [newTopic.Title, newTopic.Description, newTopic.Id_Status, newTopic.Id_User], (err, results)=> {
                 err ? reject(err) : resolve(results[0]);
             });
         });
     }
 
-    static updateTopic(id, updateTopic){
+    static updatePutTopic(id, updateTopic){
         return new Promise((resolve, reject) => {
+            const sql = `UPDATE topic SET Title=?, Description=?, Id_Status=?, Id_User=? WHERE id=?`;
+            const values = [updateTopic.Title, updateTopic.Description, updateTopic.Id_Status, updateTopic.Id_User, id];
 
-        })
+            connection.query(sql, values, (err, results) => err ? reject(err) : resolve(results[0]));
+        });
     }
+
+    static updatePatchTopic(id, updateTopic){
+        return new Promise((resolve, reject) => {
+            let sql = `UPDATE topic SET `;
+            const values = [];
+
+            /*
+            entries est l'objet en liste de liste
+            [
+                ["Name","Julien],
+                ["Project","Boutique"]
+            ]
+             */
+            Object.entries(updateTopic).forEach(([key, value], index, entries) => {
+                sql += `${key}=?`;
+                values.push(value);
+                if (index < entries.length - 1) {
+                    sql += `, `;
+                }
+            });
+            sql += ` WHERE id=?`;
+            values.push(id);
+
+            connection.query(sql, values, (err, results) => err ? reject(err) : resolve(results[0]));
+        });
+    }
+
 
     static deleteTopic(id){
         return new Promise((resolve, reject) => {
             const sql = `DELETE FROM topic WHERE Id=?`
-            connection.query(sql,[id], (err)=> {
-                if (err) reject(err)
-            })
+            connection.query(sql,[id], (err,results)=> err ? reject(err) : resolve(results[0]))
+
         })
     }
 }
