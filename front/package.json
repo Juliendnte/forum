@@ -1,0 +1,19 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "description": "front forum",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon main.js"
+  },
+  "author": "julien dante",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "ejs": "^3.1.5",
+    "nodemon": "^3.1.0"
+  }
+}
