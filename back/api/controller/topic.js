@@ -56,6 +56,9 @@ exports.putTopic = (req,res)=>{
 
 }
 
+exports.patchTopic = (req,res)=>{
+
+}
 
 exports.deleteTopic = async (req,res)=>{
     const id = req.params.id;
