@@ -1,29 +1,43 @@
 const user = require("../models/userModel");
 require('dotenv').config();
+const baseUrl = process.env.BASE_URL;
 
 exports.getUsers = async (req, res) =>{
     try {
-        const users = await user.getAllUser();
-        console.log(users)
+        const users = await user.getAllUser(req.query);
+
         if (!users){
             return res.status(404).json({
-                message: `Users not found`
+                message: `Users not found`,
+                status:404
             });
-        }else{
+        }else {
+            const offset = parseInt(req.query.offset) || 0;
+            const limit = parseInt(req.query.limit) || 6;
+            const href = baseUrl+req.url
+
             return res.status(200).json({
                 message: `Users successfully found`,
-                users
-            })
+                status: 200,
+                articles: {
+                    href,
+                    offset,
+                    limit,
+                    next:`${href}?limit=${limit}&offset=${offset + limit}` ,
+                    previous: `${href}?limit=${limit}&offset=${Math.max(0, offset - limit)}`,
+                    total: Object.entries(users).length,
+                    items: users
+                }
+            });
         }
     }catch (err){
         res.status(500).json({
-            message:err,
+            message:err.sqlMessage,
+            status:500
         });
     }
 }
-/*
-Pourquoi ne pas faire une seul fonction dynamique ou je met juste en paramètre la requête sql??
- */
+
 exports.getUser = async (req , res) =>{
     const id = req.params.id;
     const link = process.env.BASE_URL;
