@@ -6,6 +6,7 @@ function rateLimitHandler(req, res) {
     });
 }
 
+//Middleware de 500 requête toutes les 10 minutes
 const limiter = rateLimit({
     windowMs: 10 * 60 * 1000, // 10 minutes
     max: 500,

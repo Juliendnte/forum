@@ -1,3 +1,5 @@
+"use strict";
+
 //Importation des modules
 const express = require('express');
 const cors = require("cors");
@@ -6,6 +8,8 @@ const fs = require("fs");
 
 // Crée une application Express
 const app = express();
+app.use(cors());
+app.use("/asset", express.static(path.join(__dirname,"./")));
 
 //Applique une limite de requête pour toutes les routes
 const rateLimit = require("./middlewares/rate-limit");
@@ -17,8 +21,5 @@ fs.readdirSync(forumRoutes).forEach((file) => {
     const route = require(path.join(forumRoutes, file));
     app.use(route);
 })
-
-app.use(cors());
-app.use("/asset", express.static(path.join(__dirname,"../")));
 
 module.exports = app;
