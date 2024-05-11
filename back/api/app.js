@@ -7,10 +7,6 @@ const fs = require("fs");
 // Crée une application Express
 const app = express();
 
-//Applique une limite de requête pour toutes les routes
-const rateLimit = require("./middlewares/rate-limit");
-app.use(rateLimit);
-
 //Appel des routes automatisé
 const forumRoutes = path.join(__dirname,"./routeur/");
 fs.readdirSync(forumRoutes).forEach((file) => {
