@@ -39,26 +39,15 @@ exports.getUsers = async (req, res) =>{
 }
 
 exports.getUser = async (req , res) =>{
-    const id = req.params.id;
-    const link = process.env.BASE_URL;
-    try {
-        const userById = await user.getUserById(id);
-        userById.Photo = `${link}/images/${userById.Photo}`;
-        if (!userById){
-            return res.status(404).json({
-                message: `User with id ${id} not found`
-            });
-        }else{
-            return res.status(200).json({
-                message: `User with id ${id} successfully found`,
-                user: userById
-            })
-        }
-    }catch (err){
-        res.status(500).json({
-            message:err,
-        });
-    }
+    //const link = process.env.BASE_URL;
+    const userById = req.article;
+    //articleById.Photo = `${link}/asset/${articleById.Photo}`;
+
+    return res.status(200).json({
+        message: `User with id ${req.params.id} successfully found`,
+        status: 200,
+        User: userById
+    })
 };
 
 exports.postUser = (req,res)=>{
@@ -86,10 +75,12 @@ exports.deleteUser = async (req,res)=>{
         await user.deleteUser(id);
         return res.status(200).json({
             message: `User with id ${id} successfully delete`,
+            status: 200,
         })
     }catch (err){
         res.status(500).json({
             message:err,
+            status: 500
         });
     }
 }

@@ -39,27 +39,15 @@ exports.getTopics = async (req, res) =>{
 }
 
 exports.getTopic = async (req , res) =>{
-    const id = req.params.id;
-    const link = process.env.BASE_URL;
-    try {
-        const topicById = await topic.getTopicById(id);
-        topicById.Photo = `${link}/images/${topicById.Photo}`;
-        if (!topicById){
-            return res.status(404).json({
-                message: `User with id ${id} not found`
-            });
-        }else{
-            return res.status(200).json({
-                message: `User with id ${id} successfully found`,
-                user: topicById
-            })
-        }
-    }catch (err){
-        res.status(500).json({
-            message:err,
-            status:500
-        });
-    }
+    //const link = process.env.BASE_URL;
+    const topicById = req.article;
+    //articleById.Photo = `${link}/asset/${articleById.Photo}`;
+
+    return res.status(200).json({
+        message: `Topic with id ${req.params.id} successfully found`,
+        status: 200,
+        topic: topicById
+    })
 };
 
 exports.postTopic = (req,res)=>{
@@ -78,12 +66,14 @@ exports.deleteTopic = async (req,res)=>{
     const id = req.params.id;
     try {
         await topic.deleteTopic(id);
+
         return res.status(200).json({
             message: `User with id ${id} successfully delete`,
+            status: 200
         })
     }catch (err){
         res.status(500).json({
-            message:err,
+            message:err.sqlMessage,
             status:500
         });
     }
