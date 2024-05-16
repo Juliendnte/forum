@@ -10,6 +10,10 @@ const fs = require("fs");
 const app = express();
 app.use(cors());
 app.use("/asset", express.static(path.join(__dirname,"./")));
+//Lire le body
+app.use(express.json());
+//Lire un formulaire
+app.use(express.urlencoded({ extended: true }));
 
 //Applique une limite de requête pour toutes les routes
 const rateLimit = require("./middlewares/rate-limit");
