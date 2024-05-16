@@ -9,7 +9,7 @@ const middleware = {
 }
 
 //Configuration des routes CRUD
-routeur.get("/user",  controllerUser.getUsers);
+routeur.get("/users",  controllerUser.getUsers);
 routeur.get("/user/:id",middleware.userExists, controllerUser.getUser);
 routeur.post("/user",[middleware.validateToken, middleware.bodyParser] ,controllerUser.postUser);
 routeur.put("/user/:id",[middleware.validateToken,middleware.userExists, middleware.bodyParser] ,controllerUser.putUser);

@@ -14,7 +14,7 @@ exports.getUsers = async (req, res) =>{
         }else {
             const offset = parseInt(req.query.offset) || 0;
             const limit = parseInt(req.query.limit) || 6;
-            const href = baseUrl+req.url
+            const href = baseUrl+"/users"
 
             return res.status(200).json({
                 message: `Users successfully found`,
