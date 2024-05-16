@@ -1,0 +1,27 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+@font-face {
+    font-family: 'Bold';
+    src: url('../fonts/Outfit-SemiBold.ttf'), format(truetype);
+}
+@font-face {
+    font-family: 'SemiBold';
+    src: url('../fonts/Outfit-SemiBold.ttf'), format(truetype);
+}
+@font-face {
+    font-family: 'Regular';
+    src: url('../fonts/Outfit-Regular.ttf'), format(truetype);
+}
+
+:root {
+    --color-green: hwb(166 0% 0%);
+    --color-placehorder: #737373;
+    --color-line : #acacac;
+    --color-input-search: #EFEFEF;
+    --font-header-bold: 'Bold';
+    --font-header-semibold: 'Semibold';
+    --font-header-regular: 'Regular';
+} 

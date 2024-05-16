@@ -1,0 +1,126 @@
+.header-global {
+    width: 100%;
+    height: 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-logo {
+    width: 20%;
+    height: 100%;
+    border-bottom: 1px solid var(--color-line);
+}
+
+.header-logo-img img {
+    height: 80px;
+}
+
+.header-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header-logo-name p {
+    font-family: var(--font-header-bold);
+    font-size: 40px;
+}
+
+.header-search-global {
+    width: 60%;
+    height: 100%;
+    border-bottom: 1px solid var(--color-line);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.header-login {
+    width: 20%;
+    height: 100%;
+    border-bottom: 1px solid var(--color-line);
+}
+
+/* CSS INPUT */
+
+.group {
+    display: flex;
+    line-height: 28px;
+    align-items: center;
+    position: relative;
+    min-width: 60%;
+}
+
+.input {
+    width: 100%;
+    height: 40px;
+    line-height: 28px;
+    padding: 0 1rem;
+    padding-left: 2.5rem;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    outline: none;
+    background-color: var(--color-input-search);
+    border: 1px solid var(--color-line);
+    color: #0d0c22;
+    transition: 0.3s ease;
+}
+
+.input::placeholder {
+    color: var(--color-placehorder);
+}
+
+.input:focus,
+input:hover {
+    outline: none;
+    border-color: var(--color-green);
+    background-color: #fff;
+    box-shadow: 0 0 0 4px rgb(0 255 195 / 10%);
+}
+
+.icon {
+    position: absolute;
+    left: 1rem;
+    fill: #9e9ea7;
+    width: 1rem;
+    height: 1rem;
+}
+
+/* CSS BTN ADD POST */
+
+.header-btn-add-post  button{
+    font-family: var(--font-header-semibold);
+    height: 50px;
+    width: 50px;
+    border: none;
+    border-radius: 10px;
+    background-color: var(--color-green);
+    color: #EFEFEF;
+    font-size: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 4px 4px 0px var(--color-placehorder);
+}
+
+/* CSS SVG NOTIF + COMPTE */
+.header-login {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.header-login svg {
+    width: 40px;
+}
+
+
+/* CSS POUR LES HOVER */
+.header-login svg:hover,
+.header-btn-add-post button:hover,
+.header-logo {
+    cursor: pointer;
+}
