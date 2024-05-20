@@ -8,12 +8,12 @@ const middleware = {
 }
 
 //Configuration des routes CRUD
-routeur.get("/users",  controllerUser.getUsers);
 routeur.get("/user/:id",middleware.userExists, controllerUser.getUser);
-routeur.post("/user",middleware.validateToken ,controllerUser.postUser);
-routeur.put("/user/:id",[middleware.validateToken,middleware.userExists] ,controllerUser.putUser);
+routeur.post("/login",middleware.validateToken ,controllerUser.postUser);
+routeur.post("/register",middleware.validateToken ,controllerUser.postUser);
 routeur.patch("/user/:id",[middleware.validateToken,middleware.userExists ] ,controllerUser.patchUser);
 routeur.delete("/user/:id",[middleware.validateToken, middleware.userExists] ,controllerUser.deleteUser);
+
 
 //Exportation des routes
 module.exports = routeur;

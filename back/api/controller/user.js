@@ -1,47 +1,22 @@
+const crypto = require('crypto');
 const user = require("../models/userModel");
-require('dotenv').config();
-const baseUrl = process.env.BASE_URL;
+const jwt = require('jsonwebtoken');
+require("dotenv").config();
 
-exports.getUsers = async (req, res) =>{
-    try {
-        const users = await user.getAllUser(req.query);
-
-        if (!users){
-            return res.status(404).json({
-                message: `Users not found`,
-                status:404
-            });
-        }else {
-            const offset = parseInt(req.query.offset) || 0;
-            const limit = parseInt(req.query.limit) || 6;
-            const href = baseUrl+"/users"
-
-            return res.status(200).json({
-                message: `Users successfully found`,
-                status: 200,
-                articles: {
-                    href,
-                    offset,
-                    limit,
-                    next:`${href}?limit=${limit}&offset=${offset + limit}` ,
-                    previous: `${href}?limit=${limit}&offset=${Math.max(0, offset - limit)}`,
-                    total: Object.entries(users).length,
-                    items: users
-                }
-            });
-        }
-    }catch (err){
-        res.status(500).json({
-            message: err,
-            status:500
-        });
-    }
-}
+const jwtkey = process.env.JWT_KEY
+const pepper = process.env.PEPPER//Difference entre pepper et salt et que le salt est dans la bdd et le pepper en local . Les deux servent a modifiée le mdp
+const hashPassword = (password, salt) => {
+    const hash = crypto.createHmac('sha512', salt);//Je set le hash a sha512 avec mon salt
+    hash.update(password + pepper);//Je rajoute mon pepper au hashage du mdp
+    const value = hash.digest('hex');
+    return {
+        salt: salt,
+        hashedPassword: value
+    };
+};
 
 exports.getUser = async (req , res) =>{
-    //const link = process.env.BASE_URL;
     const userById = req.article;
-    //articleById.Photo = `${link}/asset/${articleById.Photo}`;
 
     return res.status(200).json({
         message: `User with id ${req.params.id} successfully found`,
@@ -50,65 +25,52 @@ exports.getUser = async (req , res) =>{
     })
 };
 
-exports.postUser = async (req,res)=>{
-    const {Name, Biography, Email, Password, Id_roles} = req.body;
-
-    if (!Name || !Biography || !Email || !Password || !Id_roles){
-        return res.status(400).json({
-            message: "Tous les champs (Name, Biography, Email, Password, Id_roles) sont requis.",
-            status: 400
-        })
-    }
-
-    try {
-        const NewUser = await user.createUser({
-            Name,
-            Biography,
-            Email,
-            Password,
-            Id_roles
-        });
-        
-        return res.status(201).json({
-            message: 'User successfully created',
-            status: 201,
-            NewUser
-        })
+exports.Login = async (req,res)=>{
+    const { email,username , password ,remember} = req.body;
+    try{
+        const utilisateur = await user.login(email,username);
+        if (!utilisateur){
+            return res.status(401).json({
+                message:`Invalid username or password`,
+                status: 401
+            });
+        }
+        const hashedPassword = hashPassword(password, utilisateur.Salt);//Récupere le password hashé
+        if (hashedPassword === utilisateur.Pwd) {//Test s'il est egale au password de l'utilisateur a l'email donné par l'utilisateur
+            if (email){
+                const Token = jwt.sign({ email: utilisateur.Email }, jwtkey, { expiresIn: remember ? '365j':'24h' });//Me passe un token pendant 24h et le régle avec le jwtkey
+                res.status(200).json({ Token });//Je renvoie un nouveau token a chaque login
+            }else{
+                const Token = jwt.sign({username: utilisateur.Name}, jwtkey, { expiresIn: remember ? '365j': '24h' });
+                res.status(200).json({ Token });
+            }
+        } else {
+            return res.status(401).json({
+                message:`Invalid username or password`,
+                status: 401
+            });
+        }
     }catch (err){
         res.status(500).json({
-            message: err,
+            message:err,
             status:500
-        })
+        });
     }
 }
 
-exports.putUser = async (req,res)=>{
-    const id = req.params.id;
-    const {Name, Biography, Email, Password, Id_roles} = req.body;
-
-    if (!Name || !Biography || !Email || !Password || !Id_roles){
-        return res.status(400).json({
-            message: "Tous les champs (Name, Biography, Email, Password, Id_roles) sont requis.",
-            status: 400
-        })
-    }
-
-    try {
-        await user.updatePutUser({
-            Name,
-            Biography,
-            Email,
-            Password,
-            Id_roles
-        });
-
-        return res.status(200).json({
-            message: `User with id ${id} successfully updated`,
-            status: 200,
+exports.Regiter = async (req,res)=>{
+    const { username, email, password } = req.body;
+    const salt = crypto.randomBytes(16).toString('hex')//Prend un salt bien chiant
+    const hashedPassword  = hashPassword(password, salt);//hash mon password
+    try{
+        await user.register({username, email, hashedPassword, salt});
+        res.status(201).json({
+            message : `User registered successfully`,
+            status: 201
         })
     }catch (err){
-        res.status(500).json({
-            message: err,
+        res.status(500).send({
+            message:err,
             status:500
         })
     }

@@ -4,7 +4,6 @@
 const express = require('express');
 const cors = require("cors");
 const path = require("path");
-const fs = require("fs");
 
 // Crée une application Express
 const app = express();
@@ -19,11 +18,11 @@ app.use(express.urlencoded({ extended: true }));
 const rateLimit = require("./middlewares/rate-limit");
 app.use(rateLimit);
 
-//Appel des routes automatisé
-const forumRoutes = path.join(__dirname,"./routeur/");
-fs.readdirSync(forumRoutes).forEach((file) => {
-    const route = require(path.join(forumRoutes, file));
-    app.use(route);
-})
+const routePost = require("./routeur/postRoute");
+app.use(routePost);
+const routeUser = require("./routeur/userRoute");
+app.use(routeUser);
+const routeTopic = require("./routeur/topicRoute");
+app.use(routeTopic);
 
 module.exports = app;
