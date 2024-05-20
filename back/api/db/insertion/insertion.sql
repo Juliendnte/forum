@@ -20,8 +20,8 @@ INSERT INTO `status` (`Id`, `Label`) VALUES
 
 -- Insertion des données dans la table `roles`
 INSERT INTO `roles` (`Label`) VALUES
-                                  ('Admin'),
                                   ('User'),
+                                  ('Admin'),
                                   ('Moderator');
 
 -- Insertion des données dans la table `users`
