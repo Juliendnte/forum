@@ -56,16 +56,15 @@ CREATE TABLE IF NOT EXISTS `roles` (
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `Id` int NOT NULL AUTO_INCREMENT,
-  `Name` varchar(15) NOT NULL,
+  `Name` varchar(15) NOT NULL UNIQUE,
   `Biography` varchar(250) DEFAULT NULL,
   `Photo` varchar(60) DEFAULT 'undefined',
-  `Email` varchar(100) NOT NULL,
-  `Password` varchar(50) NOT NULL,
+  `Email` varchar(100) NOT NULL UNIQUE,
+  `Password` varchar(100) NOT NULL,
+  `Salt` varchar(100) NOT NULL,
   `Create_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `Id_roles` int NOT NULL,
+  `Id_roles` int NOT NULL DEFAULT 1,
   PRIMARY KEY (`Id`),
-  UNIQUE KEY `Name` (`Name`),
-  UNIQUE KEY `Email` (`Email`),
   FOREIGN KEY (`Id_roles`) REFERENCES `roles`(`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
