@@ -12,3 +12,10 @@ subMenus.forEach(subMenu => {
         event.currentTarget.querySelector('.arrow-svg').classList.toggle('rotate');
     });
 });
+
+document.querySelector("#show-login").addEventListener("click", function () {
+    document.querySelector(".form").classList.add("active");
+});
+document.querySelector(".form .close-btn").addEventListener("click", function () {
+    document.querySelector(".form").classList.remove("active");
+});
