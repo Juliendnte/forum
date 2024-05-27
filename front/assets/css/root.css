@@ -1,6 +1,7 @@
 *{
     margin: 0;
     padding: 0;
+    font-family: var(--font-header-regular);
 }
 
 @font-face {
@@ -17,7 +18,8 @@
 }
 
 :root {
-    --color-green: hwb(166 0% 0%);
+    --color-green: #00ffc3;
+    --color-green-linear: linear-gradient(to right, #64ffdb, #00dfab);
     --color-placehorder: #737373;
     --color-line : #acacac;
     --color-input-search: #EFEFEF;

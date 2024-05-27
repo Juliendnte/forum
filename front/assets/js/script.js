@@ -16,6 +16,28 @@ subMenus.forEach(subMenu => {
 document.querySelector("#show-login").addEventListener("click", function () {
     document.querySelector(".form").classList.add("active");
 });
-document.querySelector(".form .close-btn").addEventListener("click", function () {
+document.querySelector(".form .btn-close").addEventListener("click", function () {
     document.querySelector(".form").classList.remove("active");
+});
+
+// fonction pour mouve le login/register
+document.addEventListener('DOMContentLoaded', function() {
+    var x = document.getElementById("login");
+    var y = document.getElementById("register");
+    var z = document.getElementById("btn");
+
+    function register() {
+        x.style.left = "-400px";
+        y.style.left = "50px";
+        z.style.left = "110px";
+    }
+
+    function login() {
+        x.style.left = "50px";
+        y.style.left = "450px";
+        z.style.left = "0px";
+    }
+
+    document.getElementById("loginBtn").addEventListener("click", login);
+    document.getElementById("registerBtn").addEventListener("click", register);
 });

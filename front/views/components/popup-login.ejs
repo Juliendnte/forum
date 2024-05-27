@@ -1,32 +1,21 @@
-<form class="form">
-    <button class="close-btn">&times;</button>
-    <p class="title">S'incrire</p>
-    <p class="message">En coutinuant, tu acceptes notre Contrat d’utilisation et reconnais que tu comprends notre Politique de confidentialité.</p>
-        <div class="flex">
-        <label>
-            <input class="input" type="text" placeholder="" required="">
-            <span>Firstname</span>
-        </label>
-
-        <label>
-            <input class="input" type="text" placeholder="" required="">
-            <span>Lastname</span>
-        </label>
-    </div>  
-            
-    <label>
-        <input class="input" type="email" placeholder="" required="">
-        <span>Email</span>
-    </label> 
-        
-    <label>
-        <input class="input" type="password" placeholder="" required="">
-        <span>Password</span>
-    </label>
-    <label>
-        <input class="input" type="password" placeholder="" required="">
-        <span>Confirm password</span>
-    </label>
-    <button class="submit">Submit</button>
-    <p class="signin">Already have an acount ? <a href="#">Signin</a> </p>
-</form>
+<div class="form">
+    <button class="btn-close">Fermer</button>
+    <div class="button-box">
+        <div id="btn"></div>
+        <button type="button" class="toggle-btn" id="loginBtn">Connection</button>
+        <button type="button" class="toggle-btn" id="registerBtn">S'inscrire</button>
+    </div>
+    <form id="login" class="input-group">
+        <input type="text" class="input-field" placeholder="Pseudo ou e-mail" required>
+        <input type="password" class="input-field" placeholder="Mot de passe" required>
+        <input type="checkbox" class="chech-box"><span>Se souvenir de moi</span>
+        <button type="submit" class="submit-btn">Se connecter</button>
+    </form>
+    <form id="register" class="input-group">
+        <input type="text" class="input-field" placeholder="Pseudo" required>
+        <input type="email" class="input-field" placeholder="exemple@coder.com" required>
+        <input type="password" class="input-field" placeholder="Mot de passe" required>
+        <input type="checkbox" class="chech-box"><span>Se souvenir de moi</span>
+        <button type="submit" class="submit-btn">S'inscrire</button>
+    </form>
+</div>

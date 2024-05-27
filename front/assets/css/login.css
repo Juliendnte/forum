@@ -1,24 +1,23 @@
 .form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    max-width: 350px;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 20px;
+    width: 380px;
+    height: 480px;
     position: absolute;
+    margin: 6% auto;
+    background: #fff;
+    padding: 5px;
+    box-shadow: 0px 0px 8px 4px #d4d4d4;
     top: -150%;
     left: 50%;
+    overflow: hidden;
+    border-radius: 15px;
     opacity: 0;
-    box-shadow: 2px 2px 5px 5px rgba(0, 0, 0, 0.15);
-    transform: translate(-50%,-50%) scale(1.25);
     transition: top 0ms ease-in-out 200ms,
                 opacity 200ms ease-in-out 0ms
                 transform 20ms ease-in-out 0ms;
 }
 
 .form.active {
-    top: 50%;
+    top: 40%;
     opacity: 1;
     transform: translate(-50%,-50%) scale(1);
     transition: top 0ms ease-in-out 0ms,
@@ -26,139 +25,100 @@
                 transform 20ms ease-in-out 0ms;
 }
 
-.form .close-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 15px;
-    height: 15px;
-    background: #888;
-    color: #eee;
-    text-align: center;
-    line-height: 15px;
-    border-radius: 15px;
+.button-box {
+    width: 250px;
+    margin: 35px auto;
+    position: relative;
+    box-shadow: 0 0 20px 9px #24ffa41f;
+    border-radius: 30px;
+}
+
+.toggle-btn {
+    padding: 10px 30px;
     cursor: pointer;
-}
-
-.title {
-    font-size: 28px;
-    color: black;
-    font-weight: 600;
-    letter-spacing: -1px;
+    background: transparent;
+    border: 0;
+    outline: none;
     position: relative;
-    display: flex;
-    align-items: center;
-    padding-left: 30px;
 }
 
-.title::before,
-.title::after {
+#btn {
+    top: 0;
+    left: 0;
     position: absolute;
-    content: "";
-    height: 16px;
-    width: 16px;
-    border-radius: 50%;
-    left: 0px;
-    background-color: rgb(0, 255, 13);
-}
-
-.title::before {
-    width: 18px;
-    height: 18px;
-    background-color: rgb(65, 225, 86);
-}
-
-.title::after {
-    width: 18px;
-    height: 18px;
-    animation: pulse 1s linear infinite;
-}
-
-.message,
-.signin {
-    color: rgba(88, 87, 87, 0.822);
-    font-size: 14px;
-}
-
-.signin {
-    text-align: center;
-}
-
-.signin a {
-    color: royalblue;
-}
-
-.signin a:hover {
-    text-decoration: underline royalblue;
-}
-
-.flex {
-    display: flex;
-    width: 100%;
-    gap: 6px;
-}
-
-.form label {
-    position: relative;
-}
-
-.form label .input {
-    width: 100%;
-    padding: 2px 0 5px 2px;
-    outline: 0;
+    width: 137px;
+    height: 100%;
+    background: var(--color-green-linear);
     border-radius: 10px;
+    transition: .5s;
 }
 
-.form label .input+span {
+.input-group {
+    top: 150px;
     position: absolute;
-    left: 10px;
+    width: 280px;
+    transition: .5s;
+}
+.input-field:focus,
+.input-field:hover {
+    outline: none;
+    border-bottom-color: var(red);
+    background-color: #fff;
+}
+
+.input-field {
+    width: 100%;
+    padding: 10px 0;
+    margin: 5px 0;
+    border-left: 0;
+    border-top: 0;
+    border-right: 0;
+    border-bottom: 1px solid #999;
+    outline: none;
+    background: transparent;
+}
+
+.submit-btn {
+    width: 85%;
+    padding: 10px 30px;
+    cursor: pointer;
+    display: block;
+    margin: auto;
+    background: var(--color-green-linear);
+    border: 0;
+    outline: none;
+    border-radius: 30px;
+}
+
+.chech-box {
+    margin: 30px 10px 30px 0;
+}
+
+span {
+    color: #777;
+    font-size: 12px;
+    bottom: 66px;
+    position: absolute;
+}
+
+#login {
+    left: 50px;
+}
+
+#register {
+    left: 450px;
+}
+
+.btn-close {
+    position: absolute;
     top: 15px;
-    color: grey;
-    font-size: 0.9em;
-    cursor: text;
-    transition: 0.3s ease;
-}
-
-.form label .input:placeholder-shown+span {
-    top: 15px;
-    font-size: 0.9em;
-}
-
-.form label .input:focus+span,
-.form label .input:valid+span {
-    top: 0px;
-    font-size: 0.7em;
-    font-weight: 600;
-}
-
-.form label .input:valid+span {
-    color: green;
-}
-
-.submit {
+    right: 15px;
     border: none;
     outline: none;
-    background-color: royalblue;
-    padding: 10px;
-    border-radius: 10px;
-    color: #fff;
-    font-size: 16px;
-    transform: .3s ease;
+    background: transparent;
 }
 
-.submit:hover {
-    background-color: rgb(56, 90, 194);
+.btn-close:hover {
     cursor: pointer;
-}
-
-@keyframes pulse {
-    from {
-        transform: scale(0.9);
-        opacity: 1;
-    }
-
-    to {
-        transform: scale(1.8);
-        opacity: 0;
-    }
+    text-decoration: underline;
 }
