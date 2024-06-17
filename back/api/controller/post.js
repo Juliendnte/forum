@@ -141,7 +141,6 @@ exports.patchPost = async (req,res)=>{
     }
 }
 
-
 exports.deletePost = async (req,res)=>{
     const id = req.params.id;
     try {
