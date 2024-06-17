@@ -1,0 +1,715 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="@localhost">
+  <database-model serializer="dbm" dbms="MYSQL" family-id="MYSQL" format-version="4.52">
+    <root id="1">
+      <DefaultCasing>lower/lower</DefaultCasing>
+      <DefaultEngine>MyISAM</DefaultEngine>
+      <DefaultTmpEngine>InnoDB</DefaultTmpEngine>
+      <ServerVersion>8.2.0</ServerVersion>
+    </root>
+    <schema id="2" parent="1" name="boutiquejs">
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </schema>
+    <schema id="3" parent="1" name="forum">
+      <LastIntrospectionLocalTimestamp>2024-06-14.07:07:47</LastIntrospectionLocalTimestamp>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </schema>
+    <schema id="4" parent="1" name="information_schema">
+      <CollationName>utf8mb3_general_ci</CollationName>
+    </schema>
+    <schema id="5" parent="1" name="mysql">
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </schema>
+    <schema id="6" parent="1" name="performance_schema">
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </schema>
+    <schema id="7" parent="1" name="sys">
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </schema>
+    <table id="8" parent="3" name="favtopics">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="9" parent="3" name="follow">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="10" parent="3" name="friendship">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="11" parent="3" name="likepost">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="12" parent="3" name="liketopics">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="13" parent="3" name="notifs">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="14" parent="3" name="posts">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="15" parent="3" name="roles">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="16" parent="3" name="send">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="17" parent="3" name="status">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="18" parent="3" name="tags">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="19" parent="3" name="tagstopics">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="20" parent="3" name="topics">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="21" parent="3" name="users">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="22" parent="3" name="userstags">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <column id="23" parent="8" name="Id_topics">
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+    </column>
+    <column id="24" parent="8" name="Id_User">
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+    </column>
+    <foreign-key id="25" parent="8" name="favtopics_ibfk_1">
+      <ColNames>Id_topics</ColNames>
+      <RefColNames>Id</RefColNames>
+      <RefTableName>topics</RefTableName>
+    </foreign-key>
+    <foreign-key id="26" parent="8" name="favtopics_ibfk_2">
+      <ColNames>Id_User</ColNames>
+      <RefColNames>Id</RefColNames>
+      <RefTableName>users</RefTableName>
+    </foreign-key>
+    <index id="27" parent="8" name="PRIMARY">
+      <ColNames>Id_User
+Id_topics</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="28" parent="8" name="Id_topics">
+      <ColNames>Id_topics</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="29" parent="8" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <column id="30" parent="9" name="Id_User1">
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+    </column>
+    <column id="31" parent="9" name="Id_User2">
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+    </column>
+    <column id="32" parent="9" name="follow_at">
+      <DasType>timestamp|0s</DasType>
+      <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+    </column>
+    <foreign-key id="33" parent="9" name="follow_ibfk_1">
+      <ColNames>Id_User1</ColNames>
+      <RefColNames>Id</RefColNames>
+      <RefTableName>users</RefTableName>
+    </foreign-key>
+    <foreign-key id="34" parent="9" name="follow_ibfk_2">
+      <ColNames>Id_User2</ColNames>
+      <RefColNames>Id</RefColNames>
+      <RefTableName>users</RefTableName>
+    </foreign-key>
+    <index id="35" parent="9" name="PRIMARY">
+      <ColNames>Id_User1
+Id_User2</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="36" parent="9" name="Id_User2">
+      <ColNames>Id_User2</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="37" parent="9" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <column id="38" parent="10" name="Id_User1">
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+    </column>
+    <column id="39" parent="10" name="Id_User2">
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+    </column>
+    <column id="40" parent="10" name="status">
+      <DasType>varchar(50)|0s</DasType>
+      <DefaultExpression>&apos;waiting&apos;</DefaultExpression>
+      <Position>3</Position>
+    </column>
+    <foreign-key id="41" parent="10" name="friendship_ibfk_1">
+      <ColNames>Id_User1</ColNames>
+      <RefColNames>Id</RefColNames>
+      <RefTableName>users</RefTableName>
+    </foreign-key>
+    <foreign-key id="42" parent="10" name="friendship_ibfk_2">
+      <ColNames>Id_User2</ColNames>
+      <RefColNames>Id</RefColNames>
+      <RefTableName>users</RefTableName>
+    </foreign-key>
+    <index id="43" parent="10" name="PRIMARY">
+      <ColNames>Id_User1
+Id_User2</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="44" parent="10" name="Id_User2">
+      <ColNames>Id_User2</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="45" parent="10" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <column id="46" parent="11" name="Id_Post">
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+    </column>
+    <column id="47" parent="11" name="Id_User">
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+    </column>
+    <column id="48" parent="11" name="Dislike">
+      <DasType>int|0s</DasType>
+      <DefaultExpression>0</DefaultExpression>
+      <Position>3</Position>
+    </column>
+    <foreign-key id="49" parent="11" name="likepost_ibfk_1">
+      <ColNames>Id_Post</ColNames>
+      <RefColNames>Id</RefColNames>
+      <RefTableName>posts</RefTableName>
+    </foreign-key>
+    <foreign-key id="50" parent="11" name="likepost_ibfk_2">
+      <ColNames>Id_User</ColNames>
+      <RefColNames>Id</RefColNames>
+      <RefTableName>users</RefTableName>
+    </foreign-key>
+    <index id="51" parent="11" name="PRIMARY">
+      <ColNames>Id_User
+Id_Post</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="52" parent="11" name="Id_Post">
+      <ColNames>Id_Post</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="53" parent="11" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <column id="54" parent="12" name="Id_topics">
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+    </column>
+    <column id="55" parent="12" name="Id_User">
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+    </column>
+    <column id="56" parent="12" name="Dislike">
+      <DasType>int|0s</DasType>
+      <DefaultExpression>0</DefaultExpression>
+      <Position>3</Position>
+    </column>
+    <foreign-key id="57" parent="12" name="liketopics_ibfk_1">
+      <ColNames>Id_topics</ColNames>
+      <RefColNames>Id</RefColNames>
+      <RefTableName>topics</RefTableName>
+    </foreign-key>
+    <foreign-key id="58" parent="12" name="liketopics_ibfk_2">
+      <ColNames>Id_User</ColNames>
+      <RefColNames>Id</RefColNames>
+      <RefTableName>users</RefTableName>
+    </foreign-key>
+    <index id="59" parent="12" name="PRIMARY">
+      <ColNames>Id_User
+Id_topics</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="60" parent="12" name="Id_topics">
+      <ColNames>Id_topics</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="61" parent="12" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <column id="62" parent="13" name="Id">
+      <AutoIncrement>4</AutoIncrement>
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+    </column>
+    <column id="63" parent="13" name="Label">
+      <DasType>varchar(50)|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+    </column>
+    <index id="64" parent="13" name="PRIMARY">
+      <ColNames>Id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="65" parent="13" name="Label">
+      <ColNames>Label</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <key id="66" parent="13" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <key id="67" parent="13" name="Label">
+      <UnderlyingIndexName>Label</UnderlyingIndexName>
+    </key>
+    <column id="68" parent="14" name="Id">
+      <AutoIncrement>1</AutoIncrement>
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+    </column>
+    <column id="69" parent="14" name="Content">
+      <DasType>varchar(500)|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+    </column>
+    <column id="70" parent="14" name="Create_post">
+      <DasType>timestamp|0s</DasType>
+      <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+    </column>
+    <column id="71" parent="14" name="Update_post">
+      <DasType>timestamp|0s</DasType>
+      <Position>4</Position>
+    </column>
+    <column id="72" parent="14" name="Id_PostAnswer">
+      <DasType>int|0s</DasType>
+      <Position>5</Position>
+    </column>
+    <column id="73" parent="14" name="Id_topics">
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>6</Position>
+    </column>
+    <column id="74" parent="14" name="Id_Users">
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>7</Position>
+    </column>
+    <foreign-key id="75" parent="14" name="posts_ibfk_1">
+      <ColNames>Id_PostAnswer</ColNames>
+      <RefColNames>Id</RefColNames>
+      <RefTableName>posts</RefTableName>
+    </foreign-key>
+    <foreign-key id="76" parent="14" name="posts_ibfk_2">
+      <ColNames>Id_topics</ColNames>
+      <RefColNames>Id</RefColNames>
+      <RefTableName>topics</RefTableName>
+    </foreign-key>
+    <foreign-key id="77" parent="14" name="posts_ibfk_3">
+      <ColNames>Id_Users</ColNames>
+      <RefColNames>Id</RefColNames>
+      <RefTableName>users</RefTableName>
+    </foreign-key>
+    <index id="78" parent="14" name="PRIMARY">
+      <ColNames>Id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="79" parent="14" name="Id_PostAnswer">
+      <ColNames>Id_PostAnswer</ColNames>
+      <Type>btree</Type>
+    </index>
+    <index id="80" parent="14" name="Id_topics">
+      <ColNames>Id_topics</ColNames>
+      <Type>btree</Type>
+    </index>
+    <index id="81" parent="14" name="Id_Users">
+      <ColNames>Id_Users</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="82" parent="14" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <column id="83" parent="15" name="Id">
+      <AutoIncrement>3</AutoIncrement>
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+    </column>
+    <column id="84" parent="15" name="Label">
+      <DasType>varchar(50)|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+    </column>
+    <index id="85" parent="15" name="PRIMARY">
+      <ColNames>Id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="86" parent="15" name="Label">
+      <ColNames>Label</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <key id="87" parent="15" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <key id="88" parent="15" name="Label">
+      <UnderlyingIndexName>Label</UnderlyingIndexName>
+    </key>
+    <column id="89" parent="16" name="Id_User">
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+    </column>
+    <column id="90" parent="16" name="Id_Notif">
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+    </column>
+    <foreign-key id="91" parent="16" name="send_ibfk_2">
+      <ColNames>Id_User</ColNames>
+      <RefColNames>Id</RefColNames>
+      <RefTableName>users</RefTableName>
+    </foreign-key>
+    <foreign-key id="92" parent="16" name="send_ibfk_1">
+      <ColNames>Id_Notif</ColNames>
+      <RefColNames>Id</RefColNames>
+      <RefTableName>notifs</RefTableName>
+    </foreign-key>
+    <index id="93" parent="16" name="PRIMARY">
+      <ColNames>Id_User
+Id_Notif</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="94" parent="16" name="Id_Notif">
+      <ColNames>Id_Notif</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="95" parent="16" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <column id="96" parent="17" name="Id">
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+    </column>
+    <column id="97" parent="17" name="Label">
+      <DasType>varchar(50)|0s</DasType>
+      <Position>2</Position>
+    </column>
+    <index id="98" parent="17" name="PRIMARY">
+      <ColNames>Id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="99" parent="17" name="Label">
+      <ColNames>Label</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <key id="100" parent="17" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <key id="101" parent="17" name="Label">
+      <UnderlyingIndexName>Label</UnderlyingIndexName>
+    </key>
+    <column id="102" parent="18" name="Id">
+      <AutoIncrement>5</AutoIncrement>
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+    </column>
+    <column id="103" parent="18" name="Label">
+      <DasType>varchar(50)|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+    </column>
+    <index id="104" parent="18" name="PRIMARY">
+      <ColNames>Id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="105" parent="18" name="Label">
+      <ColNames>Label</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <key id="106" parent="18" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <key id="107" parent="18" name="Label">
+      <UnderlyingIndexName>Label</UnderlyingIndexName>
+    </key>
+    <column id="108" parent="19" name="Id_topics">
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+    </column>
+    <column id="109" parent="19" name="Id_Tag">
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+    </column>
+    <foreign-key id="110" parent="19" name="tagstopics_ibfk_1">
+      <ColNames>Id_topics</ColNames>
+      <RefColNames>Id</RefColNames>
+      <RefTableName>topics</RefTableName>
+    </foreign-key>
+    <foreign-key id="111" parent="19" name="tagstopics_ibfk_2">
+      <ColNames>Id_Tag</ColNames>
+      <RefColNames>Id</RefColNames>
+      <RefTableName>tags</RefTableName>
+    </foreign-key>
+    <index id="112" parent="19" name="PRIMARY">
+      <ColNames>Id_topics
+Id_Tag</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="113" parent="19" name="Id_Tag">
+      <ColNames>Id_Tag</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="114" parent="19" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <column id="115" parent="20" name="Id">
+      <AutoIncrement>1</AutoIncrement>
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+    </column>
+    <column id="116" parent="20" name="Title">
+      <DasType>varchar(75)|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+    </column>
+    <column id="117" parent="20" name="Description">
+      <DasType>varchar(500)|0s</DasType>
+      <Position>3</Position>
+    </column>
+    <column id="118" parent="20" name="Create_at">
+      <DasType>timestamp|0s</DasType>
+      <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
+      <Position>4</Position>
+    </column>
+    <column id="119" parent="20" name="Id_Status">
+      <DasType>int|0s</DasType>
+      <Position>5</Position>
+    </column>
+    <column id="120" parent="20" name="Id_User">
+      <DasType>int|0s</DasType>
+      <Position>6</Position>
+    </column>
+    <foreign-key id="121" parent="20" name="topics_ibfk_2">
+      <ColNames>Id_Status</ColNames>
+      <RefColNames>Id</RefColNames>
+      <RefTableName>status</RefTableName>
+    </foreign-key>
+    <foreign-key id="122" parent="20" name="topics_ibfk_1">
+      <ColNames>Id_User</ColNames>
+      <RefColNames>Id</RefColNames>
+      <RefTableName>users</RefTableName>
+    </foreign-key>
+    <index id="123" parent="20" name="PRIMARY">
+      <ColNames>Id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="124" parent="20" name="Id_Status">
+      <ColNames>Id_Status</ColNames>
+      <Type>btree</Type>
+    </index>
+    <index id="125" parent="20" name="Id_User">
+      <ColNames>Id_User</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="126" parent="20" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <column id="127" parent="21" name="Id">
+      <AutoIncrement>2</AutoIncrement>
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+    </column>
+    <column id="128" parent="21" name="Name">
+      <DasType>varchar(50)|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+    </column>
+    <column id="129" parent="21" name="Biography">
+      <DasType>varchar(1200)|0s</DasType>
+      <Position>3</Position>
+    </column>
+    <column id="130" parent="21" name="Photo">
+      <DasType>varchar(60)|0s</DasType>
+      <DefaultExpression>&apos;undefined&apos;</DefaultExpression>
+      <Position>4</Position>
+    </column>
+    <column id="131" parent="21" name="Email">
+      <DasType>varchar(100)|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>5</Position>
+    </column>
+    <column id="132" parent="21" name="Password">
+      <DasType>varchar(200)|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>6</Position>
+    </column>
+    <column id="133" parent="21" name="Salt">
+      <DasType>varchar(100)|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>7</Position>
+    </column>
+    <column id="134" parent="21" name="Create_at">
+      <DasType>timestamp|0s</DasType>
+      <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
+      <NotNull>1</NotNull>
+      <Position>8</Position>
+    </column>
+    <column id="135" parent="21" name="Id_roles">
+      <DasType>int|0s</DasType>
+      <DefaultExpression>1</DefaultExpression>
+      <NotNull>1</NotNull>
+      <Position>9</Position>
+    </column>
+    <foreign-key id="136" parent="21" name="users_ibfk_1">
+      <ColNames>Id_roles</ColNames>
+      <RefColNames>Id</RefColNames>
+      <RefTableName>roles</RefTableName>
+    </foreign-key>
+    <index id="137" parent="21" name="PRIMARY">
+      <ColNames>Id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="138" parent="21" name="Name">
+      <ColNames>Name</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="139" parent="21" name="Email">
+      <ColNames>Email</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="140" parent="21" name="Id_roles">
+      <ColNames>Id_roles</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="141" parent="21" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <key id="142" parent="21" name="Name">
+      <UnderlyingIndexName>Name</UnderlyingIndexName>
+    </key>
+    <key id="143" parent="21" name="Email">
+      <UnderlyingIndexName>Email</UnderlyingIndexName>
+    </key>
+    <column id="144" parent="22" name="Id_Tag">
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+    </column>
+    <column id="145" parent="22" name="Id_User">
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+    </column>
+    <foreign-key id="146" parent="22" name="userstags_ibfk_1">
+      <ColNames>Id_Tag</ColNames>
+      <RefColNames>Id</RefColNames>
+      <RefTableName>tags</RefTableName>
+    </foreign-key>
+    <foreign-key id="147" parent="22" name="userstags_ibfk_2">
+      <ColNames>Id_User</ColNames>
+      <RefColNames>Id</RefColNames>
+      <RefTableName>users</RefTableName>
+    </foreign-key>
+    <index id="148" parent="22" name="PRIMARY">
+      <ColNames>Id_User
+Id_Tag</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="149" parent="22" name="Id_Tag">
+      <ColNames>Id_Tag</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="150" parent="22" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+  </database-model>
+</dataSource>
