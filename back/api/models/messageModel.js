@@ -64,7 +64,6 @@ class messageModel{
         return new Promise((resolve, reject) => {
             const sql = `DELETE FROM message WHERE Id=?`
             connection.query(sql,[id], (err,results)=> err ? reject(err) : resolve(results[0]))
-
         })
     }
 }
