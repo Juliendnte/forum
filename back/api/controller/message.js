@@ -1,22 +1,22 @@
-const post = require("../models/postModel");
+const message = require("../models/messageModel");
 require('dotenv').config();
 const baseUrl = process.env.BASE_URL;
 
-class PostController{
-    static async getPosts(req, res) {
+class messageController{
+    static async getMessages(req, res) {
         try {
-            const posts = await post.getAllpost(req.query);
+            const messages = await message.getAllMessage(req.query);
 
-            if (!posts){
+            if (!messages){
                 return res.status(404).send({
-                    message: `posts not found`,
+                    message: `messages not found`,
                     status:404
                 });
             }else {
                 return res.status(200).send({
-                    message: `posts successfully found`,
+                    message: `messages successfully found`,
                     status: 200,
-                    items: posts
+                    items: messages
                 });
             }
         }catch (err){
@@ -27,15 +27,15 @@ class PostController{
         }
     }
 
-    static getPost(req, res) {
-        const postById = req.post;
+    static getMessage(req, res) {
+        const messageById = req.message;
         try{
-            postById.Path = `${baseUrl}/assets/${postById.Path}`;
+            messageById.Path = `${baseUrl}/assets/${messageById.Path}`;
 
             return res.status(200).send({
                 message: `Article with id ${req.params.id} successfully found`,
                 status: 200,
-                post: postById,
+                commentaire: messageById,
             });
         }catch (err){
             res.status(500).send({
@@ -45,28 +45,23 @@ class PostController{
         }
     }
 
-    static async postPost(req,res){
-        const {Content, Id_topics, Id_PostAnswer} = req.body;
+    static async postMessage(req,res){
+        const {Content, Id_PostAnswer, Id_MessageAnswer} = req.body;
         const Id_User = req.user.Sub;
-        if (!Content || !Id_topics || !Id_PostAnswer){
+        if (!Content || !Id_PostAnswer || !Id_MessageAnswer){
             return res.status(400).send({
-                message: "Tous les champs (Name, Biography, Email, Password, Id_roles) sont requis.",
+                message: "Tous les champs (Content, Id_PostAnswer, Id_MessageAnswer) sont requis.",
                 status: 400
             })
         }
 
         try {
-            const Newpost = await post.createpost({
-                Content,
-                Id_topics,
-                Id_PostAnswer,
-                Id_User
-            });
+            const NewMessage = await message.createMessage({ Content, Id_PostAnswer, Id_MessageAnswer, Id_User});
 
             return res.status(201).send({
-                message: 'post successfully created',
+                message: 'message successfully created',
                 status: 201,
-                Newpost
+                NewMessage
             })
         }catch (err){
             res.status(500).send({
@@ -76,7 +71,7 @@ class PostController{
         }
     }
 
-    static async patchPost(req,res){
+    static async patchMessage(req,res){
         const id = req.params.id
         const {Content} = req.body;
 
@@ -89,10 +84,10 @@ class PostController{
         }
 
         try{
-            await post.updatePatchpost(id, Content);
+            await message.updatePatchMessage(id, Content);
 
             return res.status(200).send({
-                message: `post with id ${id} successfully updated`,
+                message: `message with id ${id} successfully updated`,
                 status: 200,
             });
         }catch (err){
@@ -103,12 +98,12 @@ class PostController{
         }
     }
 
-    static async deletePost(req, res){
+    static async deleteMessage(req, res){
         const id = req.params.id;
         try {
-            await post.deletepost(id);
+            await message.deleteMessage(id);
             return res.status(200).send({
-                message: `post with id ${id} successfully delete`,
+                message: `message with id ${id} successfully delete`,
                 status: 200,
             })
         }catch (err){
@@ -120,4 +115,4 @@ class PostController{
     }
 }
 
-module.exports = PostController;
+module.exports = messageController;

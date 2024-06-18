@@ -1,9 +1,11 @@
 const connection = require("../config/authBDD")
 
 class topicModel{
+    total = 0;
+
     static getTopicById(id){
         return new Promise((resolve, reject) => {
-            const sql = `SELECT * FROM topic WHERE Id=?`
+            const sql = `SELECT * FROM topics WHERE Id=?`
             connection.query(sql,[id], (err, results)=>{
                 err ? reject(err) : resolve(results[0]);
             });
@@ -11,71 +13,58 @@ class topicModel{
     }
 
     static getAllTopic(query){
-        return new Promise((resolve, reject) => {
-            let sql = `SELECT * FROM topic `
+        return new Promise(async (resolve, reject) => {
+            let sql = `SELECT * FROM topics `
 
-            //S'il y a quelque chose dans la query
-            if (!(Object.entries(query).length === 0)){
-                const values = [];
+            const values = [];
+            let whereClauses = [];
+            let limitClause = "";
+            let offsetClause = "";
 
-                /*
-                Un objet marche comme une map en clé valeur
-                Name: Julien
-                la clé est Name et la valeur Julien
-                Ici je met la clé dans la requête sql, la valeur dans une liste qui remplacera les ?
-                Et j'ai un index pour mettre un WHERE si il y a une query autre que limit ou offset
-                Ma fonction ne marche que si le limit et offset sont a la fin comme en sql
-                 */
-                Object.entries(query).forEach(([key, value], index) => {
-                    if (key.toLowerCase() === "limit" || key.toLowerCase() === "offset"){
-                        sql += `${key} ? `;
-                        values.push(parseInt(value));
-                    }else{
-                        sql += index ===0 ? "WHERE ": "AND "
-                        sql += `${key}=? `;
-                        values.push(value);
-                    }
-                });
+            // Construire les clauses WHERE, LIMIT et OFFSET
+            Object.entries(query).forEach(([key, value]) => {
+                if (key.toLowerCase() === "limit") {
+                    limitClause = ` LIMIT ?`;
+                    values.push(parseInt(value));
+                } else if (key.toLowerCase() === "offset") {
+                    offsetClause = ` OFFSET ?`;
+                    values.push(parseInt(value));
+                } else {
+                    const valuesArray = value.split(",");
+                    const placeholders = valuesArray.map(() => "?").join(",");
+                    whereClauses.push(valuesArray.length > 1 ? `${key} IN (${placeholders})` : `${key} = ?`);
+                    values.push(...valuesArray);
+                }
+            });
 
-                connection.query(sql,values, (err, results)=> err ? reject(err) : resolve(results));
-            }else{
-                connection.query(sql, (err, results)=> err ? reject(err) : resolve(results));
+            // Ajouter les clauses WHERE à la requête SQL
+            if (whereClauses.length > 0) {
+                sql += " WHERE " + whereClauses.join(" AND ");
             }
 
-        });
+            // Utilise la même requête sans limit ni offset
+            this.total = (await this.getTotal(sql, values.slice(0, values.length - (limitClause ? 1 : 0) - (offsetClause ? 1 : 0)))).total;
 
+            // Ajouter limit et offset à la requête principale
+            sql += limitClause + offsetClause;
+
+            // Exécuter la requête avec les valeurs
+            connection.query(sql, values, (err, results) => err ? reject(err) : resolve(results));
+        });
     }
 
     static createTopic(newTopic){
         return new Promise((resolve, reject) => {
-            const sql = `INSERT INTO topic (Title, Description, Id_Status, Id_User) VALUES (?, ?, ?, ?)`;
-            connection.query(sql, [newTopic.Title, newTopic.Description, newTopic.Id_Status, newTopic.Id_User], (err, results)=> {
-                err ? reject(err) : resolve(results[0]);
-            });
-        });
-    }
-
-    static updatePutTopic(id, updateTopic){
-        return new Promise((resolve, reject) => {
-            const sql = `UPDATE topic SET Title=?, Description=?, Id_Status=?, Id_User=? WHERE id=?`;
-            const values = [updateTopic.Title, updateTopic.Description, updateTopic.Id_Status, updateTopic.Id_User, id];
-
-            connection.query(sql, values, (err, results) => err ? reject(err) : resolve(results[0]));
+            const sql = `INSERT INTO topics (Title, Id_Status, Id_User) VALUES (?, 1, ?)`;
+            connection.query(sql, [newTopic.Title, newTopic.Id_User], (err, results)=> err ? reject(err) : resolve(results[0]));
         });
     }
 
     static updatePatchTopic(id, updateTopic){
         return new Promise((resolve, reject) => {
-            let sql = `UPDATE topic SET `;
+            let sql = `UPDATE topics SET `;
             const values = [];
 
-            /*
-            entries est l'objet en liste de liste
-            [
-                ["Name","Julien],
-                ["Project","Boutique"]
-            ]
-             */
             Object.entries(updateTopic).forEach(([key, value], index, entries) => {
                 sql += `${key}=?`;
                 values.push(value);
@@ -90,13 +79,21 @@ class topicModel{
         });
     }
 
-
     static deleteTopic(id){
         return new Promise((resolve, reject) => {
-            const sql = `DELETE FROM topic WHERE Id=?`
+            const sql = `DELETE FROM topics WHERE Id=?`
             connection.query(sql,[id], (err,results)=> err ? reject(err) : resolve(results[0]))
 
         })
+    }
+
+    static getTotal(sql, values) {
+        return new Promise((resolve, reject) => {
+            const countSql = `SELECT COUNT(*) AS total FROM (${sql}) AS subquery`;
+            connection.query(countSql, values, (err, results) =>
+                err ? reject(err) : resolve(results[0])
+            );
+        });
     }
 }
 

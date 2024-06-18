@@ -76,7 +76,7 @@ class UserController {
             }
             const hashedPassword = hashPassword(password, user.Salt);//Récupere le password hashé
             if (hashedPassword.hashedPassword === user.Password) {//Test s'il est egale au password de l'utilisateur a l'email donné par l'utilisateur
-                const Token = jwt.sign({ Sub: user.Id }, jwtkey, { expiresIn: remember ? '365d':'24h' });//Me passe un token pendant 24h et le régle avec le jwtkey
+                const Token = jwt.sign({ Sub: user.Id , IsAdmin: user.Role === 1, IsModo: user.Role === 2}, jwtkey, { expiresIn: remember ? '365d':'24h' });//Me passe un token pendant 24h et le régle avec le jwtkey
                 res.status(200).send({ Token });//Je renvoie un nouveau token a chaque login
             } else {
                 return res.status(401).send({
@@ -162,6 +162,40 @@ class UserController {
         }catch (err){
             res.status(500).send({
                 message:err,
+                status: 500
+            })
+        }
+    }
+
+    static async UploadImage (req,res){
+        const filePath = req.file.path.replace('assets', '');
+        const id = req.user.Sub;
+        try {
+            await log.updatePatchUser(id, {Path: filePath})
+            res.download(filePath, (err) => {
+                if (err) {
+                    res.status(500).send({
+                        message: err,
+                        status: 500
+                    })
+                }
+            });
+        }catch (err){
+            res.status(500).send({
+                message: err,
+                status: 500
+            })
+        }
+    }
+
+    static async UpdateUser(req, res){
+        const id = req.user.Sub;
+        const body = req.body;
+        try {
+
+        }catch (err){
+            res.status(500).send({
+                message: err,
                 status: 500
             })
         }

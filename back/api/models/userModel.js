@@ -38,10 +38,30 @@ class logModel{
 
     static setPassword(password, id){
         return new Promise((resolve,reject)=>{
-            const sql = `UPDATE users SET Pwd = ?, Salt = ? WHERE Id = ?;`;
+            const sql = `UPDATE users SET Password = ?, Salt = ? WHERE Id = ?;`;
             connection.query(sql, [password.hashedPassword, password.salt ,id],(err,results)=> err ? reject(err) : resolve(results[0]));
         })
     }
+
+    static updatePatchUser(id, updateUser){
+        return new Promise((resolve, reject) => {
+            let sql = `UPDATE users SET `;
+            const values = [];
+
+            Object.entries(updateUser).forEach(([key, value], index, entries) => {
+                sql += `${key}=?`;
+                values.push(value);
+                if (index < entries.length - 1) {
+                    sql += `, `;
+                }
+            });
+            sql += ` WHERE id=?`;
+            values.push(id);
+
+            connection.query(sql, values, (err, results) => err ? reject(err) : resolve(results[0]));
+        });
+    }
+
 }
 
 module.exports = logModel;

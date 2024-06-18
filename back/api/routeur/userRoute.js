@@ -3,16 +3,18 @@ const express = require("express");
 const routeur = express.Router();
 const controllerUser = require("../controller/user");
 const middleware = {
-    validateToken : require("../middlewares/auth"),
+    auth : require("../middlewares/auth/"),
+    upload : require("../middlewares/multerConfig"),
 }
 
-//Configuration des routes CRUD
+//Configuration des routes
+routeur.patch("/user/update", middleware.auth.validateToken, controllerUser.UpdateUser)
 routeur.post("/login", controllerUser.Login);
 routeur.post("/register", controllerUser.Register);
 routeur.post("/forgotPassword", controllerUser.ForgotPassword)
-routeur.post("/resetPassword", middleware.validateToken, controllerUser.ResetPassword);
-routeur.get("/user", middleware.validateToken, controllerUser.getUser)
-
+routeur.post("/resetPassword", middleware.auth.validateToken, controllerUser.ResetPassword);
+routeur.get("/user", middleware.auth.validateToken, controllerUser.getUser)
+routeur.post('/upload/user', [middleware.auth.validateToken, middleware.upload('user').single('image')], controllerUser.UploadImage)
 
 //Exportation des routes
 module.exports = routeur;

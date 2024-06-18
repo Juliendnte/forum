@@ -9,9 +9,7 @@ const path = require("path");
 const app = express();
 app.use(cors());
 app.use("/asset", express.static(path.join(__dirname,"./")));
-//Lire le body
 app.use(express.json());
-//Lire un formulaire
 app.use(express.urlencoded({ extended: true }));
 
 //Applique une limite de requête pour toutes les routes
@@ -24,5 +22,7 @@ const routeUser = require("./routeur/userRoute");
 app.use(routeUser);
 const routeTopic = require("./routeur/topicRoute");
 app.use(routeTopic);
+const routeMessage = require("./routeur/messageRoute");
+app.use(routeMessage);
 
 module.exports = app;

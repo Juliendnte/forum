@@ -4,9 +4,7 @@ class postModel{
     static getpostById(id){
         return new Promise((resolve, reject) => {
             const sql = `SELECT * FROM posts WHERE Id=?`
-            connection.query(sql,[id], (err, results)=>{
-                err ? reject(err) : resolve(results[0]);
-            });
+            connection.query(sql,[id], (err, results)=> err ? reject(err) : resolve(results[0]));
         });
     }
 
@@ -41,24 +39,20 @@ class postModel{
             }else{
                 connection.query(sql, (err, results)=> err ? reject(err) : resolve(results));
             }
-
         });
-
     }
 
     static createpost(newpost){
         return new Promise((resolve, reject) => {
-            const sql = `INSERT INTO posts (Content, Id_PostAnswer, Id_topics, Id_Users) VALUES (?, ?, ?, ?)`;
-            connection.query(sql, [newpost.Content, newpost.Id_PostAnswer, newpost.Id_topics, newpost.Id_Users], (err, results)=> {
-                err ? reject(err) : resolve(results[0]);
-            });
+            const sql = `INSERT INTO posts (Content, Id_PostAnswer, Id_topics, Id_User) VALUES (?, ?, ?, ?)`;
+            connection.query(sql, [newpost.Content, newpost.Id_PostAnswer, newpost.Id_topics, newpost.Id_User], (err, results)=> err ? reject(err) : resolve(results[0]));
         });
     }
 
     static updatePutpost(id, updatepost){
         return new Promise((resolve, reject) => {
-            const sql = `UPDATE posts SET Content=?, Id_PostAnswer=?, Id_topics=?, Id_Users=? WHERE id=?`;
-            const values = [updatepost.Content, updatepost.Id_PostAnswer, updatepost.Id_topics, updatepost.Id_Users, id];
+            const sql = `UPDATE posts SET Content=?, Id_PostAnswer=?, Id_topics=?, Id_User=? WHERE id=?`;
+            const values = [updatepost.Content, updatepost.Id_PostAnswer, updatepost.Id_topics, updatepost.Id_User, id];
 
             connection.query(sql, values, (err, results) => err ? reject(err) : resolve(results[0]));
         });

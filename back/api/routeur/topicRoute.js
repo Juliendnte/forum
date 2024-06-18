@@ -1,19 +1,22 @@
 //Importation des modules
 const express = require("express");
 const routeur = express.Router();
-const controllerTopic = require("../controller/topic");
+const TopicController = require("../controller/topic");
 const middleware = {
-    validateToken : require("../middlewares/auth"),
+    auth : require("../middlewares/auth/"),
     topicExists: require("../middlewares/Exists/topicExist"),
+    upload : require("../middlewares/multerConfig"),
+    Owner: require("../middlewares/Owner/topicOwn")
 }
 
-//Configuration des routes CRUD
-routeur.get("/topics", controllerTopic.getTopics);
-routeur.get("/topic/:id",middleware.topicExists , controllerTopic.getTopic);
-routeur.post("/topic",middleware.validateToken ,controllerTopic.postTopic);
-routeur.put("/topic/:id", [middleware.validateToken,middleware.topicExists] ,controllerTopic.putTopic);
-routeur.patch("/topic/:id",[middleware.validateToken,middleware.topicExists],controllerTopic.patchTopic)
-routeur.delete("/topic/:id",[middleware.validateToken, middleware.topicExists] ,controllerTopic.deleteTopic);
+//Configuration des routes
+routeur.get("/topics", TopicController.getTopics);
+routeur.get("/topic/:id",middleware.topicExists , TopicController.getTopic);
+routeur.post("/topic",middleware.auth.validateToken ,TopicController.postTopic);
+routeur.patch("/topic/:id",[middleware.auth.validateToken, middleware.topicExists, middleware.Owner.topicOwn],TopicController.patchTopic)
+routeur.delete("/topic/:id",[middleware.auth.validateToken, middleware.topicExists, middleware.Owner.everyRight] ,TopicController.deleteTopic);
+routeur.post("/upload/topic/:id", [middleware.auth.validateToken, middleware.topicExists, middleware.Owner.topicOwn, middleware.upload('topic').single('image')], TopicController.UploadImage)
+
 
 //Exportation des routes
 module.exports = routeur;
