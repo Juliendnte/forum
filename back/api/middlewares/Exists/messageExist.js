@@ -1,19 +1,19 @@
-const post = require("../../models/postModel");
+const post = require("../../models/messageModel");
 
 const postExists = async (req, res, next) => {
     const id = req.params.id;
 
     try {
-        const postById = await post.getpostById(id);
+        const messageById = await post.getMessageById(id);
 
-        if (!postById) {
+        if (!messageById) {
             return res.status(404).send({
-                message: `Post with id ${id} not found`,
+                message: `Message with id ${id} not found`,
                 status: 404
             });
         }
 
-        req.post = postById;
+        req.message = messageById;
         next();
     } catch (err) {
         res.status(500).json({

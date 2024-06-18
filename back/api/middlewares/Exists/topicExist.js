@@ -7,13 +7,13 @@ const topicExists = async (req, res, next) => {
         const topicById = await topic.getTopicById(id);
 
         if (!topicById) {
-            return res.status(404).json({
+            return res.status(404).send({
                 message: `Topic with id ${id} not found`,
                 status: 404
             });
         }
 
-        req.article = topicById;
+        req.topic = topicById;
         next();
     } catch (err) {
         res.status(500).json({
