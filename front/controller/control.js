@@ -19,7 +19,7 @@ exports.Index = (req,res)=>{
  * @param {Object} res - The response object.
  */
 exports.Login = (req,res)=>{
-
+    res.render('../views/pages/login');
 }
 
 /**
@@ -28,7 +28,25 @@ exports.Login = (req,res)=>{
  * @param {Object} res - The response object.
  */
 exports.Register = (req,res)=>{
+    res.render('../views/pages/login');
+}
 
+/**
+ * Render the index page
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
+exports.ForgotPwd = (req,res)=>{
+    res.render('../views/pages/forgotpwd');
+}
+
+/**
+ * Render the index page
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
+exports.ProfilUser = (req,res)=>{
+    res.render('../views/pages/profiluser');
 }
 
 /**
