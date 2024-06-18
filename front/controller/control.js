@@ -41,6 +41,15 @@ exports.ForgotPwd = (req,res)=>{
 }
 
 /**
+ * Render the index page
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
+exports.ProfilUser = (req,res)=>{
+    res.render('../views/pages/profiluser');
+}
+
+/**
  * Handle login form submission.
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
