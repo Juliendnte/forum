@@ -19,7 +19,7 @@ exports.Index = (req,res)=>{
  * @param {Object} res - The response object.
  */
 exports.Login = (req,res)=>{
-
+    res.render('../views/pages/login');
 }
 
 /**
@@ -28,7 +28,7 @@ exports.Login = (req,res)=>{
  * @param {Object} res - The response object.
  */
 exports.Register = (req,res)=>{
-
+    res.render('../views/pages/login');
 }
 
 /**

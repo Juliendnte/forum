@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('../components/head'); %>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <title>Modern Login Page | AsmrProg</title>
+</head>
+
+<body class="body-login">
+  <div class="container" id="container">
+    <div class="form-container sign-up">
+      <form>
+        <h1>Creer un compte</h1>
+        <span>ou utilisez votre email pour l'inscription</span>
+        <input type="text" placeholder="Name">
+        <input type="email" placeholder="Email">
+        <input type="password" placeholder="Password">
+        <button>Inscrivez-vous</button>
+      </form>
+    </div>
+    <div class="form-container sign-in">
+      <form>
+        <h1>Connectez-vous</h1>
+        <span>ou utilisez votre mot de passe email</span>
+        <input type="email" placeholder="Email">
+        <input type="password" placeholder="Password">
+        <div class="checkbox-forget_password">
+          <div class="checkbox-wrapper-46">
+            <input type="checkbox" id="cbx-46" class="inp-cbx" />
+            <label for="cbx-46" class="cbx"><span>
+                <svg viewBox="0 0 12 10" height="10px" width="12px">
+                  <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                </svg></span><span>Se souvenir de moi</span>
+            </label>
+          </div>
+          <a href="#">Mot de passe oublié ?</a>
+        </div>
+        <button>Connectez-vous</button>
+      </form>
+    </div>
+    <div class="toggle-container">
+      <div class="toggle">
+        <div class="toggle-panel toggle-left">
+          <h1>Content de vous revoir !</h1>
+          <p>Entrez vos informations personnelles pour utiliser toutes les fonctionnalités du site.</p>
+          <button class="hidden" id="login">Connectez-vous</button>
+        </div>
+        <div class="toggle-panel toggle-right">
+          <h1>Salut, cher ami !</h1>
+          <p>Enregistrez-vous avec vos informations personnelles pour accéder à toutes les fonctionnalités du site.</p>
+          <button class="hidden" id="register">Inscrivez-vous</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/public/js/scriptLogin.js"></script>
+</body>
+
+</html>
