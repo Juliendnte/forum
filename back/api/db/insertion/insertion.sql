@@ -12,3 +12,8 @@ INSERT INTO `status` (Label) VALUES
                                          ('Public'),
                                          ('Private'),
                                          ('Archived');
+
+INSERT INTO `role` (Label) VALUES
+                               ('Admin'),
+                               ('Modérateur'),
+                               ('Utilisateur');
