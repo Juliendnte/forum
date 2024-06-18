@@ -177,7 +177,7 @@
 
 .toggle-panel {
     position: absolute;
-    width: 50%;
+    width: 45%;
     height: 100%;
     display: flex;
     align-items: center;
@@ -297,4 +297,61 @@
     color: #333;
     font-size: 15px;
     text-decoration: none;
+}
+
+.btn-back-login {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+}
+
+.Btn {
+    width: 45px;
+    height: 45px;
+    background: var(--color-green-linear);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    border: none;
+}
+
+.arrow path {
+    fill: white;
+}
+
+.text {
+    font-size: 0.9em;
+    width: 100px;
+    position: absolute;
+    color: rgb(0, 0, 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    bottom: -18px;
+    opacity: 0;
+    transition-duration: .7s;
+}
+
+.Btn:hover .text {
+    opacity: 1;
+    transition-duration: .7s;
+}
+
+.Btn:hover .arrow {
+    animation: slide-in-bottom .7s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+
+@keyframes slide-in-bottom {
+    0% {
+        transform: translateX(10px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
