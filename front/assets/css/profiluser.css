@@ -87,3 +87,35 @@
     background: #555555;
     color: #fff;
 }
+
+.info-like-post-ctn {
+    border-bottom: 1px solid #d5d5d5;
+    border-top: 1px solid #d5d5d5;
+    margin: 40px 100px;
+    font-size: 1.5rem;
+}
+
+.info-like-post-global {
+    display: flex;
+    margin: 5px 35px;
+    gap: 25px;
+}
+
+.info-like-post-global span:first-child{
+    font-weight: bold;
+}
+
+.info-user-biographie-ctn {
+    margin: 40px 100px;
+}
+
+.info-titre {
+    font-size: 1.67rem;
+}
+
+.biographie-text {
+    width: 80%;
+    margin-top : 20px;
+    margin-bottom : 20px;
+    font-size: 1.2rem;
+}

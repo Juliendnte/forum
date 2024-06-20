@@ -7,44 +7,79 @@
 </head>
 
 <body>
-    <%- include('../components/header'); %>
-    <section class="section-global">
-        <%- include('../components/aside'); %>
-        <section class="profil-user-global">
-            <div class="info-user-global-ctn">
-                <div class="img-user-global">
-                    <img src="/public/images/icon/undefined.png" alt="img de profil">
+<%- include('../components/header'); %>
+<section class="section-global">
+    <%- include('../components/aside'); %>
+    <section class="profil-user-global">
+        <section class="info-user-global-ctn">
+            <div class="img-user-global">
+                <img src="/public/images/icon/undefined.png" alt="img de profil">
+            </div>
+            <div class="info-user-global">
+                <div class="info-user-name-email-date">
+                    <div class="info-user-name-email">
+                        <span>KAVTIV</span>
+                        <span>kantin.fagn@gmail.com</span>
+                    </div>
+                    <div class="info-user-date  ">
+                        <span>Membre depuis le : </span>
+                        <span>11 Avril 2024</span>
+                    </div>
                 </div>
-                <div class="info-user-global">
-                    <div class="info-user-name-email-date">
-                        <div class="info-user-name-email">
-                            <span>KAVTIV</span>
-                            <span>kantin.fagn@gmail.com</span>
+                <div class="info-user-follow-friend-global">
+                    <div class="info-user-follow-friend">
+                        <div class="info-user-follow">
+                            <span>23</span>
+                            <span>followers</span>
                         </div>
-                        <div class="info-user-date  ">
-                            <span>Membre depuis le : </span>
-                            <span>Avril 11 2024</span>
+                        <div class="info-user-friend">
+                            <span>2</span>
+                            <span>ami(e)s</span>
                         </div>
                     </div>
-                    <div class="info-user-follow-friend-global">
-                        <div class="info-user-follow-friend">
-                            <div class="info-user-follow">
-                                <span>23</span>
-                                <span>followers</span>
-                            </div>
-                            <div class="info-user-friend">
-                                <span>2</span>
-                                <span>ami(e)s</span>
-                            </div>
-                        </div>
-                        <div class="btn-follow-profil">
-                            <button>Suivre</button>
-                        </div>
+                    <div class="btn-follow-profil">
+                        <button>Suivre</button>
                     </div>
                 </div>
             </div>
         </section>
+        <section class="info-like-post-ctn">
+            <div class="info-like-post-global">
+                <div class="post-global">
+                    <span>2</span>
+                    <span>Topics</span>
+                </div>
+                <div class="like-global">
+                    <span>158</span>
+                    <span>Likes</span>
+                </div>
+            </div>
+        </section>
+        <section class="info-user-biographie-ctn">
+            <div>
+                <div class="info-titre">
+                    <h2>Biographie</h2>
+                </div>
+                <div class="biographie-text">
+                    <span>Bonjour ! Je suis Kantin, un développeur front-end passionné basé à Paris. Depuis que j'ai découvert la magie du code web, j'ai plongé tête baissée dans le monde du développement. J'aime jongler avec HTML, CSS et JavaScript, en explorant constamment de nouveaux frameworks comme React et Angular. Toujours avide d'apprendre et de relever de nouveaux défis, je suis heureux de contribuer à rendre le web plus beau et plus fonctionnel, une ligne de code à la fois.</span>
+                </div>
+            </div>
+            <div>
+                <div class="info-titre">
+                    <h2>Topics</h2>
+                </div>
+                <div>
+
+                </div>
+            </div>
+            <div>
+                <div class="info-titre">
+                    <h2> Langages de programmation préférés</h2>
+                </div>
+            </div>
+        </section>
     </section>
+</section>
 </body>
 
 </html>
