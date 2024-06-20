@@ -84,7 +84,6 @@ class postModel{
         });
     }
 
-
     static deletepost(id){
         return new Promise((resolve, reject) => {
             const sql = `DELETE FROM posts WHERE Id=?`

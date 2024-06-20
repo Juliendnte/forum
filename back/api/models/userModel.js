@@ -17,7 +17,9 @@ class logModel{
 
     static register(user){
         return new Promise((resolve,reject)=>{
-            const sql = `INSERT INTO users (Name, Email, Password, Salt, Create_at)VALUES(?,?,?,?, DEFAULT)`;
+            const sql = `INSERT INTO users (Name, Email, Password, Salt, Create_at)VALUES (?,?,?,?, DEFAULT)`;
+            console.log(sql)
+            console.log(user)
             connection.query(sql,[user.username,user.email, user.Password.hashedPassword, user.Password.salt], (err, results)=> err ? reject(err) : resolve(results[0]));
         });
     }
@@ -31,7 +33,20 @@ class logModel{
 
     static getUserById(id){
         return new Promise((resolve,reject)=>{
-            const sql = `SELECT * FROM users WHERE Id = ?`;
+            const sql = `
+                            SELECT 
+                                u.Name, 
+                                u.Biography, 
+                                u.Email, 
+                                u.Path AS Img_Profil, 
+                                u.Create_at, 
+                                r.Label As Role,
+                                t.Label AS Tags
+                            FROM users u
+                            LEFT JOIN role r ON u.Id_role = r.Id
+                            LEFT JOIN userstags ON u.Id = userstags.Id_User
+                            LEFT JOIN tags t ON userstags.Id_Tag = t.Id
+                            WHERE u.Id = ?`;
             connection.query(sql, [id],(err,results)=> err ? reject(err) : resolve(results[0]));
         })
     }
@@ -62,6 +77,20 @@ class logModel{
         });
     }
 
+    static getFriends(id){
+        return new Promise((resolve, reject)=>{
+            const sql = `
+                            SELECT 
+                                u2.Id,
+                                u2.Name,
+                                u2.Path
+                            FROM friendship f 
+                            LEFT JOIN users u1 ON f.Id_User1 = u1.Id
+                            LEFT JOIN users u2 ON f.Id_User2 = u2.Id
+                            WHERE u1.Id = ? AND f.status = 'friend'`;
+            connection.query(sql, id , (err, results)=> err ? reject(err) : resolve(results));
+        })
+    }
 }
 
 module.exports = logModel;

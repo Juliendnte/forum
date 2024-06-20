@@ -192,7 +192,34 @@ class UserController {
         const id = req.user.Sub;
         const body = req.body;
         try {
+            await log.updatePatchUser(id, body)
+            res.status(200).send({
+                message: "User successfully updated",
+                status: 200
+            })
+        }catch (err){
+            res.status(500).send({
+                message: err,
+                status: 500
+            })
+        }
+    }
 
+    static async getFriends(req, res){
+        const id = req.user.Sub;
+        try{
+            const friends = await log.getFriends(id);
+            if (friends.length !== 0){
+                return res.status(404).send({
+                    message: 'Vous n\'avez aucun amies',
+                    status: 404
+                })
+            }
+            res.status(200).send({
+                message: 'Friends successfully got',
+                status: 200,
+                friends
+            })
         }catch (err){
             res.status(500).send({
                 message: err,
