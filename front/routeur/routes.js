@@ -1,12 +1,8 @@
 // Importation des modules
 const express = require("express");
 const routeur = express.Router();
-const ControlTemplate = require("../controller/controlTemplate");
-const controlUser = require("../controller/controlTreatmentUser");
-
-// Instantiate the ControlTemplate class
-const controllerTemplate = new ControlTemplate();
-const controllerUser = new controlUser();
+const controllerTemplate = require("../controller/controlTemplate");
+const controllerUser = require("../controller/controlTreatmentUser");
 
 // Configuration des routes
 routeur.get("/CODER", controllerTemplate.Index);

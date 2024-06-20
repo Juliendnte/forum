@@ -1,11 +1,22 @@
+const controlUser = require('./controlTreatmentUser');
+
 class ControlTemplate {
     /**
      * Render the index page
      * @param {Object} req - The request object.
      * @param {Object} res - The response object.
      */
-    Index = (req, res) => {
-        res.render('../views/pages/index');
+    static async Index(req, res) {
+        try {
+            const dataUser = await controlUser.GetUser(req, res);
+
+            res.render('../views/pages/index', {
+                dataUser,
+            });
+        } catch (err) {
+            console.error(err);
+            res.status(500).send("Internal Server Error");
+        }
     };
 
     /**
@@ -13,7 +24,7 @@ class ControlTemplate {
      * @param {Object} req - The request object.
      * @param {Object} res - The response object.
      */
-    Login = (req, res) => {
+    static async Login(req, res) {
         res.render('../views/pages/login');
     }
 
@@ -22,7 +33,7 @@ class ControlTemplate {
      * @param {Object} req - The request object.
      * @param {Object} res - The response object.
      */
-    Register = (req, res) => {
+    static async Register (req, res) {
         res.render('../views/pages/register');
     }
 
@@ -31,7 +42,7 @@ class ControlTemplate {
      * @param {Object} req - The request object.
      * @param {Object} res - The response object.
      */
-    ForgotPwd = (req, res) => {
+    static async ForgotPwd(req, res) {
         res.render('../views/pages/forgotpwd');
     }
 
@@ -40,7 +51,7 @@ class ControlTemplate {
      * @param {Object} req - The request object.
      * @param {Object} res - The response object.
      */
-    ProfilUser = (req, res) => {
+    static async ProfilUser(req, res) {
         res.render('../views/pages/profiluser');
     }
 }
