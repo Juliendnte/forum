@@ -2,7 +2,7 @@
 const express = require("express");
 const routeur = express.Router();
 const controllerUser = require("../controller/controlTreatmentUser");
-const controllerPage = require("../controller/controlPage");
+const controllerPage = require("../controller/controlTemplate");
 
 //Configuration des routes
 routeur.get("/CODER", controllerPage.Index);

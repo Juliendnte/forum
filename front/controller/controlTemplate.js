@@ -1,4 +1,4 @@
-class ControlPage {
+class ControlTemplate {
     /**
      * Render the index page
      * @param {Object} req - The request object.
@@ -45,4 +45,4 @@ class ControlPage {
     }
 }
 
-module.exports = ControlPage;
+module.exports = ControlTemplate;
