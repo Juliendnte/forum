@@ -23,8 +23,9 @@ class TreatmentUser {
     LoginTreatment = async (req, res) => {
         const {name, password, remember} = req.body;
         if (!name) {
+            console.log({name, password, remember});
             errorHandler.setError("The username/Email field must be filled", 401);
-            return res.redirect("/login");
+            return res.redirect('/CODER/login');
         }
 
         const {username, email} = isValidEmail(name) ? {email: name} : {username: name};
@@ -50,7 +51,8 @@ class TreatmentUser {
         } catch (err) {
             errorHandler.handleRequestError(err);
         }
-        res.redirect("/login");
+        console.log({name, password, remember})
+        res.redirect("/CODER");
     };
 
     /**

@@ -1,21 +1,25 @@
-//Importation des modules
+// Importation des modules
 const express = require("express");
 const routeur = express.Router();
-const controllerUser = require("../controller/controlTreatmentUser");
-const controllerPage = require("../controller/controlTemplate");
+const ControlTemplate = require("../controller/controlTemplate");
+const controlUser = require("../controller/controlTreatmentUser");
 
-//Configuration des routes
-routeur.get("/CODER", controllerPage.Index);
-routeur.get("/CODER/login", controllerPage.Login)
-routeur.get("/CODER/register", controllerPage.Register)
-routeur.get("/CODER/accounts/password/reset/", controllerPage.ForgotPwd)
-routeur.get("/CODER/profil", controllerPage.ProfilUser)
+// Instantiate the ControlTemplate class
+const controllerTemplate = new ControlTemplate();
+const controllerUser = new controlUser();
+
+// Configuration des routes
+routeur.get("/CODER", controllerTemplate.Index);
+routeur.get("/CODER/login", controllerTemplate.Login);
+routeur.get("/CODER/register", controllerTemplate.Register);
+routeur.get("/CODER/accounts/password/reset/", controllerTemplate.ForgotPwd);
+routeur.get("/CODER/profil", controllerTemplate.ProfilUser);
 
 // Route Traitement en rapport avec le user
-routeur.post("/treatment/login", controllerUser.LoginTreatment)
-routeur.post("/treatment/register", controllerUser.RegisterTreatment)
-routeur.post("/treatment/forgotpwd", controllerUser.ForgotPwdTreatment)
-routeur.post("/treatment/followUser", controllerUser.FollowUserTreatment)
+routeur.post("/treatment/login", controllerUser.LoginTreatment);
+routeur.post("/treatment/register", controllerUser.RegisterTreatment);
+// routeur.post("/treatment/forgotpwd", controllerUser);
+// routeur.post("/treatment/followUser", controllerUser);
 
-//pour que nos routes soit accessible
-module.exports = routeur
+// Pour que nos routes soient accessibles
+module.exports = routeur;
