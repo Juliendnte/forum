@@ -5,7 +5,17 @@ class topicModel{
 
     static getTopicById(id){
         return new Promise((resolve, reject) => {
-            const sql = `SELECT * FROM topics WHERE Id=?`
+            const sql = `
+                            SELECT 
+                                t.Id,
+                                t.Title,
+                                t.Path,
+                                t.Create_at,
+                                t.Id_User,
+                                s.Label AS Status
+                            FROM topics t
+                            LEFT JOIN status s ON t.Id_Status = s.Id
+                            WHERE t.Id=?`
             connection.query(sql,[id], (err, results)=>{
                 err ? reject(err) : resolve(results[0]);
             });
@@ -51,6 +61,13 @@ class topicModel{
             // Exécuter la requête avec les valeurs
             connection.query(sql, values, (err, results) => err ? reject(err) : resolve(results));
         });
+    }
+
+    static getTags(){
+        return new Promise((resolve, reject) => {
+            const sql = `SELECT Label, Path FROM tags`;
+            connection.query(sql, (err, results)=> err ? reject(err) : resolve(results));
+        })
     }
 
     static createTopic(newTopic){

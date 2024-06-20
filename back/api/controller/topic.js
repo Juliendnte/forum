@@ -86,6 +86,25 @@ class TopicController {
         }
     }
 
+    static async getTags(req,res){
+        try{
+            const tags = await topic.getTags();
+            for (const tag of tags) {
+                tag.Path = `${baseUrl}/assets${tag.Path}`;
+            }
+            res.status(200).send({
+                message: "Tags successfully found",
+                status: 200,
+                tags
+            })
+        }catch (err){
+            res.status(500).send({
+                message: err,
+                status: 500
+            })
+        }
+    }
+
     static async postTopic(req,res){
         const {Title} = req.body;
         const Id_User = req.user.Sub;
