@@ -27,7 +27,7 @@ class topicModel{
             let sql = `SELECT * FROM topics `
 
             const values = [];
-            let whereClauses = [];
+            const whereClauses = [];
             let limitClause = "";
             let offsetClause = "";
 

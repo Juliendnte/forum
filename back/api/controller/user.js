@@ -1,7 +1,8 @@
 const crypto = require('crypto');
-const log = require("../models/userModel");
+const user = require("../models/userModel");
 const jwt = require('jsonwebtoken');
-const nodemailer = require("nodemailer")
+const nodemailer = require("nodemailer");
+const url = "http://localhost:4000/";
 require("dotenv").config();
 
 
@@ -41,7 +42,7 @@ class UserController {
         }
         const Password  = hashPassword(password, crypto.randomBytes(16).toString('hex'));//hash mon password
         try{
-            await log.register({username, email, Password});
+            await user.register({username, email, Password});
             res.status(201).send({
                 message : `User registered successfully`,
                 status: 201
@@ -57,26 +58,26 @@ class UserController {
     static async Login(req, res) {
         const { email, username , password ,remember} = req.body;
         try{
-            let user
+            let utilisateur
             if (isValidEmail(email))
-                user = await log.login(email);
+                utilisateur = await user.login(email);
             else if (username)
-                user = await log.login(null,username);
+                utilisateur = await user.login(null,username);
             else{
                 return res.status(401).send({
                     message:`Invalid username, email or password`,
                     status: 401
                 });
             }
-            if (!user){
+            if (!utilisateur){
                 return res.status(401).send({
                     message:`Invalid username, email or password`,
                     status: 401
                 });
             }
-            const hashedPassword = hashPassword(password, user.Salt);//Récupere le password hashé
-            if (hashedPassword.hashedPassword === user.Password) {//Test s'il est egale au password de l'utilisateur a l'email donné par l'utilisateur
-                const Token = jwt.sign({ Sub: user.Id , IsAdmin: user.Role === 1, IsModo: user.Role === 2}, jwtkey, { expiresIn: remember ? '365d':'24h' });//Me passe un token pendant 24h et le régle avec le jwtkey
+            const hashedPassword = hashPassword(password, utilisateur.Salt);//Récupere le password hashé
+            if (hashedPassword.hashedPassword === utilisateur.Password) {//Test s'il est egale au password de l'utilisateur a l'email donné par l'utilisateur
+                const Token = jwt.sign({ Sub: utilisateur.Id , IsAdmin: utilisateur.Role === 1, IsModo: utilisateur.Role === 2}, jwtkey, { expiresIn: remember ? '365d':'24h' });//Me passe un token pendant 24h et le régle avec le jwtkey
                 res.status(200).send({ Token });//Je renvoie un nouveau token a chaque login
             } else {
                 return res.status(401).send({
@@ -94,8 +95,9 @@ class UserController {
 
     static async getUser(req, res) {
         try {
-            const user = await log.getUserById(req.user.Sub);
-            if (!user){
+            const utilisateur = await user.getUserById(req.user.Sub);
+            utilisateur.Path = url + "assets/" + utilisateur.Path;
+            if (!utilisateur){
                 res.status(404).send({
                     message: 'User not found',
                     status: 404
@@ -104,7 +106,7 @@ class UserController {
                 res.status(200).send({
                     message: 'User successfully found',
                     status: 200,
-                    user
+                    utilisateur
                 })
             }
         }catch (err){
@@ -118,21 +120,21 @@ class UserController {
     static async ForgotPassword(req, res) {
         const { email } = req.body;
         try{
-            const user = await log.getUserByEmail(email);
-            if (!user) {
+            const utilisateur = await user.getUserByEmail(email);
+            if (!utilisateur) {
                 return res.status(400).send({
                     message:'No user with that email',
                     status: 400
                 });
             }
-            const token = jwt.sign({ Sub: user.Id }, jwtkey, { expiresIn: '1h' });
+            const token = jwt.sign({ Sub: utilisateur.Id }, jwtkey, { expiresIn: '1h' });
             const resetURL = `http://localhost:3000/resetPassword?token=${token}`;
 
             await transporter.sendMail({
                 from: process.env.EMAIL,
-                to: user.Email,
+                to: utilisateur.Email,
                 subject: '[Horo-Haven] Réinitialisation du mot de passe',
-                html: `<p>Bonjour ${user.Name},</p>
+                html: `<p>Bonjour ${utilisateur.Name},</p>
                 <p>Vous avez demandé à réinitialiser votre mot de passe.</p>
                 <p>Cliquez sur ce <a href="${resetURL}">lien</a> pour réinitialiser votre mot de passe.</p>
                 <p>Si vous n'avez pas fait cette demande, veuillez ignorer cet e-mail.</p>`
@@ -154,7 +156,7 @@ class UserController {
         const { password } = req.body;
         try{
             const Password  = hashPassword(password, crypto.randomBytes(16).toString('hex'));//hash mon password
-            await log.setPassword(Password, req.user.Sub)
+            await user.setPassword(Password, req.user.Sub)
             res.status(200).send({
                 message : `Password updated successfully`,
                 status: 200
@@ -171,7 +173,7 @@ class UserController {
         const filePath = req.file.path.replace('assets', '');
         const id = req.user.Sub;
         try {
-            await log.updatePatchUser(id, {Path: filePath})
+            await user.updatePatchUser(id, {Path: filePath})
             res.download(filePath, (err) => {
                 if (err) {
                     res.status(500).send({
@@ -192,7 +194,7 @@ class UserController {
         const id = req.user.Sub;
         const body = req.body;
         try {
-            await log.updatePatchUser(id, body)
+            await user.updatePatchUser(id, body)
             res.status(200).send({
                 message: "User successfully updated",
                 status: 200
@@ -208,7 +210,7 @@ class UserController {
     static async getFriends(req, res){
         const id = req.user.Sub;
         try{
-            const friends = await log.getFriends(id);
+            const friends = await user.getFriends(id);
             if (friends.length !== 0){
                 return res.status(404).send({
                     message: 'Vous n\'avez aucun amies',
@@ -219,6 +221,29 @@ class UserController {
                 message: 'Friends successfully got',
                 status: 200,
                 friends
+            })
+        }catch (err){
+            res.status(500).send({
+                message: err,
+                status: 500
+            })
+        }
+    }
+
+    static async Search(req, res){
+        const searchQuery = req.query.search
+        try{
+            const search = await user.search(searchQuery)
+            if (search.length === 0){
+                return res.status(404).send({
+                    message: 'Nous n\'avons pas trouvé résultat similaire a ' + search,
+                    status: 404
+                })
+            }
+            res.status(200).send({
+                message: 'Articles trouvé',
+                status: 200,
+                search
             })
         }catch (err){
             res.status(500).send({
