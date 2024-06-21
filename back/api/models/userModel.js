@@ -1,10 +1,10 @@
 const connection = require("../config/authBDD")
 
-class logModel{
+class userModel{
 
     static login (email = null,username = null){
         return new Promise((resolve,reject)=>{
-            let sql = ``
+            let sql
             if(email) {
                 sql = `SELECT * FROM users WHERE Email = ?`;//Car email unique
                 connection.query(sql,email, (err, results)=> err ? reject(err) : resolve(results[0]));
@@ -38,7 +38,7 @@ class logModel{
                                 u.Name, 
                                 u.Biography, 
                                 u.Email, 
-                                u.Path AS Img_Profil, 
+                                u.Path, 
                                 u.Create_at, 
                                 r.Label As Role,
                                 t.Label AS Tags
@@ -91,6 +91,17 @@ class logModel{
             connection.query(sql, id , (err, results)=> err ? reject(err) : resolve(results));
         })
     }
+
+    static search(search){
+        return new Promise((resolve,reject)=>{
+            const sql = `
+                            SELECT 
+                                t.*
+                            FROM topics t
+                            WHERE (t.Title LIKE ?)`
+            connection.query(sql , search, (err, results)=> err ? reject(err) : resolve(results));
+        })
+    }
 }
 
-module.exports = logModel;
+module.exports = userModel;

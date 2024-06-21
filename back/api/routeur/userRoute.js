@@ -15,6 +15,7 @@ routeur.post("/forgotPassword", controllerUser.ForgotPassword)
 routeur.post("/resetPassword", middleware.auth.validateToken, controllerUser.ResetPassword);
 routeur.get("/user", middleware.auth.validateToken, controllerUser.getUser)
 routeur.get("/friends", [middleware.auth.validateToken], controllerUser.getFriends)
+routeur.post("/search", controllerUser.Search)
 routeur.post('/upload/user', [middleware.auth.validateToken, middleware.upload('user').single('image')], controllerUser.UploadImage)
 
 //Exportation des routes

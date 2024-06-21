@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `users`
     `Id`        int          NOT NULL AUTO_INCREMENT,
     `Name`      varchar(50)  NOT NULL UNIQUE,
     `Biography` varchar(1200)         DEFAULT NULL,
-    `Path`      varchar(255)          DEFAULT 'user/undefined',
+    `Path`      varchar(255)          DEFAULT 'user/undefined.png',
     `Email`     varchar(140) NOT NULL UNIQUE,
     `Password`  varchar(250) NOT NULL,
     `Salt`      varchar(150) NOT NULL,
