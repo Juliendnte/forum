@@ -13,17 +13,17 @@
     <section class="profil-user-global">
         <section class="info-user-global-ctn">
             <div class="img-user-global">
-                <img src="/public/images/icon/undefined.png" alt="img de profil">
+                <img src="<%= dataUser.user.Img_Profil %>" alt="img de profil">
             </div>
             <div class="info-user-global">
                 <div class="info-user-name-email-date">
                     <div class="info-user-name-email">
-                        <span>KAVTIV</span>
-                        <span>kantin.fagn@gmail.com</span>
+                        <span><%= dataUser.user.Name %></span>
+                        <span><%= dataUser.user.Email %></span>
                     </div>
-                    <div class="info-user-date  ">
+                    <div class="info-user-date">
                         <span>Membre depuis le : </span>
-                        <span>11 Avril 2024</span>
+                        <span><%= dataUser.user.Create_at_formatted %></span>
                     </div>
                 </div>
                 <div class="info-user-follow-friend-global">

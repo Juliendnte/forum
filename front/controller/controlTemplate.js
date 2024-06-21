@@ -1,4 +1,5 @@
 const controlUser = require('./controlTreatmentUser');
+const moment = require('moment');
 
 class ControlTemplate {
     /**
@@ -52,7 +53,20 @@ class ControlTemplate {
      * @param {Object} res - The response object.
      */
     static async ProfilUser(req, res) {
-        res.render('../views/pages/profiluser');
+        try {
+            const dataUser = await controlUser.GetUser(req, res);
+
+            if (dataUser && dataUser.user && dataUser.user.Create_at) {
+                dataUser.user.Create_at_formatted = moment(dataUser.user.Create_at).locale('fr').format('LL');
+            }
+
+            res.render('../views/pages/profiluser', {
+                dataUser,
+            });
+        } catch (err) {
+            console.error(err);
+            res.status(500).send("Internal Server Error");
+        }
     }
 }
 
