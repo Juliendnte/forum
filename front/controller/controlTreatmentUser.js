@@ -88,7 +88,7 @@ class TreatmentUser {
     }
 
     /**
-     * Handle getUser form submission.
+     * Handle get user form submission.
      * @param {Object} req - The request object.
      * @param {Object} res - The response object.
      */
@@ -115,9 +115,28 @@ class TreatmentUser {
                 return undefined;
             }
         } catch (err) {
-            console.error("Failed to fetch user data");
-            res.status(500).send("Internal Server Error");
-            return undefined;
+            errorHandler.handleRequestError(err);
+        }
+    }
+
+    /**
+     * Handle disconnect form submission.
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
+    static async DisconnectTreatment(req, res) {
+        try {
+            const token = req.cookies.Token;
+
+            if (!token) {
+                return res.status(400).send("No token found");
+            }
+
+            // Suppression du cookie de session
+            res.clearCookie('Token');
+            res.redirect('/CODER'); // Redirection vers la page précédente
+        } catch (err) {
+            errorHandler.handleRequestError(err);
         }
     }
 }
