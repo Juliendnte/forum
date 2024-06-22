@@ -14,6 +14,7 @@ routeur.get("/CODER/profil", controllerTemplate.ProfilUser);
 // Route Traitement en rapport avec le user
 routeur.post("/treatment/login", controllerUser.LoginTreatment);
 routeur.post("/treatment/register", controllerUser.RegisterTreatment);
+routeur.get("/treatment/disconnect", controllerUser.DisconnectTreatment)
 // routeur.post("/treatment/forgotpwd", controllerUser);
 // routeur.post("/treatment/followUser", controllerUser);
 

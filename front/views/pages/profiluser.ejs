@@ -13,17 +13,17 @@
     <section class="profil-user-global">
         <section class="info-user-global-ctn">
             <div class="img-user-global">
-                <img src="<%= dataUser.user.Img_Profil %>" alt="img de profil">
+                <img src="<%= dataUser.utilisateur.Path %>" alt="img de profil">
             </div>
             <div class="info-user-global">
                 <div class="info-user-name-email-date">
                     <div class="info-user-name-email">
-                        <span><%= dataUser.user.Name %></span>
-                        <span><%= dataUser.user.Email %></span>
+                        <span><%= dataUser.utilisateur.Name %></span>
+                        <span><%= dataUser.utilisateur.Email %></span>
                     </div>
                     <div class="info-user-date">
                         <span>Membre depuis le : </span>
-                        <span><%= dataUser.user.Create_at_formatted %></span>
+                        <span><%= dataUser.utilisateur.Create_at_formatted %></span>
                     </div>
                 </div>
                 <div class="info-user-follow-friend-global">
@@ -60,17 +60,29 @@
                 <div class="info-titre">
                     <h2>Biographie</h2>
                 </div>
-                <div class="biographie-text">
-                    <span>Bonjour ! Je suis Kantin, un développeur front-end passionné basé à Paris. Depuis que j'ai découvert la magie du code web, j'ai plongé tête baissée dans le monde du développement. J'aime jongler avec HTML, CSS et JavaScript, en explorant constamment de nouveaux frameworks comme React et Angular. Toujours avide d'apprendre et de relever de nouveaux défis, je suis heureux de contribuer à rendre le web plus beau et plus fonctionnel, une ligne de code à la fois.</span>
-                </div>
+                <% if (dataUser.utilisateur.Biography === null ) {%>
+                    <div class="biographie-text">
+                        <span>Ajouter une biographie</span>
+                    </div>
+                <%} else {%>
+                    <div class="biographie-text">
+                        <span><%= dataUser.utilisateur.Biography%></span>
+                    </div>
+                <% } %>
             </div>
             <div>
                 <div class="info-titre">
                     <h2>Topics</h2>
                 </div>
-                <div>
-
-                </div>
+                <% if (dataUser.utilisateur.Topics === null ) {%>
+                    <div class="biographie-text">
+                        <span>Créer des topics pour qu'ils apparaissent ici !</span>
+                    </div>
+                <%} else {%>
+                    <div class="biographie-text">
+                        <span><%= dataUser.utilisateur.Topics %></span>
+                    </div>
+                <% } %>
             </div>
             <div>
                 <div class="info-titre">

@@ -1,5 +1,4 @@
 const controlUser = require('./controlTreatmentUser');
-const moment = require('moment');
 
 class ControlTemplate {
     /**
@@ -56,8 +55,10 @@ class ControlTemplate {
         try {
             const dataUser = await controlUser.GetUser(req, res);
 
-            if (dataUser && dataUser.user && dataUser.user.Create_at) {
-                dataUser.user.Create_at_formatted = moment(dataUser.user.Create_at).locale('fr').format('LL');
+            if (dataUser && dataUser.utilisateur && dataUser.utilisateur.Create_at) {
+                const date = new Date(dataUser.utilisateur.Create_at);
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                dataUser.utilisateur.Create_at_formatted = date.toLocaleDateString('fr-FR', options);
             }
 
             res.render('../views/pages/profiluser', {
