@@ -31,25 +31,52 @@ class userModel{
         })
     }
 
-    static getUserById(id){
-        return new Promise((resolve,reject)=>{
+    static getUserById(id) {
+        return new Promise((resolve, reject) => {
             const sql = `
-                            SELECT 
-                                u.Name, 
-                                u.Biography, 
-                                u.Email, 
-                                u.Path, 
-                                u.Create_at, 
-                                r.Label As Role,
-                                t.Label AS Tags
-                            FROM users u
-                            LEFT JOIN role r ON u.Id_role = r.Id
-                            LEFT JOIN userstags ON u.Id = userstags.Id_User
-                            LEFT JOIN tags t ON userstags.Id_Tag = t.Id
-                            WHERE u.Id = ?`;
-            connection.query(sql, [id],(err,results)=> err ? reject(err) : resolve(results[0]));
-        })
+            SELECT 
+                u.Name, 
+                u.Biography, 
+                u.Email, 
+                u.Path, 
+                u.Create_at, 
+                r.Label AS Role,
+                t.Path AS Tag
+            FROM users u
+            LEFT JOIN role r ON u.Id_role = r.Id
+            LEFT JOIN userstags ON u.Id = userstags.Id_User
+            LEFT JOIN tags t ON userstags.Id_Tag = t.Id
+            WHERE u.Id = ?;
+        `;
+            connection.query(sql, [id], (err, results) => {
+                if (err) {
+                    return reject(err);
+                }
+
+                if (results.length === 0) {
+                    return resolve(null);
+                }
+
+                const user = {
+                    Name: results[0].Name,
+                    Biography: results[0].Biography,
+                    Email: results[0].Email,
+                    Path: results[0].Path,
+                    Create_at: results[0].Create_at,
+                    Role: results[0].Role,
+                    Tags: []
+                };
+
+                results.forEach(row => {
+                    if (row.Tag)
+                        user.Tags.push(row.Tag);
+                });
+
+                resolve(user);
+            });
+        });
     }
+
 
     static setPassword(password, id){
         return new Promise((resolve,reject)=>{

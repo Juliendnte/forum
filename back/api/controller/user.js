@@ -97,6 +97,7 @@ class UserController {
         try {
             const utilisateur = await user.getUserById(req.user.Sub);
             utilisateur.Path = url + "assets/" + utilisateur.Path;
+            utilisateur.Tags = utilisateur.Tags.map((tag) => url + "assets/" + tag)
             if (!utilisateur){
                 res.status(404).send({
                     message: 'User not found',
