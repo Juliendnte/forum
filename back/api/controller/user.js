@@ -99,6 +99,8 @@ class UserController {
             const utilisateur = await user.getUserById(userId);
             utilisateur.Path = url + "assets/" + utilisateur.Path;
             utilisateur.Tags = utilisateur.Tags.map((tag) => url + "assets/" + tag)
+            utilisateur.VueEnsemble = await user.getPostMessage(userId)
+            utilisateur.VueEnsemble.forEach((vue) => vue.TopicLike = vue.TopicLike === 0 ? -1 : vue.TopicLike);
             if (!utilisateur){
                 res.status(404).send({
                     message: 'User not found',
@@ -112,6 +114,7 @@ class UserController {
                 })
             }
         }catch (err){
+            console.log(err)
             res.status(500).send({
                 message : err,
                 status: 500
@@ -223,28 +226,6 @@ class UserController {
                 message: 'Friends successfully got',
                 status: 200,
                 friends
-            })
-        }catch (err){
-            res.status(500).send({
-                message: err,
-                status: 500
-            })
-        }
-    }
-
-    static async getTopics(req,res){
-        try{
-            const topics = await user.getTopic(req.user.Sub);
-            if (topics.length === 0){
-                return res.status(404).send({
-                    message: 'Vous n\'avez aucun posts',
-                    status: 404
-                })
-            }
-            res.status(200).send({
-                message: 'Topics successfully got',
-                status: 200,
-                topics
             })
         }catch (err){
             res.status(500).send({

@@ -16,7 +16,6 @@ routeur.post("/resetPassword", [middleware.auth.validateToken], controllerUser.R
 routeur.get("/user", [middleware.auth.validateToken], controllerUser.getUser)
 routeur.get("/friends", [middleware.auth.validateToken], controllerUser.getFriends)
 routeur.post("/search", controllerUser.Search)
-routeur.get("/TopicsUser",[middleware.auth.validateToken], controllerUser.getTopics)
 routeur.patch("/user/update", [middleware.auth.validateToken], controllerUser.UpdateUser)
 routeur.post('/upload/user', [middleware.auth.validateToken, middleware.upload('user').single('image')], controllerUser.UploadImage)
 
