@@ -35,6 +35,7 @@ class userModel{
         return new Promise((resolve, reject) => {
             const sql = `
             SELECT 
+                u.Id,
                 u.Name, 
                 u.Biography, 
                 u.Email, 
@@ -58,6 +59,7 @@ class userModel{
                 }
 
                 const user = {
+                    Id: results[0].Id,
                     Name: results[0].Name,
                     Biography: results[0].Biography,
                     Email: results[0].Email,
@@ -76,7 +78,6 @@ class userModel{
             });
         });
     }
-
 
     static setPassword(password, id){
         return new Promise((resolve,reject)=>{
@@ -116,6 +117,13 @@ class userModel{
                             LEFT JOIN users u2 ON f.Id_User2 = u2.Id
                             WHERE u1.Id = ? AND f.status = 'friend'`;
             connection.query(sql, id , (err, results)=> err ? reject(err) : resolve(results));
+        })
+    }
+
+    static getTopic(id){
+        return new Promise((resolve, reject)=>{
+            const sql = ` SELECT * FROM topics WHERE Id_User = ?`;
+            connection.query(sql, id, (err, results ) => err ? reject(err): resolve(results))
         })
     }
 

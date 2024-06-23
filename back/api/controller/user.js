@@ -94,8 +94,9 @@ class UserController {
     }
 
     static async getUser(req, res) {
+        const userId = req.params.id || req.user.Sub
         try {
-            const utilisateur = await user.getUserById(req.user.Sub);
+            const utilisateur = await user.getUserById(userId);
             utilisateur.Path = url + "assets/" + utilisateur.Path;
             utilisateur.Tags = utilisateur.Tags.map((tag) => url + "assets/" + tag)
             if (!utilisateur){
@@ -222,6 +223,28 @@ class UserController {
                 message: 'Friends successfully got',
                 status: 200,
                 friends
+            })
+        }catch (err){
+            res.status(500).send({
+                message: err,
+                status: 500
+            })
+        }
+    }
+
+    static async getTopics(req,res){
+        try{
+            const topics = await user.getTopic(req.user.Sub);
+            if (topics.length === 0){
+                return res.status(404).send({
+                    message: 'Vous n\'avez aucun posts',
+                    status: 404
+                })
+            }
+            res.status(200).send({
+                message: 'Topics successfully got',
+                status: 200,
+                topics
             })
         }catch (err){
             res.status(500).send({
