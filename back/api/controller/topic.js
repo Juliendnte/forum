@@ -72,6 +72,7 @@ class TopicController {
         const topicById = req.topic;
         try{
             topicById.Path = `${baseUrl}/assets/${topicById.Path}`;
+            topicById.TagPath = `${baseUrl}/assets${topicById.TagPath}`;
 
             return res.status(200).send({
                 message: `Article with id ${req.params.id} successfully found`,

@@ -94,10 +94,13 @@ class UserController {
     }
 
     static async getUser(req, res) {
+        const userId = req.params.id || req.user.Sub
         try {
-            const utilisateur = await user.getUserById(req.user.Sub);
+            const utilisateur = await user.getUserById(userId);
             utilisateur.Path = url + "assets/" + utilisateur.Path;
             utilisateur.Tags = utilisateur.Tags.map((tag) => url + "assets/" + tag)
+            utilisateur.VueEnsemble = await user.getPostMessage(userId)
+            utilisateur.VueEnsemble.forEach((vue) => vue.TopicLike = vue.TopicLike === 0 ? -1 : vue.TopicLike);
             if (!utilisateur){
                 res.status(404).send({
                     message: 'User not found',
@@ -111,6 +114,7 @@ class UserController {
                 })
             }
         }catch (err){
+            console.log(err)
             res.status(500).send({
                 message : err,
                 status: 500

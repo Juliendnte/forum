@@ -3,7 +3,24 @@ const connection = require("../config/authBDD")
 class postModel{
     static getpostById(id){
         return new Promise((resolve, reject) => {
-            const sql = `SELECT * FROM posts WHERE Id=?`
+            const sql = `
+                SELECT
+                    p.*,
+                    u.Name,
+                    r.Label AS Role,
+                    COUNT(lp.Id_User) AS Likes,
+                    SUM(lp.Dislike) AS Dislikes,
+                    COUNT(m.Id) AS MessageCount
+                FROM posts p
+                LEFT JOIN users u ON p.Id_User = u.Id
+                LEFT JOIN role r ON u.Id_role = r.Id
+                LEFT JOIN likepost lp ON lp.Id_Post = p.Id
+                LEFT JOIN message m ON p.Id = m.Id_PostAnswer
+                WHERE p.Id = ?
+                GROUP BY
+                    p.Id,
+                    u.Name,
+                    r.Label`
             connection.query(sql,[id], (err, results)=> err ? reject(err) : resolve(results[0]));
         });
     }
