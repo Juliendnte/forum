@@ -4,7 +4,7 @@
 <head>
     <%- include('../components/head'); %>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <title>CODER - Mot de passe oublié ?</title>
+    <title>CODER - Creation d'un topic</title>
 </head>
 
 <body class="body-login">
@@ -22,11 +22,24 @@
 </div>
 <div class="container" id="container">
     <div class="form-container sign-in">
-        <form action="/treatment/forgotpwd" method="POST">
-            <h1>Mot de passe oublié ?</h1>
-            <span>Utilisez votre email</span>
-            <input type="email" name="name" placeholder="Email" required>
-            <button type="submit">Envoyer un lien de récupération</button>
+        <form action="/treatment/createTopic" method="POST">
+            <div class="titre-form">
+                <h1>Creation d'un nouveau Topic</h1>
+                <span>Un nom et une description aident les gens à comprendre ce qu'est votre communauté</span>
+            </div>
+            <input type="text" name="Title" placeholder="Nom du topic" required>
+            <div class="radio-create-topic">
+                <span>Type du topic : </span>
+                <div class="radio-topic">
+                    <input type="radio" id="Public" name="Status" value="Public" checked>
+                    <label for="html">Public</label><br>
+                </div>
+                <div class="radio-topic">
+                    <input type="radio" id="Private" name="Status" value="Private">
+                    <label for="css">Privé</label><br>
+                </div>
+            </div>
+            <button type="submit">Creer votre topic</button>
         </form>
     </div>
     <div class="toggle-container">

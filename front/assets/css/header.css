@@ -128,6 +128,12 @@
     width: 40px;
 }
 
+.header-btn-add-post a {
+    text-decoration: none;
+    text-transform: none;
+    color: white;
+}
+
 
 /* CSS POUR LES HOVER */
 .header-login svg:hover,

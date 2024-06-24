@@ -1,4 +1,7 @@
 const controlUser = require('./controlTreatmentUser');
+const ErrorHandler = require("./ErrorHandler");
+const errorHandler = new ErrorHandler();
+
 
 class ControlTemplate {
     /**
@@ -14,8 +17,7 @@ class ControlTemplate {
                 dataUser,
             });
         } catch (err) {
-            console.error(err);
-            res.status(500).send("Internal Server Error");
+            errorHandler.handleRequestError(err);
         }
     };
 
@@ -47,7 +49,7 @@ class ControlTemplate {
     }
 
     /**
-     * Render the user profile page
+     * Render the user profil profile page
      * @param {Object} req - The request object.
      * @param {Object} res - The response object.
      */
@@ -65,8 +67,24 @@ class ControlTemplate {
                 dataUser,
             });
         } catch (err) {
-            console.error(err);
-            res.status(500).send("Internal Server Error");
+            errorHandler.handleRequestError(err);
+        }
+    }
+
+    /**
+     * Render the create topic profile page
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
+    static async CreateTopic(req, res) {
+        try {
+            const dataUser = await controlUser.GetUser(req, res);
+
+            res.render('../views/pages/createTopic', {
+                dataUser,
+            });
+        } catch (err) {
+            errorHandler.handleRequestError(err);
         }
     }
 }
