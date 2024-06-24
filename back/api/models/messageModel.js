@@ -3,7 +3,15 @@ const connection = require("../config/authBDD")
 class messageModel{
     static getMessageById(id){
         return new Promise((resolve, reject) => {
-            const sql = `SELECT * FROM message WHERE Id=?`
+            const sql = `
+                            SELECT 
+                                m.* ,
+                                u.Name,
+                                r.Label AS Role
+                            FROM message m
+                            LEFT JOIN users u ON m.Id_User = u.Id
+                            LEFT JOIN role r ON u.Id_role = r.Id
+                            WHERE m.Id=?`
             connection.query(sql,[id], (err, results)=> err ? reject(err) : resolve(results[0]));
         });
     }
