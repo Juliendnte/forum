@@ -7,6 +7,8 @@
 </head>
 
 <body>
+<%- include('../components/Pop-up-Friend'); %>
+<%- include('../components/Pop-up-Follower'); %>
 <%- include('../components/header'); %>
 <section class="section-global">
     <%- include('../components/aside'); %>
@@ -48,12 +50,16 @@
                 <div class="info-user-follow-friend-global">
                     <div class="info-user-follow-friend">
                         <div class="info-user-follow">
-                            <span>23</span>
-                            <span>followers</span>
+                            <button class="btn-follow-friend" id="btnFollow">
+                                <span><%= dataUser.utilisateur.Follow.length %></span>
+                                <span>followers</span>
+                            </button>
                         </div>
                         <div class="info-user-friend">
-                            <span>2</span>
-                            <span>ami(e)s</span>
+                            <button class="btn-follow-friend" id="btnFriend">
+                                <span><%= dataUser.utilisateur.Friends.length %></span>
+                                <span>Suivi(e)s</span>
+                            </button>
                         </div>
                     </div>
                     <div class="btn-follow-profil">
@@ -65,24 +71,55 @@
         <section class="info-like-post-ctn">
             <div class="info-like-post-global">
                 <div class="post-global">
-                    <span>2</span>
-                    <span>Topics</span>
+                    <%
+                    var countPosts = 0;
+                    dataUser.utilisateur.VueEnsemble.forEach(function(post) {
+                        if (post.Type === 'post') {
+                            countPosts++;
+                        }
+                    });
+                    %>
+                    <span><%= countPosts %></span>
+                    <span>Publications</span>
                 </div>
                 <div class="like-global">
                     <span>158</span>
-                    <span>Likes</span>
+                    <span>Votes</span>
                 </div>
             </div>
         </section>
         <section class="info-user-biographie-ctn">
             <div class="nav-bar-user-global">
-                <span class="select" id="vue-densemble">Vue d'ensembles</span>
-                <span id="postes">Publications</span>
-                <span id="commentaires">Commentaires</span>
+                <span class="nav-item select" id="vue-densemble">Vue d'ensembles</span>
+                <span class="nav-item" id="postes">Publications</span>
+                <span class="nav-item" id="commentaires">Commentaires</span>
             </div>
-            <div>
-                <div>
-                    <% if (true) { %>
+            <div class="content">
+                <div class="posts">
+                    <% if (dataUser && dataUser.utilisateur && dataUser.utilisateur.VueEnsemble) { %>
+                        <% dataUser.utilisateur.VueEnsemble.forEach(function(item) { %>
+                            <% if (item.Type === 'post') { %>
+                                <div class="post">
+                                    <h3><%= item.TopicTitle %></h3>
+                                    <p><%= item.PostContent %></p>
+                                </div>
+                            <% } %>
+                        <% }); %>
+                    <% } else { %>
+                        <p>Aucun contenu disponible.</p>
+                    <% } %>
+                </div>
+                <div class="messages">
+                    <% if (dataUser && dataUser.utilisateur && dataUser.utilisateur.VueEnsemble) { %>
+                        <% dataUser.utilisateur.VueEnsemble.forEach(function(item) { %>
+                            <% if (item.Type === 'message') { %>
+                                <div class="message">
+                                    <p><%= item.CommentContent %></p>
+                                </div>
+                            <% } %>
+                        <% }); %>
+                    <% } else { %>
+                        <p>Aucun commentaire disponible.</p>
                     <% } %>
                 </div>
             </div>
