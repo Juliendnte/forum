@@ -5,7 +5,7 @@
 }
 
 .profil-user-global {
-    width: 100%;
+    width: 80%;
 }
 
 .img-user-global {
@@ -25,14 +25,30 @@
     flex-direction: row;
     justify-content: space-between;
     width: 100%;
+    max-width: 100%; /* Assure que l'élément ne dépasse pas de l'écran */
+    overflow: hidden; /* Cache le dépassement, si nécessaire */
+    flex-wrap: wrap; /* Permet aux éléments de passer à la ligne si l'espace est insuffisant */
 }
 
 .info-user-name-email-date {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    height: 85%;
+    height: 100%;
+    width: 80%; /* Définit la largeur à 50% */
+    max-width: 100%; /* Assure que l'élément ne dépasse pas de l'écran */
+    overflow: hidden; /* Cache le dépassement, si nécessaire */
 }
+
+.img-user-global img {
+    max-width: 100%; /* Assure que l'image ne dépasse pas de son conteneur */
+    height: auto; /* Maintient le ratio d'aspect de l'image */
+}
+
+.info-user-global-ctn {
+    max-width: 100%; /* Assure que la section ne dépasse pas de l'écran */
+    overflow: hidden; /* Cache le dépassement, si nécessaire */
+}
+
 
 .info-user-name-email {
     display: flex;
@@ -48,11 +64,34 @@
     color: #a8a8a8;
 }
 
+.info-user-name-email span:last-child {
+    font-weight: normal;
+    color: #323232;
+    font-size: 18px;
+    max-width: 5em;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
+.biographie-text {
+    width: 80%;
+    margin-top : 20px;
+    margin-bottom : 20px;
+}
+
+.biographie-text p {
+    width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
 .info-user-follow-friend-global {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 85%;
+    height: 50%;
 }
 
 .info-user-follow-friend {
@@ -85,7 +124,7 @@
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    transition: box-shadow 0.3s, transform 0.3s;
+    transition: box-shadow 0.3s;
 }
 
 .btn-follow-profil button::before {
@@ -119,19 +158,17 @@
 /* Hover Effect */
 .btn-follow-profil button:hover {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    transform: scale(1.05);
 }
 
 /* Active Effect */
 .btn-follow-profil button:active {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transform: scale(0.95);
 }
 
 .info-like-post-ctn {
     border-bottom: 1px solid #d5d5d5;
     border-top: 1px solid #d5d5d5;
-    margin: 40px 100px;
+    margin: 15px 100px;
     font-size: 1.5rem;
 }
 
@@ -146,16 +183,44 @@
 }
 
 .info-user-biographie-ctn {
-    margin: 40px 100px;
+    margin: 10px 100px;
 }
 
 .info-titre {
     font-size: 1rem;
 }
 
-.biographie-text {
-    width: 80%;
-    margin-top : 20px;
-    margin-bottom : 20px;
-    font-size: 0.975rem;
+.nav-bar-user-global {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+    text-align: center;
+    align-items: center;
+}
+
+.nav-bar-user-global span {
+    padding: 10px 14px;
+}
+
+.nav-bar-user-global span:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.select {
+    background: #C9D7DE;
+    padding: 10px 14px;
+    border-radius: 100px;
+}
+
+.info-user-tagsFav {
+    display: flex;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.info-user-tagsFav img {
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
 }

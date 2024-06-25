@@ -20,10 +20,29 @@
                     <div class="info-user-name-email">
                         <span><%= dataUser.utilisateur.Name %></span>
                         <span><%= dataUser.utilisateur.Email %></span>
+                        <% if (dataUser.utilisateur.Biography === null ) {%>
+                            <div class="biographie-text">
+                                <p>Ajouter une biographie</p>
+                            </div>
+                        <%} else {%>
+                            <div class="biographie-text">
+                                <span><%= dataUser.utilisateur.Biography%></span>
+                            </div>
+                        <% } %>
                     </div>
                     <div class="info-user-date">
                         <span>Membre depuis le : </span>
                         <span><%= dataUser.utilisateur.Create_at_formatted %></span>
+                    </div>
+                    <div class="info-user-tagsFav">
+                        <div class="info-user-tagsFav">
+                            <% if (dataUser.utilisateur.Tags && dataUser.utilisateur.Tags.length > 0) { %>
+                                <% dataUser.utilisateur.Tags.forEach(function(tag) { %>
+                                    <img src="<%= tag %>" alt="Tag Icon" />
+                                <% }); %>
+                            <% } else { %>
+                            <% } %>
+                        </div>
                     </div>
                 </div>
                 <div class="info-user-follow-friend-global">
@@ -56,37 +75,15 @@
             </div>
         </section>
         <section class="info-user-biographie-ctn">
-            <div>
-                <div class="info-titre">
-                    <h2>Biographie</h2>
-                </div>
-                <% if (dataUser.utilisateur.Biography === null ) {%>
-                    <div class="biographie-text">
-                        <span>Ajouter une biographie</span>
-                    </div>
-                <%} else {%>
-                    <div class="biographie-text">
-                        <span><%= dataUser.utilisateur.Biography%></span>
-                    </div>
-                <% } %>
+            <div class="nav-bar-user-global">
+                <span class="select" id="vue-densemble">Vue d'ensembles</span>
+                <span id="postes">Publications</span>
+                <span id="commentaires">Commentaires</span>
             </div>
             <div>
-                <div class="info-titre">
-                    <h2>Topics</h2>
-                </div>
-                <% if (dataUser.utilisateur.Topics === null ) {%>
-                    <div class="biographie-text">
-                        <span>Créer des topics pour qu'ils apparaissent ici !</span>
-                    </div>
-                <%} else {%>
-                    <div class="biographie-text">
-                        <span><%= dataUser.utilisateur.Topics %></span>
-                    </div>
-                <% } %>
-            </div>
-            <div>
-                <div class="info-titre">
-                    <h2> Langages de programmation préférés</h2>
+                <div>
+                    <% if (true) { %>
+                    <% } %>
                 </div>
             </div>
         </section>
