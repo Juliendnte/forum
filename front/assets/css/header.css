@@ -103,14 +103,14 @@
 
 .header-btn-add-post  button{
     font-family: var(--font-header-semibold);
-    height: 50px;
-    width: 50px;
+    padding: .552rem .752rem;
     border: none;
     border-radius: 10px;
     background-color: var(--color-green);
     color: #EFEFEF;
-    font-size: 45px;
+    font-size: 20px;
     display: flex;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
     box-shadow: 0px 4px 4px 0px var(--color-placehorder);
@@ -126,6 +126,12 @@
 
 .header-login svg {
     width: 40px;
+}
+
+.header-btn-add-post a {
+    text-decoration: none;
+    text-transform: none;
+    color: white;
 }
 
 

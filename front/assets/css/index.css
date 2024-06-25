@@ -1,0 +1,25 @@
+.radio-create-topic {
+    width: 100%;
+    flex-direction: column;
+    display: flex;
+    align-items: baseline;
+}
+.radio-create-topic span {
+    width: 100%;
+    flex-direction: column;
+    display: flex;
+    align-items: baseline;
+    margin: 10px;
+}
+.radio-topic {
+    display: flex;
+    gap: 15px;
+    padding-left: 25px;
+}
+.titre-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 35px 0px;
+}
