@@ -8,7 +8,7 @@ const middleware = {
 }
 
 //Configuration des routes
-routeur.get("/user/:id", controllerUser.getUser)
+routeur.get("/user/:name", controllerUser.getUser)
 routeur.post("/login", controllerUser.Login);
 routeur.post("/register", controllerUser.Register);
 routeur.post("/forgotPassword", controllerUser.ForgotPassword)

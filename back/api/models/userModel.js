@@ -85,6 +85,53 @@ class userModel {
         });
     }
 
+    static getUserByName(name) {
+        return new Promise((resolve, reject) => {
+            const sql = `
+                SELECT u.Id,
+                       u.Name,
+                       u.Biography,
+                       u.Email,
+                       u.Path,
+                       u.Create_at,
+                       r.Label AS Role,
+                       t.Path  AS Tag
+                FROM users u
+                         LEFT JOIN role r ON u.Id_role = r.Id
+                         LEFT JOIN userstags ON u.Id = userstags.Id_User
+                         LEFT JOIN tags t ON userstags.Id_Tag = t.Id
+                WHERE u.Name = ?;
+            `;
+            connection.query(sql, [name], (err, results) => {
+                if (err) {
+                    return reject(err);
+                }
+
+                if (results.length === 0) {
+                    return resolve(null);
+                }
+
+                const user = {
+                    Id: results[0].Id,
+                    Name: results[0].Name,
+                    Biography: results[0].Biography,
+                    Email: results[0].Email,
+                    Path: results[0].Path,
+                    Create_at: results[0].Create_at,
+                    Role: results[0].Role,
+                    Tags: []
+                };
+
+                results.forEach(row => {
+                    if (row.Tag)
+                        user.Tags.push(row.Tag);
+                });
+
+                resolve(user);
+            });
+        });
+    }
+
     static setPassword(password, id) {
         return new Promise((resolve, reject) => {
             const sql = `UPDATE users
@@ -118,15 +165,82 @@ class userModel {
     static getFriends(id) {
         return new Promise((resolve, reject) => {
             const sql = `
-                SELECT u2.Id,
-                       u2.Name,
-                       u2.Path
+                SELECT
+                    CASE
+                        WHEN u1.Id = ? THEN u2.Id
+                        WHEN u2.Id = ? THEN u1.Id
+                        END AS Id,
+                    CASE
+                        WHEN u1.Id = ? THEN u2.Name
+                        WHEN u2.Id = ? THEN u1.Name
+                        END AS Name,
+                    CASE
+                        WHEN u1.Id = ? THEN u2.Path
+                        WHEN u2.Id = ? THEN u1.Path
+                        END AS Path
                 FROM friendship f
                          LEFT JOIN users u1 ON f.Id_User1 = u1.Id
                          LEFT JOIN users u2 ON f.Id_User2 = u2.Id
-                WHERE u1.Id = ?
-                  AND f.status = 'friend'`;
+                WHERE (u1.Id = ? OR u2.Id = ?) AND f.status = 'friend'
+
+            `;
+            connection.query(sql, [id, id, id, id, id, id, id, id], (err, results) => err ? reject(err) : resolve(results));
+        })
+    }
+
+    static getFollow(id){
+        return new Promise((resolve, reject) => {
+            const sql = `
+                SELECT 
+                    u1.Id,
+                    u1.Name,
+                    u1.Path
+                FROM friendship f 
+                LEFT JOIN users u1 ON f.Id_User1 = u1.Id
+                LEFT JOIN users u2 ON f.Id_User2 = u2.Id
+                WHERE u2.Id = ? AND f.status = 'waiting'`;
             connection.query(sql, id, (err, results) => err ? reject(err) : resolve(results));
+        })
+    }
+
+    static getFriendsName(name) {
+        return new Promise((resolve, reject) => {
+            const sql = `
+                SELECT
+                    CASE
+                        WHEN u1.Name = ? THEN u2.Id
+                        WHEN u2.Name = ? THEN u1.Id
+                        END AS Id,
+                    CASE
+                        WHEN u1.Name = ? THEN u2.Name
+                        WHEN u2.Name = ? THEN u1.Name
+                        END AS Name,
+                    CASE
+                        WHEN u1.Name = ? THEN u2.Path
+                        WHEN u2.Name = ? THEN u1.Path
+                        END AS Path
+                FROM friendship f
+                         LEFT JOIN users u1 ON f.Id_User1 = u1.Id
+                         LEFT JOIN users u2 ON f.Id_User2 = u2.Id
+                WHERE (u1.Name = ? OR u2.Name = ?) AND f.status = 'friend'
+
+            `;
+            connection.query(sql, [name, name, name, name, name, name, name, name], (err, results) => err ? reject(err) : resolve(results));
+        })
+    }
+
+    static getFollowName(name){
+        return new Promise((resolve, reject) => {
+            const sql = `
+                SELECT 
+                    u1.Id,
+                    u1.Name,
+                    u1.Path
+                FROM friendship f 
+                LEFT JOIN users u1 ON f.Id_User1 = u1.Id
+                LEFT JOIN users u2 ON f.Id_User2 = u2.Id
+                WHERE u2.Name= ? AND f.status = 'waiting'`;
+            connection.query(sql, name, (err, results) => err ? reject(err) : resolve(results));
         })
     }
 
@@ -169,6 +283,46 @@ class userModel {
         })
     }
 
+    static getPostMessageName(name) {
+        return new Promise((resolve, reject) => {
+            const sql = `
+                SELECT p.Id          AS PostId,
+                       p.Content     AS PostContent,
+                       p.Create_post AS CreateAt,
+                       p.Id_User     AS UserId,
+                       'post'        AS Type,
+                       lp.Like       AS PostLike,
+                       t.Title       AS TopicTitle,
+                       t.Id          AS TopicId
+                FROM posts p
+                         LEFT JOIN topics t ON p.Id_topics = t.Id
+                         LEFT JOIN likepost lp ON p.Id = lp.Id_Post
+                         LEFT JOIN users u ON p.Id_User = u.Id
+                WHERE u.Name = ?
+                GROUP BY p.Id, t.Title
+
+                UNION ALL
+
+                SELECT m.Id             AS MessageId,
+                       m.Content        AS MessageContent,
+                       m.Create_message AS CreateAt,
+                       m.Id_User        AS UserId,
+                       'message'        AS Type,
+                       t.Title          AS TopicTitle,
+                       t.Id             AS TopicId,
+                       NULL
+                FROM message m
+                         LEFT JOIN posts p ON m.Id_PostAnswer = p.Id
+                         LEFT JOIN topics t ON p.Id_topics = t.Id
+                         LEFT JOIN users u ON m.Id_User = u.id
+                WHERE u.Name = ?
+
+                ORDER BY CreateAt;
+
+            `;
+            connection.query(sql, [name, name], (err, results) => err ? reject(err) : resolve(results))
+        })
+    }
 
     static search(search) {
         return new Promise((resolve, reject) => {

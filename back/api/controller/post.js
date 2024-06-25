@@ -2,42 +2,24 @@ const post = require("../models/postModel");
 require('dotenv').config();
 const baseUrl = process.env.BASE_URL;
 
-class PostController{
+class PostController {
     static async getPosts(req, res) {
         try {
             const posts = await post.getAllpost(req.query);
 
-            if (!posts){
+            if (!posts) {
                 return res.status(404).send({
                     message: `posts not found`,
-                    status:404
+                    status: 404
                 });
-            }else {
+            } else {
                 return res.status(200).send({
                     message: `posts successfully found`,
                     status: 200,
                     items: posts
                 });
             }
-        }catch (err){
-            res.status(500).send({
-                message: err,
-                status:500
-            });
-        }
-    }
-
-    static getPost(req, res) {
-        const postById = req.post;
-        try{
-            postById.Path = `${baseUrl}/assets/${postById.Path}`;
-
-            return res.status(200).send({
-                message: `Article with id ${req.params.id} successfully found`,
-                status: 200,
-                post: postById,
-            });
-        }catch (err){
+        } catch (err) {
             res.status(500).send({
                 message: err,
                 status: 500
@@ -45,10 +27,28 @@ class PostController{
         }
     }
 
-    static async postPost(req,res){
+    static getPost(req, res) {
+        const postById = req.post;
+        try {
+            postById.Path = `${baseUrl}/assets/${postById.Path}`;
+
+            return res.status(200).send({
+                message: `Article with id ${req.params.id} successfully found`,
+                status: 200,
+                post: postById,
+            });
+        } catch (err) {
+            res.status(500).send({
+                message: err,
+                status: 500
+            });
+        }
+    }
+
+    static async postPost(req, res) {
         const {Content, Id_topics, Id_PostAnswer} = req.body;
         const Id_User = req.user.Sub;
-        if (!Content || !Id_topics || !Id_PostAnswer){
+        if (!Content || !Id_topics || !Id_PostAnswer) {
             return res.status(400).send({
                 message: "Tous les champs (Name, Biography, Email, Password, Id_roles) sont requis.",
                 status: 400
@@ -68,15 +68,15 @@ class PostController{
                 status: 201,
                 Newpost
             })
-        }catch (err){
+        } catch (err) {
             res.status(500).send({
                 message: err,
-                status:500
+                status: 500
             })
         }
     }
 
-    static async patchPost(req,res){
+    static async patchPost(req, res) {
         const id = req.params.id
         const {Content} = req.body;
 
@@ -88,22 +88,22 @@ class PostController{
             });
         }
 
-        try{
+        try {
             await post.updatePatchpost(id, Content);
 
             return res.status(200).send({
                 message: `post with id ${id} successfully updated`,
                 status: 200,
             });
-        }catch (err){
+        } catch (err) {
             res.status(500).send({
                 message: err,
-                status:500
+                status: 500
             });
         }
     }
 
-    static async deletePost(req, res){
+    static async deletePost(req, res) {
         const id = req.params.id;
         try {
             await post.deletepost(id);
@@ -111,9 +111,9 @@ class PostController{
                 message: `post with id ${id} successfully delete`,
                 status: 200,
             })
-        }catch (err){
+        } catch (err) {
             res.status(500).send({
-                message:err,
+                message: err,
                 status: 500
             });
         }
