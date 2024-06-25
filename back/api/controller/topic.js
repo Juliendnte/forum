@@ -11,7 +11,7 @@ const pagination = 5;
  */
 function buildQueryWithoutLimitOffset(query) {
     const filteredQuery = Object.entries(query).filter(([key]) => key.toLowerCase() !== "limit" && key.toLowerCase() !== "offset")
-        .map(([key, value]) =>`${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
         .join("&");
     return filteredQuery ? `?${filteredQuery}` : "";
 }
@@ -40,7 +40,7 @@ class TopicController {
             }
             const last_page = Math.ceil(topic.total / limit);
             const current_page = Math.ceil(offset / limit) + 1;
-            const next =  topic.total - limit <= offset ? null : href.includes("?") ? `${href}&limit=${limit}&offset=${offset + limit}`: `${href}?limit=${limit}&offset=${offset + limit}`; //Si article.total et total sont égaux alors pas de suivant
+            const next = topic.total - limit <= offset ? null : href.includes("?") ? `${href}&limit=${limit}&offset=${offset + limit}` : `${href}?limit=${limit}&offset=${offset + limit}`; //Si article.total et total sont égaux alors pas de suivant
             const previous = offset ? href.includes("?") ? `${href}&limit=${limit}&offset=${offset - limit}` : `${href}?limit=${limit}&offset=${offset - limit}` : null; //Si l'offset est différent de 0 pagination sinon y en a pas
 
 
@@ -60,17 +60,17 @@ class TopicController {
                 }
             });
 
-        }catch (err){
+        } catch (err) {
             res.status(500).send({
-                message: err ,
-                status:500
+                message: err,
+                status: 500
             });
         }
     }
 
     static getTopic(req, res) {
         const topicById = req.topic;
-        try{
+        try {
             topicById.Path = `${baseUrl}/assets/${topicById.Path}`;
             topicById.TagPath = `${baseUrl}/assets${topicById.TagPath}`;
 
@@ -79,7 +79,7 @@ class TopicController {
                 status: 200,
                 topic: topicById,
             });
-        }catch (err){
+        } catch (err) {
             res.status(500).send({
                 message: err,
                 status: 500
@@ -87,8 +87,8 @@ class TopicController {
         }
     }
 
-    static async getTags(req,res){
-        try{
+    static async getTags(req, res) {
+        try {
             const tags = await topic.getTags();
             for (const tag of tags) {
                 tag.Path = `${baseUrl}/assets${tag.Path}`;
@@ -98,7 +98,7 @@ class TopicController {
                 status: 200,
                 tags
             })
-        }catch (err){
+        } catch (err) {
             res.status(500).send({
                 message: err,
                 status: 500
@@ -106,28 +106,28 @@ class TopicController {
         }
     }
 
-    static async postTopic(req,res){
+    static async postTopic(req, res) {
         const {Title} = req.body;
         const Id_User = req.user.Sub;
-        if (!Title || !Id_User){
+        if (!Title || !Id_User) {
             return res.status(400).send({
                 message: "Le champ Title est requis.",
                 status: 400
             })
         }
 
-        try{
+        try {
             const NewTopic = await topic.createTopic({
                 Title,
                 Id_User
             });
 
-            return  res.status(201).send({
+            return res.status(201).send({
                 message: `Topic successfully created`,
                 status: 201,
                 NewTopic
             });
-        }catch (err){
+        } catch (err) {
             res.status(500).send({
                 message: err,
                 status: 500
@@ -135,7 +135,7 @@ class TopicController {
         }
     }
 
-    static async patchTopic(req,res){
+    static async patchTopic(req, res) {
         const id = req.params.id
         const body = req.body;
 
@@ -147,22 +147,22 @@ class TopicController {
             });
         }
 
-        try{
+        try {
             await topic.updatePatchTopic(id, body);
 
             return res.status(200).send({
                 message: `Topic with id ${id} successfully updated`,
                 status: 200,
             });
-        }catch (err){
+        } catch (err) {
             res.status(500).send({
                 message: err,
-                status:500
+                status: 500
             });
         }
     }
 
-    static async deleteTopic(req,res){
+    static async deleteTopic(req, res) {
         const id = req.params.id;
         try {
             await topic.deleteTopic(id);
@@ -171,15 +171,15 @@ class TopicController {
                 message: `Topic with id ${id} successfully delete`,
                 status: 200
             })
-        }catch (err){
+        } catch (err) {
             res.status(500).send({
-                message: err ,
-                status:500
+                message: err,
+                status: 500
             });
         }
     }
 
-    static async UploadImage (req,res){
+    static async UploadImage(req, res) {
         const filePath = req.file.path.replace('assets', '');
         const id = req.user.Sub;
         try {
@@ -192,7 +192,7 @@ class TopicController {
                     })
                 }
             });
-        }catch (err){
+        } catch (err) {
             res.status(500).send({
                 message: err,
                 status: 500
