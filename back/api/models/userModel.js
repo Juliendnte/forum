@@ -1,7 +1,13 @@
 const connection = require("../config/authBDD")
 
 class userModel {
-
+    /**
+     * This static method logs in a user.
+     *
+     * @param {string} email - The email of the user.
+     * @param {string} username - The username of the user.
+     * @returns {Promise} - A promise that resolves with the user's data.
+     */
     static login(email = null, username = null) {
         return new Promise((resolve, reject) => {
             let sql
@@ -19,6 +25,12 @@ class userModel {
         });
     }
 
+    /**
+     * This static method registers a user.
+     *
+     * @param {Object} user - The user's data.
+     * @returns {Promise} - A promise that resolves with the user's data.
+     */
     static register(user) {
         return new Promise((resolve, reject) => {
             const sql = `INSERT INTO users (Name, Email, Password, Salt, Create_at)
@@ -29,6 +41,12 @@ class userModel {
         });
     }
 
+    /**
+     * This static method retrieves a user by their email from the database.
+     *
+     * @param {string} email - The email of the user.
+     * @returns {Promise} - A promise that resolves with the user's data.
+     */
     static getUserByEmail(email) {
         return new Promise((resolve, reject) => {
             const sql = `SELECT *
@@ -38,6 +56,12 @@ class userModel {
         })
     }
 
+    /**
+     * This static method retrieves a user by their ID from the database.
+     *
+     * @param {number} id - The ID of the user.
+     * @returns {Promise} - A promise that resolves with the user's data.
+     */
     static getUserById(id) {
         return new Promise((resolve, reject) => {
             const sql = `
@@ -85,6 +109,12 @@ class userModel {
         });
     }
 
+    /**
+     * This static method retrieves a user by their name from the database.
+     *
+     * @param {string} name - The name of the user.
+     * @returns {Promise} - A promise that resolves with the user's data.
+     */
     static getUserByName(name) {
         return new Promise((resolve, reject) => {
             const sql = `
@@ -132,6 +162,13 @@ class userModel {
         });
     }
 
+    /**
+     * This static method updates the password of a user in the database.
+     *
+     * @param {string} password - The new password of the user.
+     * @param {number} id - The ID of the user.
+     * @returns {Promise} - A promise that resolves when the password is updated.
+     */
     static setPassword(password, id) {
         return new Promise((resolve, reject) => {
             const sql = `UPDATE users
@@ -142,6 +179,13 @@ class userModel {
         })
     }
 
+    /**
+     * This static method updates a user in the database.
+     *
+     * @param {number} id - The ID of the user.
+     * @param {Object} updateUser - An object containing the fields to update.
+     * @returns {Promise} - A promise that resolves when the user is updated.
+     */
     static updatePatchUser(id, updateUser) {
         return new Promise((resolve, reject) => {
             let sql = `UPDATE users
@@ -162,32 +206,44 @@ class userModel {
         });
     }
 
+    /**
+     * This static method retrieves the friends of a user from the database.
+     *
+     * @param {number} id - The ID of the user.
+     * @returns {Promise} - A promise that resolves with the friends of the user.
+     */
     static getFriends(id) {
-        return new Promise((resolve, reject) => {
-            const sql = `
-                SELECT
-                    CASE
-                        WHEN u1.Id = ? THEN u2.Id
-                        WHEN u2.Id = ? THEN u1.Id
-                        END AS Id,
-                    CASE
-                        WHEN u1.Id = ? THEN u2.Name
-                        WHEN u2.Id = ? THEN u1.Name
-                        END AS Name,
-                    CASE
-                        WHEN u1.Id = ? THEN u2.Path
-                        WHEN u2.Id = ? THEN u1.Path
-                        END AS Path
-                FROM friendship f
-                         LEFT JOIN users u1 ON f.Id_User1 = u1.Id
-                         LEFT JOIN users u2 ON f.Id_User2 = u2.Id
-                WHERE (u1.Id = ? OR u2.Id = ?) AND f.status = 'friend'
+    return new Promise((resolve, reject) => {
+        const sql = `
+            SELECT
+                CASE
+                    WHEN u1.Id = ? THEN u2.Id
+                    WHEN u2.Id = ? THEN u1.Id
+                    END AS Id,
+                CASE
+                    WHEN u1.Id = ? THEN u2.Name
+                    WHEN u2.Id = ? THEN u1.Name
+                    END AS Name,
+                CASE
+                    WHEN u1.Id = ? THEN u2.Path
+                    WHEN u2.Id = ? THEN u1.Path
+                    END AS Path
+            FROM friendship f
+                     LEFT JOIN users u1 ON f.Id_User1 = u1.Id
+                     LEFT JOIN users u2 ON f.Id_User2 = u2.Id
+            WHERE (u1.Id = ? OR u2.Id = ?) AND f.status = 'friend'
 
-            `;
-            connection.query(sql, [id, id, id, id, id, id, id, id], (err, results) => err ? reject(err) : resolve(results));
-        })
-    }
+        `;
+        connection.query(sql, [id, id, id, id, id, id, id, id], (err, results) => err ? reject(err) : resolve(results));
+    })
+}
 
+    /**
+     * This static method retrieves the users who follow a user from the database.
+     *
+     * @param {number} id - The ID of the user.
+     * @returns {Promise} - A promise that resolves with the followers of the user.
+     */
     static getFollow(id){
         return new Promise((resolve, reject) => {
             const sql = `
@@ -203,6 +259,12 @@ class userModel {
         })
     }
 
+    /**
+     * This static method retrieves the friends of a user from the database by their name.
+     *
+     * @param {string} name - The name of the user.
+     * @returns {Promise} - A promise that resolves with the friends of the user.
+     */
     static getFriendsName(name) {
         return new Promise((resolve, reject) => {
             const sql = `
@@ -229,6 +291,12 @@ class userModel {
         })
     }
 
+    /**
+     * This static method retrieves the users who follow a user from the database by their name.
+     *
+     * @param {string} name - The name of the user.
+     * @returns {Promise} - A promise that resolves with the followers of the user.
+     */
     static getFollowName(name){
         return new Promise((resolve, reject) => {
             const sql = `
@@ -244,6 +312,12 @@ class userModel {
         })
     }
 
+    /**
+     * This static method retrieves the posts and messages of a user from the database.
+     *
+     * @param {number} id - The ID of the user.
+     * @returns {Promise} - A promise that resolves with the posts and messages of the user.
+     */
     static getPostMessage(id) {
         return new Promise((resolve, reject) => {
             const sql = `
@@ -283,47 +357,62 @@ class userModel {
         })
     }
 
+    /**
+     * Retrieves the posts and messages of a user from the database by their name.
+     *
+     * @param {string} name - The name of the user.
+     * @returns {Promise} - A promise that resolves with the posts and messages of the user.
+     */
     static getPostMessageName(name) {
         return new Promise((resolve, reject) => {
             const sql = `
-                SELECT p.Id          AS PostId,
-                       p.Content     AS PostContent,
-                       p.Create_post AS CreateAt,
-                       p.Id_User     AS UserId,
-                       'post'        AS Type,
-                       lp.Like       AS PostLike,
-                       t.Title       AS TopicTitle,
-                       t.Id          AS TopicId
-                FROM posts p
-                         LEFT JOIN topics t ON p.Id_topics = t.Id
-                         LEFT JOIN likepost lp ON p.Id = lp.Id_Post
-                         LEFT JOIN users u ON p.Id_User = u.Id
-                WHERE u.Name = ?
-                GROUP BY p.Id, t.Title
+            SELECT p.Id          AS PostId,
+                   p.Content     AS PostContent,
+                   p.Create_post AS CreateAt,
+                   p.Id_User     AS UserId,
+                   'post'        AS Type,
+                   SUM(CASE 
+                       WHEN lp.Like = 1 THEN 1 
+                       WHEN lp.Like = 0 THEN -1 
+                       ELSE 0 
+                   END) AS PostLikes,
+                   t.Title       AS TopicTitle,
+                   t.Id          AS TopicId
+            FROM posts p
+                     LEFT JOIN topics t ON p.Id_topics = t.Id
+                     LEFT JOIN likepost lp ON p.Id = lp.Id_Post
+                     LEFT JOIN users u ON p.Id_User = u.Id
+            WHERE u.Name = ?
+            GROUP BY p.Id, t.Title
 
-                UNION ALL
+            UNION ALL
 
-                SELECT m.Id             AS MessageId,
-                       m.Content        AS MessageContent,
-                       m.Create_message AS CreateAt,
-                       m.Id_User        AS UserId,
-                       'message'        AS Type,
-                       t.Title          AS TopicTitle,
-                       t.Id             AS TopicId,
-                       NULL
-                FROM message m
-                         LEFT JOIN posts p ON m.Id_PostAnswer = p.Id
-                         LEFT JOIN topics t ON p.Id_topics = t.Id
-                         LEFT JOIN users u ON m.Id_User = u.id
-                WHERE u.Name = ?
+            SELECT m.Id             AS MessageId,
+                   m.Content        AS MessageContent,
+                   m.Create_message AS CreateAt,
+                   m.Id_User        AS UserId,
+                   'message'        AS Type,
+                   t.Title          AS TopicTitle,
+                   t.Id             AS TopicId,
+                   NULL AS PostLikes
+            FROM message m
+                     LEFT JOIN posts p ON m.Id_PostAnswer = p.Id
+                     LEFT JOIN topics t ON p.Id_topics = t.Id
+                     LEFT JOIN users u ON m.Id_User = u.id
+            WHERE u.Name = ?
 
-                ORDER BY CreateAt;
-
-            `;
+            ORDER BY CreateAt;
+        `;
             connection.query(sql, [name, name], (err, results) => err ? reject(err) : resolve(results))
-        })
+        });
     }
 
+    /**
+     * This static method searches for topics by their title in the database.
+     *
+     * @param {string} search - The search query.
+     * @returns {Promise} - A promise that resolves with the search results.
+     */
     static search(search) {
         return new Promise((resolve, reject) => {
             const sql = `

@@ -9,7 +9,6 @@ class postModel{
                     u.Name,
                     r.Label AS Role,
                     COUNT(lp.Id_User) AS Likes,
-                    SUM(lp.Dislike) AS Dislikes,
                     COUNT(m.Id) AS MessageCount
                 FROM posts p
                 LEFT JOIN users u ON p.Id_User = u.Id

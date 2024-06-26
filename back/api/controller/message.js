@@ -3,8 +3,15 @@ require('dotenv').config();
 const baseUrl = process.env.BASE_URL;
 
 class messageController {
+    /**
+     * Retrieves all messages based on the provided query parameters.
+     *
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     * @returns {Object} - The response object.
+     */
     static async getMessages(req, res) {
-        try {
+    try {
             const messages = await message.getAllMessage(req.query);
 
             if (!messages) {
@@ -12,13 +19,14 @@ class messageController {
                     message: `messages not found`,
                     status: 404
                 });
-            } else {
-                return res.status(200).send({
-                    message: `messages successfully found`,
-                    status: 200,
-                    items: messages
-                });
             }
+
+            return res.status(200).send({
+                message: `messages successfully found`,
+                status: 200,
+                items: messages
+            });
+
         } catch (err) {
             res.status(500).send({
                 message: err,
@@ -27,6 +35,13 @@ class messageController {
         }
     }
 
+    /**
+     * Retrieves a specific message by its ID and returns it in the response.
+     *
+     * @param {Object} req - The request object, containing the message ID in the parameters.
+     * @param {Object} res - The response object.
+     * @returns {Object} - The response object, containing the retrieved message.
+     */
     static getMessage(req, res) {
         const messageById = req.message;
         try {
@@ -45,6 +60,14 @@ class messageController {
         }
     }
 
+   /**
+     * Creates a new message with the provided content, post ID, and message ID.
+     * The user ID is retrieved from the authenticated user's sub claim.
+     *
+     * @param {Object} req - The request object, containing the message details in the body and the user's sub claim.
+     * @param {Object} res - The response object.
+     * @returns {Object} - The response object, containing the newly created message.
+     */
     static async postMessage(req, res) {
         const {Content, Id_PostAnswer, Id_MessageAnswer} = req.body;
         const Id_User = req.user.Sub;
@@ -70,7 +93,13 @@ class messageController {
             })
         }
     }
-
+    /**
+     * Updates the content of a specific message by its ID.
+     *
+     * @param {Object} req - The request object, containing the message ID in the parameters and the new content in the body.
+     * @param {Object} res - The response object.
+     * @returns {Object} - The response object, containing a success message.
+     */
     static async patchMessage(req, res) {
         const id = req.params.id
         const {Content} = req.body;
@@ -98,10 +127,18 @@ class messageController {
         }
     }
 
+    /**
+     * Deletes a specific message by its ID.
+     *
+     * @param {Object} req - The request object, containing the message ID in the parameters.
+     * @param {Object} res - The response object.
+     * @returns {Object} - The response object, containing a success message.
+     */
     static async deleteMessage(req, res) {
         const id = req.params.id;
         try {
             await message.deleteMessage(id);
+
             return res.status(200).send({
                 message: `message with id ${id} successfully delete`,
                 status: 200,
