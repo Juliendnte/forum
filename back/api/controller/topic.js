@@ -15,6 +15,7 @@ function buildQueryWithoutLimitOffset(query) {
         .join("&");
     return filteredQuery ? `?${filteredQuery}` : "";
 }
+
 /**
  * TopicController class.
  * @class
@@ -32,18 +33,14 @@ class TopicController {
             const limit = parseInt(req.query.limit) || pagination;
             const href = `${baseUrl}/topics${buildQueryWithoutLimitOffset(req.query)}`;
 
-            const topics = await topic.getAllTopic({ ...req.query, limit, offset });
+            const topics = await topic.getAllTopic({...req.query, limit, offset});
             topics.forEach(top => top.Path = `${baseUrl}/assets/${top.Path}`);
 
             if (!topics.length) {
-                return res.status(404).send({ message: `Topics not found`, status: 404 });
+                return res.status(404).send({message: `Topics not found`, status: 404});
             }
 
             const total = topics.length;
-            const last_page = Math.ceil(total / limit);
-            const current_page = Math.ceil(offset / limit) + 1;
-            const next = total - limit <= offset ? null : `${href}&limit=${limit}&offset=${offset + limit}`;
-            const previous = offset ? `${href}&limit=${limit}&offset=${offset - limit}` : null;
 
             return res.status(200).send({
                 message: `Topics successfully found`,
@@ -52,17 +49,17 @@ class TopicController {
                     href,
                     offset,
                     limit,
-                    next,
-                    previous,
+                    next: total - limit <= offset ? null : `${href}&limit=${limit}&offset=${offset + limit}`,
+                    previous: offset ? `${href}&limit=${limit}&offset=${offset - limit}` : null,
                     total,
-                    last_page,
-                    current_page,
+                    last_page: Math.ceil(total / limit),
+                    current_page: Math.ceil(offset / limit) + 1,
                     items: topics,
                 }
             });
 
         } catch (err) {
-            res.status(500).send({ message: err, status: 500 });
+            res.status(500).send({message: err, status: 500});
         }
     }
 
@@ -84,7 +81,7 @@ class TopicController {
                 topic: topicById,
             });
         } catch (err) {
-            res.status(500).send({ message: err, status: 500 });
+            res.status(500).send({message: err, status: 500});
         }
     }
 
@@ -99,9 +96,9 @@ class TopicController {
             const tags = await topic.getTags();
             tags.forEach(tag => tag.Path = `${baseUrl}/assets${tag.Path}`);
 
-            res.status(200).send({ message: "Tags successfully found", status: 200, tags });
+            res.status(200).send({message: "Tags successfully found", status: 200, tags});
         } catch (err) {
-            res.status(500).send({ message: err, status: 500 });
+            res.status(500).send({message: err, status: 500});
         }
     }
 
@@ -112,19 +109,19 @@ class TopicController {
      * @returns {Object} - The response object, containing a success message.
      */
     static async postTopic(req, res) {
-        const { Title } = req.body;
+        const {Title, Status} = req.body;
         const Id_User = req.user.Sub;
 
-        if (!Title || !Id_User) {
-            return res.status(400).send({ message: "Le champ Title est requis.", status: 400 });
+        if (!Title || !Status || !Id_User) {
+            return res.status(400).send({message: "Les champs Title et Status est requis.", status: 400});
         }
 
         try {
-            const NewTopic = await topic.createTopic({ Title, Id_User });
+            const NewTopic = await topic.createTopic({Title, Status,  Id_User});
 
-            return res.status(201).send({ message: `Topic successfully created`, status: 201, NewTopic });
+            return res.status(201).send({message: `Topic successfully created`, status: 201, NewTopic});
         } catch (err) {
-            res.status(500).send({ message: err, status: 500 });
+            res.status(500).send({message: err, status: 500});
         }
     }
 
@@ -139,15 +136,18 @@ class TopicController {
         const body = req.body;
 
         if (!body || !Object.keys(body).some(key => ["Title", "Description", "Id_Status", "Id_User"].includes(key))) {
-            return res.status(400).send({ message: "Au moins un des champs (Title, Description, Id_Status, Id_User) doit être modifié", status: 400 });
+            return res.status(400).send({
+                message: "Au moins un des champs (Title, Description, Id_Status, Id_User) doit être modifié",
+                status: 400
+            });
         }
 
         try {
             await topic.updatePatchTopic(id, body);
 
-            return res.status(200).send({ message: `Topic with id ${id} successfully updated`, status: 200 });
+            return res.status(200).send({message: `Topic with id ${id} successfully updated`, status: 200});
         } catch (err) {
-            res.status(500).send({ message: err, status: 500 });
+            res.status(500).send({message: err, status: 500});
         }
     }
 
@@ -163,9 +163,9 @@ class TopicController {
         try {
             await topic.deleteTopic(id);
 
-            return res.status(200).send({ message: `Topic with id ${id} successfully delete`, status: 200 });
+            return res.status(200).send({message: `Topic with id ${id} successfully delete`, status: 200});
         } catch (err) {
-            res.status(500).send({ message: err, status: 500 });
+            res.status(500).send({message: err, status: 500});
         }
     }
 
@@ -180,14 +180,14 @@ class TopicController {
         const id = req.user.Sub;
 
         try {
-            await topic.updatePatchTopic(id, { Path: filePath });
+            await topic.updatePatchTopic(id, {Path: filePath});
             res.download(filePath, err => {
                 if (err) {
-                    res.status(500).send({ message: err, status: 500 });
+                    res.status(500).send({message: err, status: 500});
                 }
             });
         } catch (err) {
-            res.status(500).send({ message: err, status: 500 });
+            res.status(500).send({message: err, status: 500});
         }
     }
 }

@@ -268,18 +268,41 @@ class UserController {
         }
     }
 
-    static async Search(req, res) {
+    static async SearchFriend(req, res) {
         const searchQuery = req.query.search
         try {
-            const search = await user.search(searchQuery)
+            const search = await user.searchFriend(searchQuery)
             if (search.length === 0) {
                 return res.status(404).send({
-                    message: 'Nous n\'avons pas trouvé résultat similaire a ' + search,
+                    message: 'Nous n\'avons pas trouvé d\'ami pour ' + search,
                     status: 404
                 })
             }
             res.status(200).send({
-                message: 'Articles trouvé',
+                message: 'Friends found',
+                status: 200,
+                search
+            })
+        } catch (err) {
+            res.status(500).send({
+                message: err,
+                status: 500
+            })
+        }
+    }
+
+    static async SearchFollow(req, res) {
+        const searchQuery = req.query.search
+        try {
+            const search = await user.searchFollow(searchQuery)
+            if (search.length === 0) {
+                return res.status(404).send({
+                    message: 'Nous n\'avons pas trouvé de follower pour ' + search,
+                    status: 404
+                })
+            }
+            res.status(200).send({
+                message: 'Followers found',
                 status: 200,
                 search
             })

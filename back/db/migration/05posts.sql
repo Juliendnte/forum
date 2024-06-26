@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS `posts`;
 CREATE TABLE IF NOT EXISTS `posts`
 (
     `Id`            int          NOT NULL AUTO_INCREMENT,
+    `Title`         varchar(75)  NOT NULL,
     `Content`       varchar(500) NOT NULL,
     `Create_post`   timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `Id_topics`     int          NOT NULL,
