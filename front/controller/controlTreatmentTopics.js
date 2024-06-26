@@ -11,7 +11,7 @@ class TreatmentTopic {
      * @param {Object} res - The response object.
      */
     static async CreateTopicTreatment(req, res) {
-        const { Title, Path, Status } = req.body;
+        const {Title, Path, Status} = req.body;
         try {
             const response = await axios.post(`${url}/topic`, {
                 Title,
@@ -20,9 +20,25 @@ class TreatmentTopic {
         } catch (err) {
             errorHandler.handleRequestError(err);
         }
-        console.log({ Title, Path, Status });
         res.redirect("/CODER");
     }
-}
 
-module.exports = TreatmentTopic;
+    static async GetTopic(id) {
+        try {
+            const response = await axios.get(`${url}/topic/${id}`)
+
+            if (response.status === 200) {
+                console.log(response.data)
+                return response.data;
+            } else {
+                console.error("Unexpected response status when fetching user data: ", response.status);
+                res.status(401).send("Failed to fetch topic data");
+                return undefined;
+            }
+        } catch
+            (err) {
+            errorHandler.handleRequestError(err);
+        }
+    }
+}
+    module.exports = TreatmentTopic;

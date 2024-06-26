@@ -10,8 +10,9 @@ routeur.get("/CODER", controllerTemplate.Index);
 routeur.get("/CODER/login", controllerTemplate.Login);
 routeur.get("/CODER/register", controllerTemplate.Register);
 routeur.get("/CODER/accounts/password/reset/", controllerTemplate.ForgotPwd);
-routeur.get("/CODER/profil", controllerTemplate.ProfilUser);
-routeur.get("/CODER/create/topic", controllerTemplate.CreateTopic)
+routeur.get("/CODER/user/:name", controllerTemplate.ProfilUser);
+routeur.get("/CODER/create/topic", controllerTemplate.CreateTopic);
+routeur.get("/CODER/t/:id", controllerTemplate.GetTopic);
 
 // Route Traitement en rapport avec le user
 routeur.post("/treatment/login", controllerUser.LoginTreatment);

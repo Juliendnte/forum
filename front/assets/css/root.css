@@ -17,8 +17,14 @@
     src: url('../fonts/Outfit-Regular.ttf'), format(truetype);
 }
 
+a {
+    text-decoration: none;
+    text-transform: none;
+    color: #000;
+}
+
 :root {
-    --color-green: #00dfab;
+    --color-green: #00cd99;
     --color-green-linear: linear-gradient(to right, #64ffdb, #00dfab);
     --color-placehorder: #737373;
     --color-line : #acacac;

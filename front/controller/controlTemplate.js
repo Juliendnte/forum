@@ -1,4 +1,5 @@
 const controlUser = require('./controlTreatmentUser');
+const controlTopic = require('./controlTreatmentTopics');
 const ErrorHandler = require("./ErrorHandler");
 const errorHandler = new ErrorHandler();
 
@@ -82,6 +83,26 @@ class ControlTemplate {
 
             res.render('../views/pages/createTopic', {
                 dataUser,
+            });
+        } catch (err) {
+            errorHandler.handleRequestError(err);
+        }
+    }
+
+    /**
+     * Render the create topic profile page
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
+    static async GetTopic(req, res) {
+        try {
+            const topicId = req.params.id;
+            const dataUser = await controlUser.GetUser(req, res);
+            const dataTopic = await controlTopic.GetTopic(topicId);
+
+            res.render('../views/pages/topic', {
+                dataUser,
+                dataTopic,
             });
         } catch (err) {
             errorHandler.handleRequestError(err);

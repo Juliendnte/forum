@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>CODER</title>
+    <%- include('../components/head'); %>
+</head>
+
+<body>
+<%- include('../components/header'); %>
+<section class="section-global">
+    <%- include('../components/aside'); %>
+    <% if (dataTopic && dataTopic.topic.Title) { %>
+        <section class="topic-single-ctn">
+            <div class="header-topic-single-ctn">
+                <div class="header-topic-single-img-title">
+                    <div class="header-topic-single-img">
+                        <img src="<%= dataTopic.topic.TopicPath %>" alt="image topic">
+                    </div>
+                    <div class="header-topic-single-title">
+                        <p>t/<%= dataTopic.topic.Title %></p>
+                    </div>
+                </div>
+                <div class="header-topic-single-btn">
+                    <a href="">
+                        <button>
+                            <span>
+                                <svg rpl="" fill="currentColor" height="20" icon-name="add-outline" viewBox="0 0 20 20"
+                                     width="20" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M19 9.375h-8.375V1h-1.25v8.375H1v1.25h8.375V19h1.25v-8.375H19v-1.25Z"></path>
+                                </svg>
+                            </span>
+                            <span>Créer un poste</span>
+                        </button>
+                    </a>
+                    <a href="">
+                        <button>
+                            Rejoindre
+                        </button>
+                    </a>
+                    <button class="btn-header-topic-dots">
+                        <span>
+                            <svg rpl="" fill="currentColor" height="20" icon-name="overflow-horizontal-outline"
+                                 viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg"> <!--?lit$236961859$-->
+                                <path d="M5.5 10a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0ZM10 8.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Zm6 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z">
+                                </path>
+                            </svg>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </section>
+    <% } else { %>
+        <p>No title available</p>
+    <% } %>
+</section>
+</body>
+
+</html>
