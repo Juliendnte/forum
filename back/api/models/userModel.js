@@ -324,7 +324,11 @@ class userModel {
                        p.Create_post AS CreateAt,
                        p.Id_User     AS UserId,
                        'post'        AS Type,
-                       lp.Like       AS PostLike,
+                       SUM(CASE
+                               WHEN lp.Like = 1 THEN 1
+                               WHEN lp.Like = 0 THEN -1
+                               ELSE 0
+                       END) AS  PostLikes,
                        t.Title       AS TopicTitle,
                        t.Path        AS TopicPath,
                        t.Id          AS TopicId
@@ -377,6 +381,7 @@ class userModel {
                        ELSE 0 
                    END) AS PostLikes,
                    t.Title       AS TopicTitle,
+                   t.Path        AS TopicPath,
                    t.Id          AS TopicId
             FROM posts p
                      LEFT JOIN topics t ON p.Id_topics = t.Id
@@ -393,6 +398,7 @@ class userModel {
                    m.Id_User        AS UserId,
                    'message'        AS Type,
                    t.Title          AS TopicTitle,
+                   t.Path        AS TopicPath,
                    t.Id             AS TopicId,
                    NULL AS PostLikes
             FROM message m
