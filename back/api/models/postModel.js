@@ -9,6 +9,8 @@ class postModel{
                 SELECT
                     p.*,
                     u.Name,
+                    u.Path,
+                    u.Id AS Id_User,
                     r.Label AS Role,
                     SUM(CASE
                             WHEN lp.Like = 1 THEN 1

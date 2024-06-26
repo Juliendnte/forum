@@ -12,6 +12,9 @@ class topicModel {
                        t.Create_at,
                        t.Id_User,
                        s.Label     AS Status,
+                       u.Name      AS UserName,
+                       u.Path      AS UserPath,
+                       u.Id        AS UserId,
                        tags.Id     AS TagId,
                        tags.Path   AS TagPath,
                        tags.Label  AS TagLabel,
@@ -33,6 +36,7 @@ class topicModel {
                          LEFT JOIN posts p ON t.Id = p.Id_topics
                          LEFT JOIN message m ON p.Id = m.Id_PostAnswer
                          LEFT JOIN likepost lp on p.Id = lp.Id_Post
+                         LEFT JOIN users u ON t.Id_User = u.Id
                 WHERE t.Id = ?;
             `
             connection.query(sql, [id], (err, results) => {
@@ -125,7 +129,7 @@ class topicModel {
             const sql = `INSERT INTO topics (Title, Id_Status, Id_User)
                          VALUES (?, ?, ?)`;
 
-            connection.query(sql, [newTopic.Title, newTopic.Status === 'Public' ? 1 : 2 , newTopic.Id_User], (err, results) => err ? reject(err) : resolve(results[0]));
+            connection.query(sql, [newTopic.Title, newTopic.Status === 'Public' ? 1 : 2, newTopic.Id_User], (err, results) => err ? reject(err) : resolve(results[0]));
         });
     }
 

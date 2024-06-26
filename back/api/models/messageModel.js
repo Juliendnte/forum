@@ -7,6 +7,8 @@ class messageModel{
                             SELECT 
                                 m.* ,
                                 u.Name,
+                                u.Path,
+                                U.Id AS Id_User,
                                 r.Label AS Role
                             FROM message m
                             LEFT JOIN users u ON m.Id_User = u.Id
