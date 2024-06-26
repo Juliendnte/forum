@@ -16,10 +16,15 @@ const migrationDir = path.join(__dirname, 'db', 'migration');
 const migrations = fs.readdirSync(migrationDir).sort().map(file => {
     const filePath = path.join(migrationDir, file);
     const fileContent = fs.readFileSync(filePath, 'utf8');
-    // Diviser les commandes par point-virgule
-    return fileContent.split(';').map(cmd => cmd.trim()).filter(cmd => cmd.length > 0);
+    return fileContent.split(';').map(command => command.trim()).filter(command => command.length > 0);
 }).flat();
-const insertions = fs.readFileSync(path.join(__dirname, 'db', 'insertion', 'insertion.sql'), 'utf8').split(';').map(cmd => cmd.trim()).filter(cmd => cmd.length > 0);
+
+const insertionDir = path.join(__dirname, 'db', 'insertion');
+const insertions = fs.readdirSync(insertionDir).sort().map(file => {
+    const filePath = path.join(insertionDir, file);
+    const fileContent = fs.readFileSync(filePath, 'utf8');
+    return fileContent.split(';').map(command => command.trim()).filter(command => command.length > 0);
+}).flat();
 
 /**
  * Initialize the database by executing a series of SQL queries.

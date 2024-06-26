@@ -1,0 +1,2 @@
+INSERT INTO posts (Title, Content, Id_topics, Id_User)
+VALUES ('Faut mieux faire un carrousel en natif ou avec bibliothèque ?', 'Je suis en train de faire une boutique en js et je veux faire un carrousel pour afficher mes articles et j\'essaye de bien opti mon code donc je ne sais pas si je dois me faciliter la vie en utilisant swiper par exemple mais donc importer toutes une bibliothèque où me complexifier la vie en créant ma fonction qui fait le carrousel ', 1, 1);
