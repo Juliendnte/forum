@@ -75,7 +75,7 @@ class TopicController {
     static getTopic(req, res) {
         try {
             const topicById = req.topic;
-            topicById.Path = `${baseUrl}/assets/${topicById.Path}`;
+            topicById.TopicPath = `${baseUrl}/assets/${topicById.TopicPath}`;
             topicById.TagPath = `${baseUrl}/assets${topicById.TagPath}`;
 
             return res.status(200).send({

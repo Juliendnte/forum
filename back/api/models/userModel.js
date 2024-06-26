@@ -33,10 +33,8 @@ class userModel {
      */
     static register(user) {
         return new Promise((resolve, reject) => {
-            const sql = `INSERT INTO users (Name, Email, Password, Salt, Create_at)
-                         VALUES (?, ?, ?, ?, DEFAULT)`;
-            console.log(sql)
-            console.log(user)
+            const sql = `INSERT INTO users (Name, Email, Password, Salt)
+                         VALUES (?, ?, ?, ?)`;
             connection.query(sql, [user.username, user.email, user.Password.hashedPassword, user.Password.salt], (err, results) => err ? reject(err) : resolve(results[0]));
         });
     }

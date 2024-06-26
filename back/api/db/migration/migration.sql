@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `users`
     `Id`        int          NOT NULL AUTO_INCREMENT,
     `Name`      varchar(50)  NOT NULL UNIQUE,
     `Biography` varchar(1200)         DEFAULT NULL,
-    `Path`      varchar(255)          DEFAULT 'user/undefined.png',
+    `Path`      varchar(255)          DEFAULT 'user/undefined.webp',
     `Email`     varchar(140) NOT NULL UNIQUE,
     `Password`  varchar(250) NOT NULL,
     `Salt`      varchar(150) NOT NULL,
@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS `topics`
 (
     `Id`        int         NOT NULL AUTO_INCREMENT,
     `Title`     varchar(75) NOT NULL,
-    `Path`      varchar(255)     DEFAULT NULL,
+    `Path`      varchar(255)     DEFAULT 'topic/undefined.webp',
     `Create_at` timestamp   NULL DEFAULT CURRENT_TIMESTAMP,
     `Id_Status` int         NOT NULL,
     `Id_User`   int         NOT NULL,

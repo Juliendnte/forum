@@ -30,7 +30,6 @@ const hashPassword = (password, salt) => {
     return {salt, hashedPassword};
 };
 
-
 /**
  * Helper function to validate email
  * @param {string} email - The email to be validated.
@@ -69,8 +68,10 @@ class UserController {
                 status: 201
             })
         } catch (err) {
-            handleError(res, err);
-        }
+            res.status(500).send({
+                message: err,
+                status: 500
+            });        }
     }
 
     static async Login(req, res) {
