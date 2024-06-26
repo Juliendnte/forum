@@ -112,12 +112,12 @@ class TopicController {
         const {Title, Status} = req.body;
         const Id_User = req.user.Sub;
 
-        if (!Title || !Id_User) {
-            return res.status(400).send({message: "Le champ Title est requis.", status: 400});
+        if (!Title || !Status || !Id_User) {
+            return res.status(400).send({message: "Les champs Title et Status est requis.", status: 400});
         }
 
         try {
-            const NewTopic = await topic.createTopic({Title, Id_User});
+            const NewTopic = await topic.createTopic({Title, Status,  Id_User});
 
             return res.status(201).send({message: `Topic successfully created`, status: 201, NewTopic});
         } catch (err) {

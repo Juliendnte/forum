@@ -123,8 +123,9 @@ class topicModel {
     static createTopic(newTopic) {
         return new Promise((resolve, reject) => {
             const sql = `INSERT INTO topics (Title, Id_Status, Id_User)
-                         VALUES (?, 1, ?)`;
-            connection.query(sql, [newTopic.Title, newTopic.Id_User], (err, results) => err ? reject(err) : resolve(results[0]));
+                         VALUES (?, ?, ?)`;
+
+            connection.query(sql, [newTopic.Title, newTopic.Status === 'Public' ? 1 : 2 , newTopic.Id_User], (err, results) => err ? reject(err) : resolve(results[0]));
         });
     }
 
