@@ -11,38 +11,39 @@ const pagination = 5;
  */
 function buildQueryWithoutLimitOffset(query) {
     const filteredQuery = Object.entries(query).filter(([key]) => key.toLowerCase() !== "limit" && key.toLowerCase() !== "offset")
-        .map(([key, value]) =>`${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
         .join("&");
     return filteredQuery ? `?${filteredQuery}` : "";
 }
-
+/**
+ * TopicController class.
+ * @class
+ */
 class TopicController {
+    /**
+     * Get all topics with pagination.
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     * @returns {Object} - The response object, containing a list of topics.
+     */
     static async getTopics(req, res) {
         try {
             const offset = parseInt(req.query.offset) || 0;
             const limit = parseInt(req.query.limit) || pagination;
-            const href = baseUrl + "/topics" + buildQueryWithoutLimitOffset(req.query);
+            const href = `${baseUrl}/topics${buildQueryWithoutLimitOffset(req.query)}`;
 
-            req.query.limit = limit;
-            req.query.offset = offset;
+            const topics = await topic.getAllTopic({ ...req.query, limit, offset });
+            topics.forEach(top => top.Path = `${baseUrl}/assets/${top.Path}`);
 
-            const topics = await topic.getAllTopic(req.query);
-            for (const top of topics) {
-                top.Path = `${baseUrl}/assets/${top.Path}`;
+            if (!topics.length) {
+                return res.status(404).send({ message: `Topics not found`, status: 404 });
             }
 
-            const total = Object.entries(topic).length; //Pour savoir j'ai combien d'article
-            if (!topics || total === 0) {
-                return res.status(404).send({
-                    message: `Topics not found`,
-                    status: 404,
-                });
-            }
-            const last_page = Math.ceil(topic.total / limit);
+            const total = topics.length;
+            const last_page = Math.ceil(total / limit);
             const current_page = Math.ceil(offset / limit) + 1;
-            const next =  topic.total - limit <= offset ? null : href.includes("?") ? `${href}&limit=${limit}&offset=${offset + limit}`: `${href}?limit=${limit}&offset=${offset + limit}`; //Si article.total et total sont égaux alors pas de suivant
-            const previous = offset ? href.includes("?") ? `${href}&limit=${limit}&offset=${offset - limit}` : `${href}?limit=${limit}&offset=${offset - limit}` : null; //Si l'offset est différent de 0 pagination sinon y en a pas
-
+            const next = total - limit <= offset ? null : `${href}&limit=${limit}&offset=${offset + limit}`;
+            const previous = offset ? `${href}&limit=${limit}&offset=${offset - limit}` : null;
 
             return res.status(200).send({
                 message: `Topics successfully found`,
@@ -60,18 +61,21 @@ class TopicController {
                 }
             });
 
-        }catch (err){
-            res.status(500).send({
-                message: err ,
-                status:500
-            });
+        } catch (err) {
+            res.status(500).send({ message: err, status: 500 });
         }
     }
 
+    /**
+     * Get a specific topic by its ID.
+     * @param {Object} req - The request object, containing the topic ID in the parameters.
+     * @param {Object} res - The response object.
+     * @returns {Object} - The response object, containing a specific topic.
+     */
     static getTopic(req, res) {
-        const topicById = req.topic;
-        try{
-            topicById.Path = `${baseUrl}/assets/${topicById.Path}`;
+        try {
+            const topicById = req.topic;
+            topicById.TopicPath = `${baseUrl}/assets/${topicById.TopicPath}`;
             topicById.TagPath = `${baseUrl}/assets${topicById.TagPath}`;
 
             return res.status(200).send({
@@ -79,126 +83,115 @@ class TopicController {
                 status: 200,
                 topic: topicById,
             });
-        }catch (err){
-            res.status(500).send({
-                message: err,
-                status: 500
-            });
+        } catch (err) {
+            res.status(500).send({ message: err, status: 500 });
         }
     }
 
-    static async getTags(req,res){
-        try{
+    /**
+     * Get all tags.
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     * @returns {Object} - The response object, containing a list of tags.
+     */
+    static async getTags(req, res) {
+        try {
             const tags = await topic.getTags();
-            for (const tag of tags) {
-                tag.Path = `${baseUrl}/assets${tag.Path}`;
-            }
-            res.status(200).send({
-                message: "Tags successfully found",
-                status: 200,
-                tags
-            })
-        }catch (err){
-            res.status(500).send({
-                message: err,
-                status: 500
-            })
+            tags.forEach(tag => tag.Path = `${baseUrl}/assets${tag.Path}`);
+
+            res.status(200).send({ message: "Tags successfully found", status: 200, tags });
+        } catch (err) {
+            res.status(500).send({ message: err, status: 500 });
         }
     }
 
-    static async postTopic(req,res){
-        const {Title} = req.body;
+    /**
+     * Create a new topic.
+     * @param {Object} req - The request object, containing the new topic details in the body.
+     * @param {Object} res - The response object.
+     * @returns {Object} - The response object, containing a success message.
+     */
+    static async postTopic(req, res) {
+        const { Title } = req.body;
         const Id_User = req.user.Sub;
-        if (!Title || !Id_User){
-            return res.status(400).send({
-                message: "Le champ Title est requis.",
-                status: 400
-            })
+
+        if (!Title || !Id_User) {
+            return res.status(400).send({ message: "Le champ Title est requis.", status: 400 });
         }
 
-        try{
-            const NewTopic = await topic.createTopic({
-                Title,
-                Id_User
-            });
+        try {
+            const NewTopic = await topic.createTopic({ Title, Id_User });
 
-            return  res.status(201).send({
-                message: `Topic successfully created`,
-                status: 201,
-                NewTopic
-            });
-        }catch (err){
-            res.status(500).send({
-                message: err,
-                status: 500
-            });
+            return res.status(201).send({ message: `Topic successfully created`, status: 201, NewTopic });
+        } catch (err) {
+            res.status(500).send({ message: err, status: 500 });
         }
     }
 
-    static async patchTopic(req,res){
-        const id = req.params.id
+    /**
+     * Update a specific topic by its ID.
+     * @param {Object} req - The request object, containing the topic ID in the parameters and the new details in the body.
+     * @param {Object} res - The response object.
+     * @returns {Object} - The response object, containing a success message.
+     */
+    static async patchTopic(req, res) {
+        const id = req.params.id;
         const body = req.body;
 
-        //Check si une clé du body appartient a cette liste
         if (!body || !Object.keys(body).some(key => ["Title", "Description", "Id_Status", "Id_User"].includes(key))) {
-            return res.status(400).send({
-                message: "Au moins un des champs (Title, Description, Id_Status, Id_User) doit être modifié",
-                status: 400
-            });
+            return res.status(400).send({ message: "Au moins un des champs (Title, Description, Id_Status, Id_User) doit être modifié", status: 400 });
         }
 
-        try{
+        try {
             await topic.updatePatchTopic(id, body);
 
-            return res.status(200).send({
-                message: `Topic with id ${id} successfully updated`,
-                status: 200,
-            });
-        }catch (err){
-            res.status(500).send({
-                message: err,
-                status:500
-            });
+            return res.status(200).send({ message: `Topic with id ${id} successfully updated`, status: 200 });
+        } catch (err) {
+            res.status(500).send({ message: err, status: 500 });
         }
     }
 
-    static async deleteTopic(req,res){
+    /**
+     * Delete a specific topic by its ID.
+     * @param {Object} req - The request object, containing the topic ID in the parameters.
+     * @param {Object} res - The response object.
+     * @returns {Object} - The response object, containing a success message.
+     */
+    static async deleteTopic(req, res) {
         const id = req.params.id;
+
         try {
             await topic.deleteTopic(id);
 
-            return res.status(200).send({
-                message: `Topic with id ${id} successfully delete`,
-                status: 200
-            })
-        }catch (err){
-            res.status(500).send({
-                message: err ,
-                status:500
-            });
+            return res.status(200).send({ message: `Topic with id ${id} successfully delete`, status: 200 });
+        } catch (err) {
+            res.status(500).send({ message: err, status: 500 });
         }
     }
 
-    static async UploadImage (req,res){
+    /**
+     * Upload an image for a specific topic.
+     * @param {Object} req - The request object, containing the image file in the body.
+     * @param {Object} res - The response object.
+     * @returns {Object} - The response object, containing a success message.
+     */
+    static async UploadImage(req, res) {
         const filePath = req.file.path.replace('assets', '');
         const id = req.user.Sub;
+
         try {
-            await topic.updatePatchTopic(id, {Path: filePath})
-            res.download(filePath, (err) => {
+            await topic.updatePatchTopic(id, { Path: filePath });
+            res.download(filePath, err => {
                 if (err) {
-                    res.status(500).send({
-                        message: err,
-                        status: 500
-                    })
+                    res.status(500).send({ message: err, status: 500 });
                 }
             });
-        }catch (err){
-            res.status(500).send({
-                message: err,
-                status: 500
-            })
+        } catch (err) {
+            res.status(500).send({ message: err, status: 500 });
         }
     }
 }
+
+module.exports = TopicController;
 
 module.exports = TopicController

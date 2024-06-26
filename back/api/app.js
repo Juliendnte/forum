@@ -16,6 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 const rateLimit = require("./middlewares/rate-limit");
 app.use(rateLimit);
 
+//Importation des routes
 const routePost = require("./routeur/postRoute");
 app.use(routePost);
 const routeUser = require("./routeur/userRoute");
