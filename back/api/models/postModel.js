@@ -1,6 +1,8 @@
 const connection = require("../config/authBDD")
 
 class postModel{
+
+    total = 0;
     static getpostById(id){
         return new Promise((resolve, reject) => {
             const sql = `
@@ -25,36 +27,46 @@ class postModel{
     }
 
     static getAllpost(query){
-        return new Promise((resolve, reject) => {
-            let sql = `SELECT * FROM posts `
+        return new Promise(async (resolve, reject) => {
+            let sql = `SELECT *
+                       FROM posts `
 
-            //S'il y a quelque chose dans la query
-            if (!(Object.entries(query).length === 0)){
-                const values = [];
+            const values = [];
+            const whereClauses = [];
+            let limitClause = "";
+            let offsetClause = "";
 
-                /*
-                Un objet marche comme une map en clé valeur
-                Name: Julien
-                la clé est Name et la valeur Julien
-                Ici je met la clé dans la requête sql, la valeur dans une liste qui remplacera les ?
-                Et j'ai un index pour mettre un WHERE si il y a une query autre que limit ou offset
-                Ma fonction ne marche que si le limit et offset sont a la fin comme en sql
-                 */
-                Object.entries(query).forEach(([key, value], index) => {
-                    if (key.toLowerCase() === "limit" || key.toLowerCase() === "offset"){
-                        sql += `${key} ? `;
-                        values.push(parseInt(value));
-                    }else{
-                        sql += index ===0 ? "WHERE ": "AND "
-                        sql += `${key}=? `;
-                        values.push(value);
-                    }
-                });
+            // Construire les clauses WHERE, LIMIT et OFFSET
+            Object.entries(query).forEach(([key, value]) => {
+                if (key.toLowerCase() === "limit") {
+                    limitClause = ` LIMIT ?`;
+                    values.push(parseInt(value));
+                } else if (key.toLowerCase() === "offset") {
+                    offsetClause = ` OFFSET ?`;
+                    values.push(parseInt(value));
+                } else {
+                    const valuesArray = value.split(",");
+                    const placeholders = valuesArray.map(() => "?").join(",");
+                    whereClauses.push(valuesArray.length > 1 ? `${key} IN (${placeholders})` : `${key} = ?`);
+                    values.push(...valuesArray);
+                }
+            });
 
-                connection.query(sql,values, (err, results)=> err ? reject(err) : resolve(results));
-            }else{
-                connection.query(sql, (err, results)=> err ? reject(err) : resolve(results));
+            // Ajouter les clauses WHERE à la requête SQL
+            if (whereClauses.length > 0) {
+                sql += " WHERE " + whereClauses.join(" AND ");
             }
+
+            // Utilise la même requête sans limit ni offset
+            this.total = (await this.getTotal(sql, values.slice(0, values.length - (limitClause ? 1 : 0) - (offsetClause ? 1 : 0)))).total;
+
+            // Ajouter limit et offset à la requête principale
+            sql += limitClause + offsetClause;
+
+            // Exécuter la requête avec les valeurs
+            connection.query(sql, values, (err, results) => err ? reject(err) : resolve(results));
+
+
         });
     }
 
@@ -106,6 +118,15 @@ class postModel{
             connection.query(sql,[id], (err,results)=> err ? reject(err) : resolve(results[0]))
 
         })
+    }
+
+    static getTotal(sql, values) {
+        return new Promise((resolve, reject) => {
+            const countSql = `SELECT COUNT(*) AS total FROM (${sql}) AS subquery`;
+            connection.query(countSql, values, (err, results) =>
+                err ? reject(err) : resolve(results[0])
+            );
+        });
     }
 }
 
