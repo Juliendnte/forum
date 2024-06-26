@@ -320,6 +320,7 @@ class userModel {
         return new Promise((resolve, reject) => {
             const sql = `
                 SELECT p.Id          AS PostId,
+                       p.Title       AS PostTitle,
                        p.Content     AS PostContent,
                        p.Create_post AS CreateAt,
                        p.Id_User     AS UserId,
@@ -335,23 +336,26 @@ class userModel {
                 FROM posts p
                          LEFT JOIN topics t ON p.Id_topics = t.Id
                          LEFT JOIN likepost lp ON p.Id = lp.Id_Post
+                         LEFT JOIN users u ON p.Id_User = u.Id
                 WHERE p.Id_User = ?
                 GROUP BY p.Id, t.Title
 
                 UNION ALL
 
                 SELECT m.Id             AS MessageId,
+                       NULL             AS MessageTitle,
                        m.Content        AS MessageContent,
                        m.Create_message AS CreateAt,
                        m.Id_User        AS UserId,
                        'message'        AS Type,
+                       NULL             AS MessageLikes,
                        t.Title          AS TopicTitle,
                        t.Path           AS TopicPath,
-                       t.Id             AS TopicId,
-                       NULL
+                       t.Id             AS TopicId
                 FROM message m
                          LEFT JOIN posts p ON m.Id_PostAnswer = p.Id
                          LEFT JOIN topics t ON p.Id_topics = t.Id
+                         LEFT JOIN users u ON m.Id_User = u.id
                 WHERE m.Id_User = ?
 
                 ORDER BY CreateAt;
