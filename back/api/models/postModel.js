@@ -18,6 +18,7 @@ class postModel{
                             ELSE 0
                         END) AS  PostLikes,
                     COUNT(m.Id) AS MessageCount
+                    
                 FROM posts p
                 LEFT JOIN users u ON p.Id_User = u.Id
                 LEFT JOIN role r ON u.Id_role = r.Id

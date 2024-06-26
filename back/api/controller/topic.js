@@ -72,9 +72,11 @@ class TopicController {
     static getTopic(req, res) {
         try {
             const topicById = req.topic;
+            topicById.UserPath = `${baseUrl}/assets/${topicById.UserPath}`;
             topicById.TopicPath = `${baseUrl}/assets/${topicById.TopicPath}`;
             topicById.TagPath = `${baseUrl}/assets${topicById.TagPath}`;
 
+            topicById.Posts.forEach(post => post.UserPath = `${baseUrl}/assets/${post.UserPath}`);
             return res.status(200).send({
                 message: `Article with id ${req.params.id} successfully found`,
                 status: 200,
@@ -114,6 +116,10 @@ class TopicController {
 
         if (!Title || !Status || !Id_User) {
             return res.status(400).send({message: "Les champs Title et Status est requis.", status: 400});
+        }
+
+        if (Title.includes(' ')){
+            return res.status(400).send({message: "Le titre ne doit pas contenir d'espace.", status: 400});
         }
 
         try {
