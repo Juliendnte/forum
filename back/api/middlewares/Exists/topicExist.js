@@ -12,7 +12,6 @@ const topicExists = async (req, res, next) => {
                 status: 404
             });
         }
-        console.log(topicById);
         req.topic = topicById;
         next();
     } catch (err) {

@@ -326,6 +326,7 @@ class userModel {
                        'post'        AS Type,
                        lp.Like       AS PostLike,
                        t.Title       AS TopicTitle,
+                       t.Path        AS TopicPath,
                        t.Id          AS TopicId
                 FROM posts p
                          LEFT JOIN topics t ON p.Id_topics = t.Id
@@ -341,6 +342,7 @@ class userModel {
                        m.Id_User        AS UserId,
                        'message'        AS Type,
                        t.Title          AS TopicTitle,
+                       t.Path           AS TopicPath,
                        t.Id             AS TopicId,
                        NULL
                 FROM message m
