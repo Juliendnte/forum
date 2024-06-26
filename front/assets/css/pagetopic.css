@@ -108,3 +108,61 @@
 .btn-header-topic-dots:hover {
     border-color: #151515;
 }
+
+.content-topic-single-ctn {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.post-topic-ctn {
+    display: flex;
+    flex-direction: column;
+    width: 65%;
+}
+
+.content-aside-ctn {
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    margin: 1rem;
+    padding: 1rem;
+    position: sticky;
+    width: 316px;
+    height: 100%;
+}
+
+.content-aside-title-creator {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.content-aside-title span {
+    font-weight: bold;
+}
+
+.content-aside-user-admin-modo {
+    margin-top: 1rem;
+}
+
+.title-user-aside {
+    font-weight: bold;
+}
+
+.aside-user-modo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.aside-user-modo span{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 75%;
+    border-bottom: 1px solid var(--color-line);
+    padding: 0.54rem;
+}

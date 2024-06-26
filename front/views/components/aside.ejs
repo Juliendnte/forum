@@ -13,17 +13,20 @@
                 </a>
             </div>
         </div>
-        <div class="nav-posts">
-            <div class="svg-nav">
-                <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
-                    <path d="M352 48H160a48 48 0 00-48 48v368l144-128 144 128V96a48 48 0 00-48-48z" fill="none"
-                          stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/>
-                </svg>
+        <% if (dataUser) { %>
+            <div class="nav-posts">
+                <div class="svg-nav">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
+                        <path d="M352 48H160a48 48 0 00-48 48v368l144-128 144 128V96a48 48 0 00-48-48z" fill="none"
+                              stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/>
+                    </svg>
+                </div>
+                <div class="text-nav">
+                    <p>Favoris</p>
+                </div>
             </div>
-            <div class="text-nav">
-                <p>Favoris</p>
-            </div>
-        </div>
+        <% } else {%>
+        <%}%>
     </div>
     <div class="bar"></div>
     <div class="nav-categories">

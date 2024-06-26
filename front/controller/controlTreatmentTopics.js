@@ -28,7 +28,6 @@ class TreatmentTopic {
             const response = await axios.get(`${url}/topic/${id}`)
 
             if (response.status === 200) {
-                console.log(response.data)
                 return response.data;
             } else {
                 console.error("Unexpected response status when fetching user data: ", response.status);

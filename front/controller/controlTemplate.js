@@ -100,6 +100,12 @@ class ControlTemplate {
             const dataUser = await controlUser.GetUser(req, res);
             const dataTopic = await controlTopic.GetTopic(topicId);
 
+            if (dataTopic && dataTopic.topic && dataTopic.topic.Create_at) {
+                const date = new Date(dataTopic.topic.Create_at);
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                dataTopic.topic.Create_at_formatted = date.toLocaleDateString('fr-FR', options);
+            }
+
             res.render('../views/pages/topic', {
                 dataUser,
                 dataTopic,
