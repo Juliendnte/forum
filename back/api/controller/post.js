@@ -77,11 +77,11 @@ class PostController {
     }
 
     static async postPost(req, res) {
-        const {Content, Id_topics, Id_PostAnswer} = req.body;
+        const {Title, Content, Id_topics, Id_PostAnswer} = req.body;
         const Id_User = req.user.Sub;
-        if (!Content || !Id_topics || !Id_PostAnswer) {
+        if (!Title || !Content || !Id_topics || !Id_PostAnswer) {
             return res.status(400).send({
-                message: "Tous les champs (Name, Biography, Email, Password, Id_roles) sont requis.",
+                message: "Tous les champs (Title, Content, Id_topics, Id_PostAnswer) sont requis.",
                 status: 400
             })
         }
@@ -91,7 +91,8 @@ class PostController {
                 Content,
                 Id_topics,
                 Id_PostAnswer,
-                Id_User
+                Id_User,
+                Title
             });
 
             return res.status(201).send({

@@ -10,7 +10,11 @@ class postModel{
                     p.*,
                     u.Name,
                     r.Label AS Role,
-                    COUNT(lp.Id_User) AS Likes,
+                    SUM(CASE
+                            WHEN lp.Like = 1 THEN 1
+                            WHEN lp.Like = 0 THEN -1
+                            ELSE 0
+                        END) AS  PostLikes,
                     COUNT(m.Id) AS MessageCount
                 FROM posts p
                 LEFT JOIN users u ON p.Id_User = u.Id
@@ -72,17 +76,8 @@ class postModel{
 
     static createpost(newpost){
         return new Promise((resolve, reject) => {
-            const sql = `INSERT INTO posts (Content, Id_PostAnswer, Id_topics, Id_User) VALUES (?, ?, ?, ?)`;
+            const sql = `INSERT INTO posts (Title, Content, Id_PostAnswer, Id_topics, Id_User) VALUES (? ,?, ?, ?, ?)`;
             connection.query(sql, [newpost.Content, newpost.Id_PostAnswer, newpost.Id_topics, newpost.Id_User], (err, results)=> err ? reject(err) : resolve(results[0]));
-        });
-    }
-
-    static updatePutpost(id, updatepost){
-        return new Promise((resolve, reject) => {
-            const sql = `UPDATE posts SET Content=?, Id_PostAnswer=?, Id_topics=?, Id_User=? WHERE id=?`;
-            const values = [updatepost.Content, updatepost.Id_PostAnswer, updatepost.Id_topics, updatepost.Id_User, id];
-
-            connection.query(sql, values, (err, results) => err ? reject(err) : resolve(results[0]));
         });
     }
 
