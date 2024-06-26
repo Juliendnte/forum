@@ -414,18 +414,55 @@ class userModel {
     }
 
     /**
-     * This static method searches for topics by their title in the database.
+     * This static method searches for users friends by their name in the database.
      *
      * @param {string} search - The search query.
      * @returns {Promise} - A promise that resolves with the search results.
      */
-    static search(search) {
+    static searchFriend(search) {
         return new Promise((resolve, reject) => {
             const sql = `
-                SELECT t.*
-                FROM topics t
-                WHERE (t.Title LIKE ?)`
-            connection.query(sql, search, (err, results) => err ? reject(err) : resolve(results));
+                SELECT
+                    CASE
+                        WHEN u1.Name = ? THEN u2.Id
+                        WHEN u2.Name = ? THEN u1.Id
+                        END AS Id,
+                    CASE
+                        WHEN u1.Name = ? THEN u2.Name
+                        WHEN u2.Name = ? THEN u1.Name
+                        END AS Name,
+                    CASE
+                        WHEN u1.Name = ? THEN u2.Path
+                        WHEN u2.Name = ? THEN u1.Path
+                        END AS Path
+                FROM friendship f
+                         LEFT JOIN users u1 ON f.Id_User1 = u1.Id
+                         LEFT JOIN users u2 ON f.Id_User2 = u2.Id
+                WHERE (u1.Name LIKE ? OR u2.Name LIKE ?) AND f.status = 'friend'
+                `
+            connection.query(sql, [search, search, search, search, search, search, search, search], (err, results) => err ? reject(err) : resolve(results));
+        })
+    }
+
+    /**
+     * This static method searches for users follow by their name in the database.
+     *
+     * @param {string} search - The search query.
+     * @returns {Promise} - A promise that resolves with the search results.
+     */
+    static searchFollow(search) {
+        return new Promise((resolve, reject) => {
+            const sql = `
+                SELECT u1.Id,
+                       u1.Name,
+                       u1.Path
+                FROM friendship f
+                         LEFT JOIN users u1 ON f.Id_User1 = u1.Id
+                         LEFT JOIN users u2 ON f.Id_User2 = u2.Id
+                WHERE u2.Name LIKE ?
+                  AND f.status = 'waiting'
+                `
+            connection.query(sql, [search], (err, results) => err ? reject(err) : resolve(results));
         })
     }
 }

@@ -19,7 +19,6 @@ function buildQueryWithoutLimitOffset(query) {
 class PostController {
     static async getPosts(req, res) {
         try {
-
             const offset = parseInt(req.query.offset) || 0;
             const limit = parseInt(req.query.limit) || pagination;
             const href = `${baseUrl}/topics${buildQueryWithoutLimitOffset(req.query)}`;
@@ -33,7 +32,7 @@ class PostController {
                 });
             }
 
-            const total = topics.length;
+            const total = posts.length;
 
             return res.status(200).send({
                 message: `Posts successfully found`,
