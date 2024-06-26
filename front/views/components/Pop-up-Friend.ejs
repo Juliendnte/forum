@@ -33,17 +33,19 @@
                             <% if (dataUser.utilisateur.Friends.length > 0) { %>
                                 <% dataUser.utilisateur.Friends.forEach(friend => { %>
                                     <div class="UserFriend-div-global">
-                                        <div class="UserFriend-global">
-                                            <div class="UserFriend-img">
-                                                <img src="<%= friend.Path %>" alt="Photo de <%= friend.Name %>">
+                                        <a href="/CODER/user/<%= friend.Name %>">
+                                            <div class="UserFriend-global">
+                                                <div class="UserFriend-img">
+                                                    <img src="<%= friend.Path %>" alt="Photo de <%= friend.Name %>">
+                                                </div>
+                                                <div class="UserFriend-name">
+                                                    <span><%= friend.Name %></span>
+                                                </div>
                                             </div>
-                                            <div class="UserFriend-name">
-                                                <span><%= friend.Name %></span>
+                                            <div class="UserFriend-btn-friend">
+                                                <button>Suivi(e)</button>
                                             </div>
-                                        </div>
-                                        <div class="UserFriend-btn-friend">
-                                            <button>Suivi(e)</button>
-                                        </div>
+                                        </a>
                                     </div>
                                 <% }); %>
                             <% } else { %>

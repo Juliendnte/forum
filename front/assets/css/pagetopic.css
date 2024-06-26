@@ -118,6 +118,8 @@
 .post-topic-ctn {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     width: 65%;
 }
 

@@ -6,6 +6,7 @@
 
 .profil-user-global {
     width: 80%;
+    overflow: auto;
 }
 
 .img-user-global {
@@ -297,7 +298,7 @@
     padding: 15px 5px;
 }
 
-.UserFriend-div-global {
+.UserFriend-div-global a {
     margin: 5px 15px;
     display: flex;
     flex-direction: row;
@@ -346,11 +347,10 @@
 }
 
 .post-profil {
-    margin: 2rem 0rem;
+    margin: 2rem 15rem;
     padding: 1rem 1rem;
     border-radius: 16px;
     cursor: pointer;
-    width: 100%;
 }
 .post {
     margin: 2rem 0rem;
@@ -495,9 +495,15 @@
 
 .post-user-content-description {
     font-weight: normal;
+    max-width: 80%;
 }
 
 .bar-suparator-post {
     border-bottom: 1px solid var(--color-line);
-    width: 100%;
+    width: 70%;
+}
+
+.bar-suparator-post-profil {
+    border-bottom: 1px solid var(--color-line);
+    margin: 0 15rem;
 }
