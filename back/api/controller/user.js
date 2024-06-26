@@ -313,6 +313,30 @@ class UserController {
             })
         }
     }
+
+    static async getAdminModo(req, res) {
+        try {
+            const admin = await user.getAdminModo()
+            if (admin.length === 0) {
+                return res.status(404).send({
+                    message: 'Nous n\'avons pas trouvé d\'admin ou de modo',
+                    status: 404
+                })
+            }
+
+            admin.forEach((user) => user.Path = `${url}assets/${user.Path}`)
+            res.status(200).send({
+                message: 'Admins and Modos found',
+                status: 200,
+                admin
+            })
+        } catch (err) {
+            res.status(500).send({
+                message: err,
+                status: 500
+            })
+        }
+    }
 }
 
 module.exports = UserController;
