@@ -507,3 +507,11 @@
     border-bottom: 1px solid var(--color-line);
     margin: 0 15rem;
 }
+
+.err-ctn-profil-post {
+    margin: 5rem 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
