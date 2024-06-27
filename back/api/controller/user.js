@@ -71,7 +71,8 @@ class UserController {
             res.status(500).send({
                 message: err,
                 status: 500
-            });        }
+            });
+        }
     }
 
     static async Login(req, res) {
@@ -128,11 +129,12 @@ class UserController {
      * @param {Object} res - The response object.
      */
     static async getUser(req, res) {
-        const { name: userName } = req.params;
+        const {name: userName} = req.params;
         let userId;
         try {
             userId = req.user.Sub;
-        } catch (e) {}
+        } catch (e) {
+        }
         try {
             const utilisateur = userName ? await user.getUserByName(userName) : await user.getUserById(userId);
             if (!utilisateur) {
@@ -146,9 +148,12 @@ class UserController {
             utilisateur.Follow = userName ? await user.getFollowName(userName) : await user.getFollow(userId);
             utilisateur.Follow.forEach((follow) => follow.Path = `${url}assets/${follow.Path}`)
             utilisateur.Path = `${url}assets/${utilisateur.Path}`;
-            utilisateur.Tags = utilisateur.Tags.map((tag) => `${url}assets/${tag}`);
+            utilisateur.Tags = utilisateur.Tags.map((tag) => `${url}assets${tag}`);
             utilisateur.VueEnsemble = userName ? await user.getPostMessageName(userName) : await user.getPostMessage(userId);
-            utilisateur.VueEnsemble.forEach((vue) => vue.TopicLike = vue.TopicLike === 0 ? -1 : vue.TopicLike);
+            utilisateur.VueEnsemble.forEach((vue) => {
+                vue.TopicLike = vue.TopicLike === 0 ? -1 : vue.TopicLike
+                vue.TopicPath = `${url}assets/${vue.TopicPath}`
+            });
             res.status(200).send({
                 message: 'User successfully found',
                 status: 200,
@@ -263,20 +268,67 @@ class UserController {
         }
     }
 
-    static async Search(req, res) {
+    static async SearchFriend(req, res) {
         const searchQuery = req.query.search
         try {
-            const search = await user.search(searchQuery)
+            const search = await user.searchFriend(searchQuery)
             if (search.length === 0) {
                 return res.status(404).send({
-                    message: 'Nous n\'avons pas trouvé résultat similaire a ' + search,
+                    message: 'Nous n\'avons pas trouvé d\'ami pour ' + search,
                     status: 404
                 })
             }
             res.status(200).send({
-                message: 'Articles trouvé',
+                message: 'Friends found',
                 status: 200,
                 search
+            })
+        } catch (err) {
+            res.status(500).send({
+                message: err,
+                status: 500
+            })
+        }
+    }
+
+    static async SearchFollow(req, res) {
+        const searchQuery = req.query.search
+        try {
+            const search = await user.searchFollow(searchQuery)
+            if (search.length === 0) {
+                return res.status(404).send({
+                    message: 'Nous n\'avons pas trouvé de follower pour ' + search,
+                    status: 404
+                })
+            }
+            res.status(200).send({
+                message: 'Followers found',
+                status: 200,
+                search
+            })
+        } catch (err) {
+            res.status(500).send({
+                message: err,
+                status: 500
+            })
+        }
+    }
+
+    static async getAdminModo(req, res) {
+        try {
+            const admin = await user.getAdminModo()
+            if (admin.length === 0) {
+                return res.status(404).send({
+                    message: 'Nous n\'avons pas trouvé d\'admin ou de modo',
+                    status: 404
+                })
+            }
+
+            admin.forEach((user) => user.Path = `${url}assets/${user.Path}`)
+            res.status(200).send({
+                message: 'Admins and Modos found',
+                status: 200,
+                admin
             })
         } catch (err) {
             res.status(500).send({

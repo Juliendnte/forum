@@ -1,4 +1,5 @@
 const controlUser = require('./controlTreatmentUser');
+const controlTopic = require('./controlTreatmentTopics');
 const ErrorHandler = require("./ErrorHandler");
 const errorHandler = new ErrorHandler();
 
@@ -35,7 +36,7 @@ class ControlTemplate {
      * @param {Object} req - The request object.
      * @param {Object} res - The response object.
      */
-    static async Register (req, res) {
+    static async Register(req, res) {
         res.render('../views/pages/register');
     }
 
@@ -55,19 +56,91 @@ class ControlTemplate {
      */
     static async ProfilUser(req, res) {
         try {
-            const dataUser = await controlUser.GetUser(req, res);
+            let dataUser = await controlUser.GetUser(req, res);
+            let Own = true
+
+            if (dataUser.utilisateur.Name !== req.params.name) {
+                dataUser = await controlUser.GetUsers(req, res);
+                Own = false
+            }
 
             if (dataUser && dataUser.utilisateur && dataUser.utilisateur.Create_at) {
                 const date = new Date(dataUser.utilisateur.Create_at);
-                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                const options = {year: 'numeric', month: 'long', day: 'numeric'};
                 dataUser.utilisateur.Create_at_formatted = date.toLocaleDateString('fr-FR', options);
             }
 
+            const posts = dataUser.utilisateur.VueEnsemble;
+            let totalLikes = 0;
+            let totalPosts = 0;
+
+            posts.forEach(post => {
+                if (post.Type === 'post') {
+                    totalPosts++;
+                    totalLikes += parseInt(post.PostLikes, 10);
+                }
+            });
+
+            // Passer les totaux au template
             res.render('../views/pages/profiluser', {
                 dataUser,
+                totalLikes,
+                totalPosts,
+                Own
             });
         } catch (err) {
             errorHandler.handleRequestError(err);
+        }
+    }
+
+    /**
+     * Render the users profils profile page
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
+    static async ProfilUsers(req, res) {
+        try {
+            const UsersName = req.params.name;
+
+            const dataUser = await controlUser.GetUser(req, res);
+
+            if (!dataUser) {
+                throw new Error("Données de l'utilisateur non trouvées");
+            }
+
+            const dataUsers = await controlUser.GetUsers(UsersName);
+
+            if (!dataUsers) {
+                throw new Error("Données du profil non trouvées");
+            }
+
+            if (dataUsers.utilisateur && dataUsers.utilisateur.Create_at) {
+                const date = new Date(dataUsers.utilisateur.Create_at);
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                dataUsers.utilisateur.Create_at_formatted = date.toLocaleDateString('fr-FR', options);
+            }
+
+            let totalLikes = 0;
+            let totalPosts = 0;
+
+            if (dataUsers.utilisateur && dataUsers.utilisateur.VueEnsemble) {
+                dataUsers.utilisateur.VueEnsemble.forEach(post => {
+                    if (post.Type === 'post') {
+                        totalPosts++;
+                        totalLikes += parseInt(post.PostLikes, 10) || 0;
+                    }
+                });
+            }
+
+            res.render('../views/pages/profilusers', {
+                dataUser,
+                dataUsers,
+                totalLikes,
+                totalPosts
+            });
+        } catch (err) {
+            errorHandler.handleRequestError(err); // Gestion des erreurs
+            res.status(500).send("Erreur interne du serveur");
         }
     }
 
@@ -82,6 +155,33 @@ class ControlTemplate {
 
             res.render('../views/pages/createTopic', {
                 dataUser,
+            });
+        } catch (err) {
+            errorHandler.handleRequestError(err);
+        }
+    }
+
+    /**
+     * Render the create topic profile page
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
+    static
+    async GetTopic(req, res) {
+        try {
+            const topicName = req.params.name;
+            const dataUser = await controlUser.GetUser(req, res);
+            const dataTopic = await controlTopic.GetTopic(topicName);
+
+            if (dataTopic && dataTopic.topic && dataTopic.topic.Create_at) {
+                const date = new Date(dataTopic.topic.Create_at);
+                const options = {year: 'numeric', month: 'long', day: 'numeric'};
+                dataTopic.topic.Create_at_formatted = date.toLocaleDateString('fr-FR', options);
+            }
+
+            res.render('../views/pages/topic', {
+                dataUser,
+                dataTopic,
             });
         } catch (err) {
             errorHandler.handleRequestError(err);

@@ -119,6 +119,27 @@ class TreatmentUser {
     }
 
     /**
+     * Handle get users form submission.
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
+    static async GetUsers(req, res) {
+        try {
+            const response = await axios.get(`${url}/user/${req.params.name}`);
+
+            if (response.status === 200) {
+                return response.data;
+            } else {
+                console.error("Unexpected response status when fetching user data: ", response.status);
+                res.status(401).send("Failed to fetch user data");
+                return undefined;
+            }
+        } catch (err) {
+            errorHandler.handleRequestError(err);
+        }
+    }
+
+    /**
      * Handle disconnect form submission.
      * @param {Object} req - The request object.
      * @param {Object} res - The response object.
