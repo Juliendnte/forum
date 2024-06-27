@@ -63,13 +63,13 @@
                     <div class="info-user-follow-friend">
                         <div class="info-user-follow">
                             <button class="btn-follow-friend" id="btnFollow">
-                                <span><%= dataUser.utilisateur.Follow.length %></span>
+                                <span><%= dataUser.utilisateur.Follow.length + dataUser.utilisateur.Friends.length %></span>
                                 <span>followers</span>
                             </button>
                         </div>
                         <div class="info-user-friend">
                             <button class="btn-follow-friend" id="btnFriend">
-                                <span><%= dataUser.utilisateur.Friends.length %></span>
+                                <span><%= dataUser.utilisateur.Suivie.length + dataUser.utilisateur.Friends.length %></span>
                                 <span>Suivi(e)s</span>
                             </button>
                         </div>

@@ -2,7 +2,7 @@
     <div class="popUp-friend-global">
         <div class="titre-friend-popUp">
             <div class="titre-friend">
-                <p>Suivi(e)s</p>
+                <p>Followers</p>
                 <button class="btn-friend-popUp" id="btnClosePopUPFollow">
                     <div class="_abm0">
                         <svg aria-label="Fermer" class="x1lliihq x1n2onr6 x5n08af" fill="black" height="18"
@@ -30,24 +30,43 @@
                     </div>
                     <div class="UserFriend-ctn">
                         <div class="UserFriend-ctn">
-                            <% if (dataUser.utilisateur.Follow.length > 0) { %>
-                                <% dataUser.utilisateur.Follow.forEach(friend => { %>
+                            <% if (dataUser.utilisateur.Follow.length > 0 ||  dataUser.utilisateur.Friends.length > 0) { %>
+                                <% dataUser.utilisateur.Follow.forEach(follow => { %>
                                     <div class="UserFriend-div-global">
-                                        <div class="UserFriend-global">
-                                            <div class="UserFriend-img">
-                                                <img src="<%= friend.Path %>" alt="Photo de <%= friend.Name %>">
+                                        <a href="/CODER/user/<%= follow.Name %>">
+                                            <div class="UserFriend-global">
+                                                <div class="UserFriend-img">
+                                                    <img src="<%= follow.Path %>" alt="Photo de <%= follow.Name %>">
+                                                </div>
+                                                <div class="UserFriend-name">
+                                                    <span><%= follow.Name %></span>
+                                                </div>
                                             </div>
-                                            <div class="UserFriend-name">
-                                                <span><%= friend.Name %></span>
+                                            <div class="UserFriend-btn-friend">
+                                                <button>Voir Profil</button>
                                             </div>
-                                        </div>
-                                        <div class="UserFriend-btn-friend">
-                                            <button>Suivi(e)</button>
-                                        </div>
+                                        </a>
+                                    </div>
+                                <% }); %>
+                                <% dataUser.utilisateur.Friends.forEach(follow => { %>
+                                    <div class="UserFriend-div-global">
+                                        <a href="/CODER/user/<%= follow.Name %>">
+                                            <div class="UserFriend-global">
+                                                <div class="UserFriend-img">
+                                                    <img src="<%= follow.Path %>" alt="Photo de <%= follow.Name %>">
+                                                </div>
+                                                <div class="UserFriend-name">
+                                                    <span><%= follow.Name %></span>
+                                                </div>
+                                            </div>
+                                            <div class="UserFriend-btn-friend">
+                                                <button>Voir Profil</button>
+                                            </div>
+                                        </a>
                                     </div>
                                 <% }); %>
                             <% } else { %>
-                                <p class="message-friend-not-found")>Aucun followers trouvé.</p>
+                                <p class="message-friend-not-found" )>Aucun followers trouvé.</p>
                             <% } %>
                         </div>
                     </div>

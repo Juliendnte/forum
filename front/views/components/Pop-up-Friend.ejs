@@ -30,7 +30,24 @@
                     </div>
                     <div class="UserFriend-ctn">
                         <div class="UserFriend-ctn">
-                            <% if (dataUser.utilisateur.Friends.length > 0) { %>
+                            <% if (dataUser.utilisateur.Suivie.length > 0 || dataUser.utilisateur.Friends.length > 0) { %>
+                                <% dataUser.utilisateur.Suivie.forEach(Suivie => { %>
+                                    <div class="UserFriend-div-global">
+                                        <a href="/CODER/user/<%= Suivie.Name %>">
+                                            <div class="UserFriend-global">
+                                                <div class="UserFriend-img">
+                                                    <img src="<%= Suivie.Path %>" alt="Photo de <%= Suivie.Name %>">
+                                                </div>
+                                                <div class="UserFriend-name">
+                                                    <span><%= Suivie.Name %></span>
+                                                </div>
+                                            </div>
+                                            <div class="UserFriend-btn-friend">
+                                                <button>Voir Profil</button>
+                                            </div>
+                                        </a>
+                                    </div>
+                                <% }); %>
                                 <% dataUser.utilisateur.Friends.forEach(friend => { %>
                                     <div class="UserFriend-div-global">
                                         <a href="/CODER/user/<%= friend.Name %>">
@@ -43,13 +60,13 @@
                                                 </div>
                                             </div>
                                             <div class="UserFriend-btn-friend">
-                                                <button>Suivi(e)</button>
+                                                <button>Voir Profil</button>
                                             </div>
                                         </a>
                                     </div>
                                 <% }); %>
                             <% } else { %>
-                                <p class="message-friend-not-found")>Aucun ami trouvé.</p>
+                                <p class="message-friend-not-found" )>Aucun suivi(e)s trouvé.</p>
                             <% } %>
                         </div>
                     </div>
