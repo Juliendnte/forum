@@ -35,8 +35,7 @@ class postModel{
 
     static getAllpost(query){
         return new Promise(async (resolve, reject) => {
-            let sql = `SELECT *
-                       FROM posts `
+            let sql = `SELECT * FROM posts`;
 
             const values = [];
             const whereClauses = [];
@@ -64,7 +63,10 @@ class postModel{
                 sql += " WHERE " + whereClauses.join(" AND ");
             }
 
-            // Utilise la même requête sans limit ni offset
+            // Ajouter la clause ORDER BY pour trier par la date de création la plus récente
+            sql += " ORDER BY Create_post DESC";
+
+            // Utiliser la même requête sans limit ni offset pour obtenir le total des résultats
             this.total = (await this.getTotal(sql, values.slice(0, values.length - (limitClause ? 1 : 0) - (offsetClause ? 1 : 0)))).total;
 
             // Ajouter limit et offset à la requête principale
@@ -72,10 +74,9 @@ class postModel{
 
             // Exécuter la requête avec les valeurs
             connection.query(sql, values, (err, results) => err ? reject(err) : resolve(results));
-
-
         });
     }
+
 
     static likepost(like){
         return new Promise((resolve, reject) => {

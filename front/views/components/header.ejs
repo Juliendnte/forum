@@ -38,11 +38,11 @@
                 </button>
             </a>
         <% } else { %>
-            <a href="/CODER/user/<%= Name ? Name : dataUser.utilisateur.Name %>">
-                <button class="login-global" id="show-login">
-                    <img src="<%= dataUser.utilisateur.Path %>" alt="User Avatar">
-                </button>
-            </a>
+                <a href="/CODER/user/<%= typeof Name !== 'undefined' ? Name : dataUser.utilisateur.Name %>">
+                    <button class="login-global" id="show-login">
+                        <img src="<%= dataUser.utilisateur.Path %>" alt="User Avatar">
+                    </button>
+                </a>
             <form action="/treatment/disconnect" method="get">
                 <button class="log-out-global">
                     <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
