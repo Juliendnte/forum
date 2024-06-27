@@ -37,9 +37,10 @@ class TreatmentUser {
                 remember,
             });
             if (response.status === 200) {
-                const {token} = response.data;
-                if (token) {
-                    res.cookie("Token", token, {
+                const {Token} = response.data;
+
+                if (Token) {
+                    res.cookie("Token", Token, {
                         maxAge: remember ? 365 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000,
                         httpOnly: true,
                         secure: false, // Change to true if using HTTPS
@@ -47,7 +48,7 @@ class TreatmentUser {
                     });
                     user = await axios.get(url + "/user", {
                         headers: {
-                            "Authorization": token,
+                            "Authorization": Token,
                             "Content-Type": "application/json"
                         }
                     });
@@ -112,6 +113,7 @@ class TreatmentUser {
                 }
             });
 
+            console.log(response.data)
             if (response.status === 200) {
                 return response.data;
             } else {

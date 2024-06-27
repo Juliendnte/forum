@@ -15,8 +15,7 @@ class ControlTemplate {
             const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
 
             res.render('../views/pages/index', {
-                dataUser,
-                Name: controlUser.user.Name
+                dataUser
             });
         } catch (err) {
             errorHandler.handleRequestError(err);
@@ -58,6 +57,7 @@ class ControlTemplate {
     static async ProfilUser(req, res) {
         try {
             let dataUser = await controlUser.TreatmentUser.GetUser(req, res);
+            const Name = dataUser.utilisateur.Name;
             let Own = true
 
             if (dataUser.utilisateur.Name !== req.params.name) {
@@ -87,7 +87,8 @@ class ControlTemplate {
                 dataUser,
                 totalLikes,
                 totalPosts,
-                Own
+                Own,
+                Name
             });
         } catch (err) {
             errorHandler.handleRequestError(err);
@@ -136,7 +137,7 @@ class ControlTemplate {
                 dataUser,
                 dataUsers,
                 totalLikes,
-                totalPosts
+                totalPosts,
             });
         } catch (err) {
             errorHandler.handleRequestError(err); // Gestion des erreurs
@@ -154,7 +155,7 @@ class ControlTemplate {
             const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
 
             res.render('../views/pages/createTopic', {
-                dataUser,
+                dataUser
             });
         } catch (err) {
             errorHandler.handleRequestError(err);

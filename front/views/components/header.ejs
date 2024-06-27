@@ -38,7 +38,7 @@
                 </button>
             </a>
         <% } else { %>
-            <a href="/CODER/user/<%= Name %>">
+            <a href="/CODER/user/<%= Name ? Name : dataUser.utilisateur.Name %>">
                 <button class="login-global" id="show-login">
                     <img src="<%= dataUser.utilisateur.Path %>" alt="User Avatar">
                 </button>
