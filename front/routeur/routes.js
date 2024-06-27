@@ -19,12 +19,13 @@ routeur.get("/CODER/t/:name", controllerTemplate.GetTopic);
 // Configuration des routes Posts
 routeur.get("/CODER/p/:id", controllerTemplate.GetPost);
 
-// Route Traitement en rapport avec le user
+// Route Traitement en rapport avec le User
 routeur.post("/treatment/login", controllerUser.LoginTreatment);
 routeur.post("/treatment/register", controllerUser.RegisterTreatment);
 routeur.get("/treatment/disconnect", controllerUser.DisconnectTreatment);
+routeur.get("/treatment/follow/:id", controllerUser.FollowUser)
 
-// Route Traitement en rapport avec les topics
+// Route Traitement en rapport avec les Topics
 routeur.post("/treatment/createTopic", controllerTopic.CreateTopicTreatment);
 
 // Pour que nos routes soient accessibles

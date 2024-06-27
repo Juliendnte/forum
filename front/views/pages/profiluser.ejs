@@ -78,7 +78,9 @@
                         <% if (Own) { %>
                             <button>Modifier le profil</button>
                         <% } else { %>
-                            <button>Suivre</button>
+                            <a href="/treatment/follow/<%= dataUser.utilisateur.Id %>">
+                                <button>Suivre</button>
+                            </a>
                         <% } %>
                     </div>
                 </div>
@@ -204,7 +206,8 @@
                                         <div class="post-user-footer-commente">
                                             <a href="/CODER/p/<%= item.PostId %>">
                                                 <button>
-                                                    <svg rpl="" aria-hidden="true" class="icon-comment" fill="currentColor"
+                                                    <svg rpl="" aria-hidden="true" class="icon-comment"
+                                                         fill="currentColor"
                                                          height="20" icon-name="comment-outline" viewBox="0 0 20 20"
                                                          width="20"
                                                          xmlns="http://www.w3.org/2000/svg">
@@ -270,7 +273,8 @@
                                         <div class="post-user-footer-commente">
                                             <a href="/CODER/p/<%= item.PostId %>">
                                                 <button>
-                                                    <svg rpl="" aria-hidden="true" class="icon-comment" fill="currentColor"
+                                                    <svg rpl="" aria-hidden="true" class="icon-comment"
+                                                         fill="currentColor"
                                                          height="20" icon-name="comment-outline" viewBox="0 0 20 20"
                                                          width="20"
                                                          xmlns="http://www.w3.org/2000/svg">

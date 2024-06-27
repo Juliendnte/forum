@@ -169,24 +169,28 @@ class ControlTemplate {
     static async GetTopic(req, res) {
         try {
             const topicName = req.params.name;
-            const dataUser = await controlUser.GetUser(req, res);
-            const dataTopic = await controlTopic.GetTopic(topicName);
+            const [dataUser, dataTopic, dataAdmin] = await Promise.all([
+                controlUser.GetUser(req, res),
+                controlTopic.GetTopic(topicName),
+                controlUser.GetAdmin(req, res)
+            ]);
 
             if (dataTopic && dataTopic.topic && dataTopic.topic.Create_at) {
                 const date = new Date(dataTopic.topic.Create_at);
-                const options = {year: 'numeric', month: 'long', day: 'numeric'};
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
                 dataTopic.topic.Create_at_formatted = date.toLocaleDateString('fr-FR', options);
             }
 
             res.render('../views/pages/topic', {
                 dataUser,
                 dataTopic,
+                dataAdmin
             });
         } catch (err) {
-            errorHandler.handleRequestError(err);
+            console.error("Error fetching topic data:", err);
+            res.status(500).send("Internal server error");
         }
     }
-
     /**
      * Render the create topic profile page
      * @param {Object} req - The request object.
