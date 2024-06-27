@@ -15,6 +15,7 @@ routeur.post("/register", controllerUser.Register);
 routeur.post("/forgotPassword", controllerUser.ForgotPassword)
 routeur.post("/resetPassword", [middleware.auth.validateToken], controllerUser.ResetPassword);
 routeur.get("/user", [middleware.auth.validateToken], controllerUser.getUser)
+routeur.post("/follow", [middleware.auth.validateToken], controllerUser.Follow);
 routeur.post("/searchFriend", controllerUser.SearchFriend)
 routeur.post("/searchFollow", controllerUser.SearchFollow)
 routeur.patch("/user/update", [middleware.auth.validateToken], controllerUser.UpdateUser)
