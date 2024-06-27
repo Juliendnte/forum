@@ -5,14 +5,19 @@ const controllerTemplate = require("../controller/controlTemplate");
 const controllerUser = require("../controller/controlTreatmentUser");
 const controllerTopic = require("../controller/controlTreatmentTopics");
 
-// Configuration des routes
+// Configuration des routes Users
 routeur.get("/CODER", controllerTemplate.Index);
 routeur.get("/CODER/login", controllerTemplate.Login);
 routeur.get("/CODER/register", controllerTemplate.Register);
 routeur.get("/CODER/accounts/password/reset/", controllerTemplate.ForgotPwd);
 routeur.get("/CODER/user/:name", controllerTemplate.ProfilUser);
+
+// Configuration des routes Topics
 routeur.get("/CODER/create/topic", controllerTemplate.CreateTopic);
 routeur.get("/CODER/t/:name", controllerTemplate.GetTopic);
+
+// Configuration des routes Posts
+routeur.get("/CODER/p/:id", controllerTemplate.GetPost);
 
 // Route Traitement en rapport avec le user
 routeur.post("/treatment/login", controllerUser.LoginTreatment);

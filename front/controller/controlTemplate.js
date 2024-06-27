@@ -166,8 +166,7 @@ class ControlTemplate {
      * @param {Object} req - The request object.
      * @param {Object} res - The response object.
      */
-    static
-    async GetTopic(req, res) {
+    static async GetTopic(req, res) {
         try {
             const topicName = req.params.name;
             const dataUser = await controlUser.GetUser(req, res);
@@ -182,6 +181,32 @@ class ControlTemplate {
             res.render('../views/pages/topic', {
                 dataUser,
                 dataTopic,
+            });
+        } catch (err) {
+            errorHandler.handleRequestError(err);
+        }
+    }
+
+    /**
+     * Render the create topic profile page
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
+    static async GetPost(req, res) {
+        try {
+            const postId = req.params.id;
+            const dataUser = await controlUser.GetUser(req, res);
+            const dataPost = await controlTopic.GetPost(postId);
+
+            if (dataPost && dataPost.topic && dataPost.topic.Create_at) {
+                const date = new Date(dataPost.topic.Create_at);
+                const options = {year: 'numeric', month: 'long', day: 'numeric'};
+                dataPost.topic.Create_at_formatted = date.toLocaleDateString('fr-FR', options);
+            }
+
+            res.render('../views/pages/detailPost', {
+                dataUser,
+                dataPost,
             });
         } catch (err) {
             errorHandler.handleRequestError(err);
