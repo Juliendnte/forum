@@ -172,27 +172,37 @@ class TreatmentUser {
     static async FollowUser(req, res) {
         try {
             const id = req.params.id;
-            console.log(id)
             if (!id) {
-                return res.status(400).send("Not user found");
+                return res.status(400).send("No user found");
             }
 
             const token = req.cookies.Token;
             if (!token) {
-                return res.status(400).send("Not token found");
+                return res.status(400).send("No token found");
             }
+
+            // Ajoutez des logs pour déboguer
+            console.log(`Attempting to follow/unfollow user with ID: ${id}`);
+            console.log(`Using token: ${token}`);
 
             const response = await axios.post(`${url}/follow`, {id}, {
                 headers: {
                     "Authorization": token,
                     "Content-Type": "application/json"
                 }
-            })
-            console.log(response)
-            res.redirect('/CODER');
+            });
+
+            console.log('Axios response:', response.data);
+
+            res.redirect('back');
         } catch (err) {
-            console.log(err.response)
-            errorHandler.handleRequestError(err);
+            if (err.response) {
+                res.redirect('back');
+            } else if (err.request) {
+                errorHandler.setError("No response from server", 500)
+            } else {
+                errorHandler.setError("Request error", 500)
+            }
         }
     }
 
@@ -208,8 +218,7 @@ class TreatmentUser {
                 return [];
             }
         } catch (err) {
-            console.error("Error fetching admin data:", err);
-            res.status(500).send("Internal server error");
+            errorHandler.setError("Internal server error", 500)
             return [];
         }
     }

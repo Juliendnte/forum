@@ -213,18 +213,18 @@ class userModel {
     static getFriends(id) {
         return new Promise((resolve, reject) => {
             const sql = `
-                SELECT CASE
-                           WHEN u1.Id = ? THEN u2.Id
-                           WHEN u2.Id = ? THEN u1.Id
-                           END AS Id,
-                       CASE
-                           WHEN u1.Id = ? THEN u2.Name
-                           WHEN u2.Id = ? THEN u1.Name
-                           END AS Name,
-                       CASE
-                           WHEN u1.Id = ? THEN u2.Path
-                           WHEN u2.Id = ? THEN u1.Path
-                           END AS Path
+                SELECT DISTINCT CASE
+                                    WHEN u1.Id = ? THEN u2.Id
+                                    WHEN u2.Id = ? THEN u1.Id
+                                    END AS Id,
+                                CASE
+                                    WHEN u1.Id = ? THEN u2.Name
+                                    WHEN u2.Id = ? THEN u1.Name
+                                    END AS Name,
+                                CASE
+                                    WHEN u1.Id = ? THEN u2.Path
+                                    WHEN u2.Id = ? THEN u1.Path
+                                    END AS Path
                 FROM friendship f
                          LEFT JOIN users u1 ON f.Id_User1 = u1.Id
                          LEFT JOIN users u2 ON f.Id_User2 = u2.Id
@@ -281,18 +281,18 @@ class userModel {
     static getFriendsName(name) {
         return new Promise((resolve, reject) => {
             const sql = `
-                SELECT CASE
-                           WHEN u1.Name = ? THEN u2.Id
-                           WHEN u2.Name = ? THEN u1.Id
-                           END AS Id,
-                       CASE
-                           WHEN u1.Name = ? THEN u2.Name
-                           WHEN u2.Name = ? THEN u1.Name
-                           END AS Name,
-                       CASE
-                           WHEN u1.Name = ? THEN u2.Path
-                           WHEN u2.Name = ? THEN u1.Path
-                           END AS Path
+                SELECT DISTINCT CASE
+                                    WHEN u1.Name = ? THEN u2.Id
+                                    WHEN u2.Name = ? THEN u1.Id
+                                    END AS Id,
+                                CASE
+                                    WHEN u1.Name = ? THEN u2.Name
+                                    WHEN u2.Name = ? THEN u1.Name
+                                    END AS Name,
+                                CASE
+                                    WHEN u1.Name = ? THEN u2.Path
+                                    WHEN u2.Name = ? THEN u1.Path
+                                    END AS Path
                 FROM friendship f
                          LEFT JOIN users u1 ON f.Id_User1 = u1.Id
                          LEFT JOIN users u2 ON f.Id_User2 = u2.Id

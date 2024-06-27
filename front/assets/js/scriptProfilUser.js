@@ -1,24 +1,48 @@
-const vueEnsemble = document.getElementById("vue-densemble");
-const vuePost = document.getElementById("postes");
-const vueCommentaire = document.getElementById("commentaires");
+document.addEventListener('DOMContentLoaded', function () {
+    const vueEnsemble = document.getElementById("vue-densemble");
+    const vuePost = document.getElementById("postes");
+    const vueCommentaire = document.getElementById("commentaires");
+    const VueEnsembleCtn = document.getElementById("VueEnsembleCtn");
+    const VuePostsCtn = document.getElementById("VuePostsCtn");
+    const VueMessageCtn = document.getElementById("VueMessageCtn");
 
-vueEnsemble.addEventListener("click", () => {
+    // Ajoute la classe 'select' à VueEnsemble par défaut
     vueEnsemble.classList.add("select");
-    vuePost.classList.remove("select");
-    vueCommentaire.classList.remove("select");
-})
+    VueEnsembleCtn.style.display = 'block';
+    VuePostsCtn.style.display = 'none';
+    VueMessageCtn.style.display = 'none';
 
-vuePost.addEventListener("click", () => {
-    vuePost.classList.add("select");
-    vueEnsemble.classList.remove("select");
-    vueCommentaire.classList.remove("select");
-})
+    vueEnsemble.addEventListener("click", function () {
+        VueEnsembleCtn.style.display = 'block';
+        VuePostsCtn.style.display = 'none';
+        VueMessageCtn.style.display = 'none';
 
-vueCommentaire.addEventListener("click", () => {
-    vueCommentaire.classList.add("select");
-    vuePost.classList.remove("select");
-    vueEnsemble.classList.remove("select");
-})
+        vueEnsemble.classList.add("select");
+        vuePost.classList.remove("select");
+        vueCommentaire.classList.remove("select");
+    });
+
+    vuePost.addEventListener("click", function () {
+        VuePostsCtn.style.display = 'block';
+        VueEnsembleCtn.style.display = 'none';
+        VueMessageCtn.style.display = 'none';
+
+        vuePost.classList.add("select");
+        vueEnsemble.classList.remove("select");
+        vueCommentaire.classList.remove("select");
+    });
+
+    vueCommentaire.addEventListener("click", function () {
+        VueMessageCtn.style.display = 'block';
+        VueEnsembleCtn.style.display = 'none';
+        VuePostsCtn.style.display = 'none';
+
+        vueCommentaire.classList.add("select");
+        vueEnsemble.classList.remove("select");
+        vuePost.classList.remove("select");
+    });
+});
+
 
 document.addEventListener("DOMContentLoaded", function () {
     const BtnFriend = document.getElementById("btnFriend");
@@ -48,42 +72,5 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-
-document.addEventListener('DOMContentLoaded', function () {
-    const navItems = document.querySelectorAll('.nav-item');
-    const postsContainer = document.querySelector('.posts');
-    const commentsContainer = document.querySelector('.messages');
-
-    displayPosts();
-
-    navItems.forEach(item => {
-        item.addEventListener('click', function () {
-            navItems.forEach(navItem => navItem.classList.remove('select'));
-            item.classList.add('select');
-            if (item.id === 'vue-densemble') {
-                displayPosts();
-            } else if (item.id === 'postes') {
-                displayPostsOnly();
-            } else if (item.id === 'commentaires') {
-                displayCommentsOnly();
-            }
-        });
-    });
-
-    function displayPosts() {
-        postsContainer.style.display = 'block';
-        commentsContainer.style.display = 'block';
-    }
-
-    function displayPostsOnly() {
-        postsContainer.style.display = 'block';
-        commentsContainer.style.display = 'none';
-    }
-
-    function displayCommentsOnly() {
-        postsContainer.style.display = 'none';
-        commentsContainer.style.display = 'block';
-    }
-});
 
 
