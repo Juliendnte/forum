@@ -1,5 +1,5 @@
-INSERT INTO message (Content, Id_User, Id_PostAnswer, Create_message)
-VALUES ('Moi je préfére faire mes carrousels avec Swiper', 2, 1, '2024-06-26 08:53:27'),
+INSERT INTO message (Content, Id_User, Id_PostAnswer)
+VALUES ('Moi je préfére faire mes carrousels avec Swiper', 2, 1),
        ('Salut tout le monde, je viens de terminer un projet web et je voudrais des retours sur les performances.', 2,
         1),
        ('J ai un problème avec une animation CSS qui cause des ralentissements, quelqu un peut m aider ?', 2, 2),
