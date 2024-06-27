@@ -145,7 +145,7 @@ class UserController {
             }
             utilisateur.Friends = userName ? await user.getFriendsName(userName) : await user.getFriends(userId);
             utilisateur.Friends.forEach((friend) => friend.Path = `${url}assets/${friend.Path}`)
-            utilisateur.Follow = userName ? await user.getFollowName(userName) : await user.getFollow(userId);
+            utilisateur.Follow = userName ? await user.getFollowedName(userName) : await user.getFollowed(userId);
             utilisateur.Follow.forEach((follow) => follow.Path = `${url}assets/${follow.Path}`)
             utilisateur.Path = `${url}assets/${utilisateur.Path}`;
             utilisateur.Tags = utilisateur.Tags.map((tag) => `${url}assets${tag}`);
@@ -339,6 +339,7 @@ class UserController {
     }
 
     static async Follow(req, res) {
+        console.log(req.body.id)
         const id = parseInt(req.body.id)
         const userId = req.user.Sub
         if (id === userId){
@@ -361,13 +362,13 @@ class UserController {
                 await user.unfollow(userId, id)
                 return res.status(400).send({
                     message: 'Unfollowed successfully',
-                    status: 400
+                    status: 200
                 })
             }else if (u1Follow.find(u => u.Id === userId) ) {
                 await user.unfollow(userId, id)
                 return res.status(400).send({
                     message: 'Unfollowed successfully',
-                    status: 400
+                    status: 200
                 })
             }else {
                 await user.follow(userId, id)

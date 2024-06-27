@@ -21,14 +21,14 @@ class TreatmentUser {
      * @param {Object} res - The response object.
      */
     static async LoginTreatment(req, res) {
-        const { name, password, remember } = req.body;
+        const {name, password, remember} = req.body;
         if (!name) {
-            console.log({ name, password, remember});
+            console.log({name, password, remember});
             errorHandler.setError("The username/Email field must be filled", 401);
             return res.redirect('/CODER/login');
         }
 
-        const { username, email } = isValidEmail(name) ? { email: name } : { username: name };
+        const {username, email} = isValidEmail(name) ? {email: name} : {username: name};
         try {
             const response = await axios.post(`${url}/login`, {
                 username,
@@ -37,7 +37,7 @@ class TreatmentUser {
                 remember,
             });
             if (response.status === 200) {
-                const { Token } = response.data;
+                const {Token} = response.data;
                 if (Token) {
                     res.cookie("Token", Token, {
                         maxAge: remember ? 365 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000,
@@ -56,7 +56,7 @@ class TreatmentUser {
         } catch (err) {
             errorHandler.handleRequestError(err);
         }
-        console.log({ name, password, remember });
+        console.log({name, password, remember});
         res.redirect("/CODER");
     }
 
@@ -66,7 +66,7 @@ class TreatmentUser {
      * @param {Object} res - The response object.
      */
     static async RegisterTreatment(req, res) {
-        const { username, password, email } = req.body;
+        const {username, password, email} = req.body;
 
         try {
             const response = await axios.post(`${url}/register`, {
@@ -82,7 +82,7 @@ class TreatmentUser {
         } catch (err) {
             errorHandler.handleRequestError(err);
         }
-        console.log({ username, password, email })
+        console.log({username, password, email})
         res.redirect("/CODER/login");
     }
 
@@ -159,6 +159,52 @@ class TreatmentUser {
             errorHandler.handleRequestError(err);
         }
     }
+
+    static async FollowUser(req, res) {
+        try {
+            const id = req.params.id;
+            console.log(id)
+            if (!id) {
+                return res.status(400).send("Not user found");
+            }
+
+            const token = req.cookies.Token;
+            if (!token) {
+                return res.status(400).send("Not token found");
+            }
+
+            const response = await axios.post(`${url}/follow`, {id}, {
+                headers: {
+                    "Authorization": token,
+                    "Content-Type": "application/json"
+                }
+            })
+            console.log(response)
+            res.redirect('/CODER');
+        } catch (err) {
+            console.log(err.response)
+            errorHandler.handleRequestError(err);
+        }
+    }
+
+    static async GetAdmin(req, res) {
+        try {
+            const response = await axios.get(`${url}/admin/`);
+
+            if (response.status === 200) {
+                return response.data.admin; // Return the array of admin and moderators
+            } else {
+                console.error("Unexpected response status when fetching user data: ", response.status);
+                res.status(401).send("Failed to fetch user data");
+                return [];
+            }
+        } catch (err) {
+            console.error("Error fetching admin data:", err);
+            res.status(500).send("Internal server error");
+            return [];
+        }
+    }
+
 }
 
 module.exports = TreatmentUser;

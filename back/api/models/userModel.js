@@ -257,6 +257,21 @@ class userModel {
         })
     }
 
+    static getFollowed(id){
+        return new Promise((resolve, reject) => {
+            const sql = `
+                SELECT u2.Id,
+                       u2.Name,
+                       u2.Path
+                FROM friendship f
+                         LEFT JOIN users u1 ON f.Id_User1 = u1.Id
+                         LEFT JOIN users u2 ON f.Id_User2 = u2.Id
+                WHERE u1.Id = ?
+                  AND f.status = 'waiting'`;
+            connection.query(sql, id, (err, results) => err ? reject(err) : resolve(results));
+        })
+    }
+
     /**
      * This static method retrieves the friends of a user from the database by their name.
      *
@@ -305,6 +320,21 @@ class userModel {
                          LEFT JOIN users u1 ON f.Id_User1 = u1.Id
                          LEFT JOIN users u2 ON f.Id_User2 = u2.Id
                 WHERE u2.Name = ?
+                  AND f.status = 'waiting'`;
+            connection.query(sql, name, (err, results) => err ? reject(err) : resolve(results));
+        })
+    }
+
+    static getFollowedName(name){
+        return new Promise((resolve, reject) => {
+            const sql = `
+                SELECT u2.Id,
+                       u2.Name,
+                       u2.Path
+                FROM friendship f
+                         LEFT JOIN users u1 ON f.Id_User1 = u1.Id
+                         LEFT JOIN users u2 ON f.Id_User2 = u2.Id
+                WHERE u1.Name = ?
                   AND f.status = 'waiting'`;
             connection.query(sql, name, (err, results) => err ? reject(err) : resolve(results));
         })

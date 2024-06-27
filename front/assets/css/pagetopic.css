@@ -118,7 +118,6 @@
 .post-topic-ctn {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     width: 65%;
 }
@@ -167,4 +166,42 @@
     width: 75%;
     border-bottom: 1px solid var(--color-line);
     padding: 0.54rem;
+}
+
+.user-aside {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.user-aside-unique {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: flex-start;
+    margin-top: 15px;
+}
+
+.user-aside-unique:hover {
+    text-decoration: underline;
+}
+
+.user-aside-unique-img {
+    width: 50px;
+    height: 50px;
+}
+.user-aside-unique-img img {
+    width: 100%;
+    height: auto;
+    border-radius: 999px;
+}
+
+.user-aside-unique-name {
+    margin-left: 5px;
+    border: none;
+}
+
+.user-aside-unique-name span{
+    border: none;
 }

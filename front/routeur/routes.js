@@ -5,21 +5,27 @@ const controllerTemplate = require("../controller/controlTemplate");
 const controllerUser = require("../controller/controlTreatmentUser");
 const controllerTopic = require("../controller/controlTreatmentTopics");
 
-// Configuration des routes
+// Configuration des routes Users
 routeur.get("/CODER", controllerTemplate.Index);
 routeur.get("/CODER/login", controllerTemplate.Login);
 routeur.get("/CODER/register", controllerTemplate.Register);
 routeur.get("/CODER/accounts/password/reset/", controllerTemplate.ForgotPwd);
 routeur.get("/CODER/user/:name", controllerTemplate.ProfilUser);
+
+// Configuration des routes Topics
 routeur.get("/CODER/create/topic", controllerTemplate.CreateTopic);
 routeur.get("/CODER/t/:name", controllerTemplate.GetTopic);
 
-// Route Traitement en rapport avec le user
+// Configuration des routes Posts
+routeur.get("/CODER/p/:id", controllerTemplate.GetPost);
+
+// Route Traitement en rapport avec le User
 routeur.post("/treatment/login", controllerUser.LoginTreatment);
 routeur.post("/treatment/register", controllerUser.RegisterTreatment);
 routeur.get("/treatment/disconnect", controllerUser.DisconnectTreatment);
+routeur.get("/treatment/follow/:id", controllerUser.FollowUser)
 
-// Route Traitement en rapport avec les topics
+// Route Traitement en rapport avec les Topics
 routeur.post("/treatment/createTopic", controllerTopic.CreateTopicTreatment);
 
 // Pour que nos routes soient accessibles
