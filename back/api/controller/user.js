@@ -145,8 +145,10 @@ class UserController {
             }
             utilisateur.Friends = userName ? await user.getFriendsName(userName) : await user.getFriends(userId);
             utilisateur.Friends.forEach((friend) => friend.Path = `${url}assets/${friend.Path}`)
-            utilisateur.Follow = userName ? await user.getFollowedName(userName) : await user.getFollowed(userId);
+            utilisateur.Follow = userName ? await user.getFollowName(userName) : await user.getFollow(userId);
             utilisateur.Follow.forEach((follow) => follow.Path = `${url}assets/${follow.Path}`)
+            utilisateur.Suivie = userName ? await user.getFollowedName(userName) : await user.getFollowed(userId);
+            utilisateur.Suivie.forEach((follow) => follow.Path = `${url}assets/${follow.Path}`)
             utilisateur.Path = `${url}assets/${utilisateur.Path}`;
             utilisateur.Tags = utilisateur.Tags.map((tag) => `${url}assets${tag}`);
             utilisateur.VueEnsemble = userName ? await user.getPostMessageName(userName) : await user.getPostMessage(userId);
