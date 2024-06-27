@@ -337,6 +337,57 @@ class UserController {
             })
         }
     }
+
+    static async Follow(req, res) {
+        const id = parseInt(req.body.id)
+        console.log(typeof id)
+        const userId = req.user.Sub
+        if (id === userId){
+            return res.status(400).send({
+                message: 'You can\'t follow yourself',
+                status: 400
+            })
+        }
+        try {
+            const uFollow = await user.getFollow(userId);
+            const uFriend = await user.getFriends(userId);
+            const u1Follow = await user.getFollow(id);
+            if (uFollow.find(u => u.Id === id) ) {
+                console.log('accept')
+                await user.acceptFollow(userId, id)
+                return res.status(200).send({
+                    message: 'You\'re friends now !',
+                    status: 200
+                })
+            }else if (uFriend.find(u => u.Id === id) ) {
+                console.log('unfollow 1')
+                await user.unfollow(userId, id)
+                return res.status(400).send({
+                    message: 'Unfollowed successfully',
+                    status: 400
+                })
+            }else if (u1Follow.find(u => u.Id === userId) ) {
+                console.log('unfollow 2')
+                await user.unfollow(userId, id)
+                return res.status(400).send({
+                    message: 'Unfollowed successfully',
+                    status: 400
+                })
+            }else {
+                console.log('follow')
+                await user.follow(userId, id)
+                res.status(200).send({
+                    message: 'Followed successfully',
+                    status: 200
+                })
+            }
+        } catch (err) {
+            res.status(500).send({
+                message: err,
+                status: 500
+            })
+        }
+    }
 }
 
 module.exports = UserController;

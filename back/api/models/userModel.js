@@ -310,6 +310,54 @@ class userModel {
         })
     }
 
+    static follow(idUser1, idUser2) {
+        return new Promise((resolve, reject) => {
+            const sql = `INSERT INTO friendship (Id_User1, Id_User2)
+                         VALUES (?, ?)`;
+            connection.query(sql, [idUser1, idUser2], (err, results) => err ? reject(err) : resolve(results));
+        });
+    }
+
+    static unfollow(idUser1, idUser2) {
+        return new Promise((resolve, reject) => {
+            const sql = `
+                DELETE
+                FROM friendship
+                WHERE Id_User1 = ? AND Id_User2 = ?;`;
+            connection.query(sql, [idUser1, idUser2], (err, results) => {
+                if (err){
+                    console.log(err)
+                    reject(err)
+                }
+                const sql2 = `
+                UPDATE friendship
+                SET status = 'waiting'
+                WHERE Id_User1 = ? AND Id_User2 = ?;`
+                console.log(sql)
+                console.log(idUser1, idUser2)
+                connection.query(sql2, [idUser2, idUser1], (err, results2) => err ? resolve(results) : resolve({results, results2}));
+            });
+        });
+    }
+
+    static acceptFollow(idUser1, idUser2) {
+        return new Promise((resolve, reject) => {
+            const sql = `
+                UPDATE friendship
+                SET status = 'friend'
+                WHERE (Id_User1 = ? AND Id_User2 = ?);`
+            connection.query(sql, [idUser2, idUser1], (err, results) => {
+                if (err){
+                    reject(err)
+                }
+                const sql2 = `
+                    INSERT INTO friendship (Id_User1, Id_User2, status)
+                    VALUES (?, ?, 'friend');`
+                connection.query(sql2, [idUser1, idUser2], (err, results2) => err ? reject(err) : resolve({results, results2}));
+            });
+        });
+    }
+
     /**
      * This static method retrieves the posts and messages of a user from the database.
      *
@@ -475,18 +523,19 @@ class userModel {
     static getAdminModo() {
         return new Promise((resolve, reject) => {
             const sql = `
-                SELECT 
-                    u.Id,
-                    u.Name,
-                    u.Path,
-                    r.Label AS Role
+                SELECT u.Id,
+                       u.Name,
+                       u.Path,
+                       r.Label AS Role
                 FROM users u
-                LEFT JOIN role r ON u.Id_role = r.Id
-                WHERE u.Id_role = 1 OR u.Id_role = 2;
-          `
+                         LEFT JOIN role r ON u.Id_role = r.Id
+                WHERE u.Id_role = 1
+                   OR u.Id_role = 2;
+            `
             connection.query(sql, (err, results) => err ? reject(err) : resolve(results));
         })
     }
+
 }
 
 module.exports = userModel;
