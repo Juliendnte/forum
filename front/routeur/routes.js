@@ -12,7 +12,7 @@ routeur.get("/CODER/register", controllerTemplate.Register);
 routeur.get("/CODER/accounts/password/reset/", controllerTemplate.ForgotPwd);
 routeur.get("/CODER/user/:name", controllerTemplate.ProfilUser);
 routeur.get("/CODER/create/topic", controllerTemplate.CreateTopic);
-routeur.get("/CODER/t/:id", controllerTemplate.GetTopic);
+routeur.get("/CODER/t/:name", controllerTemplate.GetTopic);
 
 // Route Traitement en rapport avec le user
 routeur.post("/treatment/login", controllerUser.LoginTreatment);
