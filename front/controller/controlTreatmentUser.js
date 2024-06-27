@@ -1,7 +1,7 @@
 const url = "http://localhost:4000";
 const axios = require("axios");
 const ErrorHandler = require("./ErrorHandler");
-
+let user
 const errorHandler = new ErrorHandler();
 
 /**
@@ -37,13 +37,19 @@ class TreatmentUser {
                 remember,
             });
             if (response.status === 200) {
-                const {Token} = response.data;
-                if (Token) {
-                    res.cookie("Token", Token, {
+                const {token} = response.data;
+                if (token) {
+                    res.cookie("Token", token, {
                         maxAge: remember ? 365 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000,
                         httpOnly: true,
                         secure: false, // Change to true if using HTTPS
                         sameSite: "Lax",
+                    });
+                    user = await axios.get(url + "/user", {
+                        headers: {
+                            "Authorization": token,
+                            "Content-Type": "application/json"
+                        }
                     });
                     return res.redirect("/CODER");
                 } else {
@@ -154,6 +160,7 @@ class TreatmentUser {
 
             // Suppression du cookie de session
             res.clearCookie('Token');
+            user = undefined;
             res.redirect('/CODER'); // Redirection vers la page précédente
         } catch (err) {
             errorHandler.handleRequestError(err);
@@ -207,4 +214,4 @@ class TreatmentUser {
 
 }
 
-module.exports = TreatmentUser;
+module.exports = {TreatmentUser, user};

@@ -25,22 +25,23 @@
         <form action="/treatment/createTopic" method="POST">
             <div class="titre-form">
                 <h1>Creation d'un nouveau Topic</h1>
-                <span>Un nom aident les gens à comprendre ce qu'est votre communauté</span>
+                <span>Un nom aide les gens à comprendre ce qu'est votre communauté</span>
             </div>
             <input type="text" name="Title" placeholder="Nom du topic" required>
             <div class="radio-create-topic">
                 <span>Type du topic : </span>
                 <div class="radio-topic">
                     <input type="radio" id="Public" name="Status" value="Public" checked>
-                    <label for="html">Public</label><br>
+                    <label for="Public">Public</label><br>
                 </div>
                 <div class="radio-topic">
                     <input type="radio" id="Private" name="Status" value="Private">
-                    <label for="css">Privé</label><br>
+                    <label for="Private">Privé</label><br>
                 </div>
             </div>
             <button type="submit">Creer votre topic</button>
         </form>
+
     </div>
     <div class="toggle-container">
         <div class="toggle">

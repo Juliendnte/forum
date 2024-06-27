@@ -12,10 +12,11 @@ class ControlTemplate {
      */
     static async Index(req, res) {
         try {
-            const dataUser = await controlUser.GetUser(req, res);
+            const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
 
             res.render('../views/pages/index', {
                 dataUser,
+                Name: controlUser.user.Name
             });
         } catch (err) {
             errorHandler.handleRequestError(err);
@@ -56,11 +57,11 @@ class ControlTemplate {
      */
     static async ProfilUser(req, res) {
         try {
-            let dataUser = await controlUser.GetUser(req, res);
+            let dataUser = await controlUser.TreatmentUser.GetUser(req, res);
             let Own = true
 
             if (dataUser.utilisateur.Name !== req.params.name) {
-                dataUser = await controlUser.GetUsers(req, res);
+                dataUser = await controlUser.TreatmentUser.GetUsers(req, res);
                 Own = false
             }
 
@@ -100,15 +101,14 @@ class ControlTemplate {
      */
     static async ProfilUsers(req, res) {
         try {
-            const UsersName = req.params.name;
 
-            const dataUser = await controlUser.GetUser(req, res);
+            const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
 
             if (!dataUser) {
                 throw new Error("Données de l'utilisateur non trouvées");
             }
 
-            const dataUsers = await controlUser.GetUsers(UsersName);
+            const dataUsers = await controlUser.TreatmentUser.GetUsers(req, res);
 
             if (!dataUsers) {
                 throw new Error("Données du profil non trouvées");
@@ -151,7 +151,7 @@ class ControlTemplate {
      */
     static async CreateTopic(req, res) {
         try {
-            const dataUser = await controlUser.GetUser(req, res);
+            const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
 
             res.render('../views/pages/createTopic', {
                 dataUser,
@@ -170,9 +170,9 @@ class ControlTemplate {
         try {
             const topicName = req.params.name;
             const [dataUser, dataTopic, dataAdmin] = await Promise.all([
-                controlUser.GetUser(req, res),
+                controlUser.TreatmentUser.GetUser(req, res),
                 controlTopic.GetTopic(topicName),
-                controlUser.GetAdmin(req, res)
+                controlUser.TreatmentUser.GetAdmin(req, res)
             ]);
 
             if (dataTopic && dataTopic.topic && dataTopic.topic.Create_at) {
@@ -199,7 +199,7 @@ class ControlTemplate {
     static async GetPost(req, res) {
         try {
             const postId = req.params.id;
-            const dataUser = await controlUser.GetUser(req, res);
+            const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
             const dataPost = await controlTopic.GetPost(postId);
 
             if (dataPost && dataPost.topic && dataPost.topic.Create_at) {

@@ -11,17 +11,37 @@ class TreatmentTopic {
      * @param {Object} res - The response object.
      */
     static async CreateTopicTreatment(req, res) {
-        const {Title, Path, Status} = req.body;
+        const token = req.cookies.Token;
+
+        if (!token) {
+            return res.status(401).send("Unauthorized: No token provided");
+        }
+
+        const { Title, Status } = req.body;
         try {
             const response = await axios.post(`${url}/topic`, {
-                Title,
-                Status,
-            });
+                    Title,
+                    Status,
+                },
+                {
+                    headers: {
+                        "Authorization": token,
+                        "Content-Type": "application/json"
+                    }
+                });
+
+            if (response.status === 201) {
+                const newTopic = response.data.NewTopic;
+                res.redirect(`/CODER/t/${newTopic.Title}`);
+            } else {
+                res.status(response.status).send(response.data);
+            }
         } catch (err) {
             errorHandler.handleRequestError(err);
         }
-        res.redirect("/CODER");
     }
+
+
 
     static async GetTopic(id) {
         try {
@@ -59,4 +79,5 @@ class TreatmentTopic {
 
 
 }
-    module.exports = TreatmentTopic;
+
+module.exports = TreatmentTopic;

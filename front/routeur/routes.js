@@ -20,10 +20,10 @@ routeur.get("/CODER/t/:name", controllerTemplate.GetTopic);
 routeur.get("/CODER/p/:id", controllerTemplate.GetPost);
 
 // Route Traitement en rapport avec le User
-routeur.post("/treatment/login", controllerUser.LoginTreatment);
-routeur.post("/treatment/register", controllerUser.RegisterTreatment);
-routeur.get("/treatment/disconnect", controllerUser.DisconnectTreatment);
-routeur.get("/treatment/follow/:id", controllerUser.FollowUser)
+routeur.post("/treatment/login", controllerUser.TreatmentUser.LoginTreatment);
+routeur.post("/treatment/register", controllerUser.TreatmentUser.RegisterTreatment);
+routeur.get("/treatment/disconnect", controllerUser.TreatmentUser.DisconnectTreatment);
+routeur.get("/treatment/follow/:id", controllerUser.TreatmentUser.FollowUser)
 
 // Route Traitement en rapport avec les Topics
 routeur.post("/treatment/createTopic", controllerTopic.CreateTopicTreatment);
