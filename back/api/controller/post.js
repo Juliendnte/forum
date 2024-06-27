@@ -76,6 +76,68 @@ class PostController {
         }
     }
 
+    static async Like(req, res) {
+        const Id_Post =  parseInt(req.body.Id_Post);
+        const Id_User = req.user.Sub;
+        if (!Id_Post) {
+            return res.status(400).send({
+                message: "Le champ Id_Post est requis.",
+                status: 400
+            })
+        }
+
+        try {
+            const like = await post.getLike(Id_Post, Id_User);
+            if (!like || !like.Like) {
+                await post.likepost({Id_Post, Id_User, Like: 1});
+            }else {
+                console.log("on")
+                await post.likepost({Id_Post, Id_User, Like: null});
+            }
+
+            return res.status(201).send({
+                message: 'Liked successfully',
+                status: 201
+            })
+        } catch (err) {
+            res.status(500).send({
+                message: err,
+                status: 500
+            })
+        }
+    }
+
+    static async UnLike(req, res) {
+        const Id_Post =  parseInt(req.body.Id_Post);
+        const Id_User = req.user.Sub;
+        if (!Id_Post) {
+            return res.status(400).send({
+                message: "Le champ Id_Post est requis.",
+                status: 400
+            })
+        }
+
+        try {
+            const like = await post.getLike(Id_Post, Id_User);
+            if (!like || !like.Like) {
+                await post.likepost({Id_Post, Id_User, Like: 0});
+            }else {
+                console.log("on")
+                await post.likepost({Id_Post, Id_User, Like: null});
+            }
+
+            return res.status(201).send({
+                message: 'Liked successfully',
+                status: 201
+            })
+        } catch (err) {
+            res.status(500).send({
+                message: err,
+                status: 500
+            })
+        }
+    }
+
     static async postPost(req, res) {
         const {Title, Content, Id_topics, Id_PostAnswer} = req.body;
         const Id_User = req.user.Sub;
@@ -110,18 +172,17 @@ class PostController {
 
     static async patchPost(req, res) {
         const id = req.params.id
-        const {Content} = req.body;
+        const {Content, Title} = req.body;
 
-        //Check si une clé du body appartient a cette liste
-        if (!Content) {
+        if (!Content || !Title) {
             return res.status(400).send({
-                message: "Le champ Content doit être modifié",
+                message: "Les champs Content, Title peuvent être modifié",
                 status: 400
             });
         }
 
         try {
-            await post.updatePatchpost(id, Content);
+            await post.updatePatchpost(id, {Content, Title});
 
             return res.status(200).send({
                 message: `post with id ${id} successfully updated`,

@@ -77,6 +77,16 @@ class postModel{
         });
     }
 
+    static likepost(like){
+        return new Promise((resolve, reject) => {
+            const sql = `
+                INSERT INTO likepost (Id_User, Id_Post, \`Like\`)
+            VALUES (?, ?, ?)
+            ON DUPLICATE KEY UPDATE \`Like\` = VALUES(\`Like\`);`;
+            connection.query(sql, [like.Id_User, like.Id_Post, like.Like], (err, results) => err ? reject(err) : resolve(results[0]));
+        });
+    }
+
     static createpost(newpost){
         return new Promise((resolve, reject) => {
             const sql = `INSERT INTO posts (Title, Content, Id_PostAnswer, Id_topics, Id_User) VALUES (? ,?, ?, ?, ?)`;
@@ -107,6 +117,13 @@ class postModel{
             values.push(id);
 
             connection.query(sql, values, (err, results) => err ? reject(err) : resolve(results[0]));
+        });
+    }
+
+    static getLike(id, iduser){
+        return new Promise((resolve, reject) => {
+            const sql = `SELECT * FROM likepost WHERE Id_Post = ? AND Id_User = ?`
+            connection.query(sql,[id, iduser], (err, results)=> err ? reject(err) : resolve(results[0]));
         });
     }
 

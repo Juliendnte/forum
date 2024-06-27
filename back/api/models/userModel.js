@@ -326,15 +326,12 @@ class userModel {
                 WHERE Id_User1 = ? AND Id_User2 = ?;`;
             connection.query(sql, [idUser1, idUser2], (err, results) => {
                 if (err){
-                    console.log(err)
                     reject(err)
                 }
                 const sql2 = `
                 UPDATE friendship
                 SET status = 'waiting'
                 WHERE Id_User1 = ? AND Id_User2 = ?;`
-                console.log(sql)
-                console.log(idUser1, idUser2)
                 connection.query(sql2, [idUser2, idUser1], (err, results2) => err ? resolve(results) : resolve({results, results2}));
             });
         });
