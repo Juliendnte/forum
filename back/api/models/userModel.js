@@ -1,5 +1,8 @@
 const connection = require("../config/authBDD")
 
+/**
+ * Class representing a model for user.
+ */
 class userModel {
     /**
      * This static method logs in a user.
@@ -204,6 +207,248 @@ class userModel {
         });
     }
 
+
+    /**
+     * This static method retrieves the posts and messages of a user from the database.
+     *
+     * @param {number} id - The ID of the user.
+     * @returns {Promise} - A promise that resolves with the posts and messages of the user.
+     */
+    static getPostMessage(id) {
+        return new Promise((resolve, reject) => {
+            const sql = `
+            SELECT p.Id          AS PostId,
+                   p.Title       AS PostTitle,
+                   p.Content     AS PostContent,
+                   p.Create_post AS CreateAt,
+                   p.Id_User     AS UserId,
+                   'post'        AS Type,
+                   SUM(CASE
+                           WHEN lp.Like = 1 THEN 1
+                           WHEN lp.Like = 0 THEN -1
+                           ELSE 0
+                       END)      AS PostLikes,
+                   t.Title       AS TopicTitle,
+                   t.Path        AS TopicPath,
+                   t.Id          AS TopicId
+            FROM posts p
+                     LEFT JOIN topics t ON p.Id_topics = t.Id
+                     LEFT JOIN likepost lp ON p.Id = lp.Id_Post
+                     LEFT JOIN users u ON p.Id_User = u.Id
+            WHERE p.Id_User = ?
+            GROUP BY p.Id, p.Title, p.Content, p.Create_post, p.Id_User, t.Title, t.Path, t.Id
+
+            UNION ALL
+
+            SELECT m.Id             AS MessageId,
+                   NULL             AS MessageTitle,
+                   m.Content        AS MessageContent,
+                   m.Create_message AS CreateAt,
+                   m.Id_User        AS UserId,
+                   'message'        AS Type,
+                   NULL             AS MessageLikes,
+                   t.Title          AS TopicTitle,
+                   t.Path           AS TopicPath,
+                   t.Id             AS TopicId
+            FROM message m
+                     LEFT JOIN posts p ON m.Id_PostAnswer = p.Id
+                     LEFT JOIN topics t ON p.Id_topics = t.Id
+                     LEFT JOIN users u ON m.Id_User = u.id
+            WHERE m.Id_User = ?
+            ORDER BY CreateAt;
+        `;
+            connection.query(sql, [id, id], (err, results) => {
+                if (err) {
+                    return reject(err);
+                }
+
+                if (results.length === 0) {
+                    return resolve(null);
+                }
+
+                const posts = results.map(row => {
+                    if (row.Type === 'post') {
+                        return {
+                            PostId: row.PostId,
+                            PostTitle: row.PostTitle,
+                            PostContent: row.PostContent,
+                            CreateAt: row.CreateAt,
+                            UserId: row.UserId,
+                            Type: row.Type,
+                            PostLikes: row.PostLikes,
+                            Topic: {
+                                Title: row.TopicTitle,
+                                Path: row.TopicPath,
+                                Id: row.TopicId
+                            }
+                        };
+                    } else {
+                        return {
+                            MessageId: row.MessageId,
+                            MessageContent: row.MessageContent,
+                            CreateAt: row.CreateAt,
+                            UserId: row.UserId,
+                            Type: row.Type,
+                            Topic: {
+                                Title: row.TopicTitle,
+                                Path: row.TopicPath,
+                                Id: row.TopicId
+                            }
+                        };
+                    }
+                });
+                resolve(posts);
+            });
+        });
+    }
+
+    /**
+     * Retrieves the posts and messages of a user from the database by their name.
+     *
+     * @param {string} name - The name of the user.
+     * @returns {Promise} - A promise that resolves with the posts and messages of the user.
+     */
+    static getPostMessageName(name) {
+        return new Promise((resolve, reject) => {
+            const sql = `
+                SELECT p.Id          AS PostId,
+                       p.Title       AS PostTitle,
+                       p.Content     AS PostContent,
+                       p.Create_post AS CreateAt,
+                       p.Id_User     AS UserId,
+                       'post'        AS Type,
+                       SUM(CASE
+                               WHEN lp.Like = 1 THEN 1
+                               WHEN lp.Like = 0 THEN -1
+                               ELSE 0
+                           END)      AS PostLikes,
+                       t.Title       AS TopicTitle,
+                       t.Path        AS TopicPath,
+                       t.Id          AS TopicId
+                FROM posts p
+                         LEFT JOIN topics t ON p.Id_topics = t.Id
+                         LEFT JOIN likepost lp ON p.Id = lp.Id_Post
+                         LEFT JOIN users u ON p.Id_User = u.Id
+                WHERE u.Name = ?
+                GROUP BY p.Id, p.Title, p.Content, p.Create_post, p.Id_User, t.Title, t.Path, t.Id
+
+                UNION ALL
+
+                SELECT m.Id             AS MessageId,
+                       NULL             AS MessageTitle,
+                       m.Content        AS MessageContent,
+                       m.Create_message AS CreateAt,
+                       m.Id_User        AS UserId,
+                       'message'        AS Type,
+                       NULL             AS MessageLikes,
+                       t.Title          AS TopicTitle,
+                       t.Path           AS TopicPath,
+                       t.Id             AS TopicId
+                FROM message m
+                         LEFT JOIN posts p ON m.Id_PostAnswer = p.Id
+                         LEFT JOIN topics t ON p.Id_topics = t.Id
+                         LEFT JOIN users u ON m.Id_User = u.id
+                WHERE u.Name = ?
+                ORDER BY CreateAt;
+            `;
+            connection.query(sql, [name, name], (err, results) => {
+                if (err) {
+                    return reject(err);
+                }
+
+                if (results.length === 0) {
+                    return resolve(null);
+                }
+
+                const posts = results.map(row => {
+                    if (row.Type === 'post') {
+                        return {
+                            PostId: row.PostId,
+                            PostTitle: row.PostTitle,
+                            PostContent: row.PostContent,
+                            CreateAt: row.CreateAt,
+                            UserId: row.UserId,
+                            Type: row.Type,
+                            PostLikes: row.PostLikes,
+                            Topic: {
+                                Title: row.TopicTitle,
+                                Path: row.TopicPath,
+                                Id: row.TopicId
+                            }
+                        };
+                    } else {
+                        return {
+                            MessageId: row.MessageId,
+                            MessageContent: row.MessageContent,
+                            CreateAt: row.CreateAt,
+                            UserId: row.UserId,
+                            Type: row.Type,
+                            Topic: {
+                                Title: row.TopicTitle,
+                                Path: row.TopicPath,
+                                Id: row.TopicId
+                            }
+                        };
+                    }
+                });
+                resolve(posts);
+            });
+        });
+    }
+
+    /**
+     * This static method searches for users friends by their name in the database.
+     *
+     * @param {string} search - The search query.
+     * @returns {Promise} - A promise that resolves with the search results.
+     */
+    static searchFriend(search) {
+        return new Promise((resolve, reject) => {
+            const sql = `
+                SELECT CASE
+                           WHEN u1.Name = ? THEN u2.Id
+                           WHEN u2.Name = ? THEN u1.Id
+                           END AS Id,
+                       CASE
+                           WHEN u1.Name = ? THEN u2.Name
+                           WHEN u2.Name = ? THEN u1.Name
+                           END AS Name,
+                       CASE
+                           WHEN u1.Name = ? THEN u2.Path
+                           WHEN u2.Name = ? THEN u1.Path
+                           END AS Path
+                FROM friendship f
+                         LEFT JOIN users u1 ON f.Id_User1 = u1.Id
+                         LEFT JOIN users u2 ON f.Id_User2 = u2.Id
+                WHERE (u1.Name LIKE ? OR u2.Name LIKE ?)
+                  AND f.status = 'friend'
+            `
+            connection.query(sql, [search, search, search, search, search, search, search, search], (err, results) => err ? reject(err) : resolve(results));
+        })
+    }
+
+    /**
+     * This static method searches for users follow by their name in the database.
+     *
+     * @param {string} search - The search query.
+     * @returns {Promise} - A promise that resolves with the search results.
+     */
+    static searchFollow(search) {
+        return new Promise((resolve, reject) => {
+            const sql = `
+                SELECT u1.Id,
+                       u1.Name,
+                       u1.Path
+                FROM friendship f
+                         LEFT JOIN users u1 ON f.Id_User1 = u1.Id
+                         LEFT JOIN users u2 ON f.Id_User2 = u2.Id
+                WHERE u2.Name LIKE ?
+                  AND f.status = 'waiting'
+            `
+            connection.query(sql, [search], (err, results) => err ? reject(err) : resolve(results));
+        })
+    }
+
     /**
      * This static method retrieves the friends of a user from the database.
      *
@@ -252,21 +497,6 @@ class userModel {
                          LEFT JOIN users u1 ON f.Id_User1 = u1.Id
                          LEFT JOIN users u2 ON f.Id_User2 = u2.Id
                 WHERE u2.Id = ?
-                  AND f.status = 'waiting'`;
-            connection.query(sql, id, (err, results) => err ? reject(err) : resolve(results));
-        })
-    }
-
-    static getFollowed(id){
-        return new Promise((resolve, reject) => {
-            const sql = `
-                SELECT u2.Id,
-                       u2.Name,
-                       u2.Path
-                FROM friendship f
-                         LEFT JOIN users u1 ON f.Id_User1 = u1.Id
-                         LEFT JOIN users u2 ON f.Id_User2 = u2.Id
-                WHERE u1.Id = ?
                   AND f.status = 'waiting'`;
             connection.query(sql, id, (err, results) => err ? reject(err) : resolve(results));
         })
@@ -325,7 +555,34 @@ class userModel {
         })
     }
 
-    static getFollowedName(name){
+    /**
+     * Retrieves the users followed by a specific user from the database.
+     *
+     * @param {number} id - The ID of the user.
+     * @returns {Promise} - A promise that resolves with the users followed by the user.
+     */
+    static getFollowed(id) {
+        return new Promise((resolve, reject) => {
+            const sql = `
+                SELECT u2.Id,
+                       u2.Name,
+                       u2.Path
+                FROM friendship f
+                         LEFT JOIN users u1 ON f.Id_User1 = u1.Id
+                         LEFT JOIN users u2 ON f.Id_User2 = u2.Id
+                WHERE u1.Id = ?
+                  AND f.status = 'waiting'`;
+            connection.query(sql, id, (err, results) => err ? reject(err) : resolve(results));
+        })
+    }
+
+    /**
+     * Retrieves the users followed by a specific user from the database by their name.
+     *
+     * @param {string} name - The name of the user.
+     * @returns {Promise} - A promise that resolves with the users followed by the user.
+     */
+    static getFollowedName(name) {
         return new Promise((resolve, reject) => {
             const sql = `
                 SELECT u2.Id,
@@ -340,6 +597,13 @@ class userModel {
         })
     }
 
+    /**
+     * Follows a user.
+     *
+     * @param {number} idUser1 - The ID of the user who wants to follow.
+     * @param {number} idUser2 - The ID of the user to be followed.
+     * @returns {Promise} - A promise that resolves when the user is followed.
+     */
     static follow(idUser1, idUser2) {
         return new Promise((resolve, reject) => {
             const sql = `INSERT INTO friendship (Id_User1, Id_User2)
@@ -348,25 +612,44 @@ class userModel {
         });
     }
 
+    /**
+     * Unfollows a user.
+     *
+     * @param {number} idUser1 - The ID of the user who wants to unfollow.
+     * @param {number} idUser2 - The ID of the user to be unfollowed.
+     * @returns {Promise} - A promise that resolves when the user is unfollowed.
+     */
     static unfollow(idUser1, idUser2) {
         return new Promise((resolve, reject) => {
             const sql = `
                 DELETE
                 FROM friendship
-                WHERE Id_User1 = ? AND Id_User2 = ?;`;
+                WHERE Id_User1 = ?
+                  AND Id_User2 = ?;`;
             connection.query(sql, [idUser1, idUser2], (err, results) => {
-                if (err){
+                if (err) {
                     reject(err)
                 }
                 const sql2 = `
-                UPDATE friendship
-                SET status = 'waiting'
-                WHERE Id_User1 = ? AND Id_User2 = ?;`
-                connection.query(sql2, [idUser2, idUser1], (err, results2) => err ? resolve(results) : resolve({results, results2}));
+                    UPDATE friendship
+                    SET status = 'waiting'
+                    WHERE Id_User1 = ?
+                      AND Id_User2 = ?;`
+                connection.query(sql2, [idUser2, idUser1], (err, results2) => err ? resolve(results) : resolve({
+                    results,
+                    results2
+                }));
             });
         });
     }
 
+    /**
+     * Accepts a follow request.
+     *
+     * @param {number} idUser1 - The ID of the user who wants to accept the follow request.
+     * @param {number} idUser2 - The ID of the user who sent the follow request.
+     * @returns {Promise} - A promise that resolves when the follow request is accepted.
+     */
     static acceptFollow(idUser1, idUser2) {
         return new Promise((resolve, reject) => {
             const sql = `
@@ -374,182 +657,26 @@ class userModel {
                 SET status = 'friend'
                 WHERE (Id_User1 = ? AND Id_User2 = ?);`
             connection.query(sql, [idUser2, idUser1], (err, results) => {
-                if (err){
+                if (err) {
                     reject(err)
                 }
                 const sql2 = `
                     INSERT INTO friendship (Id_User1, Id_User2, status)
                     VALUES (?, ?, 'friend');`
-                connection.query(sql2, [idUser1, idUser2], (err, results2) => err ? reject(err) : resolve({results, results2}));
+                connection.query(sql2, [idUser1, idUser2], (err, results2) => err ? reject(err) : resolve({
+                    results,
+                    results2
+                }));
             });
         });
     }
 
-    /**
-     * This static method retrieves the posts and messages of a user from the database.
-     *
-     * @param {number} id - The ID of the user.
-     * @returns {Promise} - A promise that resolves with the posts and messages of the user.
-     */
-    static getPostMessage(id) {
-        return new Promise((resolve, reject) => {
-            const sql = `
-                SELECT p.Id          AS PostId,
-                       p.Title       AS PostTitle,
-                       p.Content     AS PostContent,
-                       p.Create_post AS CreateAt,
-                       p.Id_User     AS UserId,
-                       'post'        AS Type,
-                       SUM(CASE
-                               WHEN lp.Like = 1 THEN 1
-                               WHEN lp.Like = 0 THEN -1
-                               ELSE 0
-                           END)      AS PostLikes,
-                       t.Title       AS TopicTitle,
-                       t.Path        AS TopicPath,
-                       t.Id          AS TopicId
-                FROM posts p
-                         LEFT JOIN topics t ON p.Id_topics = t.Id
-                         LEFT JOIN likepost lp ON p.Id = lp.Id_Post
-                         LEFT JOIN users u ON p.Id_User = u.Id
-                WHERE p.Id_User = ?
-                GROUP BY p.Id, t.Title
-
-                UNION ALL
-
-                SELECT m.Id             AS MessageId,
-                       NULL             AS MessageTitle,
-                       m.Content        AS MessageContent,
-                       m.Create_message AS CreateAt,
-                       m.Id_User        AS UserId,
-                       'message'        AS Type,
-                       NULL             AS MessageLikes,
-                       t.Title          AS TopicTitle,
-                       t.Path           AS TopicPath,
-                       t.Id             AS TopicId
-                FROM message m
-                         LEFT JOIN posts p ON m.Id_PostAnswer = p.Id
-                         LEFT JOIN topics t ON p.Id_topics = t.Id
-                         LEFT JOIN users u ON m.Id_User = u.id
-                WHERE m.Id_User = ?
-
-                ORDER BY CreateAt;
-
-            `;
-            connection.query(sql, [id, id], (err, results) => err ? reject(err) : resolve(results))
-        })
-    }
 
     /**
-     * Retrieves the posts and messages of a user from the database by their name.
+     * Retrieves the administrators and moderators from the database.
      *
-     * @param {string} name - The name of the user.
-     * @returns {Promise} - A promise that resolves with the posts and messages of the user.
+     * @returns {Promise} - A promise that resolves with the administrators and moderators.
      */
-    static getPostMessageName(name) {
-        return new Promise((resolve, reject) => {
-            const sql = `
-                SELECT p.Id          AS PostId,
-                       p.Title       AS PostTitle,
-                       p.Content     AS PostContent,
-                       p.Create_post AS CreateAt,
-                       p.Id_User     AS UserId,
-                       'post'        AS Type,
-                       SUM(CASE
-                               WHEN lp.Like = 1 THEN 1
-                               WHEN lp.Like = 0 THEN -1
-                               ELSE 0
-                           END)      AS PostLikes,
-                       t.Title       AS TopicTitle,
-                       t.Path        AS TopicPath,
-                       t.Id          AS TopicId,
-                       COUNT(m.Id)  AS MessageCount
-                FROM posts p
-                         LEFT JOIN topics t ON p.Id_topics = t.Id
-                         LEFT JOIN likepost lp ON p.Id = lp.Id_Post
-                         LEFT JOIN users u ON p.Id_User = u.Id
-                         LEFT JOIN message m ON p.Id = m.Id_PostAnswer
-                WHERE u.Name = ?
-                GROUP BY p.Id, t.Title
-
-                UNION ALL
-
-                SELECT m.Id             AS MessageId,
-                       NULL             AS MessageTitle,
-                       m.Content        AS MessageContent,
-                       m.Create_message AS CreateAt,
-                       m.Id_User        AS UserId,
-                       'message'        AS Type,
-                       NULL             AS MessageLikes,
-                       t.Title          AS TopicTitle,
-                       t.Path           AS TopicPath,
-                       t.Id             AS TopicId,
-                       COUNT(m.Id)  AS MessageCount
-                FROM message m
-                         LEFT JOIN posts p ON m.Id_PostAnswer = p.Id
-                         LEFT JOIN topics t ON p.Id_topics = t.Id
-                         LEFT JOIN users u ON m.Id_User = u.id
-                WHERE u.Name = ?
-
-                ORDER BY CreateAt DESC;
-            `;
-            connection.query(sql, [name, name], (err, results) => err ? reject(err) : resolve(results))
-        });
-    }
-
-    /**
-     * This static method searches for users friends by their name in the database.
-     *
-     * @param {string} search - The search query.
-     * @returns {Promise} - A promise that resolves with the search results.
-     */
-    static searchFriend(search) {
-        return new Promise((resolve, reject) => {
-            const sql = `
-                SELECT CASE
-                           WHEN u1.Name = ? THEN u2.Id
-                           WHEN u2.Name = ? THEN u1.Id
-                           END AS Id,
-                       CASE
-                           WHEN u1.Name = ? THEN u2.Name
-                           WHEN u2.Name = ? THEN u1.Name
-                           END AS Name,
-                       CASE
-                           WHEN u1.Name = ? THEN u2.Path
-                           WHEN u2.Name = ? THEN u1.Path
-                           END AS Path
-                FROM friendship f
-                         LEFT JOIN users u1 ON f.Id_User1 = u1.Id
-                         LEFT JOIN users u2 ON f.Id_User2 = u2.Id
-                WHERE (u1.Name LIKE ? OR u2.Name LIKE ?)
-                  AND f.status = 'friend'
-            `
-            connection.query(sql, [search, search, search, search, search, search, search, search], (err, results) => err ? reject(err) : resolve(results));
-        })
-    }
-
-    /**
-     * This static method searches for users follow by their name in the database.
-     *
-     * @param {string} search - The search query.
-     * @returns {Promise} - A promise that resolves with the search results.
-     */
-    static searchFollow(search) {
-        return new Promise((resolve, reject) => {
-            const sql = `
-                SELECT u1.Id,
-                       u1.Name,
-                       u1.Path
-                FROM friendship f
-                         LEFT JOIN users u1 ON f.Id_User1 = u1.Id
-                         LEFT JOIN users u2 ON f.Id_User2 = u2.Id
-                WHERE u2.Name LIKE ?
-                  AND f.status = 'waiting'
-            `
-            connection.query(sql, [search], (err, results) => err ? reject(err) : resolve(results));
-        })
-    }
-
     static getAdminModo() {
         return new Promise((resolve, reject) => {
             const sql = `
@@ -566,7 +693,13 @@ class userModel {
         })
     }
 
-    static getFav(id){
+    /**
+     * Retrieves the favorite topics of a user from the database.
+     *
+     * @param {number} id - The ID of the user.
+     * @returns {Promise} - A promise that resolves with the favorite topics of the user.
+     */
+    static getFav(id) {
         return new Promise((resolve, reject) => {
             const sql = `
                 SELECT p.Id,
@@ -578,20 +711,28 @@ class userModel {
                        t.Path  AS TopicPath,
                        t.Id    AS TopicId
                 FROM posts p
-                LEFT JOIN favtopics fp ON p.Id_topics = fp.Id_topics
-                LEFT JOIN topics t ON p.Id_topics = t.Id
+                         LEFT JOIN favtopics fp ON p.Id_topics = fp.Id_topics
+                         LEFT JOIN topics t ON p.Id_topics = t.Id
                 WHERE fp.Id_User = ?
             `;
             connection.query(sql, id, (err, results) => err ? reject(err) : resolve(results));
         });
     }
 
-    static getLiked(id_user, id_post){
+    /**
+     * Retrieves the like status of a post for a user from the database.
+     *
+     * @param {number} id_user - The ID of the user.
+     * @param {number} id_post - The ID of the post.
+     * @returns {Promise} - A promise that resolves with the like status of the post for the user.
+     */
+    static getLiked(id_user, id_post) {
         return new Promise((resolve, reject) => {
             const sql = `
                 SELECT likepost.Like
                 FROM likepost
-                WHERE Id_User = ? AND Id_Post = ?
+                WHERE Id_User = ?
+                  AND Id_Post = ?
             `;
             connection.query(sql, [id_user, id_post], (err, results) => err ? reject(err) : resolve(results));
         });

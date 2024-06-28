@@ -24,7 +24,6 @@ class PostController {
             const href = `${baseUrl}/topics${buildQueryWithoutLimitOffset(req.query)}`;
 
             const posts = await post.getAllpost(req.query);
-
             if (posts.length === 0) {
                 return res.status(404).send({
                     message: `posts not found`,
@@ -32,6 +31,7 @@ class PostController {
                 });
             }
 
+            posts.forEach(post => post.Topic.Path = `${baseUrl}/assets/${post.Topic.Path}`);
             const total = posts.length;
 
             return res.status(200).send({
@@ -64,7 +64,7 @@ class PostController {
             const limit = parseInt(req.query.limit) || pagination;
             const href = `${baseUrl}/topics${buildQueryWithoutLimitOffset(req.query)}`;
 
-            const posts = await post.getAllpostMiddleware(req.query, req.user.Sub);
+            const posts = await post.getAllPostWithMiddleware(req.query, req.user.Sub);
 
             if (posts.length === 0) {
                 return res.status(404).send({
@@ -73,6 +73,7 @@ class PostController {
                 });
             }
 
+            posts.forEach(post => post.Topic.Path = `${baseUrl}/assets/${post.Topic.Path}`);
             const total = posts.length;
 
             return res.status(200).send({
@@ -102,7 +103,7 @@ class PostController {
     static getPost(req, res) {
         const postById = req.post;
         try {
-            postById.Path = `${baseUrl}/assets/${postById.Path}`;
+            postById.User.Path = `${baseUrl}/assets/${postById.User.Path}`;
 
             return res.status(200).send({
                 message: `Article with id ${req.params.id} successfully found`,
@@ -129,11 +130,7 @@ class PostController {
 
         try {
             const like = await post.getLike(Id_Post, Id_User);
-            if (!like || !like.Like) {
-                await post.likepost({Id_Post, Id_User, Like: 1});
-            }else {
-                await post.likepost({Id_Post, Id_User, Like: null});
-            }
+            await post.likepost({Id_Post, Id_User, Like: (!like || !like.Like) ? 1 : null});
 
             return res.status(201).send({
                 message: 'Liked successfully',
@@ -147,44 +144,44 @@ class PostController {
         }
     }
 
-/**
- * Unlikes a post.
- *
- * @async
- * @param {Object} req - The request object.
- * @param {Object} req.body - The body of the request.
- * @param {number} req.body.Id_Post - The ID of the post to unlike.
- * @param {Object} req.user - The user object.
- * @param {number} req.user.Sub - The ID of the user unliking the post.
- * @param {Object} res - The response object.
- * @returns {Object} The response object.
- * @throws Will throw an error if the request fails.
- */
-static async UnLike(req, res) {
-    const Id_Post =  parseInt(req.body.Id_Post);
-    const Id_User = req.user.Sub;
-    if (!Id_Post) {
-        return res.status(400).send({
-            message: "Le champ Id_Post est requis.",
-            status: 400
-        })
-    }
+    /**
+     * Unlikes a post.
+     *
+     * @async
+     * @param {Object} req - The request object.
+     * @param {Object} req.body - The body of the request.
+     * @param {number} req.body.Id_Post - The ID of the post to unlike.
+     * @param {Object} req.user - The user object.
+     * @param {number} req.user.Sub - The ID of the user unliking the post.
+     * @param {Object} res - The response object.
+     * @returns {Object} The response object.
+     * @throws Will throw an error if the request fails.
+     */
+    static async UnLike(req, res) {
+        const Id_Post =  parseInt(req.body.Id_Post);
+        const Id_User = req.user.Sub;
+        if (!Id_Post) {
+            return res.status(400).send({
+                message: "Le champ Id_Post est requis.",
+                status: 400
+            })
+        }
 
-    try {
-        const like = await post.getLike(Id_Post, Id_User);
-        await post.likepost({Id_Post, Id_User, Like: (!like && !like.Like === null) ? 0 : null});
+        try {
+            const like = await post.getLike(Id_Post, Id_User);
+            await post.likepost({Id_Post, Id_User, Like: (!like && !like.Like === null) ? 0 : null});
 
-        return res.status(201).send({
-            message: 'Unliked successfully',
-            status: 200
-        })
-    } catch (err) {
-        res.status(500).send({
-            message: err,
-            status: 500
-        })
+            return res.status(201).send({
+                message: 'Unliked successfully',
+                status: 200
+            })
+        } catch (err) {
+            res.status(500).send({
+                message: err,
+                status: 500
+            })
+        }
     }
-}
 
     static async postPost(req, res) {
         const {Title, Content, Id_topics} = req.body;

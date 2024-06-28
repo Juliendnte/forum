@@ -72,7 +72,7 @@ class TopicController {
     static getTopic(req, res) {
         try {
             const topicById = req.topic;
-            topicById.UserPath = `${baseUrl}/assets/${topicById.UserPath}`;
+            topicById.User.Path = `${baseUrl}/assets/${topicById.User.Path}`;
             topicById.TopicPath = `${baseUrl}/assets/${topicById.TopicPath}`;
             topicById.TagPath = `${baseUrl}/assets${topicById.TagPath}`;
 

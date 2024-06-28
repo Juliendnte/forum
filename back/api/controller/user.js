@@ -143,6 +143,7 @@ class UserController {
                     status: 404
                 });
             }
+
             utilisateur.Friends = userName ? await user.getFriendsName(userName) : await user.getFriends(userId);
             utilisateur.Friends.forEach((friend) => friend.Path = `${url}assets/${friend.Path}`)
             utilisateur.Follow = userName ? await user.getFollowName(userName) : await user.getFollow(userId);
@@ -154,7 +155,7 @@ class UserController {
             utilisateur.VueEnsemble = userName ? await user.getPostMessageName(userName) : await user.getPostMessage(userId);
             utilisateur.VueEnsemble.forEach((vue) => {
                 vue.TopicLike = vue.TopicLike === 0 ? -1 : vue.TopicLike
-                vue.TopicPath = `${url}assets/${vue.TopicPath}`
+                vue.Topic.Path = `${url}assets/${vue.Topic.Path}`
             });
             res.status(200).send({
                 message: 'User successfully found',

@@ -1,34 +1,47 @@
 const connection = require("../config/authBDD")
 
+/**
+ * Class representing a model for topics.
+ */
 class topicModel {
+    /**
+     * Total number of topics.
+     * @type {number}
+     */
     total = 0;
 
+    /**
+     * Get a topic by its title.
+     *
+     * @param {string} title - The title of the topic.
+     * @returns {Promise} - A promise that resolves with the topic.
+     */
     static getTopicByName(title) {
         return new Promise((resolve, reject) => {
             const sql = `
-                SELECT t.Id AS TopicId,
+                SELECT t.Id        AS TopicId,
                        t.Title,
-                       t.Path AS TopicPath,
+                       t.Path      AS TopicPath,
                        t.Create_at,
                        t.Id_User,
-                       u2.Name AS UserName,
-                       u2.Path AS UserPath,
-                       s.Label AS Status,
-                       tags.Id AS TagId,
-                       tags.Path AS TagPath,
-                       tags.Label AS TagLabel,
-                       p.Id AS PostId,
-                       p.Title AS PostTitle,
+                       u2.Name     AS UserName,
+                       u2.Path     AS UserPath,
+                       s.Label     AS Status,
+                       tags.Id     AS TagId,
+                       tags.Path   AS TagPath,
+                       tags.Label  AS TagLabel,
+                       p.Id        AS PostId,
+                       p.Title     AS PostTitle,
                        p.Create_post,
                        p.Content,
-                       u.Name AS UserNamePost,
-                       u.Path AS UserPathPost,
-                       u.Id AS UserIdPost,
+                       u.Name      AS UserNamePost,
+                       u.Path      AS UserPathPost,
+                       u.Id        AS UserIdPost,
                        SUM(CASE
                                WHEN lp.Like = 1 THEN 1
                                WHEN lp.Like = 0 THEN -1
                                ELSE 0
-                           END) AS PostLikes,
+                           END)    AS PostLikes,
                        COUNT(m.Id) AS MessageCount
                 FROM topics t
                          LEFT JOIN status s ON t.Id_Status = s.Id
@@ -40,10 +53,9 @@ class topicModel {
                          LEFT JOIN likepost lp ON p.Id = lp.Id_Post
                          LEFT JOIN users u ON p.Id_User = u.Id
                 WHERE t.Title = ?
-                GROUP BY t.Id, t.Title, t.Path, t.Create_at, t.Id_User, u2.Name, u2.Path, s.Label, tags.Id, tags.Path, tags.Label, p.Id, p.Title, p.Create_post, p.Content, u.Name, u.Path, u.Id
-                ORDER BY p.Create_post DESC;
-                ;
-            `
+                GROUP BY t.Id, t.Title, t.Path, t.Create_at, t.Id_User, u2.Name, u2.Path, s.Label, tags.Id, tags.Path,
+                         tags.Label, p.Id, p.Title, p.Create_post, p.Content, u.Name, u.Path, u.Id
+                ORDER BY p.Create_post DESC;`
             connection.query(sql, [title], (err, results) => {
                 if (err) {
                     return reject(err);
@@ -54,24 +66,25 @@ class topicModel {
                 }
 
                 const user = {
-                    UserName: results[0].UserName,
-                    UserPath: results[0].UserPath,
-                    UserId: results[0].Id_User,
                     TopicId: results[0].TopicId,
                     Title: results[0].Title,
                     TopicPath: results[0].TopicPath,
                     Create_at: results[0].Create_at,
                     Status: results[0].Status,
+                    User :{
+                        Name: results[0].UserName,
+                        Path: results[0].UserPath,
+                        Id: results[0].Id_User
+                    },
                     Posts: []
                 };
 
                 results.forEach(row => {
-                    console.log(row)
                     user.Posts.push({
-                        User : {
-                            Name : row.UserNamePost,
-                            Path : row.UserPathPost,
-                            Id : row.UserIdPost
+                        User: {
+                            Name: row.UserNamePost,
+                            Path: row.UserPathPost,
+                            Id: row.UserIdPost
                         },
                         Post: {
                             Id: row.PostId,
@@ -90,10 +103,15 @@ class topicModel {
         });
     }
 
+    /**
+     * Get all topics based on a query.
+     *
+     * @param {Object} query - The query parameters.
+     * @returns {Promise} - A promise that resolves with the topics.
+     */
     static getAllTopic(query) {
         return new Promise(async (resolve, reject) => {
-            let sql = `SELECT *
-                       FROM topics `
+            let sql = `SELECT * FROM topics `
 
             const values = [];
             const whereClauses = [];
@@ -132,6 +150,11 @@ class topicModel {
         });
     }
 
+    /**
+     * Get all tags.
+     *
+     * @returns {Promise} - A promise that resolves with the tags.
+     */
     static getTags() {
         return new Promise((resolve, reject) => {
             const sql = `SELECT Label, Path
@@ -140,6 +163,12 @@ class topicModel {
         })
     }
 
+    /**
+     * Create a new topic.
+     *
+     * @param {Object} newTopic - The new topic to create.
+     * @returns {Promise} - A promise that resolves with the created topic.
+     */
     static createTopic(newTopic) {
         return new Promise((resolve, reject) => {
             const sql = `INSERT INTO topics (Title, Id_Status, Id_User)
@@ -149,6 +178,13 @@ class topicModel {
         });
     }
 
+    /**
+     * Update a topic.
+     *
+     * @param {number} id - The ID of the topic to update.
+     * @param {Object} updateTopic - The updated topic.
+     * @returns {Promise} - A promise that resolves with the updated topic.
+     */
     static updatePatchTopic(id, updateTopic) {
         return new Promise((resolve, reject) => {
             let sql = `UPDATE topics
@@ -169,6 +205,12 @@ class topicModel {
         });
     }
 
+    /**
+     * Delete a topic.
+     *
+     * @param {number} id - The ID of the topic to delete.
+     * @returns {Promise} - A promise that resolves when the topic is deleted.
+     */
     static deleteTopic(id) {
         return new Promise((resolve, reject) => {
             const sql = `DELETE
@@ -179,6 +221,13 @@ class topicModel {
         })
     }
 
+    /**
+     * Get the total number of topics.
+     *
+     * @param {string} sql - The SQL query.
+     * @param {Array} values - The values for the SQL query.
+     * @returns {Promise} - A promise that resolves with the total number of topics.
+     */
     static getTotal(sql, values) {
         return new Promise((resolve, reject) => {
             const countSql = `SELECT COUNT(*) AS total
