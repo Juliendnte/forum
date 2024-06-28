@@ -29,7 +29,7 @@ body {
 .profil-user-global,
 .topic-single-ctn,
 .section-post,
-.post-detail-ctn{
+.section-global-post-cnt {
     overflow-y: auto;
     height: calc(100vh - 100px);
     max-height: calc(100vh - 100px);
