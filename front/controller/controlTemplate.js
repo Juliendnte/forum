@@ -1,8 +1,10 @@
 const controlUser = require('./controlTreatmentUser');
-const controlTopic = require('./controlTreatmentTopics');
-const ErrorHandler = require("./ErrorHandler");
-const errorHandler = new ErrorHandler();
+const controlTopic = require('./controlTreatmentTopic');
+const controlPost = require('./controlTreatmentPost');
 
+const ErrorHandler = require("./ErrorHandler");
+
+const errorHandler = new ErrorHandler();
 
 class ControlTemplate {
     /**
@@ -13,11 +15,11 @@ class ControlTemplate {
     static async Index(req, res) {
         try {
             const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
-            const dataPosts = await controlTopic.GetPosts(req, res);
+            const dataPost = await controlPost.GetPosts();
 
             res.render('../views/pages/index', {
                 dataUser,
-                dataPosts
+                dataPost
             });
         } catch (err) {
             errorHandler.handleRequestError(err);
@@ -203,7 +205,8 @@ class ControlTemplate {
         try {
             const postId = req.params.id;
             const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
-            const dataPost = await controlTopic.GetPost(postId);
+            const dataMessages = await controlPost.GetMessagesPost(req, res);
+            const dataPost = await controlPost.GetPost(postId);
 
             if (dataPost && dataPost.topic && dataPost.topic.Create_at) {
                 const date = new Date(dataPost.topic.Create_at);
@@ -214,6 +217,7 @@ class ControlTemplate {
             res.render('../views/pages/detailPost', {
                 dataUser,
                 dataPost,
+                dataMessages
             });
         } catch (err) {
             errorHandler.handleRequestError(err);

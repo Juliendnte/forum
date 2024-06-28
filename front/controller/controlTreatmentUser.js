@@ -1,7 +1,9 @@
 const url = "http://localhost:4000";
 const axios = require("axios");
 const ErrorHandler = require("./ErrorHandler");
+
 let user
+
 const errorHandler = new ErrorHandler();
 
 /**
@@ -180,18 +182,12 @@ class TreatmentUser {
                 return res.status(400).send("No token found");
             }
 
-            // Ajoutez des logs pour déboguer
-            console.log(`Attempting to follow/unfollow user with ID: ${id}`);
-            console.log(`Using token: ${token}`);
-
             const response = await axios.post(`${url}/follow`, {id}, {
                 headers: {
                     "Authorization": token,
                     "Content-Type": "application/json"
                 }
             });
-
-            console.log('Axios response:', response.data);
 
             res.redirect('back');
         } catch (err) {
