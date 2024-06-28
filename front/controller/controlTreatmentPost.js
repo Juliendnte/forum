@@ -1,11 +1,45 @@
 const url = "http://localhost:4000";
 const axios = require("axios");
 const ErrorHandler = require("./ErrorHandler");
-const controlUser = require("./controlTreatmentUser");
 
 const errorHandler = new ErrorHandler();
 
 class TreatmentPosts {
+
+    static async CreatePost(req, res) {
+        try {
+            const token = req.cookies.Token;
+            if (!token) {
+                return res.redirect(`/CODER/login`);
+            }
+
+            const { Title, Content, Id_topics, NameTopic } = req.body;
+
+            console.log("Data received:", Title, Content, Id_topics, NameTopic);
+
+            const response = await axios.post(`${url}/post`, {
+                Title,
+                Content,
+                Id_topics
+            }, {
+                headers: {
+                    "Authorization": token,
+                    "Content-Type": "application/json"
+                }
+            });
+
+            console.log("Post created successfully:", response.data);
+
+            res.redirect(`/CODER/t/${NameTopic}`);
+        } catch (err) {
+            console.error("Error creating post:", err);
+            if (err.response) {
+                console.error("Server responded with:", err.response.data);
+            }
+            res.status(500).send("Internal server error");
+        }
+    }
+
 
     static async GetPost(id) {
         try {
@@ -128,4 +162,5 @@ class TreatmentPosts {
 
 }
 
-module.exports = TreatmentPosts;
+module
+    .exports = TreatmentPosts;

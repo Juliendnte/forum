@@ -36,15 +36,6 @@ class ControlTemplate {
     }
 
     /**
-     * Render the register page
-     * @param {Object} req - The request object.
-     * @param {Object} res - The response object.
-     */
-    static async Register(req, res) {
-        res.render('../views/pages/register');
-    }
-
-    /**
      * Render the forgot password page
      * @param {Object} req - The request object.
      * @param {Object} res - The response object.
@@ -121,7 +112,7 @@ class ControlTemplate {
 
             if (dataUsers.utilisateur && dataUsers.utilisateur.Create_at) {
                 const date = new Date(dataUsers.utilisateur.Create_at);
-                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                const options = {year: 'numeric', month: 'long', day: 'numeric'};
                 dataUsers.utilisateur.Create_at_formatted = date.toLocaleDateString('fr-FR', options);
             }
 
@@ -182,7 +173,7 @@ class ControlTemplate {
 
             if (dataTopic && dataTopic.topic && dataTopic.topic.Create_at) {
                 const date = new Date(dataTopic.topic.Create_at);
-                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                const options = {year: 'numeric', month: 'long', day: 'numeric'};
                 dataTopic.topic.Create_at_formatted = date.toLocaleDateString('fr-FR', options);
             }
 
@@ -196,6 +187,7 @@ class ControlTemplate {
             res.status(500).send("Internal server error");
         }
     }
+
     /**
      * Render the create topic profile page
      * @param {Object} req - The request object.
@@ -223,6 +215,27 @@ class ControlTemplate {
             errorHandler.handleRequestError(err);
         }
     }
+
+    static async CreatePost(req, res) {
+        try {
+            const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
+
+            const topicName = req.params.nametopic;
+            const dataTopic = await controlTopic.GetTopic(topicName);
+
+            console.log("dataTopic:", dataTopic);
+
+            res.render('../views/pages/createPost', {
+                dataUser,
+                dataTopic
+            });
+        } catch (err) {
+            console.error("Error fetching data for create post:", err);
+            res.status(500).send("Internal server error");
+        }
+    }
+
+
 }
 
 module.exports = ControlTemplate;

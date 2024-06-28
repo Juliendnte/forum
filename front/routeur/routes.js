@@ -9,9 +9,9 @@ const controllerPost = require("../controller/controlTreatmentPost");
 // Configuration des routes Users
 routeur.get("/CODER", controllerTemplate.Index);
 routeur.get("/CODER/login", controllerTemplate.Login);
-routeur.get("/CODER/register", controllerTemplate.Register);
 routeur.get("/CODER/accounts/password/reset/", controllerTemplate.ForgotPwd);
 routeur.get("/CODER/user/:name", controllerTemplate.ProfilUser);
+routeur.get("/CODER/:nametopic/create/post", controllerTemplate.CreatePost);
 
 // Configuration des routes Topics
 routeur.get("/CODER/create/topic", controllerTemplate.CreateTopic);
@@ -30,6 +30,7 @@ routeur.get("/treatment/follow/:id", controllerUser.TreatmentUser.FollowUser)
 routeur.post("/treatment/createTopic", controllerTopic.CreateTopicTreatment);
 
 // Route Traitement en rapport avec les Posts
+routeur.post("/treatment/create/post", controllerPost.CreatePost)
 routeur.get("/treatment/like/post/:id", controllerPost.LikePost)
 routeur.get("/treatment/unlike/post/:id", controllerPost.UnLikePost)
 

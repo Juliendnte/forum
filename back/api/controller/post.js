@@ -187,11 +187,11 @@ static async UnLike(req, res) {
 }
 
     static async postPost(req, res) {
-        const {Title, Content, Id_topics, Id_PostAnswer} = req.body;
+        const {Title, Content, Id_topics} = req.body;
         const Id_User = req.user.Sub;
-        if (!Title || !Content || !Id_topics || !Id_PostAnswer) {
+        if (!Title || !Content || !Id_topics) {
             return res.status(400).send({
-                message: "Tous les champs (Title, Content, Id_topics, Id_PostAnswer) sont requis.",
+                message: "Tous les champs (Title, Content, Id_topics) sont requis.",
                 status: 400
             })
         }
@@ -200,7 +200,6 @@ static async UnLike(req, res) {
             const Newpost = await post.createpost({
                 Content,
                 Id_topics,
-                Id_PostAnswer,
                 Id_User,
                 Title
             });

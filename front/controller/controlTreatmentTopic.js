@@ -29,10 +29,8 @@ class TreatmentTopic {
                         "Content-Type": "application/json"
                     }
                 });
-
             if (response.status === 201) {
-                const newTopic = response.data.NewTopic;
-                res.redirect(`/CODER/t/${newTopic.Title}`);
+                res.redirect(`/CODER`);
             } else {
                 res.status(response.status).send(response.data);
             }
@@ -41,9 +39,9 @@ class TreatmentTopic {
         }
     }
 
-    static async GetTopic(id) {
+    static async GetTopic(name) {
         try {
-            const response = await axios.get(`${url}/topic/${id}`)
+            const response = await axios.get(`${url}/topic/${name}`)
 
             if (response.status === 200) {
                 return response.data;

@@ -151,8 +151,8 @@ class postModel{
 
     static createpost(newpost){
         return new Promise((resolve, reject) => {
-            const sql = `INSERT INTO posts (Title, Content, Id_PostAnswer, Id_topics, Id_User) VALUES (? ,?, ?, ?, ?)`;
-            connection.query(sql, [newpost.Content, newpost.Id_PostAnswer, newpost.Id_topics, newpost.Id_User], (err, results)=> err ? reject(err) : resolve(results[0]));
+            const sql = `INSERT INTO posts (Title, Content, Id_topics, Id_User) VALUES (?, ?, ?, ?)`;
+            connection.query(sql, [newpost.Title, newpost.Content, newpost.Id_topics, newpost.Id_User], (err, results)=> err ? reject(err) : resolve(results[0]));
         });
     }
 
