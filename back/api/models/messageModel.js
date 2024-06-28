@@ -20,7 +20,7 @@ class messageModel{
 
     static getAllMessage(query){
         return new Promise((resolve, reject) => {
-            let sql = `SELECT * FROM message `
+            let sql = `SELECT m.*, users.Name, users.Path FROM message m LEFT JOIN users ON m.Id_User = users.Id`
 
             //S'il y a quelque chose dans la query
             if (!(Object.entries(query).length === 0)){
@@ -31,12 +31,11 @@ class messageModel{
                         sql += `${key} ? `;
                         values.push(parseInt(value));
                     }else{
-                        sql += index ===0 ? "WHERE ": "AND "
+                        sql += index ===0 ? " WHERE ": "AND "
                         sql += `${key}=? `;
                         values.push(value);
                     }
                 });
-
                 connection.query(sql,values, (err, results)=> err ? reject(err) : resolve(results));
             }else{
                 connection.query(sql, (err, results)=> err ? reject(err) : resolve(results));

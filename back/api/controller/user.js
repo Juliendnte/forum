@@ -410,6 +410,24 @@ class UserController {
             })
         }
     }
+
+    static getLiked(req, res) {
+        const id = req.user.Sub
+        const idPost = req.body.id
+        try {
+            const liked = user.getLiked(id, idPost)
+            res.status(200).send({
+              message: 'Like found',
+                status: 200,
+                liked
+            })
+        }catch (err){
+            res.status(500).send({
+                message: err,
+                status: 500
+            })
+        }
+    }
 }
 
 module.exports = UserController;

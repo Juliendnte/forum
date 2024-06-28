@@ -462,11 +462,13 @@ class userModel {
                            END)      AS PostLikes,
                        t.Title       AS TopicTitle,
                        t.Path        AS TopicPath,
-                       t.Id          AS TopicId
+                       t.Id          AS TopicId,
+                       COUNT(m.Id)  AS MessageCount
                 FROM posts p
                          LEFT JOIN topics t ON p.Id_topics = t.Id
                          LEFT JOIN likepost lp ON p.Id = lp.Id_Post
                          LEFT JOIN users u ON p.Id_User = u.Id
+                         LEFT JOIN message m ON p.Id = m.Id_PostAnswer
                 WHERE u.Name = ?
                 GROUP BY p.Id, t.Title
 
@@ -481,7 +483,8 @@ class userModel {
                        NULL             AS MessageLikes,
                        t.Title          AS TopicTitle,
                        t.Path           AS TopicPath,
-                       t.Id             AS TopicId
+                       t.Id             AS TopicId,
+                       COUNT(m.Id)  AS MessageCount
                 FROM message m
                          LEFT JOIN posts p ON m.Id_PostAnswer = p.Id
                          LEFT JOIN topics t ON p.Id_topics = t.Id
@@ -580,6 +583,17 @@ class userModel {
                 WHERE fp.Id_User = ?
             `;
             connection.query(sql, id, (err, results) => err ? reject(err) : resolve(results));
+        });
+    }
+
+    static getLiked(id_user, id_post){
+        return new Promise((resolve, reject) => {
+            const sql = `
+                SELECT likepost.Like
+                FROM likepost
+                WHERE Id_User = ? AND Id_Post = ?
+            `;
+            connection.query(sql, [id_user, id_post], (err, results) => err ? reject(err) : resolve(results));
         });
     }
 }

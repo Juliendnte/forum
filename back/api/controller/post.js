@@ -58,6 +58,47 @@ class PostController {
         }
     }
 
+    static async getPostsMiddleware(req, res){
+        try {
+            const offset = parseInt(req.query.offset) || 0;
+            const limit = parseInt(req.query.limit) || pagination;
+            const href = `${baseUrl}/topics${buildQueryWithoutLimitOffset(req.query)}`;
+
+            const posts = await post.getAllpostMiddleware(req.query, req.user.Sub);
+
+            if (posts.length === 0) {
+                return res.status(404).send({
+                    message: `posts not found`,
+                    status: 404
+                });
+            }
+
+            const total = posts.length;
+
+            return res.status(200).send({
+                message: `Posts successfully found`,
+                status: 200,
+                articles: {
+                    href,
+                    offset,
+                    limit,
+                    next: total - limit <= offset ? null : `${href}&limit=${limit}&offset=${offset + limit}`,
+                    previous: offset ? `${href}&limit=${limit}&offset=${offset - limit}` : null,
+                    total,
+                    last_page: Math.ceil(total / limit),
+                    current_page: Math.ceil(offset / limit) + 1,
+                    items: posts,
+                }
+            });
+
+        } catch (err) {
+            res.status(500).send({
+                message: err,
+                status: 500
+            });
+        }
+    }
+
     static getPost(req, res) {
         const postById = req.post;
         try {
@@ -106,35 +147,44 @@ class PostController {
         }
     }
 
-    static async UnLike(req, res) {
-        const Id_Post =  parseInt(req.body.Id_Post);
-        const Id_User = req.user.Sub;
-        if (!Id_Post) {
-            return res.status(400).send({
-                message: "Le champ Id_Post est requis.",
-                status: 400
-            })
-        }
-
-        try {
-            const like = await post.getLike(Id_Post, Id_User);
-            if (!like || !like.Like) {
-                await post.likepost({Id_Post, Id_User, Like: 0});
-            }else {
-                await post.likepost({Id_Post, Id_User, Like: null});
-            }
-
-            return res.status(201).send({
-                message: 'Liked successfully',
-                status: 201
-            })
-        } catch (err) {
-            res.status(500).send({
-                message: err,
-                status: 500
-            })
-        }
+/**
+ * Unlikes a post.
+ *
+ * @async
+ * @param {Object} req - The request object.
+ * @param {Object} req.body - The body of the request.
+ * @param {number} req.body.Id_Post - The ID of the post to unlike.
+ * @param {Object} req.user - The user object.
+ * @param {number} req.user.Sub - The ID of the user unliking the post.
+ * @param {Object} res - The response object.
+ * @returns {Object} The response object.
+ * @throws Will throw an error if the request fails.
+ */
+static async UnLike(req, res) {
+    const Id_Post =  parseInt(req.body.Id_Post);
+    const Id_User = req.user.Sub;
+    if (!Id_Post) {
+        return res.status(400).send({
+            message: "Le champ Id_Post est requis.",
+            status: 400
+        })
     }
+
+    try {
+        const like = await post.getLike(Id_Post, Id_User);
+        await post.likepost({Id_Post, Id_User, Like: (!like && !like.Like === null) ? 0 : null});
+
+        return res.status(201).send({
+            message: 'Unliked successfully',
+            status: 200
+        })
+    } catch (err) {
+        res.status(500).send({
+            message: err,
+            status: 500
+        })
+    }
+}
 
     static async postPost(req, res) {
         const {Title, Content, Id_topics, Id_PostAnswer} = req.body;
