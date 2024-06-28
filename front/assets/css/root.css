@@ -22,6 +22,19 @@ a {
     text-transform: none;
     color: #000;
 }
+body {
+    overflow: hidden; /* Désactive le défilement global du body */
+}
+
+.profil-user-global,
+.topic-single-ctn,
+.section-post,
+.post-detail-ctn{
+    overflow-y: auto;
+    height: calc(100vh - 100px);
+    max-height: calc(100vh - 100px);
+}
+
 
 :root {
     --color-green: #00cd99;

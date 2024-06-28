@@ -13,9 +13,11 @@ class ControlTemplate {
     static async Index(req, res) {
         try {
             const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
+            const dataPosts = await controlTopic.GetPosts(req, res);
 
             res.render('../views/pages/index', {
-                dataUser
+                dataUser,
+                dataPosts
             });
         } catch (err) {
             errorHandler.handleRequestError(err);

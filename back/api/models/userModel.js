@@ -488,7 +488,7 @@ class userModel {
                          LEFT JOIN users u ON m.Id_User = u.id
                 WHERE u.Name = ?
 
-                ORDER BY CreateAt;
+                ORDER BY CreateAt DESC;
             `;
             connection.query(sql, [name, name], (err, results) => err ? reject(err) : resolve(results))
         });
@@ -563,6 +563,25 @@ class userModel {
         })
     }
 
+    static getFav(id){
+        return new Promise((resolve, reject) => {
+            const sql = `
+                SELECT p.Id,
+                       p.Title,
+                       p.Content,
+                       p.Create_post,
+                       p.Id_User,
+                       t.Title AS TopicTitle,
+                       t.Path  AS TopicPath,
+                       t.Id    AS TopicId
+                FROM posts p
+                LEFT JOIN favtopics fp ON p.Id_topics = fp.Id_topics
+                LEFT JOIN topics t ON p.Id_topics = t.Id
+                WHERE fp.Id_User = ?
+            `;
+            connection.query(sql, id, (err, results) => err ? reject(err) : resolve(results));
+        });
+    }
 }
 
 module.exports = userModel;

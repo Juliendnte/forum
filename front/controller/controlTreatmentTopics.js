@@ -41,8 +41,6 @@ class TreatmentTopic {
         }
     }
 
-
-
     static async GetTopic(id) {
         try {
             const response = await axios.get(`${url}/topic/${id}`)
@@ -77,6 +75,20 @@ class TreatmentTopic {
         }
     }
 
+    static async GetPosts(req, res) {
+        try {
+            const response = await axios.get(`${url}/posts/`)
+
+            if (response.status === 200) {
+                return response.data;
+            } else {
+                errorHandler.handleRequestError("Failed to fetch topic data", 401);
+                return undefined;
+            }
+        } catch (err) {
+            errorHandler.handleRequestError(err);
+        }
+    }
 
 }
 

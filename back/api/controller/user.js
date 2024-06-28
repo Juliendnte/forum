@@ -341,7 +341,7 @@ class UserController {
     }
 
     static async Follow(req, res) {
-        console.log(req.body.id)
+
         const id = parseInt(req.body.id)
         const userId = req.user.Sub
         if (id === userId){
@@ -380,6 +380,30 @@ class UserController {
                 })
             }
         } catch (err) {
+            res.status(500).send({
+                message: err,
+                status: 500
+            })
+        }
+    }
+
+    static async getFav(req, res) {
+        const id = req.user.Sub
+        try {
+            const fav = await user.getFav(id)
+            if (fav.length === 0) {
+                return res.status(404).send({
+                    message: 'Nous n\'avons pas trouvé de favoris',
+                    status: 404
+                })
+            }
+            fav.forEach((fav) => fav.TopicPath = `${url}assets/${fav.TopicPath}`)
+            res.status(200).send({
+                message: 'Fav found',
+                status: 200,
+                fav
+            })
+        }catch (err){
             res.status(500).send({
                 message: err,
                 status: 500

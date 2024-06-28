@@ -91,7 +91,6 @@ class PostController {
             if (!like || !like.Like) {
                 await post.likepost({Id_Post, Id_User, Like: 1});
             }else {
-                console.log("on")
                 await post.likepost({Id_Post, Id_User, Like: null});
             }
 
@@ -122,7 +121,6 @@ class PostController {
             if (!like || !like.Like) {
                 await post.likepost({Id_Post, Id_User, Like: 0});
             }else {
-                console.log("on")
                 await post.likepost({Id_Post, Id_User, Like: null});
             }
 
