@@ -6,31 +6,30 @@ class topicModel {
     static getTopicByName(title) {
         return new Promise((resolve, reject) => {
             const sql = `
-                SELECT t.Id        AS TopicId,
+                SELECT t.Id AS TopicId,
                        t.Title,
-                       t.Path      AS TopicPath,
+                       t.Path AS TopicPath,
                        t.Create_at,
                        t.Id_User,
-                       u2.Name    AS UserName,
-                       u2.Path    AS UserPath,
-                       s.Label     AS Status,
-                       tags.Id     AS TagId,
-                       tags.Path   AS TagPath,
-                       tags.Label  AS TagLabel,
-                       p.Id        AS PostId,
-                       p.Title     AS PostTitle,
+                       u2.Name AS UserName,
+                       u2.Path AS UserPath,
+                       s.Label AS Status,
+                       tags.Id AS TagId,
+                       tags.Path AS TagPath,
+                       tags.Label AS TagLabel,
+                       p.Id AS PostId,
+                       p.Title AS PostTitle,
                        p.Create_post,
                        p.Content,
-                       u.Name      AS UserNamePost,
-                       u.Path      AS UserPathPost,
-                       u.Id        AS UserIdPost,
+                       u.Name AS UserNamePost,
+                       u.Path AS UserPathPost,
+                       u.Id AS UserIdPost,
                        SUM(CASE
                                WHEN lp.Like = 1 THEN 1
                                WHEN lp.Like = 0 THEN -1
                                ELSE 0
-                           END)    AS PostLikes,
+                           END) AS PostLikes,
                        COUNT(m.Id) AS MessageCount
-
                 FROM topics t
                          LEFT JOIN status s ON t.Id_Status = s.Id
                          LEFT JOIN users u2 ON t.Id_User = u2.Id
@@ -38,9 +37,12 @@ class topicModel {
                          LEFT JOIN tags ON tp.Id_Tag = tags.Id
                          LEFT JOIN posts p ON t.Id = p.Id_topics
                          LEFT JOIN message m ON p.Id = m.Id_PostAnswer
-                         LEFT JOIN likepost lp on p.Id = lp.Id_Post
+                         LEFT JOIN likepost lp ON p.Id = lp.Id_Post
                          LEFT JOIN users u ON p.Id_User = u.Id
-                WHERE t.Title = ?;
+                WHERE t.Title = ?
+                GROUP BY t.Id, t.Title, t.Path, t.Create_at, t.Id_User, u2.Name, u2.Path, s.Label, tags.Id, tags.Path, tags.Label, p.Id, p.Title, p.Create_post, p.Content, u.Name, u.Path, u.Id
+                ORDER BY p.Create_post DESC;
+                ;
             `
             connection.query(sql, [title], (err, results) => {
                 if (err) {
@@ -64,16 +66,22 @@ class topicModel {
                 };
 
                 results.forEach(row => {
+                    console.log(row)
                     user.Posts.push({
-                        UserName : row.UserNamePost,
-                        UserPath : row.UserPathPost,
-                        UserId : row.UserIdPost,
-                        PostId: row.PostId,
-                        PostTitle: row.PostTitle,
-                        Create_post: row.Create_post,
-                        Content: row.Content,
-                        PostLikes: row.PostLikes,
-                        MessageCount: row.MessageCount
+                        User : {
+                            Name : row.UserNamePost,
+                            Path : row.UserPathPost,
+                            Id : row.UserIdPost
+                        },
+                        Post: {
+                            Id: row.PostId,
+                            Title: row.PostTitle,
+                            Create_post: row.Create_post,
+                            Content: row.Content,
+                            Likes: row.PostLikes,
+                            MessageCount: row.MessageCount
+
+                        },
                     });
                 });
 
