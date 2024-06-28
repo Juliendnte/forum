@@ -41,8 +41,6 @@ class TreatmentTopic {
         }
     }
 
-
-
     static async GetTopic(id) {
         try {
             const response = await axios.get(`${url}/topic/${id}`)
@@ -50,8 +48,7 @@ class TreatmentTopic {
             if (response.status === 200) {
                 return response.data;
             } else {
-                console.error("Unexpected response status when fetching user data: ", response.status);
-                res.status(401).send("Failed to fetch topic data");
+                errorHandler.setError("Failed to fetch topic data", 401)
                 return undefined;
             }
         } catch
@@ -59,24 +56,6 @@ class TreatmentTopic {
             errorHandler.handleRequestError(err);
         }
     }
-
-    static async GetPost(id) {
-        try {
-            const response = await axios.get(`${url}/post/${id}`)
-
-            if (response.status === 200) {
-                return response.data;
-            } else {
-                console.error("Unexpected response status when fetching user data: ", response.status);
-                res.status(401).send("Failed to fetch topic data");
-                return undefined;
-            }
-        } catch
-            (err) {
-            errorHandler.handleRequestError(err);
-        }
-    }
-
 
 }
 

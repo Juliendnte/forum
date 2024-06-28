@@ -3,7 +3,8 @@ const express = require("express");
 const routeur = express.Router();
 const controllerTemplate = require("../controller/controlTemplate");
 const controllerUser = require("../controller/controlTreatmentUser");
-const controllerTopic = require("../controller/controlTreatmentTopics");
+const controllerTopic = require("../controller/controlTreatmentTopic");
+const controllerPost = require("../controller/controlTreatmentPost");
 
 // Configuration des routes Users
 routeur.get("/CODER", controllerTemplate.Index);
@@ -27,6 +28,10 @@ routeur.get("/treatment/follow/:id", controllerUser.TreatmentUser.FollowUser)
 
 // Route Traitement en rapport avec les Topics
 routeur.post("/treatment/createTopic", controllerTopic.CreateTopicTreatment);
+
+// Route Traitement en rapport avec les Posts
+routeur.get("/treatment/like/post/:id", controllerPost.LikePost)
+routeur.get("/treatment/unlike/post/:id", controllerPost.UnLikePost)
 
 // Pour que nos routes soient accessibles
 module.exports = routeur;
