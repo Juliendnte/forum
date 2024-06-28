@@ -20,7 +20,7 @@ class messageModel{
 
     static getAllMessage(query){
         return new Promise((resolve, reject) => {
-            let sql = `SELECT * FROM message `
+            let sql = `SELECT message.*, users.Name, users.Name FROM message LEFT JOIN users ON message.Id_User = users.Id`
 
             //S'il y a quelque chose dans la query
             if (!(Object.entries(query).length === 0)){
