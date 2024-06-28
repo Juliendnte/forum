@@ -9,6 +9,7 @@ const middleware = {
 }
 
 //Configuration des routes
+routeur.get("/postsMiddleware" ,middleware.auth.validateToken ,PostController.getPostsMiddleware);
 routeur.get("/posts", PostController.getPosts);
 routeur.get("/post/:id",middleware.postExists , PostController.getPost);
 routeur.post("/like", middleware.auth.validateToken, PostController.Like);
