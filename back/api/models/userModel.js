@@ -217,9 +217,9 @@ class userModel {
     static getPostMessage(id) {
         return new Promise((resolve, reject) => {
             const sql = `
-            SELECT p.Id          AS PostId,
-                   p.Title       AS PostTitle,
-                   p.Content     AS PostContent,
+            SELECT p.Id          AS Id,
+                   p.Title       AS Title,
+                   p.Content     AS Content,
                    p.Create_post AS CreateAt,
                    p.Id_User     AS UserId,
                    'post'        AS Type,
@@ -240,9 +240,9 @@ class userModel {
 
             UNION ALL
 
-            SELECT m.Id             AS MessageId,
-                   NULL             AS MessageTitle,
-                   m.Content        AS MessageContent,
+            SELECT m.Id             AS Id,
+                   NULL             AS Title,
+                   m.Content        AS Content,
                    m.Create_message AS CreateAt,
                    m.Id_User        AS UserId,
                    'message'        AS Type,
@@ -269,9 +269,9 @@ class userModel {
                 const posts = results.map(row => {
                     if (row.Type === 'post') {
                         return {
-                            PostId: row.PostId,
-                            PostTitle: row.PostTitle,
-                            PostContent: row.PostContent,
+                            PostId: row.Id,
+                            PostTitle: row.Title,
+                            PostContent: row.Content,
                             CreateAt: row.CreateAt,
                             UserId: row.UserId,
                             Type: row.Type,
@@ -284,8 +284,8 @@ class userModel {
                         };
                     } else {
                         return {
-                            MessageId: row.MessageId,
-                            MessageContent: row.MessageContent,
+                            MessageId: row.Id,
+                            MessageContent: row.Content,
                             CreateAt: row.CreateAt,
                             UserId: row.UserId,
                             Type: row.Type,
@@ -361,6 +361,7 @@ class userModel {
                 }
 
                 const posts = results.map(row => {
+                    console.log(row)
                     if (row.Type === 'post') {
                         return {
                             PostId: row.PostId,
