@@ -235,7 +235,25 @@ class ControlTemplate {
         }
     }
 
+    static async UpdateProfil(req, res) {
+        try {
+            const token = req.cookies.Token;
 
+            if (!token) {
+                return res.redirect('/CODER/login');
+            }
+
+            const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
+            const dataTags = await controlUser.TreatmentUser.GetTags(req, res);
+
+            res.render('../views/pages/UpdateProfil', {
+                    dataUser,
+                    dataTags
+                });
+        } catch (err) {
+            errorHandler.handleRequestError(err);
+        }
+    }
 }
 
 module.exports = ControlTemplate;

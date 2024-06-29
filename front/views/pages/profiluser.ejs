@@ -76,7 +76,9 @@
                     </div>
                     <div class="btn-follow-profil">
                         <% if (Own) { %>
-                            <button>Modifier le profil</button>
+                            <a href="/CODER/update/profil/<%= dataUser.utilisateur.Name %>">
+                                <button>Modifier le profil</button>
+                            </a>
                         <% } else { %>
                             <a href="/treatment/follow/<%= dataUser.utilisateur.Id %>">
                                 <button>Suivre</button>
@@ -154,11 +156,6 @@
                                 <%- include('../components/messages', { item: item, timeAgo: timeAgo }); %>
                             <% } %>
                         <% }); %>
-                    <% if (!hasPosts) { %>
-                            <div class="err-ctn-profil-post">
-                                <p>Aucune publication est disponible.</p>
-                            </div>
-                        <% } %>
                     <% } else { %>
                         <div class="err-ctn-profil-post">
                             <p>Aucune publication est disponible.</p>
@@ -174,12 +171,6 @@
                                 <%- include('../components/posts', { item: item, timeAgo: timeAgo }); %>
                             <% } %>
                         <% }); %>
-
-                        <% if (!hasPosts) { %>
-                            <div class="err-ctn-profil-post">
-                                <p>Aucune publication est disponible.</p>
-                            </div>
-                        <% } %>
                     <% } else { %>
                         <div class="err-ctn-profil-post">
                             <p>Aucune publication est disponible.</p>

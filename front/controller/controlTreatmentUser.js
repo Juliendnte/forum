@@ -218,6 +218,46 @@ class TreatmentUser {
         }
     }
 
+    static async GetTags(req, res) {
+        try {
+            const response = await axios.get(`${url}/tags`);
+
+            if (response.status === 200) {
+                return response.data;
+            } else {
+                errorHandler.setError("Failed to fetch user data", 401)
+            }
+        } catch (err) {
+            errorHandler.handleRequestError(err)
+        }
+    }
+
+    static async UpdateUser(req, res) {
+        try {
+            const token = req.cookies.Token;
+            if (!token) {
+                return res.status(400).send("No token found");
+            }
+
+            const dataUpdate = req.body;
+
+            console.log(dataUpdate);
+
+            await axios.get(`${url}/user/update`,
+                {
+                    dataUpdate
+                },
+                {
+                    headers: {
+                        "Authorization": token,
+                        "Content-Type": "application/json"
+                    },
+                });
+            res.redirect('/CODER/user');
+        } catch (err) {
+            errorHandler.handleRequestError(err)
+        }
+    }
 }
 
 module.exports = {TreatmentUser, user};

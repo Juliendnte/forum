@@ -12,6 +12,7 @@ routeur.get("/CODER/login", controllerTemplate.Login);
 routeur.get("/CODER/accounts/password/reset/", controllerTemplate.ForgotPwd);
 routeur.get("/CODER/user/:name", controllerTemplate.ProfilUser);
 routeur.get("/CODER/:nametopic/create/post", controllerTemplate.CreatePost);
+routeur.get("/CODER/update/profil/:name", controllerTemplate.UpdateProfil)
 
 // Configuration des routes Topics
 routeur.get("/CODER/create/topic", controllerTemplate.CreateTopic);
@@ -25,6 +26,7 @@ routeur.post("/treatment/login", controllerUser.TreatmentUser.LoginTreatment);
 routeur.post("/treatment/register", controllerUser.TreatmentUser.RegisterTreatment);
 routeur.get("/treatment/disconnect", controllerUser.TreatmentUser.DisconnectTreatment);
 routeur.get("/treatment/follow/:id", controllerUser.TreatmentUser.FollowUser)
+routeur.post("/treatment/update/user", controllerUser.TreatmentUser.UpdateUser);
 
 // Route Traitement en rapport avec les Topics
 routeur.post("/treatment/createTopic", controllerTopic.CreateTopicTreatment);
