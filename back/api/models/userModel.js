@@ -230,7 +230,10 @@ class userModel {
                        END)      AS PostLikes,
                    t.Title       AS TopicTitle,
                    t.Path        AS TopicPath,
-                   t.Id          AS TopicId
+                   t.Id          AS TopicId,
+                   (SELECT COUNT(*)
+                    FROM message m2
+                    WHERE m2.Id_PostAnswer = p.Id) AS MessageCount
             FROM posts p
                      LEFT JOIN topics t ON p.Id_topics = t.Id
                      LEFT JOIN likepost lp ON p.Id = lp.Id_Post
@@ -249,7 +252,10 @@ class userModel {
                    NULL             AS MessageLikes,
                    t.Title          AS TopicTitle,
                    t.Path           AS TopicPath,
-                   t.Id             AS TopicId
+                   t.Id             AS TopicId,
+                   (SELECT COUNT(*)
+                    FROM message m2
+                    WHERE m2.Id_MessageAnswer = m.Id) AS MessageCount
             FROM message m
                      LEFT JOIN posts p ON m.Id_PostAnswer = p.Id
                      LEFT JOIN topics t ON p.Id_topics = t.Id
@@ -276,6 +282,7 @@ class userModel {
                             UserId: row.UserId,
                             Type: row.Type,
                             PostLikes: row.PostLikes,
+                            MessageCount: row.MessageCount,
                             Topic: {
                                 Title: row.TopicTitle,
                                 Path: row.TopicPath,
@@ -289,6 +296,7 @@ class userModel {
                             CreateAt: row.CreateAt,
                             UserId: row.UserId,
                             Type: row.Type,
+                            MessageCount: row.MessageCount,
                             Topic: {
                                 Title: row.TopicTitle,
                                 Path: row.TopicPath,
@@ -311,46 +319,51 @@ class userModel {
     static getPostMessageName(name) {
         return new Promise((resolve, reject) => {
             const sql = `
-                SELECT p.Id          AS Id,
-                       p.Title       AS Title,
-                       p.Content     AS Content,
-                       p.Create_post AS CreateAt,
-                       p.Id_User     AS UserId,
-                       'post'        AS Type,
-                       SUM(CASE
-                               WHEN lp.Like = 1 THEN 1
-                               WHEN lp.Like = 0 THEN -1
-                               ELSE 0
-                           END)      AS PostLikes,
-                       t.Title       AS TopicTitle,
-                       t.Path        AS TopicPath,
-                       t.Id          AS TopicId
-                FROM posts p
-                         LEFT JOIN topics t ON p.Id_topics = t.Id
-                         LEFT JOIN likepost lp ON p.Id = lp.Id_Post
-                         LEFT JOIN users u ON p.Id_User = u.Id
-                WHERE u.Name = ?
-                GROUP BY p.Id, p.Title, p.Content, p.Create_post, p.Id_User, t.Title, t.Path, t.Id
+            SELECT p.Id AS Id,
+                   p.Title AS Title,
+                   p.Content AS Content,
+                   p.Create_post AS CreateAt,
+                   p.Id_User AS UserId,
+                   'post' AS Type,
+                   SUM(CASE
+                           WHEN lp.Like = 1 THEN 1
+                           WHEN lp.Like = 0 THEN -1
+                           ELSE 0
+                       END) AS PostLikes,
+                   t.Title AS TopicTitle,
+                   t.Path AS TopicPath,
+                   t.Id AS TopicId,
+                   (SELECT COUNT(*)
+                    FROM message m2
+                    WHERE m2.Id_PostAnswer = p.Id) AS MessageCount
+            FROM posts p
+                     LEFT JOIN topics t ON p.Id_topics = t.Id
+                     LEFT JOIN likepost lp ON p.Id = lp.Id_Post
+                     LEFT JOIN users u ON p.Id_User = u.Id
+            WHERE u.Name = ?
+            GROUP BY p.Id, p.Title, p.Content, p.Create_post, p.Id_User, t.Title, t.Path, t.Id
 
-                UNION ALL
+            UNION ALL
 
-                SELECT m.Id             AS Id,
-                       NULL             AS Title,
-                       m.Content        AS Content,
-                       m.Create_message AS CreateAt,
-                       m.Id_User        AS UserId,
-                       'message'        AS Type,
-                       NULL             AS MessageLikes,
-                       t.Title          AS TopicTitle,
-                       t.Path           AS TopicPath,
-                       t.Id             AS TopicId
-                FROM message m
-                         LEFT JOIN posts p ON m.Id_PostAnswer = p.Id
-                         LEFT JOIN topics t ON p.Id_topics = t.Id
-                         LEFT JOIN users u ON m.Id_User = u.id
-                WHERE u.Name = ?
-                ORDER BY CreateAt;
-            `;
+            SELECT m.Id AS Id,
+                   NULL AS Title,
+                   m.Content AS Content,
+                   m.Create_message AS CreateAt,
+                   m.Id_User AS UserId,
+                   'message' AS Type,
+                   NULL AS MessageLikes,
+                   t.Title AS TopicTitle,
+                   t.Path AS TopicPath,
+                   t.Id AS TopicId,
+                   (SELECT COUNT(*)
+                    FROM message m2
+                    WHERE m2.Id_MessageAnswer = m.Id) AS MessageCount
+            FROM message m
+                     LEFT JOIN posts p ON m.Id_PostAnswer = p.Id
+                     LEFT JOIN topics t ON p.Id_topics = t.Id
+                     LEFT JOIN users u ON m.Id_User = u.id
+            WHERE u.Name = ?
+            ORDER BY CreateAt;`;
             connection.query(sql, [name, name], (err, results) => {
                 if (err) {
                     return reject(err);
@@ -363,13 +376,14 @@ class userModel {
                 const posts = results.map(row => {
                     if (row.Type === 'post') {
                         return {
-                            PostId: row.Id,
-                            PostTitle: row.Title,
-                            PostContent: row.Content,
+                            Id: row.Id,
+                            Title: row.Title,
+                            Content: row.Content,
                             CreateAt: row.CreateAt,
                             UserId: row.UserId,
                             Type: row.Type,
                             PostLikes: row.PostLikes,
+                            MessageCount: row.MessageCount,
                             Topic: {
                                 Title: row.TopicTitle,
                                 Path: row.TopicPath,
@@ -378,11 +392,12 @@ class userModel {
                         };
                     } else {
                         return {
-                            MessageId: row.Id,
-                            MessageContent: row.Content,
+                            Id: row.Id,
+                            Content: row.Content,
                             CreateAt: row.CreateAt,
                             UserId: row.UserId,
                             Type: row.Type,
+                            MessageCount: row.MessageCount,
                             Topic: {
                                 Title: row.TopicTitle,
                                 Path: row.TopicPath,
@@ -395,6 +410,7 @@ class userModel {
             });
         });
     }
+
 
     /**
      * This static method searches for users friends by their name in the database.

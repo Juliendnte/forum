@@ -89,10 +89,19 @@ class postModel {
                               t.Path,
                               t.Create_at,
                               t.Id_User AS TopicUserId,
-                              s.Label   AS Status
+                              s.Label   AS Status,
+                               SUM(CASE
+                               WHEN lp.Like = 1 THEN 1
+                               WHEN lp.Like = 0 THEN -1
+                               ELSE 0
+                                END)      AS PostLikes,
+                                COUNT(m.Id) AS MessageCount 
                        FROM posts
                                 LEFT JOIN topics t ON posts.Id_topics = t.Id
-                                LEFT JOIN status s ON t.Id_Status = s.Id`;
+                                LEFT JOIN status s ON t.Id_Status = s.Id
+                                LEFT JOIN likepost lp ON posts.Id = lp.Id_Post
+                                LEFT JOIN message m ON posts.Id = m.Id_PostAnswer
+                                `
 
             const values = [];
             const whereClauses = ['t.Id_Status = 1'];
@@ -163,38 +172,46 @@ class postModel {
      * @param {number} id - The ID of the user.
      * @returns {Promise} - A promise that resolves with the posts.
      */
-    static getAllPostWithMiddleware(query, id) {
+    static getAllPostWithMiddleware(query, userId) {
         return new Promise(async (resolve, reject) => {
             let sql = `
-                SELECT posts.Id  AS PostId,
-                       posts.Title,
-                       posts.Content,
-                       posts.Create_post,
-                       posts.Id_topics,
-                       posts.Id_User,
-                       posts.Id_PostAnswer,
-                       t.Id      AS TopicId,
-                       t.Title   AS TopicTitle,
-                       t.Path,
-                       t.Create_at,
-                       t.Id_User AS TopicUserId,
-                       s.Label   AS Status
-                FROM posts
-                         JOIN topics t ON posts.Id_topics = t.Id
-                         LEFT JOIN status s ON t.Id_Status = s.Id
-                         LEFT JOIN friendship f ON (
-                    (f.Id_User1 = ? AND f.Id_User2 = posts.Id_User AND f.status = 'friend') OR
-                    (f.Id_User2 = ? AND f.Id_User1 = posts.Id_User AND f.status = 'friend')
-                    )
-            `;
+            SELECT posts.Id  AS PostId,
+                   posts.Title,
+                   posts.Content,
+                   posts.Create_post,
+                   posts.Id_topics,
+                   posts.Id_User,
+                   posts.Id_PostAnswer,
+                   t.Id      AS TopicId,
+                   t.Title   AS TopicTitle,
+                   t.Path,
+                   t.Create_at,
+                   t.Id_User AS TopicUserId,
+                   s.Label   AS Status,
+                   SUM(CASE
+                       WHEN lp.Like = 1 THEN 1
+                       WHEN lp.Like = 0 THEN -1
+                       ELSE 0
+                   END) AS PostLikes,
+                   COUNT(m.Id) AS MessageCount
+            FROM posts
+                 JOIN topics t ON posts.Id_topics = t.Id
+                 LEFT JOIN status s ON t.Id_Status = s.Id
+                 LEFT JOIN likepost lp ON posts.Id = lp.Id_Post
+                 LEFT JOIN message m ON posts.Id = m.Id_PostAnswer
+                 LEFT JOIN friendship f ON (
+                     (f.Id_User1 = ? AND f.Id_User2 = posts.Id_User AND f.status = 'friend') OR
+                     (f.Id_User2 = ? AND f.Id_User1 = posts.Id_User AND f.status = 'friend')
+                 )
+        `;
 
-            const values = [id, id];
-            const whereClauses = ["(t.Id_Status != 1 OR f.status = 'friend' OR posts.Id_User = ?)"];
+            const values = [userId, userId];
+            const whereClauses = ["(t.Id_Status = 1 OR (f.status = 'friend' AND t.Id_Status = 2) OR posts.Id_User = ?)"];
             let limitClause = "";
             let offsetClause = "";
 
             // Include the current user ID for the private topic check
-            values.push(id);
+            values.push(userId);
 
             // Build WHERE, LIMIT, and OFFSET clauses
             Object.entries(query).forEach(([key, value]) => {
@@ -217,13 +234,13 @@ class postModel {
                 sql += " WHERE " + whereClauses.join(" AND ");
             }
 
+            // Add ORDER BY clause to sort by creation date in descending order
+            sql += " GROUP BY posts.Id ORDER BY posts.Create_post DESC";
+
 
             // Use the same query without limit and offset to get the total number of results
             this.total = (await this.getTotal(sql, values.slice(0, values.length - (limitClause ? 1 : 0) - (offsetClause ? 1 : 0)))).total;
 
-            // Add ORDER BY clause to sort by creation date in descending order
-            sql += " ORDER BY posts.Create_post DESC";
-            // Add LIMIT and OFFSET clauses to the main query
             sql += limitClause + offsetClause;
 
             // Execute the query with the values
@@ -231,6 +248,11 @@ class postModel {
                 if (err) {
                     return reject(err);
                 }
+
+                if (results.length === 0) {
+                    return resolve(null);
+                }
+                
                 const posts = results.map((row) => ({
                     Post: {
                         Id: row.PostId,
@@ -250,7 +272,8 @@ class postModel {
                     }
                 }));
                 return resolve(posts);
-            });        });
+            });
+        });
     }
 
     /**
