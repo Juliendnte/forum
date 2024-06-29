@@ -40,10 +40,9 @@ class TreatmentPosts {
         }
     }
 
-
-    static async GetPost(id) {
+    static async GetPosts(req, res) {
         try {
-            const response = await axios.get(`${url}/post/${id}`)
+            const response = await axios.get(`${url}/posts`)
 
             if (response.status === 200) {
                 return response.data;
@@ -56,9 +55,9 @@ class TreatmentPosts {
         }
     }
 
-    static async GetPosts(req, res) {
+    static async GetPost(id) {
         try {
-            const response = await axios.get(`${url}/posts/`)
+            const response = await axios.get(`${url}/post/${id}`)
 
             if (response.status === 200) {
                 return response.data;
