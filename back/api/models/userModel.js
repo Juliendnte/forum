@@ -466,6 +466,59 @@ class userModel {
     }
 
     /**
+     * This static method search for users, topics, and posts by their name in the database.
+     *
+     * @param {string} search - The search query.
+     * @returns {Promise} - A promise that resolves with the search results.
+     */
+    static search(search) {
+        return new Promise((resolve, reject) => {
+            const searchQuery = `%${search}%`;
+            const sql = `
+            (
+                SELECT 'user' AS Type, u.Id, u.Name AS Title, u.Path, u.Create_at AS CreateAt
+                FROM users u
+                WHERE u.Name LIKE ?
+            )
+            UNION
+            (
+                SELECT 'post' AS Type, p.Id, p.Title, p.Content AS Path, p.Create_post AS CreateAt
+                FROM posts p
+                WHERE p.Title LIKE ? OR p.Content LIKE ?
+            )
+            UNION
+            (
+                SELECT 'topic' AS Type, t.Id, t.Title, t.Path, t.Create_at AS CreateAt
+                FROM topics t
+                WHERE t.Title LIKE ?
+            )
+            ORDER BY CreateAt DESC
+        `;
+
+            connection.query(sql, [searchQuery, searchQuery, searchQuery, searchQuery], (err, results) => {
+                if (err) {
+                    return reject(err);
+                }
+
+                if (results.length === 0) {
+                    return resolve(null);
+                }
+
+                const searchResults = results.map(row => ({
+                    Type: row.Type,
+                    Id: row.Id,
+                    Title: row.Title,
+                    Path: row.Path,
+                    CreateAt: row.CreateAt
+                }));
+
+                resolve(searchResults);
+            });
+        });
+    }
+
+
+    /**
      * This static method retrieves the friends of a user from the database.
      *
      * @param {number} id - The ID of the user.

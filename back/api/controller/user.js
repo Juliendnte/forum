@@ -317,6 +317,29 @@ class UserController {
         }
     }
 
+    static async Search(req, res) {
+        const searchQuery = req.query.search
+        try {
+            const search = await user.search(searchQuery)
+            if (search.length === 0) {
+                return res.status(404).send({
+                    message: 'Nous n\'avons pas trouvé de résultat pour ' + search,
+                    status: 404
+                })
+            }
+            res.status(200).send({
+                message: 'Search found',
+                status: 200,
+                search
+            })
+        }catch (err){
+            res.status(500).send({
+                message: err,
+                status: 500
+            })
+        }
+    }
+
     static async getAdminModo(req, res) {
         try {
             const admin = await user.getAdminModo()

@@ -182,16 +182,16 @@ class TopicController {
      * @returns {Object} - The response object, containing a success message.
      */
     static async UploadImage(req, res) {
-        const filePath = req.file.path.replace('assets', '');
         const id = req.user.Sub;
 
         try {
-            await topic.updatePatchTopic(id, {Path: filePath});
+            const filePath = req.file.path
+            console.log(filePath);
             res.download(filePath, err => {
-                if (err) {
+                if (err)
                     res.status(500).send({message: err, status: 500});
-                }
             });
+            await topic.updatePatchTopic(id, {Path: filePath.replace('assets', '')});
         } catch (err) {
             res.status(500).send({message: err, status: 500});
         }

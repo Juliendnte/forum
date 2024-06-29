@@ -252,7 +252,7 @@ class postModel {
                 if (results.length === 0) {
                     return resolve(null);
                 }
-                
+
                 const posts = results.map((row) => ({
                     Post: {
                         Id: row.PostId,
