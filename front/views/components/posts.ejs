@@ -2,12 +2,12 @@
 <div class="post-profil">
     <div class="post-user-header">
         <div class="user-header-post-detail">
-            <a href="/CODER/t/<%- item.TopicTitle %>">
+            <a href="/CODER/t/<%- item.Topic.Title %>">
                 <div class="post-user-header-img">
-                    <img src="<%= item.TopicPath %>" alt="image topic">
+                    <img src="<%= item.Topic.Path %>" alt="image topic">
                 </div>
                 <div>
-                    <span>t/<%= item.TopicTitle %></span>
+                    <span>t/<%= item.Topic.Title %></span>
                 </div>
                 <div>
                     <span>• Publié <%= timeAgo(item.CreateAt) %></span>
