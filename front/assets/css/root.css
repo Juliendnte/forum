@@ -23,7 +23,7 @@ a {
     color: #000;
 }
 body {
-    overflow: hidden; /* Désactive le défilement global du body */
+    overflow: hidden;
 }
 
 .profil-user-global,
