@@ -169,7 +169,7 @@ class PostController {
 
         try {
             const like = await post.getLike(Id_Post, Id_User);
-            await post.likepost({Id_Post, Id_User, Like: (!like && !like.Like === null) ? 0 : null});
+            await post.likepost({Id_Post, Id_User, Like: (!like || like.Like === null) ? 0 : null});
 
             return res.status(201).send({
                 message: 'Unliked successfully',

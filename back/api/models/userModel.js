@@ -361,7 +361,6 @@ class userModel {
                 }
 
                 const posts = results.map(row => {
-                    console.log(row)
                     if (row.Type === 'post') {
                         return {
                             PostId: row.PostId,
