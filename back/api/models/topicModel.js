@@ -71,6 +71,7 @@ class topicModel {
                     TopicPath: results[0].TopicPath,
                     Create_at: results[0].Create_at,
                     Status: results[0].Status,
+                    Tag: [],
                     User :{
                         Name: results[0].UserName,
                         Path: results[0].UserPath,
@@ -80,6 +81,13 @@ class topicModel {
                 };
 
                 results.forEach(row => {
+                    if (!(user.Tag.some(tag => tag.Id === row.TagId))) {
+                        user.Tag.push({
+                            Id: row.TagId,
+                            Label: row.TagLabel,
+                            Path: row.TagPath
+                        })
+                    }
                     user.Posts.push({
                         User: {
                             Name: row.UserNamePost,

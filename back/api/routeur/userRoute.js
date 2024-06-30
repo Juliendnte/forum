@@ -21,7 +21,7 @@ routeur.post("/searchFollow", controllerUser.SearchFollow)
 routeur.get("/search", controllerUser.Search)
 routeur.patch("/user/update", [middleware.auth.validateToken], controllerUser.UpdateUser)
 routeur.post("/getLiked", [middleware.auth.validateToken], controllerUser.getLiked)
-routeur.post('/upload/user', [middleware.auth.validateToken, middleware.upload('user').single('image')], controllerUser.UploadImage)
+routeur.post('/upload/user', [middleware.auth.validateToken, middleware.upload('user')], controllerUser.UploadImage)
 
 //Exportation des routes
 module.exports = routeur;

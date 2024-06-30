@@ -234,7 +234,12 @@ class UserController {
      * @returns {Promise<void>} - A Promise that resolves when the function has completed.
      */
     static async UploadImage(req, res) {
+        console.log(req.file.path)
+        if (!req.file) {
+            return res.status(400).send({ message: 'No file uploaded', status: 400 });
+        }
         const filePath = req.file.path.replace('assets', '');
+        console.log(filePath)
         const id = req.user.Sub;
         try {
             await user.updatePatchUser(id, {Path: filePath})
