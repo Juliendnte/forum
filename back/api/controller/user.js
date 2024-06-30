@@ -257,7 +257,6 @@ class UserController {
     static async UpdateUser(req, res) {
         const id = req.user.Sub;
         const body = req.body;
-        console.log(body)
         try {
             await user.updatePatchUser(id, body)
             res.status(200).send({

@@ -240,13 +240,9 @@ class TreatmentUser {
             }
 
             const dataUpdate = req.body;
+            dataUpdate.Tags = JSON.parse(dataUpdate.Tags)
 
-            console.log(dataUpdate);
-
-            await axios.patch(`${url}/user/update`,
-                {
-                    dataUpdate
-                },
+            await axios.patch(`${url}/user/update`, dataUpdate,
                 {
                     headers: {
                         "Authorization": token,
