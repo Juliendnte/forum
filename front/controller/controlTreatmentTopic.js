@@ -55,6 +55,37 @@ class TreatmentTopic {
         }
     }
 
+    static async UpdateTopic(req, res) {
+        try {
+            const token = req.cookies.Token;
+
+            if (!token) {
+                return res.status(400).send("No token found");
+            }
+
+            const dataUpdate = req.body;
+            dataUpdate.Tags = JSON.parse(dataUpdate.Tags)
+
+            console.log(dataUpdate)
+
+            const id = req.params.id;
+
+            await axios.patch(`${url}/topic/${id}`, dataUpdate,
+                {
+                    headers: {
+                        "Authorization": token,
+                        "Content-Type": "application/json"
+                    },
+                });
+
+            res.redirect('/CODER');
+        } catch (err) {
+            console.log(err)
+            errorHandler.handleRequestError(err)
+            res.redirect('/CODER/err')
+        }
+    }
+
 }
 
 module.exports = TreatmentTopic;

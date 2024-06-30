@@ -255,6 +255,28 @@ class ControlTemplate {
         }
     }
 
+    static async UpdateTopic(req, res) {
+        try {
+            const token = req.cookies.Token;
+
+            if (!token) {
+                return res.redirect('/CODER/login');
+            }
+
+            const name = req.params.name
+
+            const dataTopic = await controlTopic.GetTopic(name);
+            const dataTags = await controlUser.TreatmentUser.GetTags(req, res);
+
+            res.render('../views/pages/UpdateTopic', {
+                dataTopic,
+                dataTags
+            });
+        } catch (err) {
+            errorHandler.handleRequestError(err);
+        }
+    }
+
     /**
      * Render the error page.
      * @param {Object} req - The request object.

@@ -29,6 +29,7 @@
 }
 
 .form-container-tags {
+    margin-top: 15px;
     display: flex;
     flex-direction: column;
 }
@@ -112,28 +113,35 @@
     width: 35%;
 }
 
-.input-user-info-update-ctn {
+.input-user-info-update-ctn,
+.input-topic-info-update-ctn{
+    margin-bottom: 15px;
     display: flex;
     flex-direction: row;
     margin-top: 25px;
 }
 
 .input-user-info-update-img,
-.input-user-info-update-global {
+.input-user-info-update-global,
+.input-topic-info-update-img,
+.input-topic-info-update-global {
     width: 50%;
 }
 
-.input-user-info-update-img input {
+.input-user-info-update-img input,
+.input-topic-info-update-img input {
     background: transparent !important;
 }
 
-.input-user-info-update-img{
+.input-user-info-update-img,
+.input-topic-info-update-img {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
-.input-user-info-update-img img {
+.input-user-info-update-img img,
+.input-topic-info-update-img img {
     width: 168px;
     height: 168px;
     border-radius: 999px;
