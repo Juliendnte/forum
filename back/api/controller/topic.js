@@ -74,10 +74,10 @@ class TopicController {
             const topicById = req.topic;
             topicById.User.Path = `${baseUrl}/assets/${topicById.User.Path}`;
             topicById.TopicPath = `${baseUrl}/assets/${topicById.TopicPath}`;
-
+            topicById.Tag.forEach(tag => tag.Path = `${baseUrl}/assets${tag.Path}`);
             topicById.Posts.forEach(post => post.User.Path = `${baseUrl}/assets/${post.User.Path}`);
             return res.status(200).send({
-                message: `Article with name ${req.params.name} successfully found`,
+                message: `Topic with name ${req.params.name} successfully found`,
                 status: 200,
                 topic: topicById,
             });

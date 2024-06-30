@@ -119,10 +119,11 @@ class topicModel {
      */
     static getAllTopic(query) {
         return new Promise(async (resolve, reject) => {
-            let sql = `SELECT t.Id AS TopicId,t.Title , t.Path, t.Create_at, t.Id_User FROM topics t LEFT JOIN status s ON t.Id_Status = s.Id`
+            let sql = `SELECT t.Id AS TopicId,t.Title , t.Path, t.Create_at, t.Id_User FROM topics t LEFT JOIN status s ON t.Id_Status = s.Id LEFT JOIN tagstopics tp ON t.Id = tp.Id_topics LEFT JOIN tags ON tp.Id_Tag = tags.Id`
 
             const values = [];
             const whereClauses = [];
+            let tag = "";
             let limitClause = "";
             let offsetClause = "";
 
@@ -134,7 +135,10 @@ class topicModel {
                 } else if (key.toLowerCase() === "offset") {
                     offsetClause = ` OFFSET ?`;
                     values.push(parseInt(value));
-                } else {
+                }else if (key.toLowerCase() === "tags"){
+                    tag = value;
+                    values.push(value);
+                }else {
                     const valuesArray = value.split(",");
                     const placeholders = valuesArray.map(() => "?").join(",");
                     whereClauses.push(valuesArray.length > 1 ? `${key} IN (${placeholders})` : `${key} = ?`);
@@ -143,7 +147,7 @@ class topicModel {
             });
 
             // Ajouter les clauses WHERE à la requête SQL
-            sql += " WHERE s.Label = 'Public'";
+            sql += " WHERE s.Label = 'Public' " + (tag ? ` AND tags.Label = ?` : "");
             if (whereClauses.length > 0) {
                 sql += "AND t." + whereClauses.join(" AND t.");
             }
