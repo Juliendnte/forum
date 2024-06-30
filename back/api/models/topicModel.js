@@ -157,7 +157,7 @@ class topicModel {
      */
     static getTags() {
         return new Promise((resolve, reject) => {
-            const sql = `SELECT Label, Path
+            const sql = `SELECT Label, Path, Id
                          FROM tags`;
             connection.query(sql, (err, results) => err ? reject(err) : resolve(results));
         })
