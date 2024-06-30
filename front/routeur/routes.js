@@ -14,6 +14,7 @@ routeur.get("/CODER/user/:name", controllerTemplate.ProfilUser);
 routeur.get("/CODER/:nametopic/create/post", controllerTemplate.CreatePost);
 routeur.get("/CODER/profil/:name/update", controllerTemplate.UpdateProfil);
 routeur.get("/CODER/topic/:name/update", controllerTemplate.UpdateTopic);
+// routeur.get("/CODER/post/:id/update", controllerTemplate.UpdatePost);
 
 // Configuration des routes Topics
 routeur.get("/CODER/create/topic", controllerTemplate.CreateTopic);
@@ -37,6 +38,7 @@ routeur.post("/treatment/update/topic/:id", controllerTopic.UpdateTopic);
 routeur.post("/treatment/create/post", controllerPost.CreatePost)
 routeur.get("/treatment/like/post/:id", controllerPost.LikePost)
 routeur.get("/treatment/unlike/post/:id", controllerPost.UnLikePost)
+// routeur.get("/CODER/treatment/post/:id", controllerPost.FavPost)
 
 // Route Erreur
 routeur.get("/CODER/:err", controllerTemplate.Error)
