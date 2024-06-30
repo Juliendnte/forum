@@ -63,6 +63,45 @@ class TopicController {
         }
     }
 
+
+    static async getTopicsMiddleware(req, res) {
+        try {
+            const userId = req.user.Sub;
+            const offset = parseInt(req.query.offset) || 0;
+            const limit = parseInt(req.query.limit) || pagination;
+            const href = `${baseUrl}/topics${buildQueryWithoutLimitOffset(req.query)}`;
+
+            const topics = await topic.getAllTopicMiddleware({...req.query, limit, offset}, userId);
+            topics.forEach(top => top.Path = `${baseUrl}/assets/${top.Path}`);
+
+            if (!topics.length) {
+                return res.status(404).send({message: `Topics not found`, status: 404});
+            }
+
+            const total = topics.length;
+
+            return res.status(200).send({
+                message: `Topics successfully found`,
+                status: 200,
+                articles: {
+                    href,
+                    offset,
+                    limit,
+                    next: total - limit <= offset ? null : `${href}&limit=${limit}&offset=${offset + limit}`,
+                    previous: offset ? `${href}&limit=${limit}&offset=${offset - limit}` : null,
+                    total,
+                    last_page: Math.ceil(total / limit),
+                    current_page: Math.ceil(offset / limit) + 1,
+                    items: topics,
+                }
+            });
+
+        } catch (err) {
+            res.status(500).send({message: err, status: 500});
+        }
+    }
+
+
     /**
      * Get a specific topic by its ID.
      * @param {Object} req - The request object, containing the topic ID in the parameters.
@@ -117,12 +156,12 @@ class TopicController {
             return res.status(400).send({message: "Les champs Title et Status est requis.", status: 400});
         }
 
-        if (Title.includes(' ')){
+        if (Title.includes(' ')) {
             return res.status(400).send({message: "Le titre ne doit pas contenir d'espace.", status: 400});
         }
 
         try {
-            const NewTopic = await topic.createTopic({Title, Status,  Id_User});
+            const NewTopic = await topic.createTopic({Title, Status, Id_User});
 
             return res.status(201).send({message: `Topic successfully created`, status: 201, NewTopic});
         } catch (err) {

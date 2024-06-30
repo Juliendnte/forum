@@ -72,7 +72,7 @@ class topicModel {
                     Create_at: results[0].Create_at,
                     Status: results[0].Status,
                     Tag: [],
-                    User :{
+                    User: {
                         Name: results[0].UserName,
                         Path: results[0].UserPath,
                         Id: results[0].Id_User
@@ -119,7 +119,12 @@ class topicModel {
      */
     static getAllTopic(query) {
         return new Promise(async (resolve, reject) => {
-            let sql = `SELECT t.Id AS TopicId,t.Title , t.Path, t.Create_at, t.Id_User FROM topics t LEFT JOIN status s ON t.Id_Status = s.Id LEFT JOIN tagstopics tp ON t.Id = tp.Id_topics LEFT JOIN tags ON tp.Id_Tag = tags.Id`
+            let sql = `
+                SELECT t.Id AS TopicId, t.Title, t.Path, t.Create_at, t.Id_User, s.Label AS Status
+                FROM topics t
+                         LEFT JOIN status s ON t.Id_Status = s.Id
+                         LEFT JOIN tagstopics tp ON t.Id = tp.Id_topics
+                         LEFT JOIN tags ON tp.Id_Tag = tags.Id`
 
             const values = [];
             const whereClauses = [];
@@ -135,10 +140,10 @@ class topicModel {
                 } else if (key.toLowerCase() === "offset") {
                     offsetClause = ` OFFSET ?`;
                     values.push(parseInt(value));
-                }else if (key.toLowerCase() === "tags"){
+                } else if (key.toLowerCase() === "tags") {
                     tag = value;
                     values.push(value);
-                }else {
+                } else {
                     const valuesArray = value.split(",");
                     const placeholders = valuesArray.map(() => "?").join(",");
                     whereClauses.push(valuesArray.length > 1 ? `${key} IN (${placeholders})` : `${key} = ?`);
@@ -148,6 +153,62 @@ class topicModel {
 
             // Ajouter les clauses WHERE à la requête SQL
             sql += " WHERE s.Label = 'Public' " + (tag ? ` AND tags.Label = ?` : "");
+            if (whereClauses.length > 0) {
+                sql += "AND t." + whereClauses.join(" AND t.");
+            }
+
+            // Utilise la même requête sans limit ni offset
+            this.total = (await this.getTotal(sql, values.slice(0, values.length - (limitClause ? 1 : 0) - (offsetClause ? 1 : 0)))).total;
+
+            // Ajouter limit et offset à la requête principale
+            sql += limitClause + offsetClause;
+
+            // Exécuter la requête avec les valeurs
+            connection.query(sql, values, (err, results) => err ? reject(err) : resolve(results));
+        });
+    }
+
+
+    static getAllTopicMiddleware(query, UserId) {
+        return new Promise(async (resolve, reject) => {
+            let sql = `
+                SELECT t.Id AS TopicId, t.Title, t.Path, t.Create_at, t.Id_User, s.Label AS Status
+                FROM topics t
+                         LEFT JOIN status s ON t.Id_Status = s.Id
+                         LEFT JOIN tagstopics tp ON t.Id = tp.Id_topics
+                         LEFT JOIN tags ON tp.Id_Tag = tags.Id
+                         LEFT JOIN friendship f ON (
+                    (f.Id_User1 = ? AND f.Id_User2 = t.Id_User AND f.status = 'friend') OR
+                    (f.Id_User2 = ? AND f.Id_User1 = t.Id_User AND f.status = 'friend')
+                    )`
+
+            const values = [UserId, UserId, UserId];
+            const whereClauses = [];
+            let tag = "";
+            let limitClause = "";
+            let offsetClause = "";
+
+            // Construire les clauses WHERE, LIMIT et OFFSET
+            Object.entries(query).forEach(([key, value]) => {
+                if (key.toLowerCase() === "limit") {
+                    limitClause = ` LIMIT ?`;
+                    values.push(parseInt(value));
+                } else if (key.toLowerCase() === "offset") {
+                    offsetClause = ` OFFSET ?`;
+                    values.push(parseInt(value));
+                } else if (key.toLowerCase() === "tags") {
+                    tag = value;
+                    values.push(value);
+                } else {
+                    const valuesArray = value.split(",");
+                    const placeholders = valuesArray.map(() => "?").join(",");
+                    whereClauses.push(valuesArray.length > 1 ? `${key} IN (${placeholders})` : `${key} = ?`);
+                    values.push(...valuesArray);
+                }
+            });
+
+            // Ajouter les clauses WHERE à la requête SQL
+            sql += " WHERE (s.Label = 'Public' OR (f.status = 'friend' AND s.Label = 'Private') OR t.Id_User = ?) " + (tag ? ` AND tags.Label = ?` : "");
             if (whereClauses.length > 0) {
                 sql += "AND t." + whereClauses.join(" AND t.");
             }

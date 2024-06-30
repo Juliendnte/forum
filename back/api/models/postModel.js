@@ -133,11 +133,15 @@ class postModel {
 
             // Utiliser la même requête sans limit ni offset pour obtenir le total des résultats
             this.total = (await this.getTotal(sql, values.slice(0, values.length - (limitClause ? 1 : 0) - (offsetClause ? 1 : 0)))).total;
-            sql += " ORDER BY Create_post DESC";
+            sql += " GROUP BY posts.Id, posts.Title, posts.Content, posts.Create_post, posts.Id_topics, \n" +
+                "         posts.Id_User, posts.Id_PostAnswer, t.Id, t.Title, t.Path, t.Create_at, \n" +
+                "         t.Id_User, s.Label\n" +
+                "ORDER BY posts.Create_post DESC;";
 
             // Ajouter limit et offset à la requête principale
             sql += limitClause + offsetClause;
             // Exécuter la requête avec les valeurs
+
             connection.query(sql, values, (err, results) => {
                 if (err) {
                     return reject(err);
@@ -193,7 +197,10 @@ class postModel {
                        WHEN lp.Like = 0 THEN -1
                        ELSE 0
                    END) AS PostLikes,
-                   COUNT(m.Id) AS MessageCount
+                   COUNT(m.Id) AS MessageCount,
+                   (
+                       tg.Label = tgs.Label
+                       ) AS similarity_score
             FROM posts
                  JOIN topics t ON posts.Id_topics = t.Id
                  LEFT JOIN status s ON t.Id_Status = s.Id
@@ -203,6 +210,10 @@ class postModel {
                      (f.Id_User1 = ? AND f.Id_User2 = posts.Id_User AND f.status = 'friend') OR
                      (f.Id_User2 = ? AND f.Id_User1 = posts.Id_User AND f.status = 'friend')
                  )
+                LEFT JOIN tagstopics tt ON t.Id = tt.Id_topics
+                LEFT JOIN tags tg ON tt.Id_tag = tg.Id
+                LEFT JOIN userstags ut ON t.Id_User = ut.Id_User
+                LEFT JOIN tags tgs ON ut.Id_Tag = tgs.Id
         `;
 
             const values = [userId, userId];
@@ -235,7 +246,7 @@ class postModel {
             }
 
             // Add ORDER BY clause to sort by creation date in descending order
-            sql += " GROUP BY posts.Id ORDER BY posts.Create_post DESC";
+            sql += " GROUP BY posts.Id ORDER BY similarity_score DESC";
 
 
             // Use the same query without limit and offset to get the total number of results
@@ -260,7 +271,8 @@ class postModel {
                         Create_post: row.Create_post,
                         Content: row.Content,
                         Likes: row.PostLikes,
-                        MessageCount: row.MessageCount
+                        MessageCount: row.MessageCount,
+                        SimilarityScore: row.similarity_score
                     },
                     Topic: {
                         Id: row.TopicId,

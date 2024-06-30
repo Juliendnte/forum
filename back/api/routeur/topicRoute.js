@@ -11,6 +11,7 @@ const middleware = {
 
 //Configuration des routes
 routeur.get("/topics", TopicController.getTopics);
+routeur.get("/topicsMiddleware", middleware.auth.validateToken ,TopicController.getTopicsMiddleware);
 routeur.get("/tags", TopicController.getTags)
 routeur.get("/topic/:name",middleware.topicExists , TopicController.getTopic);
 routeur.post("/topic",middleware.auth.validateToken ,TopicController.postTopic);
