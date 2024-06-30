@@ -243,7 +243,7 @@ class TreatmentUser {
 
             console.log(dataUpdate);
 
-            await axios.get(`${url}/user/update`,
+            await axios.patch(`${url}/user/update`,
                 {
                     dataUpdate
                 },
