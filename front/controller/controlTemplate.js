@@ -15,14 +15,14 @@ class ControlTemplate {
     static async Index(req, res) {
         try {
             const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
-            const dataPost = await controlPost.GetPosts();
-
+            const dataPost = await controlPost.GetPosts(req, res);
             res.render('../views/pages/index', {
                 dataUser,
                 dataPost
             });
         } catch (err) {
             errorHandler.handleRequestError(err);
+            res.redirect('/CODER/error');
         }
     };
 
@@ -254,6 +254,21 @@ class ControlTemplate {
             errorHandler.handleRequestError(err);
         }
     }
+
+    /**
+     * Render the error page.
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
+    static Error(req, res) {
+        const error = errorHandler.getError();
+        errorHandler.setError(
+            error.message || "Nous n'avons pas trouvé la page que vous cherchez",
+            error.status || 404
+        );
+        res.render("../views/pages/error", {error: errorHandler.getError()});
+        errorHandler.resetError();
+    };
 }
 
 module.exports = ControlTemplate;

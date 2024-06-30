@@ -36,5 +36,8 @@ routeur.post("/treatment/create/post", controllerPost.CreatePost)
 routeur.get("/treatment/like/post/:id", controllerPost.LikePost)
 routeur.get("/treatment/unlike/post/:id", controllerPost.UnLikePost)
 
+// Route Erreur
+routeur.get("/CODER/:blabla", controllerTemplate.Error)
+
 // Pour que nos routes soient accessibles
 module.exports = routeur;

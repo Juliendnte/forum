@@ -169,7 +169,6 @@ class PostController {
 
         try {
             const like = await post.getLike(Id_Post, Id_User);
-            console.log(like)
             await post.likepost({Id_Post, Id_User, Like: (!like || like.Like !==0 ) ? 0 : null});
 
             return res.status(201).send({

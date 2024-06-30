@@ -249,7 +249,7 @@ class TreatmentUser {
                         "Content-Type": "application/json"
                     },
                 });
-            res.redirect('/CODER/user');
+            res.redirect('/CODER/user/'+ req.body.Name);
         } catch (err) {
             errorHandler.handleRequestError(err)
         }

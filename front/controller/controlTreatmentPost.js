@@ -40,7 +40,13 @@ class TreatmentPosts {
 
     static async GetPosts(req, res) {
         try {
-            const response = await axios.get(`${url}/posts`)
+            const token = req.cookies.Token;
+            let response = await axios.get(`${url}/postsMiddleware`, {
+                headers: {
+                    "Authorization": token,
+                    "Content-Type": "application/json"
+                }
+            });
 
             if (response.status === 200) {
                 return response.data;
@@ -49,7 +55,7 @@ class TreatmentPosts {
                 return undefined;
             }
         } catch (err) {
-            errorHandler.handleRequestError(err);
+            return (await axios.get(`${url}/posts`)).data
         }
     }
 
