@@ -118,6 +118,29 @@ class PostController {
         }
     }
 
+    static async getLiked(req, res){
+        const id = req.user.Sub
+        try {
+            const liked = await post.getLike(id);
+            if (liked.length === 0) {
+                return res.status(404).send({
+                    message: `no posts liked`,
+                    status: 404
+                });
+            }
+            res.status(200).send({
+                message: 'posts liked found',
+                status: 200,
+                liked
+            })
+        }catch (err){
+            res.status(500).send({
+                message: err,
+                status: 500
+            });
+        }
+    }
+
     static async Like(req, res) {
         const Id_Post =  parseInt(req.body.Id_Post);
         const Id_User = req.user.Sub;
@@ -129,7 +152,8 @@ class PostController {
         }
 
         try {
-            const like = await post.getLike(Id_Post, Id_User);
+            let like = await post.getLike(Id_User);
+            like = like.find(like => parseInt(like.Id_Post) === Id_Post);
             await post.likepost({Id_Post, Id_User, Like: (!like || !like.Like) ? 1 : null});
 
             return res.status(201).send({
@@ -168,7 +192,8 @@ class PostController {
         }
 
         try {
-            const like = await post.getLike(Id_Post, Id_User);
+            let like = await post.getLike(Id_User);
+            like = like.find(like => parseInt(like.Id_Post) === Id_Post);
             await post.likepost({Id_Post, Id_User, Like: (!like || like.Like !==0 ) ? 0 : null});
 
             return res.status(201).send({

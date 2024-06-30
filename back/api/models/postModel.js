@@ -341,19 +341,17 @@ class postModel {
     }
 
     /**
-     * Get the like status of a post.
+     * Get the like status of posts.
      *
      * @param {number} id - The ID of the post.
-     * @param {number} iduser - The ID of the user.
-     * @returns {Promise} - A promise that resolves with the like status of the post.
+     * @returns {Promise} - A promise that resolves with the like status of posts.
      */
-    static getLike(id, iduser) {
+    static getLike(id) {
         return new Promise((resolve, reject) => {
             const sql = `SELECT *
                          FROM likepost
-                         WHERE Id_Post = ?
-                           AND Id_User = ?`
-            connection.query(sql, [id, iduser], (err, results) => err ? reject(err) : resolve(results[0]));
+                         WHERE  Id_User = ?`
+            connection.query(sql, [id], (err, results) => err ? reject(err) : resolve(results));
         });
     }
 

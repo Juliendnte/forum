@@ -12,6 +12,7 @@ const middleware = {
 routeur.get("/postsMiddleware" ,middleware.auth.validateToken ,PostController.getPostsMiddleware);
 routeur.get("/posts", PostController.getPosts);
 routeur.get("/post/:id",middleware.postExists , PostController.getPost);
+routeur.get("/getLiked",middleware.auth.validateToken , PostController.getLiked);
 routeur.post("/like", middleware.auth.validateToken, PostController.Like);
 routeur.post("/unlike", middleware.auth.validateToken, PostController.UnLike);
 routeur.post("/post", middleware.auth.validateToken ,PostController.postPost);
