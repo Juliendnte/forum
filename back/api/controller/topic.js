@@ -74,7 +74,6 @@ class TopicController {
             const topicById = req.topic;
             topicById.User.Path = `${baseUrl}/assets/${topicById.User.Path}`;
             topicById.TopicPath = `${baseUrl}/assets/${topicById.TopicPath}`;
-            topicById.TagPath = `${baseUrl}/assets${topicById.TagPath}`;
 
             topicById.Posts.forEach(post => post.User.Path = `${baseUrl}/assets/${post.User.Path}`);
             return res.status(200).send({

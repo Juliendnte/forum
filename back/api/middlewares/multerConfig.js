@@ -11,13 +11,10 @@ const upload = (destination) => {
             cb(null, Date.now() + '-' + path.extname(file.originalname));
         }
     });
-    console.log(storage)
     const uploadMiddleware = multer({ storage: storage }).single('image');
-    console.log(uploadMiddleware)
     return (req, res, next) => {
         uploadMiddleware(req, res, (err) => {
             if (err) {
-                console.log(err)
                 return res.status(500).json({ error: err.message });
             }
             next();
