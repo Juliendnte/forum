@@ -207,9 +207,6 @@ class userModel {
             values.push(id);
 
             connection.query(sql, values, (err, results) => {
-                if (err) {
-                    return reject(err);
-                }
 
                 if (updateUser.Tags && Array.isArray(updateUser.Tags)) {
                     const deleteTagsSql = `DELETE FROM userstags WHERE Id_User = ?`;

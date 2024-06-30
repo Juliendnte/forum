@@ -111,7 +111,7 @@ class topicModel {
      */
     static getAllTopic(query) {
         return new Promise(async (resolve, reject) => {
-            let sql = `SELECT * FROM topics `
+            let sql = `SELECT t.Id AS TopicId,t.Title , t.Path, t.Create_at, t.Id_User FROM topics t LEFT JOIN status s ON t.Id_Status = s.Id`
 
             const values = [];
             const whereClauses = [];
@@ -135,8 +135,9 @@ class topicModel {
             });
 
             // Ajouter les clauses WHERE à la requête SQL
+            sql += " WHERE s.Label = 'Public'";
             if (whereClauses.length > 0) {
-                sql += " WHERE " + whereClauses.join(" AND ");
+                sql += "AND t." + whereClauses.join(" AND t.");
             }
 
             // Utilise la même requête sans limit ni offset
