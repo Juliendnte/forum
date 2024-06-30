@@ -235,11 +235,11 @@ class TreatmentUser {
     static async UpdateUser(req, res) {
         try {
             const token = req.cookies.Token;
-            console.log("coucou")
+
             if (!token) {
                 return res.status(400).send("No token found");
             }
-            console.log(req.body)
+
             const dataUpdate = req.body;
             dataUpdate.Tags = JSON.parse(dataUpdate.Tags)
 

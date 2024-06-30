@@ -25,7 +25,8 @@
             <div class="input-user-info-update-ctn">
                 <div class="input-user-info-update-img">
                     <img id="profileImagePreview" src="<%= dataUser.utilisateur.Path %>" alt="Profile Image" style="max-width: 100px; max-height: 100px;">
-                    <input type="file" id="profileImageInput" name="Path" accept="image/*">
+                    <input type="file" id="profileImageInput" name="ProfileImage" accept="image/*">
+                    <input type="hidden" name="ProfileImage" value="<%= dataUser.utilisateur.Path %>">
                 </div>
                 <div class="input-user-info-update-global">
                     <input type="text" name="Name" placeholder="Nom d'utilisateur *" value="<%= dataUser.utilisateur.Name %>" required>
@@ -55,6 +56,7 @@
                         <% }); %>
                     </div>
                 </div>
+                <div class="bar-suparator-post"></div>
                 <div class="form-tags-notuser">
                     <span>Ajouter vos languages Favoris :</span>
                     <div id="available-tags" class="form-tags-notuser-img">
