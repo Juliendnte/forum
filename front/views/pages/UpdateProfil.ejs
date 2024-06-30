@@ -22,14 +22,18 @@
     <div class="form-container sign-in">
         <form id="tags-form" action="/treatment/update/user" method="POST">
             <h1>Modifier le profil</h1>
-            <div>
-                <input type="text" name="Name" placeholder="Nom d'utilisateur *"
-                       value="<%= dataUser.utilisateur.Name %>" required>
-                <input type="text" name="Biography" placeholder="Biographie"
-                       value="<%= dataUser.utilisateur.Biography %>">
-                <input type="email" name="Email" placeholder="Email *" value="<%= dataUser.utilisateur.Email %>"
-                       required>
+            <div class="input-user-info-update-ctn">
+                <div class="input-user-info-update-img">
+                    <img id="profileImagePreview" src="<%= dataUser.utilisateur.Path %>" alt="Profile Image" style="max-width: 100px; max-height: 100px;">
+                    <input type="file" id="profileImageInput" name="Path" accept="image/*">
+                </div>
+                <div class="input-user-info-update-global">
+                    <input type="text" name="Name" placeholder="Nom d'utilisateur *" value="<%= dataUser.utilisateur.Name %>" required>
+                    <input type="text" name="Biography" placeholder="Biographie" value="<%= dataUser.utilisateur.Biography %>">
+                    <input type="email" name="Email" placeholder="Email *" value="<%= dataUser.utilisateur.Email %>" required>
+                </div>
             </div>
+
             <div class="form-container-tags">
                 <div class="form-tags-notuser">
                     <span>Vos languages favoris :</span>

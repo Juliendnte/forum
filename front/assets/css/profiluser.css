@@ -43,6 +43,7 @@
 .img-user-global img {
     max-width: 100%; /* Assure que l'image ne dépasse pas de son conteneur */
     height: auto; /* Maintient le ratio d'aspect de l'image */
+    object-fit: contain;
 }
 
 .info-user-global-ctn {

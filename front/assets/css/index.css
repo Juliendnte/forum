@@ -111,3 +111,31 @@
     display: block;
     width: 35%;
 }
+
+.input-user-info-update-ctn {
+    display: flex;
+    flex-direction: row;
+    margin-top: 25px;
+}
+
+.input-user-info-update-img,
+.input-user-info-update-global {
+    width: 50%;
+}
+
+.input-user-info-update-img input {
+    background: transparent !important;
+}
+
+.input-user-info-update-img{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.input-user-info-update-img img {
+    width: 168px;
+    height: 168px;
+    border-radius: 999px;
+    object-fit: cover;
+}
