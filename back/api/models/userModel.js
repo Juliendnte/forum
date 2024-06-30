@@ -1,4 +1,5 @@
 const connection = require("../config/authBDD")
+const lstvalues = ['Id', 'Name', 'Biography', 'Email', 'Path', 'Create_at']
 
 /**
  * Class representing a model for user.
@@ -194,16 +195,48 @@ class userModel {
             const values = [];
 
             Object.entries(updateUser).forEach(([key, value], index, entries) => {
-                sql += `${key}=?`;
-                values.push(value);
-                if (index < entries.length - 1) {
-                    sql += `, `;
+                if (lstvalues.includes(key)) {
+                    sql += `${key}=?`;
+                    values.push(value);
+                    if (index < entries.length - (updateUser.Tags ? 2 : 1)) {
+                        sql += `, `;
+                    }
                 }
             });
             sql += ` WHERE id=?`;
             values.push(id);
 
-            connection.query(sql, values, (err, results) => err ? reject(err) : resolve(results[0]));
+            connection.query(sql, values, (err, results) => {
+                if (err) {
+                    return reject(err);
+                }
+
+                if (updateUser.Tags && Array.isArray(updateUser.Tags)) {
+                    const deleteTagsSql = `DELETE FROM userstags WHERE Id_User = ?`;
+                    connection.query(deleteTagsSql, [id], (err) => {
+                        if (err) {
+                            return reject(err);
+                        }
+
+                        if (updateUser.Tags.length === 0) {
+                            return resolve(results);
+                        }
+
+                        const insertTagsSql = `INSERT INTO userstags (Id_User, Id_Tag) VALUES ?`;
+                        const tagsValues = updateUser.Tags.map(tagId => [id, tagId]);
+
+                        connection.query(insertTagsSql, [tagsValues], (err) => {
+                            if (err) {
+                                return reject(err);
+                            }
+
+                            resolve(results);
+                        });
+                    });
+                } else {
+                    resolve(results);
+                }
+            });
         });
     }
 
