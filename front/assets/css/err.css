@@ -1,0 +1,49 @@
+.err-page-ctn {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.err-page-global {
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.err-page-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.err-page-text p:first-child{
+    font-size: 23px;
+    font-weight: bold;
+}
+
+.btn-err-page-ctn {
+    margin-top: 20px;
+}
+
+.btn-err-page-ctn button {
+    padding: 15px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    background: var(--color-green);
+    font-size: 18px;
+    color: #fff;
+}
+
+.btn-err-page-ctn button:hover {
+    background: #00dfab;
+}
+
+.btn-err-page span {
+    margin: 10px;
+}
