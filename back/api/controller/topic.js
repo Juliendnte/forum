@@ -2,7 +2,7 @@ const topic = require("../models/topicModel");
 require('dotenv').config();
 const baseUrl = process.env.BASE_URL;
 
-const pagination = 5;
+const pagination = 10;
 
 /**
  * Function that build a query without limit and offset
@@ -63,6 +63,45 @@ class TopicController {
         }
     }
 
+
+    static async getTopicsMiddleware(req, res) {
+        try {
+            const userId = req.user.Sub;
+            const offset = parseInt(req.query.offset) || 0;
+            const limit = parseInt(req.query.limit) || pagination;
+            const href = `${baseUrl}/topics${buildQueryWithoutLimitOffset(req.query)}`;
+
+            const topics = await topic.getAllTopicMiddleware({...req.query, limit, offset}, userId);
+            topics.forEach(top => top.Path = `${baseUrl}/assets/${top.Path}`);
+
+            if (!topics.length) {
+                return res.status(404).send({message: `Topics not found`, status: 404});
+            }
+
+            const total = topics.length;
+
+            return res.status(200).send({
+                message: `Topics successfully found`,
+                status: 200,
+                articles: {
+                    href,
+                    offset,
+                    limit,
+                    next: total - limit <= offset ? null : `${href}&limit=${limit}&offset=${offset + limit}`,
+                    previous: offset ? `${href}&limit=${limit}&offset=${offset - limit}` : null,
+                    total,
+                    last_page: Math.ceil(total / limit),
+                    current_page: Math.ceil(offset / limit) + 1,
+                    items: topics,
+                }
+            });
+
+        } catch (err) {
+            res.status(500).send({message: err, status: 500});
+        }
+    }
+
+
     /**
      * Get a specific topic by its ID.
      * @param {Object} req - The request object, containing the topic ID in the parameters.
@@ -72,13 +111,12 @@ class TopicController {
     static getTopic(req, res) {
         try {
             const topicById = req.topic;
-            topicById.UserPath = `${baseUrl}/assets/${topicById.UserPath}`;
+            topicById.User.Path = `${baseUrl}/assets/${topicById.User.Path}`;
             topicById.TopicPath = `${baseUrl}/assets/${topicById.TopicPath}`;
-            topicById.TagPath = `${baseUrl}/assets${topicById.TagPath}`;
-
-            topicById.Posts.forEach(post => post.UserPath = `${baseUrl}/assets/${post.UserPath}`);
+            topicById.Tag.forEach(tag => tag.Path = `${baseUrl}/assets${tag.Path}`);
+            topicById.Posts.forEach(post => post.User.Path = `${baseUrl}/assets/${post.User.Path}`);
             return res.status(200).send({
-                message: `Article with id ${req.params.id} successfully found`,
+                message: `Topic with name ${req.params.name} successfully found`,
                 status: 200,
                 topic: topicById,
             });
@@ -118,12 +156,12 @@ class TopicController {
             return res.status(400).send({message: "Les champs Title et Status est requis.", status: 400});
         }
 
-        if (Title.includes(' ')){
+        if (Title.includes(' ')) {
             return res.status(400).send({message: "Le titre ne doit pas contenir d'espace.", status: 400});
         }
 
         try {
-            const NewTopic = await topic.createTopic({Title, Status,  Id_User});
+            const NewTopic = await topic.createTopic({Title, Status, Id_User});
 
             return res.status(201).send({message: `Topic successfully created`, status: 201, NewTopic});
         } catch (err) {
@@ -182,16 +220,16 @@ class TopicController {
      * @returns {Object} - The response object, containing a success message.
      */
     static async UploadImage(req, res) {
-        const filePath = req.file.path.replace('assets', '');
         const id = req.user.Sub;
 
         try {
-            await topic.updatePatchTopic(id, {Path: filePath});
+            const filePath = req.file.path
+            console.log(filePath);
             res.download(filePath, err => {
-                if (err) {
+                if (err)
                     res.status(500).send({message: err, status: 500});
-                }
             });
+            await topic.updatePatchTopic(id, {Path: filePath.replace('assets', '')});
         } catch (err) {
             res.status(500).send({message: err, status: 500});
         }

@@ -13,7 +13,7 @@ class messageController {
     static async getMessages(req, res) {
     try {
             const messages = await message.getAllMessage(req.query);
-
+            messages.forEach((message) => message.User.Path = `${baseUrl}/assets/${message.User.Path}`);
             if (!messages) {
                 return res.status(404).send({
                     message: `messages not found`,
@@ -45,7 +45,7 @@ class messageController {
     static getMessage(req, res) {
         const messageById = req.message;
         try {
-            messageById.Path = `${baseUrl}/assets/${messageById.Path}`;
+            messageById.User.Path = `${baseUrl}/assets/${messageById.User.Path}`;
 
             return res.status(200).send({
                 message: `Article with id ${req.params.id} successfully found`,

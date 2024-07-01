@@ -1,7 +1,9 @@
 const url = "http://localhost:4000";
 const axios = require("axios");
 const ErrorHandler = require("./ErrorHandler");
+
 let user
+
 const errorHandler = new ErrorHandler();
 
 /**
@@ -180,18 +182,12 @@ class TreatmentUser {
                 return res.status(400).send("No token found");
             }
 
-            // Ajoutez des logs pour déboguer
-            console.log(`Attempting to follow/unfollow user with ID: ${id}`);
-            console.log(`Using token: ${token}`);
-
             const response = await axios.post(`${url}/follow`, {id}, {
                 headers: {
                     "Authorization": token,
                     "Content-Type": "application/json"
                 }
             });
-
-            console.log('Axios response:', response.data);
 
             res.redirect('back');
         } catch (err) {
@@ -222,6 +218,47 @@ class TreatmentUser {
         }
     }
 
+    static async GetTags(req, res) {
+        try {
+            const response = await axios.get(`${url}/tags`);
+
+            if (response.status === 200) {
+                return response.data;
+            } else {
+                errorHandler.setError("Failed to fetch user data", 401)
+            }
+        } catch (err) {
+            errorHandler.handleRequestError(err)
+        }
+    }
+
+    static async UpdateUser(req, res) {
+        try {
+            const token = req.cookies.Token;
+
+            if (!token) {
+                return res.status(400).send("No token found");
+            }
+
+            const dataUpdate = req.body;
+            dataUpdate.Tags = JSON.parse(dataUpdate.Tags)
+
+            await axios.patch(`${url}/user/update`, dataUpdate,
+                {
+                    headers: {
+                        "Authorization": token,
+                        "Content-Type": "application/json"
+                    },
+                });
+
+
+            res.redirect('/CODER/user/'+ req.body.Name);
+        } catch (err) {
+            console.log(err)
+            errorHandler.handleRequestError(err)
+            res.redirect('/CODER/err')
+        }
+    }
 }
 
-module.exports = {TreatmentUser, user};
+module.exports = {TreatmentUser};

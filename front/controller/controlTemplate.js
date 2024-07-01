@@ -1,8 +1,10 @@
 const controlUser = require('./controlTreatmentUser');
-const controlTopic = require('./controlTreatmentTopics');
-const ErrorHandler = require("./ErrorHandler");
-const errorHandler = new ErrorHandler();
+const controlTopic = require('./controlTreatmentTopic');
+const controlPost = require('./controlTreatmentPost');
 
+const ErrorHandler = require("./ErrorHandler");
+
+const errorHandler = new ErrorHandler();
 
 class ControlTemplate {
     /**
@@ -13,14 +15,14 @@ class ControlTemplate {
     static async Index(req, res) {
         try {
             const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
-            const dataPosts = await controlTopic.GetPosts(req, res);
-
+            const dataPost = await controlPost.GetPosts(req, res);
             res.render('../views/pages/index', {
                 dataUser,
-                dataPosts
+                dataPost
             });
         } catch (err) {
             errorHandler.handleRequestError(err);
+            res.redirect('/CODER/error');
         }
     };
 
@@ -31,15 +33,6 @@ class ControlTemplate {
      */
     static async Login(req, res) {
         res.render('../views/pages/login');
-    }
-
-    /**
-     * Render the register page
-     * @param {Object} req - The request object.
-     * @param {Object} res - The response object.
-     */
-    static async Register(req, res) {
-        res.render('../views/pages/register');
     }
 
     /**
@@ -119,7 +112,7 @@ class ControlTemplate {
 
             if (dataUsers.utilisateur && dataUsers.utilisateur.Create_at) {
                 const date = new Date(dataUsers.utilisateur.Create_at);
-                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                const options = {year: 'numeric', month: 'long', day: 'numeric'};
                 dataUsers.utilisateur.Create_at_formatted = date.toLocaleDateString('fr-FR', options);
             }
 
@@ -180,7 +173,7 @@ class ControlTemplate {
 
             if (dataTopic && dataTopic.topic && dataTopic.topic.Create_at) {
                 const date = new Date(dataTopic.topic.Create_at);
-                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                const options = {year: 'numeric', month: 'long', day: 'numeric'};
                 dataTopic.topic.Create_at_formatted = date.toLocaleDateString('fr-FR', options);
             }
 
@@ -194,6 +187,7 @@ class ControlTemplate {
             res.status(500).send("Internal server error");
         }
     }
+
     /**
      * Render the create topic profile page
      * @param {Object} req - The request object.
@@ -203,7 +197,8 @@ class ControlTemplate {
         try {
             const postId = req.params.id;
             const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
-            const dataPost = await controlTopic.GetPost(postId);
+            const dataMessages = await controlPost.GetMessagesPost(req, res);
+            const dataPost = await controlPost.GetPost(postId);
 
             if (dataPost && dataPost.topic && dataPost.topic.Create_at) {
                 const date = new Date(dataPost.topic.Create_at);
@@ -214,11 +209,88 @@ class ControlTemplate {
             res.render('../views/pages/detailPost', {
                 dataUser,
                 dataPost,
+                dataMessages
             });
         } catch (err) {
             errorHandler.handleRequestError(err);
         }
     }
+
+    static async CreatePost(req, res) {
+        try {
+            const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
+
+            const topicName = req.params.nametopic;
+            const dataTopic = await controlTopic.GetTopic(topicName);
+
+            console.log("dataTopic:", dataTopic);
+
+            res.render('../views/pages/createPost', {
+                dataUser,
+                dataTopic
+            });
+        } catch (err) {
+            console.error("Error fetching data for create post:", err);
+            res.status(500).send("Internal server error");
+        }
+    }
+
+    static async UpdateProfil(req, res) {
+        try {
+            const token = req.cookies.Token;
+
+            if (!token) {
+                return res.redirect('/CODER/login');
+            }
+
+            const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
+            const dataTags = await controlUser.TreatmentUser.GetTags(req, res);
+
+            res.render('../views/pages/UpdateProfil', {
+                    dataUser,
+                    dataTags
+                });
+        } catch (err) {
+            errorHandler.handleRequestError(err);
+        }
+    }
+
+    static async UpdateTopic(req, res) {
+        try {
+            const token = req.cookies.Token;
+
+            if (!token) {
+                return res.redirect('/CODER/login');
+            }
+
+            const name = req.params.name
+
+            const dataTopic = await controlTopic.GetTopic(name);
+            const dataTags = await controlUser.TreatmentUser.GetTags(req, res);
+
+            res.render('../views/pages/UpdateTopic', {
+                dataTopic,
+                dataTags
+            });
+        } catch (err) {
+            errorHandler.handleRequestError(err);
+        }
+    }
+
+    /**
+     * Render the error page.
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
+    static Error(req, res) {
+        const error = errorHandler.getError();
+        errorHandler.setError(
+            error.message || "Nous n'avons pas trouvé la page que vous cherchez",
+            error.status || 404
+        );
+        res.render("../views/pages/error", {error: errorHandler.getError()});
+        errorHandler.resetError();
+    };
 }
 
 module.exports = ControlTemplate;

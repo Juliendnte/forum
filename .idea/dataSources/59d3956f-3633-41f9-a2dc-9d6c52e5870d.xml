@@ -1146,7 +1146,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
     </schema>
     <schema id="293" parent="1" name="forum">
       <Current>1</Current>
-      <LastIntrospectionLocalTimestamp>2024-06-27.20:00:00</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2024-06-30.17:11:17</LastIntrospectionLocalTimestamp>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
     <user id="294" parent="1" name="kantin_db">
@@ -1336,7 +1336,7 @@ Id_Post</ColNames>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
     <column id="335" parent="303" name="Id">
-      <AutoIncrement>1</AutoIncrement>
+      <AutoIncrement>12</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -1408,7 +1408,7 @@ Id_Post</ColNames>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
     <column id="350" parent="304" name="Id">
-      <AutoIncrement>1</AutoIncrement>
+      <AutoIncrement>12</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -1598,7 +1598,7 @@ Id_Tag</ColNames>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
     <column id="389" parent="309" name="Id">
-      <AutoIncrement>2</AutoIncrement>
+      <AutoIncrement>22</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -1657,7 +1657,7 @@ Id_Tag</ColNames>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
     <column id="401" parent="310" name="Id">
-      <AutoIncrement>4</AutoIncrement>
+      <AutoIncrement>8</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>

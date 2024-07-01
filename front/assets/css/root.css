@@ -23,13 +23,13 @@ a {
     color: #000;
 }
 body {
-    overflow: hidden; /* Désactive le défilement global du body */
+    overflow: hidden;
 }
 
 .profil-user-global,
 .topic-single-ctn,
 .section-post,
-.post-detail-ctn{
+.section-global-post-cnt {
     overflow-y: auto;
     height: calc(100vh - 100px);
     max-height: calc(100vh - 100px);

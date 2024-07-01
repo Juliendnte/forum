@@ -9,17 +9,19 @@ const middleware = {
 
 //Configuration des routes
 routeur.get("/user/:name", controllerUser.getUser)
+routeur.get("/user", [middleware.auth.validateToken], controllerUser.getUser)
 routeur.get("/admin", controllerUser.getAdminModo)
 routeur.post("/login", controllerUser.Login);
 routeur.post("/register", controllerUser.Register);
 routeur.post("/forgotPassword", controllerUser.ForgotPassword)
 routeur.post("/resetPassword", [middleware.auth.validateToken], controllerUser.ResetPassword);
-routeur.get("/user", [middleware.auth.validateToken], controllerUser.getUser)
 routeur.post("/follow", [middleware.auth.validateToken], controllerUser.Follow);
 routeur.post("/searchFriend", controllerUser.SearchFriend)
 routeur.post("/searchFollow", controllerUser.SearchFollow)
+routeur.get("/search", controllerUser.Search)
 routeur.patch("/user/update", [middleware.auth.validateToken], controllerUser.UpdateUser)
-routeur.post('/upload/user', [middleware.auth.validateToken, middleware.upload('user').single('image')], controllerUser.UploadImage)
+routeur.post("/getLiked", [middleware.auth.validateToken], controllerUser.getLiked)
+routeur.post('/upload/user', [middleware.auth.validateToken, middleware.upload('user')], controllerUser.UploadImage)
 
 //Exportation des routes
 module.exports = routeur;

@@ -1,3 +1,8 @@
+.section-global-post-cnt {
+    display: flex;
+    flex-direction: column;
+}
+
 .topic-single-ctn {
     width: 100%;
     margin: 0 15rem;

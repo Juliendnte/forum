@@ -23,3 +23,127 @@
     align-items: center;
     margin: 35px 0px;
 }
+
+.section-post::-webkit-scrollbar {
+    display: none;
+}
+
+.form-container-tags {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-tags-notuser {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+.form-tags-notuser-img {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.form-tags-ctn-img {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    border-radius: 999px;
+}
+
+.form-tags-notuser img {
+    width: 75px;
+    height: auto;
+    cursor: pointer;
+    transition: filter 0.3s;
+}
+
+.form-tags-ctn-img:hover img {
+    filter: brightness(0.5);
+}
+
+.form-tags-ctn-img::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.65);
+    transition: opacity 0.3s;
+    opacity: 0;
+    border-radius: 999px;
+    pointer-events: none;
+}
+
+.form-tags-ctn-img:hover::before {
+    opacity: 1;
+}
+
+.form-tags-hover-add {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    color: var(--color-green);
+}
+
+.form-tags-hover-remove {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    color: #ff0000;
+}
+
+.form-tags-ctn-img:hover .form-tags-hover-add {
+    display: block;
+    width: 35%;
+}
+.form-tags-ctn-img:hover .form-tags-hover-remove {
+    display: block;
+    width: 35%;
+}
+
+.input-user-info-update-ctn,
+.input-topic-info-update-ctn{
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: row;
+    margin-top: 25px;
+}
+
+.input-user-info-update-img,
+.input-user-info-update-global,
+.input-topic-info-update-img,
+.input-topic-info-update-global {
+    width: 50%;
+}
+
+.input-user-info-update-img input,
+.input-topic-info-update-img input {
+    background: transparent !important;
+}
+
+.input-user-info-update-img,
+.input-topic-info-update-img {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.input-user-info-update-img img,
+.input-topic-info-update-img img {
+    width: 168px;
+    height: 168px;
+    border-radius: 999px;
+    object-fit: cover;
+}

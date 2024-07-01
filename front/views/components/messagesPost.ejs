@@ -1,0 +1,95 @@
+<% function timeAgo(date) {
+    const now = new Date();
+    const past = new Date(date);
+    const seconds = Math.floor((now - past) / 1000);
+
+    const intervals = {
+        annee: 31536000,
+        mois: 2592000,
+        semaine: 604800,
+        jour: 86400,
+        heure: 3600,
+        minute: 60,
+        seconde: 1
+    };
+
+    for (const key in intervals) {
+        const interval = intervals[key];
+        if (seconds >= interval) {
+            const count = Math.floor(seconds / interval);
+            switch (key) {
+                case 'annee':
+                    return `il y a ${count} an${count > 1 ? 's' : ''}`;
+                case 'mois':
+                    return `il y a ${count} mois`;
+                case 'semaine':
+                    return `il y a ${count} semaine${count > 1 ? 's' : ''}`;
+                case 'jour':
+                    return `il y a ${count} jour${count > 1 ? 's' : ''}`;
+                case 'heure':
+                    return `il y a ${count} heure${count > 1 ? 's' : ''}`;
+                case 'minute':
+                    return `il y a ${count} minute${count > 1 ? 's' : ''}`;
+                case 'seconde':
+                    return `il y a ${count} seconde${count > 1 ? 's' : ''}`;
+            }
+        }
+    }
+    return 'à l\'instant';
+} %>
+<section>
+    <% dataMessages.items.forEach(item => { %>
+        <div class="post-profil">
+            <div class="post-user-header">
+                <div class="user-header-post-detail">
+                    <a href="/CODER/user/<%- item.Name %>">
+                        <div class="post-user-header-img">
+                            <img src="<%= item.Path %>" alt="image topic">
+                        </div>
+                        <div>
+                            <span>u/<%= item.Name %></span>
+                        </div>
+                        <div>
+                            <span>• Commenter <%= timeAgo(item.Create_message) %></span>
+                        </div>
+                    </a>
+                </div>
+                <div class="user-header-post-btn">
+                    <button>
+                        Rejoindre
+                    </button>
+                    <button>
+                        <svg rpl="" fill="black" height="16"
+                             icon-name="overflow-horizontal-fill" viewBox="0 0 20 20" width="16"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6 10a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="post-user-content">
+                <div class="post-user-content-title">
+                    <div class="post-user-content-description">
+                        <p><%= item.Content %></p>
+                    </div>
+                </div>
+            </div>
+            <div class="post-user-footer">
+                <div class="post-user-footer-commente">
+                    <a href="/CODER/p/<%= item.Id_PostAnswer %>">
+                        <button>
+                            <svg rpl="" aria-hidden="true" class="icon-comment"
+                                 fill="currentColor" height="20" icon-name="comment-outline"
+                                 viewBox="0 0 20 20" width="20"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7.725 19.872a.718.718 0 0 1-.607-.328.725.725 0 0 1-.118-.397V16H3.625A2.63 2.63 0 0 1 1 13.375v-9.75A2.629 2.629 0 0 1 3.625 1h12.75A2.63 2.63 0 0 1 19 3.625v9.75A2.63 2.63 0 0 1 16.375 16h-4.161l-4 3.681a.725.725 0 0 1-.489.191ZM3.625 2.25A1.377 1.377 0 0 0 2.25 3.625v9.75a1.377 1.377 0 0 0 1.375 1.375h4a.625.625 0 0 1 .625.625v2.575l3.3-3.035a.628.628 0 0 1 .424-.165h4.4a1.377 1.377 0 0 0 1.375-1.375v-9.75a1.377 1.377 0 0 0-1.374-1.375H3.625Z"></path>
+                            </svg>
+                            <span><%= item.MessageCount %></span>
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="bar-suparator-post-profil"></div>
+    <%})%>
+</section>

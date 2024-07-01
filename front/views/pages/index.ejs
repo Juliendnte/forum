@@ -11,7 +11,133 @@
 <section class="section-global">
     <%- include('../components/aside'); %>
     <section class="section-post">
+        <% function timeAgo(date) {
+            const now = new Date();
+            const past = new Date(date);
+            const seconds = Math.floor((now - past) / 1000);
 
+            const intervals = {
+                annee: 31536000,
+                mois: 2592000,
+                semaine: 604800,
+                jour: 86400,
+                heure: 3600,
+                minute: 60,
+                seconde: 1
+            };
+
+            for (const key in intervals) {
+                const interval = intervals[key];
+                if (seconds >= interval) {
+                    const count = Math.floor(seconds / interval);
+                    switch (key) {
+                        case 'annee':
+                            return `il y a ${count} an${count > 1 ? 's' : ''}`;
+                        case 'mois':
+                            return `il y a ${count} mois`;
+                        case 'semaine':
+                            return `il y a ${count} semaine${count > 1 ? 's' : ''}`;
+                        case 'jour':
+                            return `il y a ${count} jour${count > 1 ? 's' : ''}`;
+                        case 'heure':
+                            return `il y a ${count} heure${count > 1 ? 's' : ''}`;
+                        case 'minute':
+                            return `il y a ${count} minute${count > 1 ? 's' : ''}`;
+                        case 'seconde':
+                            return `il y a ${count} seconde${count > 1 ? 's' : ''}`;
+                    }
+                }
+            }
+            return 'à l\'instant';
+        } %>
+        <% if (dataPost.articles.items && dataPost.articles.items.length > 0) { %>
+            <% dataPost.articles.items.forEach(function(item) { %>
+                <div class="post-profil">
+                    <div class="post-user-header">
+                        <div class="user-header-post-detail">
+                            <a href="/CODER/t/<%- item.Topic.Title %>">
+                                <div class="post-user-header-img">
+                                    <img src="<%= item.Topic.Path %>" alt="image topic">
+                                </div>
+                                <div>
+                                    <span>t/<%= item.Topic.Title %></span>
+                                </div>
+                                <div>
+                                    <span>• Publié <%= timeAgo(item.Post.Create_post) %></span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="user-header-post-btn">
+                            <button>
+                                Rejoindre
+                            </button>
+                            <button>
+                                <svg rpl="" fill="black" height="16"
+                                     icon-name="overflow-horizontal-fill" viewBox="0 0 20 20" width="16"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M6 10a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="post-user-content">
+                        <div class="post-user-content-title">
+                            <p><%= item.Post.Title %></p>
+                            <div class="post-user-content-description">
+                                <p><%= item.Post.Content %></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-user-footer">
+                        <div class="post-user-footer-vote">
+                            <a href="/treatment/like/post/<%= item.Post.Id %>">
+                                <button class="btn-up-vote">
+                                    <svg rpl="" fill="currentColor" height="16" icon-name="upvote-outline"
+                                         viewBox="0 0 20 20" width="16" xmlns="http://www.w3.org/2000/svg">
+                                        <% if ( item.liker === 1 ) { %>
+                                            <path d="M18.706 8.953 10.834.372A1.123 1.123 0 0 0 10 0a1.128 1.128 0 0 0-.833.368L1.29 8.957a1.249 1.249 0 0 0-.171 1.343 1.114 1.114 0 0 0 1.007.7H6v6.877A1.125 1.125 0 0 0 7.123 19h5.754A1.125 1.125 0 0 0 14 17.877V11h3.877a1.114 1.114 0 0 0 1.005-.7 1.251 1.251 0 0 0-.176-1.347Z"></path>
+                                        <% } else if ( item.liker === null ) { %>
+                                            <path d="M12.877 19H7.123A1.125 1.125 0 0 1 6 17.877V11H2.126a1.114 1.114 0 0 1-1.007-.7 1.249 1.249 0 0 1 .171-1.343L9.166.368a1.128 1.128 0 0 1 1.668.004l7.872 8.581a1.25 1.25 0 0 1 .176 1.348 1.113 1.113 0 0 1-1.005.7H14v6.877A1.125 1.125 0 0 1 12.877 19ZM7.25 17.75h5.5v-8h4.934L10 1.31 2.258 9.75H7.25v8ZM2.227 9.784l-.012.016c.01-.006.014-.01.012-.016Z"></path>
+                                        <% } %>
+                                    </svg>
+                                </button>
+                            </a>
+                            <p><%= item.Post.Likes %></p>
+                            <a href="/treatment/unlike/post/<%= item.Post.Id %>">
+                                <button class="btn-down-vote">
+                                    <svg rpl="" fill="currentColor" height="16" icon-name="downvote-outline"
+                                         viewBox="0 0 20 20" width="16" xmlns="http://www.w3.org/2000/svg">
+                                        <% if (item.liker === 0 ) { %>
+                                            <path d="M18.88 9.7a1.114 1.114 0 0 0-1.006-.7H14V2.123A1.125 1.125 0 0 0 12.877 1H7.123A1.125 1.125 0 0 0 6 2.123V9H2.123a1.114 1.114 0 0 0-1.005.7 1.25 1.25 0 0 0 .176 1.348l7.872 8.581a1.124 1.124 0 0 0 1.667.003l7.876-8.589A1.248 1.248 0 0 0 18.88 9.7Z"></path>
+                                        <% } else if (item.liker === null ) { %>
+                                            <path d="M10 20a1.122 1.122 0 0 1-.834-.372l-7.872-8.581A1.251 1.251 0 0 1 1.118 9.7 1.114 1.114 0 0 1 2.123 9H6V2.123A1.125 1.125 0 0 1 7.123 1h5.754A1.125 1.125 0 0 1 14 2.123V9h3.874a1.114 1.114 0 0 1 1.007.7 1.25 1.25 0 0 1-.171 1.345l-7.876 8.589A1.128 1.128 0 0 1 10 20Zm-7.684-9.75L10 18.69l7.741-8.44H12.75v-8h-5.5v8H2.316Zm15.469-.05c-.01 0-.014.007-.012.013l.012-.013Z"></path>
+                                        <% } %>
+                                    </svg>
+                                </button>
+                            </a>
+                        </div>
+                        <div class="post-user-footer-commente">
+                            <a href="/CODER/p/<%= item.Post.Id %>">
+                                <button>
+                                    <svg rpl="" aria-hidden="true" class="icon-comment"
+                                         fill="currentColor" height="20" icon-name="comment-outline"
+                                         viewBox="0 0 20 20" width="20"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M7.725 19.872a.718.718 0 0 1-.607-.328.725.725 0 0 1-.118-.397V16H3.625A2.63 2.63 0 0 1 1 13.375v-9.75A2.629 2.629 0 0 1 3.625 1h12.75A2.63 2.63 0 0 1 19 3.625v9.75A2.63 2.63 0 0 1 16.375 16h-4.161l-4 3.681a.725.725 0 0 1-.489.191ZM3.625 2.25A1.377 1.377 0 0 0 2.25 3.625v9.75a1.377 1.377 0 0 0 1.375 1.375h4a.625.625 0 0 1 .625.625v2.575l3.3-3.035a.628.628 0 0 1 .424-.165h4.4a1.377 1.377 0 0 0 1.375-1.375v-9.75a1.377 1.377 0 0 0-1.374-1.375H3.625Z"></path>
+                                    </svg>
+                                    <span><%= item.MessageCount %></span>
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="bar-suparator-post-profil"></div>
+            <% }); %>
+        <% } else { %>
+            <div class="err-ctn-profil-post">
+                <p>Aucune publication n'est disponible.</p>
+            </div>
+        <% } %>
     </section>
     <section class="section-friend">
 

@@ -24,6 +24,47 @@ class PostController {
             const href = `${baseUrl}/topics${buildQueryWithoutLimitOffset(req.query)}`;
 
             const posts = await post.getAllpost(req.query);
+            if (posts.length === 0) {
+                return res.status(404).send({
+                    message: `posts not found`,
+                    status: 404
+                });
+            }
+
+            posts.forEach(post => post.Topic.Path = `${baseUrl}/assets/${post.Topic.Path}`);
+            const total = posts.length;
+
+            return res.status(200).send({
+                message: `Posts successfully found`,
+                status: 200,
+                articles: {
+                    href,
+                    offset,
+                    limit,
+                    next: total - limit <= offset ? null : `${href}&limit=${limit}&offset=${offset + limit}`,
+                    previous: offset ? `${href}&limit=${limit}&offset=${offset - limit}` : null,
+                    total,
+                    last_page: Math.ceil(total / limit),
+                    current_page: Math.ceil(offset / limit) + 1,
+                    items: posts,
+                }
+            });
+
+        } catch (err) {
+            res.status(500).send({
+                message: err,
+                status: 500
+            });
+        }
+    }
+
+    static async getPostsMiddleware(req, res){
+        try {
+            const offset = parseInt(req.query.offset) || 0;
+            const limit = parseInt(req.query.limit) || pagination;
+            const href = `${baseUrl}/topics${buildQueryWithoutLimitOffset(req.query)}`;
+
+            const posts = await post.getAllPostWithMiddleware(req.query, req.user.Sub);
 
             if (posts.length === 0) {
                 return res.status(404).send({
@@ -32,6 +73,7 @@ class PostController {
                 });
             }
 
+            posts.forEach(post => post.Topic.Path = `${baseUrl}/assets/${post.Topic.Path}`);
             const total = posts.length;
 
             return res.status(200).send({
@@ -61,7 +103,7 @@ class PostController {
     static getPost(req, res) {
         const postById = req.post;
         try {
-            postById.Path = `${baseUrl}/assets/${postById.Path}`;
+            postById.User.Path = `${baseUrl}/assets/${postById.User.Path}`;
 
             return res.status(200).send({
                 message: `Article with id ${req.params.id} successfully found`,
@@ -69,6 +111,29 @@ class PostController {
                 post: postById,
             });
         } catch (err) {
+            res.status(500).send({
+                message: err,
+                status: 500
+            });
+        }
+    }
+
+    static async getLiked(req, res){
+        const id = req.user.Sub
+        try {
+            const liked = await post.getLike(id);
+            if (liked.length === 0) {
+                return res.status(404).send({
+                    message: `no posts liked`,
+                    status: 404
+                });
+            }
+            res.status(200).send({
+                message: 'posts liked found',
+                status: 200,
+                liked
+            })
+        }catch (err){
             res.status(500).send({
                 message: err,
                 status: 500
@@ -87,12 +152,9 @@ class PostController {
         }
 
         try {
-            const like = await post.getLike(Id_Post, Id_User);
-            if (!like || !like.Like) {
-                await post.likepost({Id_Post, Id_User, Like: 1});
-            }else {
-                await post.likepost({Id_Post, Id_User, Like: null});
-            }
+            let like = await post.getLike(Id_User);
+            like = like.find(like => parseInt(like.Id_Post) === Id_Post);
+            await post.likepost({Id_Post, Id_User, Like: (!like || !like.Like) ? 1 : null});
 
             return res.status(201).send({
                 message: 'Liked successfully',
@@ -106,6 +168,19 @@ class PostController {
         }
     }
 
+    /**
+     * Unlikes a post.
+     *
+     * @async
+     * @param {Object} req - The request object.
+     * @param {Object} req.body - The body of the request.
+     * @param {number} req.body.Id_Post - The ID of the post to unlike.
+     * @param {Object} req.user - The user object.
+     * @param {number} req.user.Sub - The ID of the user unliking the post.
+     * @param {Object} res - The response object.
+     * @returns {Object} The response object.
+     * @throws Will throw an error if the request fails.
+     */
     static async UnLike(req, res) {
         const Id_Post =  parseInt(req.body.Id_Post);
         const Id_User = req.user.Sub;
@@ -117,16 +192,13 @@ class PostController {
         }
 
         try {
-            const like = await post.getLike(Id_Post, Id_User);
-            if (!like || !like.Like) {
-                await post.likepost({Id_Post, Id_User, Like: 0});
-            }else {
-                await post.likepost({Id_Post, Id_User, Like: null});
-            }
+            let like = await post.getLike(Id_User);
+            like = like.find(like => parseInt(like.Id_Post) === Id_Post);
+            await post.likepost({Id_Post, Id_User, Like: (!like || like.Like !==0 ) ? 0 : null});
 
             return res.status(201).send({
-                message: 'Liked successfully',
-                status: 201
+                message: 'Unliked successfully',
+                status: 200
             })
         } catch (err) {
             res.status(500).send({
@@ -137,11 +209,11 @@ class PostController {
     }
 
     static async postPost(req, res) {
-        const {Title, Content, Id_topics, Id_PostAnswer} = req.body;
+        const {Title, Content, Id_topics} = req.body;
         const Id_User = req.user.Sub;
-        if (!Title || !Content || !Id_topics || !Id_PostAnswer) {
+        if (!Title || !Content || !Id_topics) {
             return res.status(400).send({
-                message: "Tous les champs (Title, Content, Id_topics, Id_PostAnswer) sont requis.",
+                message: "Tous les champs (Title, Content, Id_topics) sont requis.",
                 status: 400
             })
         }
@@ -150,7 +222,6 @@ class PostController {
             const Newpost = await post.createpost({
                 Content,
                 Id_topics,
-                Id_PostAnswer,
                 Id_User,
                 Title
             });

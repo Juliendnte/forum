@@ -143,6 +143,7 @@ class UserController {
                     status: 404
                 });
             }
+
             utilisateur.Friends = userName ? await user.getFriendsName(userName) : await user.getFriends(userId);
             utilisateur.Friends.forEach((friend) => friend.Path = `${url}assets/${friend.Path}`)
             utilisateur.Follow = userName ? await user.getFollowName(userName) : await user.getFollow(userId);
@@ -154,7 +155,7 @@ class UserController {
             utilisateur.VueEnsemble = userName ? await user.getPostMessageName(userName) : await user.getPostMessage(userId);
             utilisateur.VueEnsemble.forEach((vue) => {
                 vue.TopicLike = vue.TopicLike === 0 ? -1 : vue.TopicLike
-                vue.TopicPath = `${url}assets/${vue.TopicPath}`
+                vue.Topic.Path = `${url}assets/${vue.Topic.Path}`
             });
             res.status(200).send({
                 message: 'User successfully found',
@@ -233,7 +234,12 @@ class UserController {
      * @returns {Promise<void>} - A Promise that resolves when the function has completed.
      */
     static async UploadImage(req, res) {
+        console.log(req.file.path)
+        if (!req.file) {
+            return res.status(400).send({ message: 'No file uploaded', status: 400 });
+        }
         const filePath = req.file.path.replace('assets', '');
+        console.log(filePath)
         const id = req.user.Sub;
         try {
             await user.updatePatchUser(id, {Path: filePath})
@@ -309,6 +315,29 @@ class UserController {
                 search
             })
         } catch (err) {
+            res.status(500).send({
+                message: err,
+                status: 500
+            })
+        }
+    }
+
+    static async Search(req, res) {
+        const searchQuery = req.query.search
+        try {
+            const search = await user.search(searchQuery)
+            if (search.length === 0) {
+                return res.status(404).send({
+                    message: 'Nous n\'avons pas trouvé de résultat pour ' + search,
+                    status: 404
+                })
+            }
+            res.status(200).send({
+                message: 'Search found',
+                status: 200,
+                search
+            })
+        }catch (err){
             res.status(500).send({
                 message: err,
                 status: 500
@@ -402,6 +431,24 @@ class UserController {
                 message: 'Fav found',
                 status: 200,
                 fav
+            })
+        }catch (err){
+            res.status(500).send({
+                message: err,
+                status: 500
+            })
+        }
+    }
+
+    static getLiked(req, res) {
+        const id = req.user.Sub
+        const idPost = req.body.id
+        try {
+            const liked = user.getLiked(id, idPost)
+            res.status(200).send({
+              message: 'Like found',
+                status: 200,
+                liked
             })
         }catch (err){
             res.status(500).send({

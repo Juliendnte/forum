@@ -29,10 +29,8 @@ class TreatmentTopic {
                         "Content-Type": "application/json"
                     }
                 });
-
             if (response.status === 201) {
-                const newTopic = response.data.NewTopic;
-                res.redirect(`/CODER/t/${newTopic.Title}`);
+                res.redirect(`/CODER`);
             } else {
                 res.status(response.status).send(response.data);
             }
@@ -41,15 +39,14 @@ class TreatmentTopic {
         }
     }
 
-    static async GetTopic(id) {
+    static async GetTopic(name) {
         try {
-            const response = await axios.get(`${url}/topic/${id}`)
+            const response = await axios.get(`${url}/topic/${name}`)
 
             if (response.status === 200) {
                 return response.data;
             } else {
-                console.error("Unexpected response status when fetching user data: ", response.status);
-                res.status(401).send("Failed to fetch topic data");
+                errorHandler.setError("Failed to fetch topic data", 401)
                 return undefined;
             }
         } catch
@@ -58,35 +55,34 @@ class TreatmentTopic {
         }
     }
 
-    static async GetPost(id) {
+    static async UpdateTopic(req, res) {
         try {
-            const response = await axios.get(`${url}/post/${id}`)
+            const token = req.cookies.Token;
 
-            if (response.status === 200) {
-                return response.data;
-            } else {
-                console.error("Unexpected response status when fetching user data: ", response.status);
-                res.status(401).send("Failed to fetch topic data");
-                return undefined;
+            if (!token) {
+                return res.status(400).send("No token found");
             }
-        } catch
-            (err) {
-            errorHandler.handleRequestError(err);
-        }
-    }
 
-    static async GetPosts(req, res) {
-        try {
-            const response = await axios.get(`${url}/posts/`)
+            const dataUpdate = req.body;
+            dataUpdate.Tags = JSON.parse(dataUpdate.Tags)
 
-            if (response.status === 200) {
-                return response.data;
-            } else {
-                errorHandler.handleRequestError("Failed to fetch topic data", 401);
-                return undefined;
-            }
+            console.log(dataUpdate)
+
+            const id = req.params.id;
+
+            await axios.patch(`${url}/topic/${id}`, dataUpdate,
+                {
+                    headers: {
+                        "Authorization": token,
+                        "Content-Type": "application/json"
+                    },
+                });
+
+            res.redirect('/CODER');
         } catch (err) {
-            errorHandler.handleRequestError(err);
+            console.log(err)
+            errorHandler.handleRequestError(err)
+            res.redirect('/CODER/err')
         }
     }
 
