@@ -5,12 +5,10 @@ const path = require('path');
 const upload = (destination) => {
     const storage = multer.diskStorage({
         destination: function (req, file, cb) {
-            console.log('Setting destination:', path.join('assets', destination));
             cb(null, path.join('api/assets', destination));
         },
         filename: function (req, file, cb) {
             const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-            console.log('Generating filename:', uniqueSuffix + path.extname(file.originalname));
             cb(null, uniqueSuffix + path.extname(file.originalname));
         }
     });
