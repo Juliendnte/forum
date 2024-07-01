@@ -14,12 +14,20 @@ class ControlTemplate {
      */
     static async Index(req, res) {
         try {
-            const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
-            const dataPost = await controlPost.GetPosts(req, res);
-            const dataLike = await controlUser.TreatmentUser.GetLiked(req, res);
-            const PathUserLog = dataUser.utilisateur.Path
+            const [dataUser, dataPost, dataLike] = await Promise.all([
+                controlUser.TreatmentUser.GetUser(req, res),
+                controlPost.GetPosts(req, res),
+                controlUser.TreatmentUser.GetLiked(req, res)
+            ]);
 
+            const token = req.cookies.Token;
+            let PathUserLog = null;
 
+            if (token && dataUser && dataUser.utilisateur) {
+                PathUserLog = dataUser.utilisateur.Path;
+            }
+
+            // Render the index page with the fetched data
             res.render('../views/pages/index', {
                 dataUser,
                 dataPost,
@@ -27,10 +35,13 @@ class ControlTemplate {
                 PathUserLog
             });
         } catch (err) {
+            // Log the error and redirect to the error page
+            console.error(err);
             errorHandler.handleRequestError(err);
             res.redirect('/coder/error');
         }
     };
+
 
     /**
      * Render the login page

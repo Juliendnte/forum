@@ -1,0 +1,34 @@
+<section class="list-friend-ctn">
+    <footer class="friend-aside-ctn">
+        <div class="friend-aside-global" style="width: 100%;">
+            <div class="footer-contributor-global">
+                <span>Vos Ami(e)s</span>
+            </div>
+            <div class="bar-suparator-post"></div>
+            <div class="friend-user-global" >
+                <% if (!dataUser) { %>
+                    <p>ccc</p>
+                <% } else { %>
+                    <% dataUser.utilisateur.Friends.forEach(function(user) { %>
+                        <div class="UserFriend-div-global-aside">
+                            <a href="/coder/user/<%= user.Name %>">
+                                <div class="UserFriend-global-aside">
+                                    <div class="UserFriend-img">
+                                        <img src="<%= user.Path %>" alt="Photo de <%= user.Name %>">
+                                    </div>
+                                    <div class="UserFriend-name">
+                                        <span><%= user.Name %></span>
+                                    </div>
+                                </div>
+                                <div class="UserFriend-btn-friend-aside">
+                                    <button>Voir Profil</button>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="bar-suparator-friend"></div>
+                    <% }); %>
+                <% } %>
+            </div>
+        </div>
+    </footer>
+</section>
