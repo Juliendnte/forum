@@ -76,13 +76,28 @@
                     </div>
                     <div class="btn-follow-profil">
                         <% if (Own) { %>
-                            <a href="/CODER/profil/<%= dataUser.utilisateur.Name %>/update">
+                            <a href="/coder/profil/<%= dataUser.utilisateur.Name %>/update">
                                 <button>Modifier le profil</button>
                             </a>
                         <% } else { %>
-                            <a href="/treatment/follow/<%= dataUser.utilisateur.Id %>">
-                                <button>Suivre</button>
-                            </a>
+                            <%
+                                const currentUserId = IdUserLog;
+                                const isFollowing = dataUser.utilisateur.Follow.some(follow => follow.Id === currentUserId);
+                                const isFollowedBy = dataUser.utilisateur.Suivie.some(follow => follow.Id === currentUserId);
+                            %>
+                            <% if (!isFollowing && !isFollowedBy) { %>
+                                <a href="/treatment/follow/<%= dataUser.utilisateur.Id %>">
+                                    <button>Suivre</button>
+                                </a>
+                            <% } else if (isFollowing) { %>
+                                <a href="/treatment/follow/<%= dataUser.utilisateur.Id %>">
+                                    <button>Suivi (e)</button>
+                                </a>
+                            <% } else if (isFollowedBy) { %>
+                                <a href="/treatment/follow/<%= dataUser.utilisateur.Id %>">
+                                    <button>Suivre en retour</button>
+                                </a>
+                            <% } %>
                         <% } %>
                     </div>
                 </div>
@@ -151,7 +166,7 @@
                         <% let hasPosts = false; %>
                         <% dataUser.utilisateur.VueEnsemble.forEach(function(item) { %>
                             <% if (item.Type === 'post') { %>
-                                <%- include('../components/posts', { item: item, timeAgo: timeAgo }); %>
+                                <%- include('../components/posts', { item: item, timeAgo: timeAgo, dataLike: dataLike }); %>
                             <% } else if (item.Type === 'message') { %>
                                 <%- include('../components/messages', { item: item, timeAgo: timeAgo }); %>
                             <% } %>

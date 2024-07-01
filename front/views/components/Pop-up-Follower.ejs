@@ -33,7 +33,7 @@
                             <% if (dataUser.utilisateur.Follow.length > 0 ||  dataUser.utilisateur.Friends.length > 0) { %>
                                 <% dataUser.utilisateur.Follow.forEach(follow => { %>
                                     <div class="UserFriend-div-global">
-                                        <a href="/CODER/user/<%= follow.Name %>">
+                                        <a href="/coder/user/<%= follow.Name %>">
                                             <div class="UserFriend-global">
                                                 <div class="UserFriend-img">
                                                     <img src="<%= follow.Path %>" alt="Photo de <%= follow.Name %>">
@@ -50,7 +50,7 @@
                                 <% }); %>
                                 <% dataUser.utilisateur.Friends.forEach(follow => { %>
                                     <div class="UserFriend-div-global">
-                                        <a href="/CODER/user/<%= follow.Name %>">
+                                        <a href="/coder/user/<%= follow.Name %>">
                                             <div class="UserFriend-global">
                                                 <div class="UserFriend-img">
                                                     <img src="<%= follow.Path %>" alt="Photo de <%= follow.Name %>">

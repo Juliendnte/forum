@@ -33,7 +33,7 @@
                             <% if (dataUser.utilisateur.Suivie.length > 0 || dataUser.utilisateur.Friends.length > 0) { %>
                                 <% dataUser.utilisateur.Suivie.forEach(Suivie => { %>
                                     <div class="UserFriend-div-global">
-                                        <a href="/CODER/user/<%= Suivie.Name %>">
+                                        <a href="/coder/user/<%= Suivie.Name %>">
                                             <div class="UserFriend-global">
                                                 <div class="UserFriend-img">
                                                     <img src="<%= Suivie.Path %>" alt="Photo de <%= Suivie.Name %>">
@@ -50,7 +50,7 @@
                                 <% }); %>
                                 <% dataUser.utilisateur.Friends.forEach(friend => { %>
                                     <div class="UserFriend-div-global">
-                                        <a href="/CODER/user/<%= friend.Name %>">
+                                        <a href="/coder/user/<%= friend.Name %>">
                                             <div class="UserFriend-global">
                                                 <div class="UserFriend-img">
                                                     <img src="<%= friend.Path %>" alt="Photo de <%= friend.Name %>">

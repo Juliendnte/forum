@@ -263,6 +263,26 @@ class TreatmentUser {
             res.redirect('/CODER/err')
         }
     }
+
+    static async GetLiked(req, res) {
+        try {
+            const token = req.cookies.Token;
+
+            const response = await axios.get(`${url}/getLiked`,
+                {
+                headers: {
+                    "Authorization": token,
+                    "Content-Type": "application/json"
+                },
+            });
+
+            return response.data
+
+        } catch (err) {
+            errorHandler.handleRequestError(err);
+        }
+    }
+
 }
 
 module.exports = {TreatmentUser};
