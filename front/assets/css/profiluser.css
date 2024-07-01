@@ -17,8 +17,9 @@
 .img-user-global img{
     border: 1px solid #757575;
     border-radius: 100%;
-    width: 100%;
-    height: auto;
+    width: 163px;
+    height: 163px;
+    object-fit: cover;
 }
 
 .info-user-global {
@@ -38,12 +39,6 @@
     width: 80%; /* Définit la largeur à 50% */
     max-width: 100%; /* Assure que l'élément ne dépasse pas de l'écran */
     overflow: hidden; /* Cache le dépassement, si nécessaire */
-}
-
-.img-user-global img {
-    max-width: 100%; /* Assure que l'image ne dépasse pas de son conteneur */
-    height: auto; /* Maintient le ratio d'aspect de l'image */
-    object-fit: contain;
 }
 
 .info-user-global-ctn {

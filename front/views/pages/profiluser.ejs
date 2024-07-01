@@ -82,20 +82,21 @@
                         <% } else { %>
                             <%
                                 const currentUserId = IdUserLog;
-                                const isFollowing = dataUser.utilisateur.Follow.some(follow => follow.Id === currentUserId);
-                                const isFollowedBy = dataUser.utilisateur.Suivie.some(follow => follow.Id === currentUserId);
+                                const isFollowing = dataUser.utilisateur.Follow.some(follow => follow.Id == currentUserId);
+                                const isFollowedBy = dataUser.utilisateur.Suivie.some(suivie => suivie.Id == currentUserId);
+                                const isFriends = dataUser.utilisateur.Friends.some(friend => friend.Id == currentUserId)
                             %>
-                            <% if (!isFollowing && !isFollowedBy) { %>
+                            <% if (isFriends || isFollowing) { %>
                                 <a href="/treatment/follow/<%= dataUser.utilisateur.Id %>">
-                                    <button>Suivre</button>
+                                    <button>Suivi(e)</button>
                                 </a>
-                            <% } else if (isFollowing) { %>
-                                <a href="/treatment/follow/<%= dataUser.utilisateur.Id %>">
-                                    <button>Suivi (e)</button>
-                                </a>
-                            <% } else if (isFollowedBy) { %>
+                            <% } else if (!isFollowing && isFollowedBy) { %>
                                 <a href="/treatment/follow/<%= dataUser.utilisateur.Id %>">
                                     <button>Suivre en retour</button>
+                                </a>
+                            <% } else { %>
+                                <a href="/treatment/follow/<%= dataUser.utilisateur.Id %>">
+                                    <button>Suivre</button>
                                 </a>
                             <% } %>
                         <% } %>
