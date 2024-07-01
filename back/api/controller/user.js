@@ -223,36 +223,36 @@ class UserController {
     }
 
     static async UpdateUser(req, res) {
+
+        console.log("=======================================================================================================================================")
         const id = req.user.Sub;
         const body = req.body;
         console.log(body.Tags)
         body.Tags = JSON.parse(body.Tags);
+        console.log(body.Tags)
 
         let filePath;
         console.log('File:', req.file);
 
         if (req.file) {
-            filePath = req.file.path.replace('assets', '');
-            body.Path = filePath;
+            filePath = req.file.path;
+            body.Path = filePath.replace('api\\assets', '');
         }
         try {
             await user.updatePatchUser(id, body)
             if (req.file) {
-                res.download(filePath, (err) => {
+                return res.download(filePath, (err) => {
                     if (err) {
-                        res.status(500).send({
-                            message: err,
-                            status: 500
-                        })
+                        console.error(err);
                     }
                 });
             }
-            res.status(200).send({
+            return res.status(200).send({
                 message: "User successfully updated",
                 status: 200
             })
         } catch (err) {
-            res.status(500).send({
+            return res.status(500).send({
                 message: err,
                 status: 500
             })
@@ -320,7 +320,7 @@ class UserController {
                 status: 200,
                 search
             })
-        }catch (err){
+        } catch (err) {
             res.status(500).send({
                 message: err,
                 status: 500
@@ -356,7 +356,7 @@ class UserController {
 
         const id = parseInt(req.body.id)
         const userId = req.user.Sub
-        if (id === userId){
+        if (id === userId) {
             return res.status(400).send({
                 message: 'You can\'t follow yourself',
                 status: 400
@@ -366,25 +366,25 @@ class UserController {
             const uFollow = await user.getFollow(userId);
             const uFriend = await user.getFriends(userId);
             const u1Follow = await user.getFollow(id);
-            if (uFollow.find(u => u.Id === id) ) {
+            if (uFollow.find(u => u.Id === id)) {
                 await user.acceptFollow(userId, id)
                 return res.status(200).send({
                     message: 'You\'re friends now !',
                     status: 200
                 })
-            }else if (uFriend.find(u => u.Id === id) ) {
+            } else if (uFriend.find(u => u.Id === id)) {
                 await user.unfollow(userId, id)
                 return res.status(400).send({
                     message: 'Unfollowed successfully',
                     status: 200
                 })
-            }else if (u1Follow.find(u => u.Id === userId) ) {
+            } else if (u1Follow.find(u => u.Id === userId)) {
                 await user.unfollow(userId, id)
                 return res.status(400).send({
                     message: 'Unfollowed successfully',
                     status: 200
                 })
-            }else {
+            } else {
                 await user.follow(userId, id)
                 res.status(200).send({
                     message: 'Followed successfully',
@@ -415,7 +415,7 @@ class UserController {
                 status: 200,
                 fav
             })
-        }catch (err){
+        } catch (err) {
             res.status(500).send({
                 message: err,
                 status: 500
@@ -430,11 +430,11 @@ class UserController {
         try {
             const liked = user.getLiked(id, idPost)
             res.status(200).send({
-              message: 'Like found',
+                message: 'Like found',
                 status: 200,
                 liked
             })
-        }catch (err){
+        } catch (err) {
             res.status(500).send({
                 message: err,
                 status: 500

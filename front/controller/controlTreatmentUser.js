@@ -241,24 +241,30 @@ class TreatmentUser {
                 return res.status(400).send("No token found");
             }
             const formData = new FormData();
+            let blobFile ;
+
             formData.append('Name' , req.body.Name);
             formData.append('Email' , req.body.Email);
             formData.append('Biography', req.body.Biography);
             formData.append('Tags', JSON.stringify(req.body.Tags));
-            const blobFile = new Blob([req.file.buffer], { type: req.file.mimetype });
-            formData.append('ProfileImage',blobFile, req.file.originalname);
+            if (req.file){
+                blobFile = new Blob([req.file.buffer], { type: req.file.mimetype });
+                formData.append('ProfileImage',blobFile, req.file.originalname);
+            }
+
             console.log(formData)
             await axios.patch(`${url}/user/update`, formData,
                 {
                     headers: {
                         "Authorization": token,
-                        "Content-Type": "application/json"
+                        "Content-Type": "multipart/form-data"
                     },
                 });
 
 
             res.redirect('/CODER/user/'+ req.body.Name);
         } catch (err) {
+            console.log(err)
             errorHandler.handleRequestError(err)
             res.redirect('/CODER/err')
         }
