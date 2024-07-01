@@ -1,6 +1,7 @@
 const url = "http://localhost:4000";
 const axios = require("axios");
 const ErrorHandler = require("./ErrorHandler");
+const { Blob } = require('blob-polyfill');
 
 let user
 
@@ -239,11 +240,15 @@ class TreatmentUser {
             if (!token) {
                 return res.status(400).send("No token found");
             }
-
-            const dataUpdate = req.body;
-            dataUpdate.Tags = JSON.parse(dataUpdate.Tags)
-
-            await axios.patch(`${url}/user/update`, dataUpdate,
+            const formData = new FormData();
+            formData.append('Name' , req.body.Name);
+            formData.append('Email' , req.body.Email);
+            formData.append('Biography', req.body.Biography);
+            formData.append('Tags', JSON.stringify(req.body.Tags));
+            const blobFile = new Blob([req.file.buffer], { type: req.file.mimetype });
+            formData.append('ProfileImage',blobFile, req.file.originalname);
+            console.log(formData)
+            await axios.patch(`${url}/user/update`, formData,
                 {
                     headers: {
                         "Authorization": token,
@@ -254,7 +259,6 @@ class TreatmentUser {
 
             res.redirect('/CODER/user/'+ req.body.Name);
         } catch (err) {
-            console.log(err)
             errorHandler.handleRequestError(err)
             res.redirect('/CODER/err')
         }

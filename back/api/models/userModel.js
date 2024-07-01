@@ -817,25 +817,6 @@ class userModel {
             connection.query(sql, id, (err, results) => err ? reject(err) : resolve(results));
         });
     }
-
-    /**
-     * Retrieves the like status of a post for a user from the database.
-     *
-     * @param {number} id_user - The ID of the user.
-     * @param {number} id_post - The ID of the post.
-     * @returns {Promise} - A promise that resolves with the like status of the post for the user.
-     */
-    static getLiked(id_user, id_post) {
-        return new Promise((resolve, reject) => {
-            const sql = `
-                SELECT likepost.Like
-                FROM likepost
-                WHERE Id_User = ?
-                  AND Id_Post = ?
-            `;
-            connection.query(sql, [id_user, id_post], (err, results) => err ? reject(err) : resolve(results));
-        });
-    }
 }
 
 module.exports = userModel;

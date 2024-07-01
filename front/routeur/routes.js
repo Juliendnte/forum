@@ -1,6 +1,9 @@
 // Importation des modules
 const express = require("express");
 const routeur = express.Router();
+const multer  = require('multer')
+const storage = multer.memoryStorage()
+const upload = multer({ storage: storage })
 const controllerTemplate = require("../controller/controlTemplate");
 const controllerUser = require("../controller/controlTreatmentUser");
 const controllerTopic = require("../controller/controlTreatmentTopic");
@@ -28,7 +31,7 @@ routeur.post("/treatment/login", controllerUser.TreatmentUser.LoginTreatment);
 routeur.post("/treatment/register", controllerUser.TreatmentUser.RegisterTreatment);
 routeur.get("/treatment/disconnect", controllerUser.TreatmentUser.DisconnectTreatment);
 routeur.get("/treatment/follow/:id", controllerUser.TreatmentUser.FollowUser)
-routeur.post("/treatment/update/user", controllerUser.TreatmentUser.UpdateUser);
+routeur.post("/treatment/update/user", upload.single('ProfileImage') ,controllerUser.TreatmentUser.UpdateUser);
 
 // Route Traitement en rapport avec les Topics
 routeur.post("/treatment/createTopic", controllerTopic.CreateTopicTreatment);

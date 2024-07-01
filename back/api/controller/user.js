@@ -222,48 +222,31 @@ class UserController {
         }
     }
 
-    /**
-     * Uploads an image for a user and updates the user's path in the database.
-     * The image file is expected to be in the request object (req.file).
-     * The user's ID is retrieved from the request user's 'Sub' property.
-     * The function responds with the downloaded file if successful.
-     * If an error occurs during the file download or database update, it responds with a status of 500 and the error message.
-     *
-     * @param {Object} req - The request object, expected to contain the file and user's 'Sub'.
-     * @param {Object} res - The response object.
-     * @returns {Promise<void>} - A Promise that resolves when the function has completed.
-     */
-    static async UploadImage(req, res) {
-        console.log(req.file.path)
-        if (!req.file) {
-            return res.status(400).send({ message: 'No file uploaded', status: 400 });
-        }
-        const filePath = req.file.path.replace('assets', '');
-        console.log(filePath)
-        const id = req.user.Sub;
-        try {
-            await user.updatePatchUser(id, {Path: filePath})
-            res.download(filePath, (err) => {
-                if (err) {
-                    res.status(500).send({
-                        message: err,
-                        status: 500
-                    })
-                }
-            });
-        } catch (err) {
-            res.status(500).send({
-                message: err,
-                status: 500
-            })
-        }
-    }
-
     static async UpdateUser(req, res) {
         const id = req.user.Sub;
         const body = req.body;
+        console.log(body.Tags)
+        body.Tags = JSON.parse(body.Tags);
+
+        let filePath;
+        console.log('File:', req.file);
+
+        if (req.file) {
+            filePath = req.file.path.replace('assets', '');
+            body.Path = filePath;
+        }
         try {
             await user.updatePatchUser(id, body)
+            if (req.file) {
+                res.download(filePath, (err) => {
+                    if (err) {
+                        res.status(500).send({
+                            message: err,
+                            status: 500
+                        })
+                    }
+                });
+            }
             res.status(200).send({
                 message: "User successfully updated",
                 status: 200
@@ -431,24 +414,6 @@ class UserController {
                 message: 'Fav found',
                 status: 200,
                 fav
-            })
-        }catch (err){
-            res.status(500).send({
-                message: err,
-                status: 500
-            })
-        }
-    }
-
-    static getLiked(req, res) {
-        const id = req.user.Sub
-        const idPost = req.body.id
-        try {
-            const liked = user.getLiked(id, idPost)
-            res.status(200).send({
-              message: 'Like found',
-                status: 200,
-                liked
             })
         }catch (err){
             res.status(500).send({

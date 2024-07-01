@@ -54,9 +54,10 @@ class postModel {
                     Content: results[0].Content,
                     Create_post: results[0].Create_post,
                     Id_topics: results[0].Id_topics,
-                    Id_User: results[0].Id_User,
                     Id_PostAnswer: results[0].Id_PostAnswer,
                     Role: results[0].Role,
+                    MessageCount: results[0].MessageCount,
+                    PostLikes: results[0].PostLikes,
                     User: {
                         Id: results[0].Id_User,
                         Name: results[0].Name,

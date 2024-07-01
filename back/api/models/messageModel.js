@@ -17,7 +17,9 @@ class messageModel {
                        u.Name,
                        u.Path,
                        U.Id    AS Id_User,
-                       r.Label AS Role
+                       r.Label AS Role,
+                        COUNT(m.Id_MessageAnswer) AS MessageCount
+
                 FROM message m
                          LEFT JOIN users u ON m.Id_User = u.Id
                          LEFT JOIN role r ON u.Id_role = r.Id
@@ -36,6 +38,7 @@ class messageModel {
                     Update_message: results[0].Update_message,
                     Id_PostAnswer: results[0].Id_PostAnswer,
                     Id_MessageAnswer: results[0].Id_MessageAnswer,
+                    CountMessage: results[0].MessageCount,
                     Role: results[0].Role,
                     User: {
                         Id: results[0].Id_User,
@@ -56,7 +59,8 @@ class messageModel {
      */
     static getAllMessage(query) {
         return new Promise(async (resolve, reject) => {
-            let sql = `SELECT m.*, users.Name, users.Path
+            let sql = `SELECT m.*, users.Name, users.Path, COUNT(m.Id_MessageAnswer) AS MessageCount
+
                        FROM message m
                                 LEFT JOIN users ON m.Id_User = users.Id `
 
@@ -105,6 +109,7 @@ class messageModel {
                     Update_message: message.Update_message,
                     Id_PostAnswer: message.Id_PostAnswer,
                     Id_MessageAnswer: message.Id_MessageAnswer,
+                    CountMessage: message.MessageCount,
                     User: {
                         Id: message.Id_User,
                         Name: message.Name,
