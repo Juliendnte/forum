@@ -224,20 +224,16 @@ class UserController {
 
     static async UpdateUser(req, res) {
 
-        console.log("=======================================================================================================================================")
         const id = req.user.Sub;
         const body = req.body;
-        console.log(body.Tags)
-        body.Tags = JSON.parse(body.Tags);
-        console.log(body.Tags)
-
+        body.Tags = JSON.parse(JSON.parse(body.Tags));
         let filePath;
-        console.log('File:', req.file);
 
         if (req.file) {
             filePath = req.file.path;
             body.Path = filePath.replace('api\\assets', '');
         }
+
         try {
             await user.updatePatchUser(id, body)
             if (req.file) {

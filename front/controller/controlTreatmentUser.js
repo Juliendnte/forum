@@ -252,7 +252,6 @@ class TreatmentUser {
                 formData.append('ProfileImage',blobFile, req.file.originalname);
             }
 
-            console.log(formData)
             await axios.patch(`${url}/user/update`, formData,
                 {
                     headers: {
