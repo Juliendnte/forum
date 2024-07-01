@@ -7,7 +7,7 @@
 </head>
 
 <body>
-<%- include('../components/header'); %>
+<%- include('../components/header', {PathUserLog: PathUserLog}); %>
 <% function timeAgo(date) {
     const now = new Date();
     const past = new Date(date);
@@ -67,9 +67,11 @@
                         </a>
                     </div>
                     <div class="user-header-post-btn">
-                        <button>
-                            Rejoindre
-                        </button>
+                        <a href="/coder/u/<%= dataPost.post.User.Name %>">
+                            <span>
+                                Profil
+                            </span>
+                        </a>
                         <button>
                             <svg rpl="" fill="black" height="16"
                                  icon-name="overflow-horizontal-fill" viewBox="0 0 20 20" width="16"
@@ -108,7 +110,7 @@
                                 </svg>
                             </button>
                         </a>
-                        <p><%= item.Post.Likes %></p>
+                        <p><%= dataPost.post.PostLikes %></p>
                         <a href="/treatment/unlike/post/<%= dataPost.post.Id %>">
                             <button class="btn-down-vote">
                                 <svg rpl="" fill="currentColor" height="16" icon-name="downvote-outline"

@@ -40,7 +40,7 @@
         <% } else { %>
             <a href="/coder/user/<%= typeof Name !== 'undefined' ? Name : dataUser.utilisateur.Name %>">
                 <button class="login-global" id="show-login">
-                    <img src="<%= dataUser.utilisateur.Path %>" alt="User Avatar">
+                    <img src="<%= PathUserLog %>" alt="User Avatar">
                 </button>
             </a>
             <form action="/treatment/disconnect" method="get">

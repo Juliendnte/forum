@@ -17,10 +17,14 @@ class ControlTemplate {
             const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
             const dataPost = await controlPost.GetPosts(req, res);
             const dataLike = await controlUser.TreatmentUser.GetLiked(req, res);
+            const PathUserLog = dataUser.utilisateur.Path
+
+
             res.render('../views/pages/index', {
                 dataUser,
                 dataPost,
-                dataLike
+                dataLike,
+                PathUserLog
             });
         } catch (err) {
             errorHandler.handleRequestError(err);
@@ -47,7 +51,7 @@ class ControlTemplate {
     }
 
     /**
-     * Render the user profil profile page
+     * Render the users profils profile page
      * @param {Object} req - The request object.
      * @param {Object} res - The response object.
      */
@@ -57,6 +61,7 @@ class ControlTemplate {
             const Name = dataUser.utilisateur.Name;
             let Own = true;
             const IdUserLog = dataUser.utilisateur.Id;
+            const PathUserLog = dataUser.utilisateur.Path
 
             if (dataUser.utilisateur.Name !== req.params.name) {
                 dataUser = await controlUser.TreatmentUser.GetUsers(req, res);
@@ -90,8 +95,9 @@ class ControlTemplate {
                 totalPosts,
                 Own,
                 Name,
-                IdUserLog, // Pass IdUserLog to the view
-                dataLike, // Ensure dataLike is correctly populated
+                IdUserLog,
+                PathUserLog,
+                dataLike,
             });
 
         } catch (err) {
@@ -99,60 +105,6 @@ class ControlTemplate {
         }
     }
 
-
-
-    /**
-     * Render the users profils profile page
-     * @param {Object} req - The request object.
-     * @param {Object} res - The response object.
-     */
-    static async ProfilUsers(req, res) {
-        try {
-
-            const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
-
-            if (!dataUser) {
-                throw new Error("Données de l'utilisateur non trouvées");
-            }
-
-            const dataUsers = await controlUser.TreatmentUser.GetUsers(req, res);
-
-            if (!dataUsers) {
-                throw new Error("Données du profil non trouvées");
-            }
-
-            if (dataUsers.utilisateur && dataUsers.utilisateur.Create_at) {
-                const date = new Date(dataUsers.utilisateur.Create_at);
-                const options = {year: 'numeric', month: 'long', day: 'numeric'};
-                dataUsers.utilisateur.Create_at_formatted = date.toLocaleDateString('fr-FR', options);
-            }
-
-            let totalLikes = 0;
-            let totalPosts = 0;
-
-            if (dataUsers.utilisateur && dataUsers.utilisateur.VueEnsemble) {
-                dataUsers.utilisateur.VueEnsemble.forEach(post => {
-                    if (post.Type === 'post') {
-                        totalPosts++;
-                        totalLikes += parseInt(post.PostLikes, 10) || 0;
-                    }
-                });
-            }
-
-            const dataLike = await controlUser.TreatmentUser.GetLiked(req, res);
-
-            res.render('../views/pages/profilusers', {
-                dataUser,
-                dataLike,
-                dataUsers,
-                totalLikes,
-                totalPosts,
-            });
-        } catch (err) {
-            errorHandler.handleRequestError(err); // Gestion des erreurs
-            res.status(500).send("Erreur interne du serveur");
-        }
-    }
 
     /**
      * Render the create topic profile page
@@ -184,6 +136,7 @@ class ControlTemplate {
                 controlTopic.GetTopic(topicName),
                 controlUser.TreatmentUser.GetAdmin(req, res)
             ]);
+            const PathUserLog = dataUser.utilisateur.Path
 
             if (dataTopic && dataTopic.topic && dataTopic.topic.Create_at) {
                 const date = new Date(dataTopic.topic.Create_at);
@@ -197,7 +150,8 @@ class ControlTemplate {
                 dataUser,
                 dataTopic,
                 dataLike,
-                dataAdmin
+                dataAdmin,
+                PathUserLog
             });
         } catch (err) {
             console.error("Error fetching topic data:", err);
@@ -216,6 +170,7 @@ class ControlTemplate {
             const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
             const dataMessages = await controlPost.GetMessagesPost(req, res);
             const dataPost = await controlPost.GetPost(postId);
+            const PathUserLog = dataUser.utilisateur.Path
 
             if (dataPost && dataPost.topic && dataPost.topic.Create_at) {
                 const date = new Date(dataPost.topic.Create_at);
@@ -229,7 +184,8 @@ class ControlTemplate {
                 dataUser,
                 dataPost,
                 dataLike,
-                dataMessages
+                dataMessages,
+                PathUserLog
             });
         } catch (err) {
             errorHandler.handleRequestError(err);
