@@ -241,6 +241,7 @@ class TreatmentUser {
             }
 
             const dataUpdate = req.body;
+            console.log(req.body)
             dataUpdate.Tags = JSON.parse(dataUpdate.Tags)
 
             await axios.patch(`${url}/user/update`, dataUpdate,
@@ -254,11 +255,30 @@ class TreatmentUser {
 
             res.redirect('/CODER/user/'+ req.body.Name);
         } catch (err) {
-            console.log(err)
             errorHandler.handleRequestError(err)
             res.redirect('/CODER/err')
         }
     }
+
+    static async GetLiked(req, res) {
+        try {
+            const token = req.cookies.Token;
+
+            const response = await axios.get(`${url}/getLiked`,
+                {
+                headers: {
+                    "Authorization": token,
+                    "Content-Type": "application/json"
+                },
+            });
+
+            return response.data
+
+        } catch (err) {
+            errorHandler.handleRequestError(err);
+        }
+    }
+
 }
 
 module.exports = {TreatmentUser};

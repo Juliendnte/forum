@@ -16,13 +16,15 @@ class ControlTemplate {
         try {
             const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
             const dataPost = await controlPost.GetPosts(req, res);
+            const dataLike = await controlUser.TreatmentUser.GetLiked(req, res);
             res.render('../views/pages/index', {
                 dataUser,
-                dataPost
+                dataPost,
+                dataLike
             });
         } catch (err) {
             errorHandler.handleRequestError(err);
-            res.redirect('/CODER/error');
+            res.redirect('/coder/error');
         }
     };
 
@@ -53,16 +55,17 @@ class ControlTemplate {
         try {
             let dataUser = await controlUser.TreatmentUser.GetUser(req, res);
             const Name = dataUser.utilisateur.Name;
-            let Own = true
+            let Own = true;
+            const IdUserLog = dataUser.utilisateur.Id;
 
             if (dataUser.utilisateur.Name !== req.params.name) {
                 dataUser = await controlUser.TreatmentUser.GetUsers(req, res);
-                Own = false
+                Own = false;
             }
 
             if (dataUser && dataUser.utilisateur && dataUser.utilisateur.Create_at) {
                 const date = new Date(dataUser.utilisateur.Create_at);
-                const options = {year: 'numeric', month: 'long', day: 'numeric'};
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
                 dataUser.utilisateur.Create_at_formatted = date.toLocaleDateString('fr-FR', options);
             }
 
@@ -77,18 +80,26 @@ class ControlTemplate {
                 }
             });
 
-            // Passer les totaux au template
+            const dataLike = await controlUser.TreatmentUser.GetLiked(req, res);
+
+            console.log('dataLike: ', dataLike);
+
             res.render('../views/pages/profiluser', {
                 dataUser,
                 totalLikes,
                 totalPosts,
                 Own,
-                Name
+                Name,
+                IdUserLog, // Pass IdUserLog to the view
+                dataLike, // Ensure dataLike is correctly populated
             });
+
         } catch (err) {
             errorHandler.handleRequestError(err);
         }
     }
+
+
 
     /**
      * Render the users profils profile page
@@ -128,8 +139,11 @@ class ControlTemplate {
                 });
             }
 
+            const dataLike = await controlUser.TreatmentUser.GetLiked(req, res);
+
             res.render('../views/pages/profilusers', {
                 dataUser,
+                dataLike,
                 dataUsers,
                 totalLikes,
                 totalPosts,
@@ -177,9 +191,12 @@ class ControlTemplate {
                 dataTopic.topic.Create_at_formatted = date.toLocaleDateString('fr-FR', options);
             }
 
+            const dataLike = await controlUser.TreatmentUser.GetLiked(req, res);
+
             res.render('../views/pages/topic', {
                 dataUser,
                 dataTopic,
+                dataLike,
                 dataAdmin
             });
         } catch (err) {
@@ -206,9 +223,12 @@ class ControlTemplate {
                 dataPost.topic.Create_at_formatted = date.toLocaleDateString('fr-FR', options);
             }
 
+            const dataLike = await controlUser.TreatmentUser.GetLiked(req, res);
+
             res.render('../views/pages/detailPost', {
                 dataUser,
                 dataPost,
+                dataLike,
                 dataMessages
             });
         } catch (err) {

@@ -2,7 +2,7 @@
 <div class="post-profil">
     <div class="post-user-header">
         <div class="user-header-post-detail">
-            <a href="/CODER/t/<%- item.Topic.Title %>">
+            <a href="/coder/t/<%- item.Topic.Title %>">
                 <div class="post-user-header-img">
                     <img src="<%= item.Topic.Path %>" alt="image topic">
                 </div>
@@ -12,6 +12,13 @@
                 <div>
                     <span>• Commenter <%= timeAgo(item.CreateAt) %></span>
                 </div>
+            </a>
+        </div>
+        <div class="user-header-post-btn">
+            <a href="/coder/t/<%= item.Topic.Title %>">
+                <span>
+                    Rejoindre
+                </span>
             </a>
         </div>
     </div>
@@ -24,7 +31,7 @@
     </div>
     <div class="post-user-footer">
         <div class="post-user-footer-commente">
-            <a href="/CODER/p/<%= item.PostId %>">
+            <a href="/coder/p/<%= item.PostId %>">
                 <button>
                     <svg rpl="" aria-hidden="true" class="icon-comment"
                          fill="currentColor" height="20" icon-name="comment-outline"

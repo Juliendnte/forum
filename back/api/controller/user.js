@@ -443,6 +443,7 @@ class UserController {
     static getLiked(req, res) {
         const id = req.user.Sub
         const idPost = req.body.id
+
         try {
             const liked = user.getLiked(id, idPost)
             res.status(200).send({
