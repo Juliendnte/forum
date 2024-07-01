@@ -41,7 +41,7 @@ class TreatmentPosts {
     static async GetPosts(req, res) {
         try {
             const token = req.cookies.Token;
-            let response = await axios.get(`${url}/postsMiddleware`, {
+            let response = await axios.get(`${url}/posts`, {
                 headers: {
                     "Authorization": token,
                     "Content-Type": "application/json"

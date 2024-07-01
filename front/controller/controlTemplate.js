@@ -27,6 +27,8 @@ class ControlTemplate {
                 PathUserLog = dataUser.utilisateur.Path;
             }
 
+            console.log(dataLike)
+
             // Render the index page with the fetched data
             res.render('../views/pages/index', {
                 dataUser,
