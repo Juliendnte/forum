@@ -55,3 +55,14 @@
     justify-content: center;
     align-items: center;
 }
+
+.err-friend-aside-index {
+    margin: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.err-friend-aside-index span {
+    text-align: center;
+}

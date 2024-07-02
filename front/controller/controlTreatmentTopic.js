@@ -85,6 +85,7 @@ class TreatmentTopic {
             res.redirect('/CODER/err')
         }
     }
+
 }
 
 module.exports = TreatmentTopic;
