@@ -1,6 +1,7 @@
 const controlUser = require('./controlTreatmentUser');
 const controlTopic = require('./controlTreatmentTopic');
 const controlPost = require('./controlTreatmentPost');
+const controlMessage = require('./controlTreatmentMessage');
 
 const ErrorHandler = require("./ErrorHandler");
 
@@ -14,12 +15,22 @@ class ControlTemplate {
      */
     static async Index(req, res) {
         try {
-            const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
-            const dataPost = await controlPost.GetPosts(req, res);
-            const dataLike = await controlUser.TreatmentUser.GetLiked(req, res);
-            const PathUserLog = dataUser.utilisateur.Path
+            const [dataUser, dataPost, dataLike] = await Promise.all([
+                controlUser.TreatmentUser.GetUser(req, res),
+                controlPost.GetPosts(req, res),
+                controlUser.TreatmentUser.GetLiked(req, res)
+            ]);
 
+            const token = req.cookies.Token;
+            let PathUserLog = null;
 
+            if (token && dataUser && dataUser.utilisateur) {
+                PathUserLog = dataUser.utilisateur.Path;
+            }
+
+            console.log(dataLike)
+
+            // Render the index page with the fetched data
             res.render('../views/pages/index', {
                 dataUser,
                 dataPost,
@@ -27,10 +38,13 @@ class ControlTemplate {
                 PathUserLog
             });
         } catch (err) {
+            // Log the error and redirect to the error page
+            console.error(err);
             errorHandler.handleRequestError(err);
             res.redirect('/coder/error');
         }
     };
+
 
     /**
      * Render the login page
@@ -192,6 +206,33 @@ class ControlTemplate {
         }
     }
 
+    static async GetMessage(req, res) {
+        try {
+            const id = req.params.id
+
+            const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
+            const dataMessage = await controlMessage.GetMessage(id)
+            const dataMessages = await controlMessage.GetMessagestoMessage(req, res)
+
+            const PathUserLog = dataUser.utilisateur.Path
+
+            if (dataMessage && dataMessage.topic && dataMessage.topic.Create_at) {
+                const date = new Date(dataMessage.topic.Create_at);
+                const options = {year: 'numeric', month: 'long', day: 'numeric'};
+                dataMessage.topic.Create_at_formatted = date.toLocaleDateString('fr-FR', options);
+            }
+
+            res.render('../views/pages/detailMessage', {
+                dataUser,
+                dataMessage,
+                dataMessages,
+                PathUserLog
+            });
+        } catch (err) {
+            errorHandler.handleRequestError(err);
+        }
+    }
+
     static async CreatePost(req, res) {
         try {
             const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
@@ -247,6 +288,46 @@ class ControlTemplate {
             res.render('../views/pages/UpdateTopic', {
                 dataTopic,
                 dataTags
+            });
+        } catch (err) {
+            errorHandler.handleRequestError(err);
+        }
+    }
+
+    static async UpdatePost(req, res) {
+        try {
+            const token = req.cookies.Token;
+
+            if (!token) {
+                return res.redirect('/CODER/login');
+            }
+
+            const id = req.params.id
+
+            const dataPost = await controlPost.GetPost(id);
+
+            res.render('../views/pages/UpdatePost', {
+                dataPost
+            });
+        } catch (err) {
+            errorHandler.handleRequestError(err);
+        }
+    }
+
+    static async UpdateMessage(req, res) {
+        try {
+            const token = req.cookies.Token;
+
+            if (!token) {
+                return res.redirect('/CODER/login');
+            }
+
+            const id = req.params.id
+
+            const dataMessage = await controlMessage.GetMessage(id);
+
+            res.render('../views/pages/UpdateMessage', {
+                dataMessage
             });
         } catch (err) {
             errorHandler.handleRequestError(err);

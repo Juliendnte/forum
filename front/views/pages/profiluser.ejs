@@ -88,15 +88,15 @@
                             %>
                             <% if (isFriends || isFollowing) { %>
                                 <a href="/treatment/follow/<%= dataUser.utilisateur.Id %>">
-                                    <button>Suivi(e)</button>
+                                    <button class="btn-suivie">Suivi (e)</button>
                                 </a>
                             <% } else if (!isFollowing && isFollowedBy) { %>
                                 <a href="/treatment/follow/<%= dataUser.utilisateur.Id %>">
-                                    <button>Suivre en retour</button>
+                                    <button class="btn-suivre-en-retour">Suivre en retour</button>
                                 </a>
                             <% } else { %>
                                 <a href="/treatment/follow/<%= dataUser.utilisateur.Id %>">
-                                    <button>Suivre</button>
+                                    <button class="btn-suivre">Suivre</button>
                                 </a>
                             <% } %>
                         <% } %>

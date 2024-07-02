@@ -102,7 +102,7 @@ class messageController {
      */
     static async patchMessage(req, res) {
         const id = req.params.id
-        const {Content} = req.body;
+        const Content = req.body;
 
         //Check si une clé du body appartient a cette liste
         if (!Content) {

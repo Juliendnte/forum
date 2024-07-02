@@ -316,6 +316,8 @@
     border: 1px solid #9e9ea7;
     border-radius: 100px;
     width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .UserFriend-name {
@@ -386,7 +388,8 @@
 
 .post-user-header-img img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
     border-radius: 100px;
 }
 
@@ -521,11 +524,13 @@
     align-items: center;
 }
 
-.pop-up_post-ctn {
+.pop-up_post-ctn,
+.pop-up_topic-ctn{
     display: none;
 }
 
-.pop-up_post-ctn.active {
+.pop-up_post-ctn.active,
+.pop-up_topic-ctn.active {
     display: block;
     position: absolute;
     right: 15px;
@@ -538,9 +543,11 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    z-index: 999;
 }
 
-.pop-up_post-ctn.active button {
+.pop-up_post-ctn.active button,
+.pop-up_topic-ctn.active button{
     width: 121px;
     height: 40px;
     padding: 4px 16px;
@@ -550,7 +557,8 @@
     border-radius: 5px;
 }
 
-.pop-up_post-ctn.active button {
+.pop-up_post-ctn.active button,
+.pop-up_topic-ctn.active button{
     width: 121px;
     height: 40px;
     padding: 4px 16px;
@@ -559,7 +567,8 @@
     cursor: pointer;
 }
 
-.pop-up_post-ctn.active button:hover {
+.pop-up_post-ctn.active button:hover,
+.pop-up_topic-ctn.active button:hover {
    background: #F6F8F9;
 }
 
@@ -568,4 +577,16 @@
     align-items: center;
     justify-content: center;
     gap: 10px;
+}
+
+ {
+    background: #ededed !important;
+    color: #00ff00 !important;
+}
+
+.btn-suivre-en-retour,
+.btn-suivie,
+.btn-suivre {
+    background: #ededed !important;
+    color: #000000 !important;
 }
