@@ -11,29 +11,29 @@
                         <span>Connectez-vous / Inscrivez-vous pour afficher vos ami(e)s.</span>
                     </div>
                 <% } else { %>
-                    <% if (dataUser.utilisateur.Friends.length === 0 ) { %>*
-                    <% dataUser.utilisateur.Friends.forEach(function(user) { %>
-                        <div class="UserFriend-div-global-aside">
-                            <a href="/coder/user/<%= user.Name %>">
-                                <div class="UserFriend-global-aside">
-                                    <div class="UserFriend-img">
-                                        <img src="<%= user.Path %>" alt="Photo de <%= user.Name %>">
-                                    </div>
-                                    <div class="UserFriend-name">
-                                        <span><%= user.Name %></span>
-                                    </div>
-                                </div>
-                                <div class="UserFriend-btn-friend-aside">
-                                    <button>Voir Profil</button>
-                                </div>
-                            </a>
+                    <% if (dataUser.utilisateur.Friends.length === 0 ) { %>
+                        <div class="err-friend-aside-index">
+                            <span>Soyez ami(e) avec des utilisateurs pour qu'ils apparaissent ici.</span>
                         </div>
-                        <div class="bar-suparator-friend"></div>
-                    <% }); %>
                     <% }else { %>
-                            <div class="err-friend-aside-index">
-                                <span>Soyez ami(e) avec des utilisateurs pour qu'ils apparaissent ici.</span>
+                        <% dataUser.utilisateur.Friends.forEach(function(user) { %>
+                            <div class="UserFriend-div-global-aside">
+                                <a href="/coder/user/<%= user.Name %>">
+                                    <div class="UserFriend-global-aside">
+                                        <div class="UserFriend-img">
+                                            <img src="<%= user.Path %>" alt="Photo de <%= user.Name %>">
+                                        </div>
+                                        <div class="UserFriend-name">
+                                            <span><%= user.Name %></span>
+                                        </div>
+                                    </div>
+                                    <div class="UserFriend-btn-friend-aside">
+                                        <button>Voir Profil</button>
+                                    </div>
+                                </a>
                             </div>
+                            <div class="bar-suparator-friend"></div>
+                        <% }); %>
                     <% } %>
                 <% } %>
             </div>
