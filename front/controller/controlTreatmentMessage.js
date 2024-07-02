@@ -13,7 +13,7 @@ class TreatmentPosts {
                 return res.redirect(`/CODER/login`);
             }
 
-            const { Title, Content, Id_topics, NameTopic } = req.body;
+            const {Title, Content, Id_topics, NameTopic} = req.body;
 
             console.log("Data received:", Title, Content, Id_topics, NameTopic);
 
@@ -86,6 +86,33 @@ class TreatmentPosts {
             }
         } catch (err) {
             errorHandler.handleRequestError(err);
+        }
+    }
+
+    static async UpdateMessage(req, res) {
+        try {
+            const token = req.cookies.Token;
+            if (!token) {
+                return res.status(400).send("No token found");
+            }
+
+            const dataUpdate = req.body;
+
+            console.log(dataUpdate)
+
+            const id = req.params.id;
+
+            await axios.patch(`${url}/message/${id}`, dataUpdate,
+                {
+                    headers: {
+                        "Authorization": token,
+                        "Content-Type": "application/json"
+                    },
+                })
+            res.redirect('/coder/m/' + id);
+        } catch (err) {
+            console.log(err.response.data)
+            errorHandler.handleRequestError(err)
         }
     }
 

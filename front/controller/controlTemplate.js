@@ -324,10 +324,10 @@ class ControlTemplate {
 
             const id = req.params.id
 
-            const dataPost = await controlMessage.GetMessage(id);
+            const dataMessage = await controlMessage.GetMessage(id);
 
             res.render('../views/pages/UpdateMessage', {
-                dataPost
+                dataMessage
             });
         } catch (err) {
             errorHandler.handleRequestError(err);

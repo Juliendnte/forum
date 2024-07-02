@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('../components/head'); %>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <title>CODER - Modifier le profil</title>
+</head>
+
+<body class="body-login">
+<div class="btn-back-login">
+    <a href="javascript:history.back()">
+        <button class="Btn">
+            <svg height="1.2em" class="arrow" viewBox="0 0 512 512">
+                <path d="M105.4 278.6c-12.5-12.5-12.5-32.8 0-45.3l192-192c12.5-12.5 32.8-12.5 45.3 0s12.5 32.8 0 45.3L173.3 256l169.4 169.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0l-192-192z"></path>
+            </svg>
+            <p class="text">Revenir en arrière</p>
+        </button>
+    </a>
+</div>
+<div class="container" id="container">
+    <div class="form-container sign-in">
+        <form id="tags-form" action="/treatment/update/message/<%= dataMessage.commentaire.Id %>" method="POST">
+            <h1>Modifier votre commentaire</h1>
+            <input type="text" name="Content" placeholder="Contenue de votre commentaire *"
+                   value="<%= dataMessage.commentaire.Content %>" required>
+            <button type="submit">Terminé</button>
+        </form>
+    </div>
+    <div class="toggle-container">
+        <div class="toggle">
+            <div class="toggle-panel toggle-right">
+                <h1>Vous rencontrez un problème ?</h1>
+                <p>N'hésitez pas à contacter le service client pour plus de renseignements !</p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
