@@ -78,34 +78,32 @@ class postModel {
     static getAllpost(query) {
         return new Promise(async (resolve, reject) => {
 
-            let sql = `SELECT posts.Id  AS PostId,
-                              posts.Title,
-                              posts.Content,
-                              posts.Create_post,
-                              posts.Id_topics,
-                              posts.Id_User,
-                              posts.Id_PostAnswer,
-                              t.Id      AS TopicId,
-                              t.Title   AS TopicTitle,
-                              t.Path,
-                              t.Create_at,
-                              t.Id_User AS TopicUserId,
-                              s.Label   AS Status,
-                               SUM(CASE
-                               WHEN lp.Like = 1 THEN 1
-                               WHEN lp.Like = 0 THEN -1
-                               ELSE 0
-                                END)      AS PostLikes,
-                                COUNT(m.Id) AS MessageCount 
-                       FROM posts
-                                LEFT JOIN topics t ON posts.Id_topics = t.Id
-                                LEFT JOIN status s ON t.Id_Status = s.Id
-                                LEFT JOIN likepost lp ON posts.Id = lp.Id_Post
-                                LEFT JOIN message m ON posts.Id = m.Id_PostAnswer
-                                `
+            let sql = `SELECT
+                           posts.Id                                                              AS PostId,
+                           posts.Title,
+                           posts.Content,
+                           posts.Create_post,
+                           posts.Id_topics,
+                           posts.Id_User,
+                           posts.Id_PostAnswer,
+                           t.Id                                                                  AS TopicId,
+                           t.Title                                                               AS TopicTitle,
+                           t.Path,
+                           t.Create_at,
+                           t.Id_User                                                             AS TopicUserId,
+                           s.Label                                                               AS Status,
+                           SUM(CASE WHEN lp.Like = 1 THEN 1 WHEN lp.Like=0 THEN -1 ELSE 0 END) AS PostLikes,
+                           (SELECT COUNT(*) FROM message WHERE message.Id_PostAnswer = posts.Id) AS MessageCount
+
+                       FROM
+                           posts
+                               INNER JOIN topics t ON posts.Id_topics = t.Id
+                               INNER JOIN status s ON t.Id_Status = s.Id
+                               LEFT JOIN likepost AS lp ON posts.Id = lp.Id_Post`;
 
             const values = [];
-            const whereClauses = ['t.Id_Status = 1'];
+            const whereClauses = ['s.Label = ?'];
+            values.push('Public');
             let limitClause = "";
             let offsetClause = "";
 
@@ -130,19 +128,13 @@ class postModel {
                 sql += " WHERE " + whereClauses.join(" AND ");
             }
 
-            // Ajouter la clause ORDER BY pour trier par la date de création la plus récente
-
-            // Utiliser la même requête sans limit ni offset pour obtenir le total des résultats
-            this.total = (await this.getTotal(sql, values.slice(0, values.length - (limitClause ? 1 : 0) - (offsetClause ? 1 : 0)))).total;
-            sql += " GROUP BY posts.Id, posts.Title, posts.Content, posts.Create_post, posts.Id_topics, \n" +
-                "         posts.Id_User, posts.Id_PostAnswer, t.Id, t.Title, t.Path, t.Create_at, \n" +
-                "         t.Id_User, s.Label\n" +
-                "ORDER BY posts.Create_post DESC;";
+            // Ajouter GROUP BY et ORDER BY
+            sql += ` GROUP BY posts.Id
+                 ORDER BY posts.Create_post DESC`;
 
             // Ajouter limit et offset à la requête principale
             sql += limitClause + offsetClause;
             // Exécuter la requête avec les valeurs
-
             connection.query(sql, values, (err, results) => {
                 if (err) {
                     return reject(err);
@@ -174,50 +166,43 @@ class postModel {
      * Get all posts with middleware based on a query.
      *
      * @param {Object} query - The query parameters.
-     * @param {number} id - The ID of the user.
+     * @param userId - The ID of the user.
      * @returns {Promise} - A promise that resolves with the posts.
      */
     static getAllPostWithMiddleware(query, userId) {
         return new Promise(async (resolve, reject) => {
             let sql = `
-            SELECT posts.Id  AS PostId,
-                   posts.Title,
-                   posts.Content,
-                   posts.Create_post,
-                   posts.Id_topics,
-                   posts.Id_User,
-                   posts.Id_PostAnswer,
-                   t.Id      AS TopicId,
-                   t.Title   AS TopicTitle,
-                   t.Path,
-                   t.Create_at,
-                   t.Id_User AS TopicUserId,
-                   s.Label   AS Status,
-                   SUM(CASE
-                       WHEN lp.Like = 1 THEN 1
-                       WHEN lp.Like = 0 THEN -1
-                       ELSE 0
-                   END) AS PostLikes,
-                   COUNT(m.Id) AS MessageCount,
+            SELECT  posts.Id  AS PostId,
+                    posts.Title,
+                    posts.Content,
+                    posts.Create_post,
+                    posts.Id_topics,
+                    posts.Id_User,
+                    posts.Id_PostAnswer,
+                    t.Id      AS TopicId,
+                    t.Title   AS TopicTitle,
+                    t.Path,
+                    t.Create_at,
+                    t.Id_User AS TopicUserId,
+                    s.Label   AS Status,
+                    SUM(CASE WHEN lp.Like = 1 THEN 1 WHEN lp.Like=0 THEN -1 ELSE 0 END) AS PostLikes,
+                    (SELECT COUNT(*) FROM message WHERE message.Id_PostAnswer = posts.Id) AS MessageCount ,
                    (
-                       tg.Label = tgs.Label
+                       tp.Id_Tag = ut.Id_Tag
                        ) AS similarity_score
             FROM posts
-                 JOIN topics t ON posts.Id_topics = t.Id
-                 LEFT JOIN status s ON t.Id_Status = s.Id
-                 LEFT JOIN likepost lp ON posts.Id = lp.Id_Post
-                 LEFT JOIN message m ON posts.Id = m.Id_PostAnswer
+                     INNER JOIN topics t ON posts.Id_topics = t.Id
+                     INNER JOIN status s ON t.Id_Status = s.Id
+                     LEFT JOIN likepost lp ON posts.Id = lp.Id_Post
                  LEFT JOIN friendship f ON (
                      (f.Id_User1 = ? AND f.Id_User2 = posts.Id_User AND f.status = 'friend') OR
                      (f.Id_User2 = ? AND f.Id_User1 = posts.Id_User AND f.status = 'friend')
                  )
-                LEFT JOIN tagstopics tt ON t.Id = tt.Id_topics
-                LEFT JOIN tags tg ON tt.Id_tag = tg.Id
-                LEFT JOIN userstags ut ON t.Id_User = ut.Id_User
-                LEFT JOIN tags tgs ON ut.Id_Tag = tgs.Id
+                     LEFT JOIN tagstopics tp ON posts.Id_topics = tp.Id_topics
+                     LEFT JOIN userstags ut ON tp.Id_Tag = ut.Id_Tag AND ut.Id_User = ?
         `;
 
-            const values = [userId, userId];
+            const values = [userId, userId, userId];
             const whereClauses = ["(t.Id_Status = 1 OR (f.status = 'friend' AND t.Id_Status = 2) OR posts.Id_User = ?)"];
             let limitClause = "";
             let offsetClause = "";
@@ -254,7 +239,7 @@ class postModel {
             this.total = (await this.getTotal(sql, values.slice(0, values.length - (limitClause ? 1 : 0) - (offsetClause ? 1 : 0)))).total;
 
             sql += limitClause + offsetClause;
-
+            console.log(sql)
             // Execute the query with the values
             connection.query(sql, values, (err, results) => {
                 if (err) {

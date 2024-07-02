@@ -102,6 +102,11 @@ class messageModel {
                 if (err) {
                     return reject(err);
                 }
+
+                if (results.length === 0) {
+                    return resolve([]);
+                }
+
                 const messages = results.map((message) => ({
                     Id: message.Id,
                     Content: message.Content,
