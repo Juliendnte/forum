@@ -69,7 +69,7 @@
                     <div class="user-header-post-btn">
                         <a href="/coder/u/<%= dataPost.post.User.Name %>">
                             <span>
-                                Profil
+                                Répondre
                             </span>
                         </a>
                         <button>
@@ -151,60 +151,68 @@
             <div class="bar-suparator-post-profil"></div>
         </section>
         <section>
-            <% dataMessages.items.forEach(item => { %>
-                <div class="post-profil">
-                    <div class="post-user-header">
-                        <div class="user-header-post-detail">
-                            <a href="/coder/user/<%- item.User.Name %>">
-                                <div class="post-user-header-img">
-                                    <img src="<%= item.User.Path %>" alt="image user">
-                                </div>
-                                <div>
-                                    <span>u/<%= item.User.Name %></span>
-                                </div>
-                                <div>
-                                    <span>• Commenter <%= timeAgo(item.Create_message) %></span>
-                                </div>
-                            </a>
+            <% if (dataMessages) { %>
+                <% dataMessages.items.forEach(item => { %>
+                    <div class="post-profil">
+                        <div class="post-user-header">
+                            <div class="user-header-post-detail">
+                                <a href="/coder/user/<%- item.User.Name %>">
+                                    <div class="post-user-header-img">
+                                        <img src="<%= item.User.Path %>" alt="image user">
+                                    </div>
+                                    <div>
+                                        <span>u/<%= item.User.Name %></span>
+                                    </div>
+                                    <div>
+                                        <span>• Commenter <%= timeAgo(item.Create_message) %></span>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="user-header-post-btn">
+                                <a href="/coder/m/<%= item.Id %>">
+                                    <span>
+                                        Voir
+                                    </span>
+                                </a>
+                                <button>
+                                    <svg rpl="" fill="black" height="16"
+                                         icon-name="overflow-horizontal-fill" viewBox="0 0 20 20" width="16"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M6 10a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"></path>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
-                        <div class="user-header-post-btn">
-                            <button>
-                                Rejoindre
-                            </button>
-                            <button>
-                                <svg rpl="" fill="black" height="16"
-                                     icon-name="overflow-horizontal-fill" viewBox="0 0 20 20" width="16"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M6 10a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"></path>
-                                </svg>
-                            </button>
+                        <div class="post-user-content">
+                            <div class="post-user-content-title">
+                                <div class="post-user-content-description">
+                                    <p><%= item.Content %></p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="post-user-content">
-                        <div class="post-user-content-title">
-                            <div class="post-user-content-description">
-                                <p><%= item.Content %></p>
+                        <div class="post-user-footer">
+                            <div class="post-user-footer-commente">
+                                <a href="/coder/p/<%= item.Id_PostAnswer %>">
+                                    <button>
+                                        <svg rpl="" aria-hidden="true" class="icon-comment"
+                                             fill="currentColor" height="20" icon-name="comment-outline"
+                                             viewBox="0 0 20 20" width="20"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M7.725 19.872a.718.718 0 0 1-.607-.328.725.725 0 0 1-.118-.397V16H3.625A2.63 2.63 0 0 1 1 13.375v-9.75A2.629 2.629 0 0 1 3.625 1h12.75A2.63 2.63 0 0 1 19 3.625v9.75A2.63 2.63 0 0 1 16.375 16h-4.161l-4 3.681a.725.725 0 0 1-.489.191ZM3.625 2.25A1.377 1.377 0 0 0 2.25 3.625v9.75a1.377 1.377 0 0 0 1.375 1.375h4a.625.625 0 0 1 .625.625v2.575l3.3-3.035a.628.628 0 0 1 .424-.165h4.4a1.377 1.377 0 0 0 1.375-1.375v-9.75a1.377 1.377 0 0 0-1.374-1.375H3.625Z"></path>
+                                        </svg>
+                                        <span><%= item.CountMessage %></span>
+                                    </button>
+                                </a>
                             </div>
                         </div>
                     </div>
-                    <div class="post-user-footer">
-                        <div class="post-user-footer-commente">
-                            <a href="/coder/p/<%= item.Id_PostAnswer %>">
-                                <button>
-                                    <svg rpl="" aria-hidden="true" class="icon-comment"
-                                         fill="currentColor" height="20" icon-name="comment-outline"
-                                         viewBox="0 0 20 20" width="20"
-                                         xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M7.725 19.872a.718.718 0 0 1-.607-.328.725.725 0 0 1-.118-.397V16H3.625A2.63 2.63 0 0 1 1 13.375v-9.75A2.629 2.629 0 0 1 3.625 1h12.75A2.63 2.63 0 0 1 19 3.625v9.75A2.63 2.63 0 0 1 16.375 16h-4.161l-4 3.681a.725.725 0 0 1-.489.191ZM3.625 2.25A1.377 1.377 0 0 0 2.25 3.625v9.75a1.377 1.377 0 0 0 1.375 1.375h4a.625.625 0 0 1 .625.625v2.575l3.3-3.035a.628.628 0 0 1 .424-.165h4.4a1.377 1.377 0 0 0 1.375-1.375v-9.75a1.377 1.377 0 0 0-1.374-1.375H3.625Z"></path>
-                                    </svg>
-                                    <span><%= item.MessageCount %></span>
-                                </button>
-                            </a>
-                        </div>
-                    </div>
+                    <div class="bar-suparator-post-profil"></div>
+                <% }) %>
+            <% } else { %>
+                <div>
+                    <span>Cette publication n'a pas de commentaires, soyez le premier à y répondre !</span>
                 </div>
-                <div class="bar-suparator-post-profil"></div>
-            <% }) %>
+            <% } %>
         </section>
     </section>
 </section>
