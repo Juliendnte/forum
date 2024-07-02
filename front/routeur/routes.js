@@ -10,21 +10,25 @@ const controllerTopic = require("../controller/controlTreatmentTopic");
 const controllerPost = require("../controller/controlTreatmentPost");
 
 // Configuration des routes Users
+routeur.get("/coder/m/:id", controllerTemplate.GetMessage);
 routeur.get("/coder", controllerTemplate.Index);
 routeur.get("/coder/login", controllerTemplate.Login);
 routeur.get("/coder/accounts/password/reset/", controllerTemplate.ForgotPwd);
 routeur.get("/coder/user/:name", controllerTemplate.ProfilUser);
-routeur.get("/coder/:nametopic/create/post", controllerTemplate.CreatePost);
 routeur.get("/coder/profil/:name/update", controllerTemplate.UpdateProfil);
-routeur.get("/coder/topic/:name/update", controllerTemplate.UpdateTopic);
-// routeur.get("/coder/post/:id/update", controllerTemplate.UpdatePost);
 
 // Configuration des routes Topics
 routeur.get("/coder/create/topic", controllerTemplate.CreateTopic);
 routeur.get("/coder/t/:name", controllerTemplate.GetTopic);
+routeur.get("/coder/topic/:name/update", controllerTemplate.UpdateTopic);
 
 // Configuration des routes Posts
+routeur.get("/coder/:nametopic/create/post", controllerTemplate.CreatePost);
 routeur.get("/coder/p/:id", controllerTemplate.GetPost);
+// routeur.get("/coder/post/:id/update", controllerTemplate.UpdatePost);
+
+// Configuration des routes Messages
+// routeur.get("/coder/message/:id/update", controllerTemplate.UpdateMessage);
 
 // Route Traitement en rapport avec le User
 routeur.post("/treatment/login", controllerUser.TreatmentUser.LoginTreatment);

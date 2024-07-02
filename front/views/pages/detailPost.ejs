@@ -151,7 +151,7 @@
             <div class="bar-suparator-post-profil"></div>
         </section>
         <section>
-            <% if (dataMessages) { %>
+            <% if (dataPost.post.MessageCount === '0' ) { %>
                 <% dataMessages.items.forEach(item => { %>
                     <div class="post-profil">
                         <div class="post-user-header">
@@ -192,7 +192,7 @@
                         </div>
                         <div class="post-user-footer">
                             <div class="post-user-footer-commente">
-                                <a href="/coder/p/<%= item.Id_PostAnswer %>">
+                                <a href="/coder/m/<%= item.Id %>">
                                     <button>
                                         <svg rpl="" aria-hidden="true" class="icon-comment"
                                              fill="currentColor" height="20" icon-name="comment-outline"
@@ -209,7 +209,7 @@
                     <div class="bar-suparator-post-profil"></div>
                 <% }) %>
             <% } else { %>
-                <div>
+                <div class="err-message-detail-ctn">
                     <span>Cette publication n'a pas de commentaires, soyez le premier à y répondre !</span>
                 </div>
             <% } %>
