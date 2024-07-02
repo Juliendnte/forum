@@ -46,7 +46,7 @@ routeur.post("/treatment/update/topic/:id", controllerTopic.UpdateTopic);
 routeur.post("/treatment/create/post", controllerPost.CreatePost)
 routeur.get("/treatment/like/post/:id", controllerPost.LikePost)
 routeur.get("/treatment/unlike/post/:id", controllerPost.UnLikePost)
-// routeur.get("/coder/treatment/post/:id", controllerPost.FavPost)
+routeur.post("/treatment/update/post/:id", controllerPost.UpdatePost)
 
 // Route Traitment en rapport avec les Message
 routeur.post("/treatment/update/message/:id", controllerMessage.UpdateMessage)

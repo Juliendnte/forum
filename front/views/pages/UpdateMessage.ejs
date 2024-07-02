@@ -22,8 +22,8 @@
     <div class="form-container sign-in">
         <form id="tags-form" action="/treatment/update/message/<%= dataMessage.commentaire.Id %>" method="POST">
             <h1>Modifier votre commentaire</h1>
-            <input type="text" name="Content" placeholder="Contenue de votre commentaire *"
-                   value="<%= dataMessage.commentaire.Content %>" required>
+            <textarea name="Content" placeholder="Contenue de votre commentaire *"
+                      required oninput="autoResize(this)"><%= dataMessage.commentaire.Content %></textarea>
             <button type="submit">Terminé</button>
         </form>
     </div>

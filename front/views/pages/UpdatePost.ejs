@@ -20,76 +20,13 @@
 </div>
 <div class="container" id="container">
     <div class="form-container sign-in">
-        <form id="tags-form" action="/treatment/update/topic/<%= dataTopic.topic.TopicId %>" method="POST">
-            <h1>Modifier la publication</h1>
-            <div class="input-topic-info-update-ctn">
-                <div class="input-topic-info-update-global">
-                    <input type="text" name="Title" placeholder="Nom du topic *"
-                           value="<%= dataTopic.topic.Title %>" required>
-                    <div class="radio-create-topic">
-                        <span>Type du topic : </span>
-                        <div class="radio-topic">
-                            <input type="radio" id="Public" name="Status" value="Public" <% if (dataTopic.topic.Status === 'Public') {%> checked <% }; %>>
-                            <label for="Public">Public</label><br>
-                        </div>
-                        <div class="radio-topic">
-                            <input type="radio" id="Private" name="Status" value="Private" <% if (dataTopic.topic.Status === 'Private') {%> checked <% }; %>>
-                            <label for="Private">Privé</label><br>
-                        </div>
-                        <div class="radio-topic">
-                            <input type="radio" id="Private" name="Status" value="Archived" <% if (dataTopic.topic.Status === 'Archived') {%> checked <% }; %>>
-                            <label for="Private">Archivé</label><br>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="bar-suparator-post"></div>
-            <div class="form-container-tags">
-                <div class="form-tags-notuser">
-                    <span>Vos languages favoris :</span>
-                    <div id="user-tags" class="form-tags-user-img">
-                        <% dataTopic.topic.Tag.forEach(function(item) {
-                            const tag = dataTags.tags.find(tag => tag.Id === item.Id);
-                        if (tag) { %>
-                            <div class="form-tags-ctn-img" data-id="<%= tag.Id %>">
-                                <img src="<%= tag.Path %>" alt="tag" onclick="removeTagFromUser(<%= tag.Id %>)">
-                                <div class="form-tags-hover-remove" onclick="removeTagFromUser(<%= tag.Id %>)">
-                                    <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none"
-                                         xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M15 9L9 15M9 9L15 15M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
-                                              stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                              stroke-linejoin="round"/>
-                                    </svg>
-                                </div>
-                            </div>
-                        <% } %>
-                        <% }); %>
-                    </div>
-                </div>
-                <div class="form-tags-notuser">
-                    <span>Ajouter vos languages Favoris :</span>
-                    <div id="available-tags" class="form-tags-notuser-img">
-                        <% dataTags.tags.forEach(function(item) {
-                        if (!dataTopic.topic.Tag.some(tag => tag.Id === item.Id)) { %>
-                            <div class="form-tags-ctn-img" data-id="<%= item.Id %>">
-                                <img src="<%= item.Path %>" alt="<%= item.Label %>"
-                                     onclick="addTagToUser(<%= item.Id %>)">
-                                <div class="form-tags-hover-add" onclick="addTagToUser(<%= item.Id %>)">
-                                    <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none"
-                                         xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M12 8V16M8 12H16M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
-                                              stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                              stroke-linejoin="round"/>
-                                    </svg>
-                                </div>
-                            </div>
-                        <% } %>
-                        <% }); %>
-                    </div>
-                </div>
-            </div>
-            <input type="hidden" id="selected-tags" name="Tags" value="">
-            <button type="button" onclick="submitForm()">Terminé</button>
+        <form id="tags-form" action="/treatment/update/post/<%= dataPost.post.Id %>" method="POST">
+            <h1>Modifier votre publication</h1>
+            <input type="text" name="Title" placeholder="Pose ta question ou une information *"
+                   value="<%= dataPost.post.Title %>" required>
+            <textarea name="Content" placeholder="Décris ton problème ou une solution *"
+                      required oninput="autoResize(this)"><%= dataPost.post.Content %></textarea>
+            <button type="submit">Terminé</button>
         </form>
     </div>
     <div class="toggle-container">
@@ -101,7 +38,6 @@
         </div>
     </div>
 </div>
-
 </body>
 
 </html>

@@ -41,3 +41,8 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById("loginBtn").addEventListener("click", login);
     document.getElementById("registerBtn").addEventListener("click", register);
 });
+
+function autoResize(textarea) {
+    textarea.style.height = 'auto';
+    textarea.style.height = (textarea.scrollHeight) + 'px';
+}

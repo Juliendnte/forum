@@ -40,7 +40,8 @@
                 <span>Pose une question pertinente et précise en rapport avec le sujet pour que l'on te réponde le plus rapidement possible !</span>
             </div>
             <input type="text" name="Title" placeholder="Pose ta question ou une information *" required>
-            <input type="text" name="Content" placeholder="Décris ton problème ou une solution *" required>
+            <textarea name="Content" placeholder="Décris ton problème ou une solution *"
+                      required oninput="autoResize(this)"></textarea>
             <button type="submit">Créer votre publication</button>
         </form>
     </div>

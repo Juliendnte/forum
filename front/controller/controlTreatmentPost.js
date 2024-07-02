@@ -74,6 +74,33 @@ class TreatmentPosts {
         }
     }
 
+    static async UpdatePost(req, res) {
+        try {
+            const token = req.cookies.Token;
+            if (!token) {
+                return res.status(400).send("No token found");
+            }
+
+            const dataUpdate = req.body;
+
+            console.log(dataUpdate)
+
+            const id = req.params.id;
+
+            await axios.patch(`${url}/post/${id}`, dataUpdate,
+                {
+                    headers: {
+                        "Authorization": token,
+                        "Content-Type": "application/json"
+                    },
+                })
+            res.redirect('/coder/p/' + id);
+        } catch (err) {
+            console.log(err.response.data)
+            errorHandler.handleRequestError(err)
+        }
+    }
+
     static async GetMessagesPost(req, res) {
         try {
             const response = await axios.get(`${url}/messages?m.Id_PostAnswer=${req.params.id}`)
