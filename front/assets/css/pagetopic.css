@@ -1,6 +1,7 @@
 .section-global-post-cnt {
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
 
 .topic-single-ctn {

@@ -151,7 +151,11 @@
             <div class="bar-suparator-post-profil"></div>
         </section>
         <section>
-            <% if (dataPost.post.MessageCount === '0' ) { %>
+            <% if (dataPost.post.MessageCount === 0 ) { %>
+                <div class="err-message-detail-ctn">
+                    <span>Cette publication n'a pas de commentaires, soyez le premier à y répondre !</span>
+                </div>
+            <% } else { %>
                 <% dataMessages.items.forEach(item => { %>
                     <div class="post-profil">
                         <div class="post-user-header">
@@ -208,10 +212,6 @@
                     </div>
                     <div class="bar-suparator-post-profil"></div>
                 <% }) %>
-            <% } else { %>
-                <div class="err-message-detail-ctn">
-                    <span>Cette publication n'a pas de commentaires, soyez le premier à y répondre !</span>
-                </div>
             <% } %>
         </section>
     </section>
