@@ -147,6 +147,11 @@
 
 .content-aside-title span {
     font-weight: bold;
+
+}
+
+.content-aside-creator {
+    margin-top: 1rem;
 }
 
 .content-aside-user-admin-modo {

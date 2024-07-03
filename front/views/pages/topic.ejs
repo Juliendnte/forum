@@ -138,7 +138,7 @@
 
                         return 'à l\'instant';
                     } %>
-                    <% if (dataTopic.topic.Posts) { %>
+                    <% if (dataTopic.topic.Posts.length === 0 ) { %>
                         <% dataTopic.topic.Posts.forEach(function(item){ %>
                             <div class="post">
                                 <div class="post-user-header">
@@ -237,16 +237,18 @@
                             <div class="bar-suparator-post"></div>
                         <% }) %>
                     <% } else { %>
-                        <p>Ce topic n'a pas de post !</p>
+                        <div class="err-message-detail-ctn">
+                            <span>Ce topic n'a pas de publication, soyez le premier à y répondre !</span>
+                        </div>
                     <% } %>
                 </div>
                 <div class="content-aside-ctn">
                     <div class="content-aside-title-creator">
                         <div class="content-aside-title">
-                            <span><%= dataTopic.topic.Title %></span>
+                            <span>t/<%= dataTopic.topic.Title %></span>
                         </div>
                         <div class="content-aside-creator">
-                            <span>Créer par <a
+                            <span>Créer par <a href="/coder/user/<%= dataTopic.topic.User.Name %>"><strong><%= dataTopic.topic.User.Name %></a></strong><a
                                         href="CODER/user/"><strong><%= dataTopic.topic.UserName %></strong></a></span>
                             <span>le <%= dataTopic.topic.Create_at_formatted %></span>
                         </div>
