@@ -9,7 +9,7 @@
 <body>
 <%- include('../components/header', {PathUserLog: PathUserLog}); %>
 <section class="section-global">
-    <%- include('../components/aside'); %>
+    <%- include('../components/aside', {dataTags: dataTags}); %>
     <section class="section-post">
         <% function timeAgo(date) {
             const now = new Date();

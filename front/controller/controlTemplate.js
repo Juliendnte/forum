@@ -15,10 +15,11 @@ class ControlTemplate {
      */
     static async Index(req, res) {
         try {
-            const [dataUser, dataPost, dataLike] = await Promise.all([
+            const [dataUser, dataPost, dataLike, dataTags] = await Promise.all([
                 controlUser.TreatmentUser.GetUser(req, res),
                 controlPost.GetPosts(req, res),
-                controlUser.TreatmentUser.GetLiked(req, res)
+                controlUser.TreatmentUser.GetLiked(req, res),
+                controlTopic.GetTags(req, res)
             ]);
 
             const token = req.cookies.Token;
@@ -28,13 +29,14 @@ class ControlTemplate {
                 PathUserLog = dataUser.utilisateur.Path;
             }
 
-            console.log(dataLike)
+            console.log(dataTags)
 
             // Render the index page with the fetched data
             res.render('../views/pages/index', {
                 dataUser,
                 dataPost,
                 dataLike,
+                dataTags,
                 PathUserLog
             });
         } catch (err) {

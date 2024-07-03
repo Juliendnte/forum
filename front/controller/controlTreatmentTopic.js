@@ -66,8 +66,6 @@ class TreatmentTopic {
             const dataUpdate = req.body;
             dataUpdate.Tags = JSON.parse(dataUpdate.Tags)
 
-            console.log(dataUpdate)
-
             const id = req.params.id;
 
             await axios.patch(`${url}/topic/${id}`, dataUpdate,
@@ -83,6 +81,19 @@ class TreatmentTopic {
             console.log(err)
             errorHandler.handleRequestError(err)
             res.redirect('/CODER/err')
+        }
+    }
+
+    static async GetTags(req, res) {
+        try {
+            const response = await axios.get(`${url}/tags`);
+            return response.data
+        } catch (err) {
+            errorHandler.handleRequestError(err);
+            res.status(500).json({
+                message: 'Failed to fetch tags',
+                status: 500
+            });
         }
     }
 
