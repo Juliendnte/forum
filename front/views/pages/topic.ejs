@@ -138,7 +138,7 @@
 
                         return 'à l\'instant';
                     } %>
-                    <% if (dataTopic.topic.Posts.length === 0 ) { %>
+                    <% if (dataTopic.topic.Posts.length !== 0 ) { %>
                         <% dataTopic.topic.Posts.forEach(function(item){ %>
                             <div class="post">
                                 <div class="post-user-header">
