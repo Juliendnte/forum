@@ -74,6 +74,7 @@ class ControlTemplate {
     static async ProfilUser(req, res) {
         try {
             let dataUser = await controlUser.TreatmentUser.GetUser(req, res);
+            const dataTags = await controlTopic.GetTags(req, res);
             const Name = dataUser.utilisateur.Name;
             let Own = true;
             const IdUserLog = dataUser.utilisateur.Id;
@@ -109,6 +110,7 @@ class ControlTemplate {
                 dataUser,
                 totalLikes,
                 totalPosts,
+                dataTags,
                 Own,
                 Name,
                 IdUserLog,
@@ -147,10 +149,11 @@ class ControlTemplate {
     static async GetTopic(req, res) {
         try {
             const topicName = req.params.name;
-            const [dataUser, dataTopic, dataAdmin] = await Promise.all([
+            const [dataUser, dataTopic, dataAdmin, dataTags] = await Promise.all([
                 controlUser.TreatmentUser.GetUser(req, res),
                 controlTopic.GetTopic(topicName),
-                controlUser.TreatmentUser.GetAdmin(req, res)
+                controlUser.TreatmentUser.GetAdmin(req, res),
+                controlTopic.GetTags(req, res)
             ]);
             const PathUserLog = dataUser.utilisateur.Path
 
@@ -167,6 +170,7 @@ class ControlTemplate {
                 dataTopic,
                 dataLike,
                 dataAdmin,
+                dataTags,
                 PathUserLog
             });
         } catch (err) {
@@ -184,6 +188,7 @@ class ControlTemplate {
         try {
             const postId = req.params.id;
             const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
+            const dataTags = await controlTopic.GetTags(req, res);
             const dataMessages = await controlPost.GetMessagesPost(req, res);
             const dataPost = await controlPost.GetPost(postId);
             const PathUserLog = dataUser.utilisateur.Path
@@ -200,6 +205,7 @@ class ControlTemplate {
                 dataUser,
                 dataPost,
                 dataLike,
+                dataTags,
                 dataMessages,
                 PathUserLog
             });
@@ -215,6 +221,7 @@ class ControlTemplate {
             const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
             const dataMessage = await controlMessage.GetMessage(id)
             const dataMessages = await controlMessage.GetMessagestoMessage(req, res)
+            const dataTags = await controlTopic.GetTags(req, res);
 
             const PathUserLog = dataUser.utilisateur.Path
 
@@ -228,6 +235,7 @@ class ControlTemplate {
                 dataUser,
                 dataMessage,
                 dataMessages,
+                dataTags,
                 PathUserLog
             });
         } catch (err) {

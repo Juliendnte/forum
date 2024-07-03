@@ -9,7 +9,7 @@
 <body>
 <%- include('../components/header', {PathUserLog: PathUserLog}); %>
 <section class="section-global">
-    <%- include('../components/aside'); %>
+    <%- include('../components/aside', {dataTags: dataTags}); %>
     <% if (dataTopic) { %>
         <section class="topic-single-ctn">
             <div class="header-topic-single-ctn">
