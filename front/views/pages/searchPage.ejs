@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>CODER</title>
+    <%- include('../components/head'); %>
+</head>
+
+<body>
+<%- include('../components/header', {PathUserLog: PathUserLog}); %>
+<section class="section-global">
+    <%- include('../components/aside', {dataTags: dataTags}); %>
+    <section class="section-post">
+        <% function timeAgo(date) {
+            const now = new Date();
+            const past = new Date(date);
+            const seconds = Math.floor((now - past) / 1000);
+
+            const intervals = {
+                annee: 31536000,
+                mois: 2592000,
+                semaine: 604800,
+                jour: 86400,
+                heure: 3600,
+                minute: 60,
+                seconde: 1
+            };
+
+            for (const key in intervals) {
+                const interval = intervals[key];
+                if (seconds >= interval) {
+                    const count = Math.floor(seconds / interval);
+                    switch (key) {
+                        case 'annee':
+                            return `il y a ${count} an${count > 1 ? 's' : ''}`;
+                        case 'mois':
+                            return `il y a ${count} mois`;
+                        case 'semaine':
+                            return `il y a ${count} semaine${count > 1 ? 's' : ''}`;
+                        case 'jour':
+                            return `il y a ${count} jour${count > 1 ? 's' : ''}`;
+                        case 'heure':
+                            return `il y a ${count} heure${count > 1 ? 's' : ''}`;
+                        case 'minute':
+                            return `il y a ${count} minute${count > 1 ? 's' : ''}`;
+                        case 'seconde':
+                            return `il y a ${count} seconde${count > 1 ? 's' : ''}`;
+                    }
+                }
+            }
+            return 'à l\'instant';
+        } %>
+        <% if (!dataSearch) { %>
+            <div class="err-message-detail-ctn">
+                <span>Echec de votre recherche connard</span>
+            </div>
+        <% } else { %>
+            <div class="header-btn-search-categorie-ctn">
+                <div class="header-btn-search-categorie-global">
+                    <span class="active-search" data-type="topic">Topics</span>
+                    <span data-type="post">Publications</span>
+                    <span data-type="user">Personnes</span>
+                </div>
+            </div>
+
+            <div id="search-results">
+                <% dataSearch.search.forEach(function(item) { %>
+                    <% if (item.Type === 'topic') { %>
+                        <section class="topic-page-search-global" data-type="topic">
+                            <%= item.Id %>
+                        </section>
+                    <% } else if (item.Type === 'post') { %>
+                        <section class="post-page-search-global" data-type="post">
+                            <%= item.Id %>
+                        </section>
+                    <% } else if (item.Type === 'user') { %>
+                        <section class="user-page-search-global" data-type="user">
+                            <%= item.Id %>
+                        </section>
+                    <% } %>
+                <% }); %>
+            </div>
+        <% } %>
+    </section>
+    <section class="section-friend-ctn">
+        <div class="section-friend-global">
+            <%- include('../components/friends', {dataUser: dataUser}); %>
+            <%- include('../components/footer'); %>
+        </div>
+    </section>
+</section>
+</body>
+
+</html>

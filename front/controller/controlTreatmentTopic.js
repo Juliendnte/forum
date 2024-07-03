@@ -90,13 +90,18 @@ class TreatmentTopic {
             return response.data
         } catch (err) {
             errorHandler.handleRequestError(err);
-            res.status(500).json({
-                message: 'Failed to fetch tags',
-                status: 500
-            });
         }
     }
 
+    static async Search(query) {
+        try {
+            const response = await axios.get(`${url}/search?search=${query}`);
+
+            return response.data;
+        } catch (err) {
+            errorHandler.setError('Erreur lors de la recherche', 500)
+        }
+    }
 }
 
 module.exports = TreatmentTopic;

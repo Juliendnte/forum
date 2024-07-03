@@ -1,4 +1,3 @@
-
 const url = "http://localhost:4000";
 
 document.addEventListener('click', function(event) {
@@ -9,14 +8,20 @@ document.addEventListener('click', function(event) {
     }
 });
 
+
 async function handleInput(event) {
     const query = event.target.value;
     if (query.length > 0) {
-        const response = await fetch(`${url}/search?search=${query}`);
-        const data = await response.json();
-        if (data.status === 200) {
-            displaySuggestions(data.search);
-        } else {
+        try {
+            const response = await fetch(`${url}/search?search=${query}`);
+            const data = await response.json();
+            if (data.status === 200) {
+                displaySuggestions(data.search);
+            } else {
+                clearSuggestions();
+            }
+        } catch (err) {
+            console.error('Erreur lors de la recherche:', err);
             clearSuggestions();
         }
     } else {
@@ -70,3 +75,38 @@ function clearSuggestions() {
     suggestions.innerHTML = '';
     suggestions.classList.remove('active');
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const categoryButtons = document.querySelectorAll('.header-btn-search-categorie-global span');
+    const sections = document.querySelectorAll('#search-results section');
+
+    // Filtrer par défaut pour afficher seulement les Topics au chargement de la page
+    filterResults('topic');
+
+    categoryButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const type = this.getAttribute('data-type');
+            filterResults(type);
+        });
+    });
+
+    function filterResults(type) {
+        sections.forEach(section => {
+            if (section.getAttribute('data-type') === type || type === 'global') {
+                section.style.display = 'block';
+            } else {
+                section.style.display = 'none';
+            }
+        });
+
+        // Mettre à jour la classe active pour les boutons de catégorie
+        categoryButtons.forEach(button => {
+            if (button.getAttribute('data-type') === type) {
+                button.classList.add('active-search');
+            } else {
+                button.classList.remove('active-search');
+            }
+        });
+    }
+});
+

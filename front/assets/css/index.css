@@ -161,3 +161,31 @@ textarea {
     border-radius: 999px;
     object-fit: cover;
 }
+
+.header-btn-search-categorie-ctn {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.header-btn-search-categorie-global {
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.header-btn-search-categorie-global span {
+    padding: 10px 20px;
+    border-radius: 999px;
+    cursor: pointer;
+}
+
+.header-btn-search-categorie-global span:hover {
+    text-decoration: underline;
+}
+
+.active-search {
+    background: #C9D7DE;
+}
