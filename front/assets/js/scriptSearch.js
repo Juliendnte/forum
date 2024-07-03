@@ -80,7 +80,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const categoryButtons = document.querySelectorAll('.header-btn-search-categorie-global span');
     const sections = document.querySelectorAll('#search-results section');
 
-    // Filtrer par défaut pour afficher seulement les Topics au chargement de la page
     filterResults('topic');
 
     categoryButtons.forEach(button => {
@@ -94,12 +93,14 @@ document.addEventListener('DOMContentLoaded', function() {
         sections.forEach(section => {
             if (section.getAttribute('data-type') === type || type === 'global') {
                 section.style.display = 'block';
+                section.style.display = 'flex';
+                section.style.justifyContent = 'center'
+                section.style.alignItems = 'center'
             } else {
                 section.style.display = 'none';
             }
         });
 
-        // Mettre à jour la classe active pour les boutons de catégorie
         categoryButtons.forEach(button => {
             if (button.getAttribute('data-type') === type) {
                 button.classList.add('active-search');

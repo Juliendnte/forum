@@ -22,6 +22,8 @@ class ControlTemplate {
                 controlTopic.GetTags(req, res)
             ]);
 
+            let query
+
             const token = req.cookies.Token;
             let PathUserLog = null;
 
@@ -29,16 +31,15 @@ class ControlTemplate {
                 PathUserLog = dataUser.utilisateur.Path;
             }
 
-            // Render the index page with the fetched data
             res.render('../views/pages/index', {
                 dataUser,
                 dataPost,
                 dataLike,
                 dataTags,
-                PathUserLog
+                PathUserLog,
+                query
             });
         } catch (err) {
-            // Log the error and redirect to the error page
             console.error(err);
             errorHandler.handleRequestError(err);
             res.redirect('/coder/error');
@@ -104,6 +105,8 @@ class ControlTemplate {
 
             console.log('dataLike: ', dataLike);
 
+            let query
+
             res.render('../views/pages/profiluser', {
                 dataUser,
                 totalLikes,
@@ -114,6 +117,7 @@ class ControlTemplate {
                 IdUserLog,
                 PathUserLog,
                 dataLike,
+                query
             });
 
         } catch (err) {
@@ -162,6 +166,7 @@ class ControlTemplate {
             }
 
             const dataLike = await controlUser.TreatmentUser.GetLiked(req, res);
+            let query
 
             res.render('../views/pages/topic', {
                 dataUser,
@@ -169,7 +174,8 @@ class ControlTemplate {
                 dataLike,
                 dataAdmin,
                 dataTags,
-                PathUserLog
+                PathUserLog,
+                query
             });
         } catch (err) {
             console.error("Error fetching topic data:", err);
@@ -190,6 +196,8 @@ class ControlTemplate {
             const dataMessages = await controlPost.GetMessagesPost(req, res);
             const dataPost = await controlPost.GetPost(postId);
             const PathUserLog = dataUser.utilisateur.Path
+            let query
+
 
             if (dataPost && dataPost.topic && dataPost.topic.Create_at) {
                 const date = new Date(dataPost.topic.Create_at);
@@ -205,7 +213,8 @@ class ControlTemplate {
                 dataLike,
                 dataTags,
                 dataMessages,
-                PathUserLog
+                PathUserLog,
+                query
             });
         } catch (err) {
             errorHandler.handleRequestError(err);
@@ -220,6 +229,7 @@ class ControlTemplate {
             const dataMessage = await controlMessage.GetMessage(id)
             const dataMessages = await controlMessage.GetMessagestoMessage(req, res)
             const dataTags = await controlTopic.GetTags(req, res);
+            let query
 
             const PathUserLog = dataUser.utilisateur.Path
 
@@ -234,7 +244,8 @@ class ControlTemplate {
                 dataMessage,
                 dataMessages,
                 dataTags,
-                PathUserLog
+                PathUserLog,
+                query
             });
         } catch (err) {
             errorHandler.handleRequestError(err);
@@ -366,7 +377,8 @@ class ControlTemplate {
                 dataLike,
                 dataSearch,
                 dataTags,
-                PathUserLog
+                PathUserLog,
+                query
             });
 
         } catch (err) {
