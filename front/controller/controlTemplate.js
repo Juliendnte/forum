@@ -29,8 +29,6 @@ class ControlTemplate {
                 PathUserLog = dataUser.utilisateur.Path;
             }
 
-            console.log(dataTags)
-
             // Render the index page with the fetched data
             res.render('../views/pages/index', {
                 dataUser,
@@ -341,6 +339,39 @@ class ControlTemplate {
             });
         } catch (err) {
             errorHandler.handleRequestError(err);
+        }
+    }
+
+    static async SearchGlobal(req, res) {
+        try {
+            const query = req.query.search;
+
+            const [dataUser, dataLike, dataTags, dataSearch] = await Promise.all([
+                controlUser.TreatmentUser.GetUser(req, res),
+                controlUser.TreatmentUser.GetLiked(req, res),
+                controlTopic.GetTags(req, res),
+                controlTopic.Search(query)
+            ]);
+
+            const token = req.cookies.Token;
+            let PathUserLog = null;
+
+            if (token && dataUser && dataUser.utilisateur) {
+                PathUserLog = dataUser.utilisateur.Path;
+            }
+
+            // Rendre la page de recherche avec les données récupérées
+            res.render('../views/pages/searchPage', {
+                dataUser,
+                dataLike,
+                dataSearch,
+                dataTags,
+                PathUserLog
+            });
+
+        } catch (err) {
+            errorHandler.handleRequestError(err);
+            res.status(500).json({ error: 'Erreur lors de la récupération des données de recherche' });
         }
     }
 

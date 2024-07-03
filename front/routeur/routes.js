@@ -17,6 +17,9 @@ routeur.get("/coder/accounts/password/reset/", controllerTemplate.ForgotPwd);
 routeur.get("/coder/user/:name", controllerTemplate.ProfilUser);
 routeur.get("/coder/profil/:name/update", controllerTemplate.UpdateProfil);
 
+// Configuration des routes Recherche
+routeur.get("/coder/recherche", controllerTemplate.SearchGlobal);
+
 // Configuration des routes Topics
 routeur.get("/coder/create/topic", controllerTemplate.CreateTopic);
 routeur.get("/coder/t/:name", controllerTemplate.GetTopic);
@@ -53,7 +56,7 @@ routeur.get("/treatment/delete/post/:id", controllerPost.DeletePost)
 routeur.post("/treatment/update/message/:id", controllerMessage.UpdateMessage)
 
 // Route Erreur
-routeur.get("/coder/:err", controllerTemplate.Error)
+routeur.get("/:err", controllerTemplate.Error)
 
 // Pour que nos routes soient accessibles
 module.exports = routeur;
