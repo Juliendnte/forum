@@ -1,6 +1,7 @@
 .section-global-post-cnt {
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
 
 .topic-single-ctn {
@@ -146,6 +147,11 @@
 
 .content-aside-title span {
     font-weight: bold;
+
+}
+
+.content-aside-creator {
+    margin-top: 1rem;
 }
 
 .content-aside-user-admin-modo {

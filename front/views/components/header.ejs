@@ -17,7 +17,9 @@
                     </path>
                 </g>
             </svg>
-            <input class="input" type="search" placeholder="Recherche"/>
+            <input class="input" type="search" placeholder="Recherche Topics, Publications, Utilisateurs"
+                   oninput="handleInput(event)"/>
+            <div class="suggestions" id="suggestions"></div>
         </div>
         <div class="header-btn-add-post">
             <a href="/coder/create/topic">

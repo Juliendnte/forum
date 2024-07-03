@@ -13,7 +13,7 @@ class TreatmentPosts {
                 return res.redirect(`/CODER/login`);
             }
 
-            const { Title, Content, Id_topics, NameTopic } = req.body;
+            const {Title, Content, Id_topics, NameTopic} = req.body;
 
             console.log("Data received:", Title, Content, Id_topics, NameTopic);
 
@@ -40,8 +40,8 @@ class TreatmentPosts {
 
     static async GetPosts(req, res) {
         try {
-            const token = req.cookies.Token;
-            let response = await axios.get(`${url}/posts`, {
+            const token = req.cookies.Token
+            let response = await axios.get(`${url}/postsMiddleware`, {
                 headers: {
                     "Authorization": token,
                     "Content-Type": "application/json"
@@ -175,6 +175,39 @@ class TreatmentPosts {
             }
         } catch (err) {
             errorHandler.handleRequestError(err);
+        }
+    }
+
+    static async DeletePost(req, res) {
+        try {
+            const token = req.cookies.Token;
+            if (!token) {
+                return res.status(401).send({
+                    message: 'No token provided',
+                    status: 401
+                });
+            }
+
+            const id = req.params.id;
+
+            await axios.delete(`${url}/post/${id}`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`, // Assurez-vous d'utiliser le format correct pour le token
+                    "Content-Type": "application/json"
+                }
+            });
+
+            return res.status(200).send({
+                message: `Post with id ${id} successfully deleted`,
+                status: 200
+            });
+        } catch (err) {
+            console.error(err);
+            errorHandler.setError('An error occurred while deleting the post', 500);
+            return res.status(500).send({
+                message: 'An error occurred while deleting the post',
+                status: 500
+            });
         }
     }
 

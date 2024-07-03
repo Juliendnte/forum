@@ -29,8 +29,8 @@
                     <input type="hidden" name="ProfileImage" value="<%= dataUser.utilisateur.Path %>">
                 </div>
                 <div class="input-user-info-update-global">
-                    <input type="text" name="Name" placeholder="Nom d'utilisateur *" value="<%= dataUser.utilisateur.Name %>" required>
-                    <textarea name="Biography" placeholder="Biographie"
+                    <input type="text" name="Name" minlength="4" maxlength="50" placeholder="Nom d'utilisateur *" value="<%= dataUser.utilisateur.Name %>" required>
+                    <textarea name="Biography" maxlength="1200" placeholder="Biographie"
                               required oninput="autoResize(this)"><%= dataUser.utilisateur.Biography %></textarea>
                     <input type="email" name="Email" placeholder="Email *" value="<%= dataUser.utilisateur.Email %>" required>
                 </div>

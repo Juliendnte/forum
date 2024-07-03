@@ -40,13 +40,14 @@ routeur.post("/treatment/update/user", upload.single('ProfileImage') ,controller
 
 // Route Traitement en rapport avec les Topics
 routeur.post("/treatment/createTopic", controllerTopic.CreateTopicTreatment);
-routeur.post("/treatment/update/topic/:id", controllerTopic.UpdateTopic);
+routeur.post("/treatment/update/topic/:id",upload.single('ProfileImage'), controllerTopic.UpdateTopic);
 
 // Route Traitement en rapport avec les Posts
 routeur.post("/treatment/create/post", controllerPost.CreatePost)
 routeur.get("/treatment/like/post/:id", controllerPost.LikePost)
 routeur.get("/treatment/unlike/post/:id", controllerPost.UnLikePost)
 routeur.post("/treatment/update/post/:id", controllerPost.UpdatePost)
+routeur.get("/treatment/delete/post/:id", controllerPost.DeletePost)
 
 // Route Traitment en rapport avec les Message
 routeur.post("/treatment/update/message/:id", controllerMessage.UpdateMessage)

@@ -25,8 +25,8 @@
                     <p>Favoris</p>
                 </div>
             </div>
-        <% } else {%>
-        <%}%>
+        <% } else { %>
+        <% } %>
     </div>
     <div class="bar"></div>
     <div class="nav-categories">
@@ -43,21 +43,17 @@
                     </a>
                     <div id="sousMenuA" class="sousMenu"></div>
                     <ul class="options">
-                        <li><a href="#">Python</a></li>
-                        <li><a href="#">Java</a></li>
-                        <li><a href="#">JavaScript</a></li>
-                        <li><a href="#">Golang</a></li>
-                        <li><a href="#">HTML</a></li>
-                        <li><a href="#">CSS</a></li>
-                        <li><a href="#">C++</a></li>
-                        <li><a href="#">C</a></li>
-                        <li><a href="#">C#</a></li>
-                        <li><a href="#">Ruby</a></li>
-                        <li><a href="#">Perl</a></li>
-                        <li><a href="#">PHP</a></li>
-                        <li><a href="#">MySQL</a></li>
-                        <li><a href="#">Assembleur</a></li>
-                        <li><a href="#">Kotlin</a></li>
+                        <% if (dataTags) { %>
+                            <% dataTags.tags.forEach(function(item) { %>
+                                <li>
+                                    <a href="#">
+                                        <img src="<%= item.Path %>" alt="<%= item.Label %> icon" style="width: 25px; height: 25px;">
+                                        <%= item.Label %>
+                                    </a>
+                                </li>
+                            <% }); %>
+                        <% } %>
+
                     </ul>
                 </li>
             </ul>

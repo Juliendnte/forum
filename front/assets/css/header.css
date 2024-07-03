@@ -173,3 +173,41 @@
     color: red;
     cursor: pointer;
 }
+
+.suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    border: 1px solid #ddd;
+    overflow-y: auto;
+    display: none;
+    z-index: 999;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.suggestions.active {
+    display: block;
+}
+.suggestion-item a {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    cursor: pointer;
+}
+.suggestion-item img {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.suggestion-item:hover {
+    background: #f6f8f9;
+}
+.suggestion-header {
+    padding: 8px;
+    font-weight: bold;
+    color: #555;
+}

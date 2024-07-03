@@ -116,6 +116,11 @@ ul ul.active {
 
 .options li a {
     font-family: var(--font-header-regular);
+    font-size: 18px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
 }
 
 .arrow-svg {

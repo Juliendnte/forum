@@ -48,7 +48,7 @@
     return 'à l\'instant';
 } %>
 <section class="section-global">
-    <%- include('../components/aside'); %>
+    <%- include('../components/aside', {dataTags: dataTags}); %>
     <section class="section-global-post-cnt">
         <section class="post-detail-ctn">
             <div class="post-profil">
@@ -143,7 +143,11 @@
             <div class="bar-suparator-post-profil"></div>
         </section>
         <section>
-            <% if (dataMessage.commentaire.CountMessage === '0' ) { %>
+            <% if (dataMessage.commentaire.CountMessage === 0 ) { %>
+                <div class="err-message-detail-ctn">
+                    <span>Ce commentaires n'a pas de reponses, soyez le premier à y répondre !</span>
+                </div>
+            <% } else { %>
                 <% dataMessages.items.forEach(item => { %>
                     <div class="post-profil">
                         <div class="post-user-header">
@@ -200,10 +204,6 @@
                     </div>
                     <div class="bar-suparator-post-profil"></div>
                 <% }) %>
-            <% } else { %>
-                <div class="err-message-detail-ctn">
-                    <span>Ce commentaires n'a pas de reponses, soyez le premier à y répondre !</span>
-                </div>
             <% } %>
         </section>
     </section>
