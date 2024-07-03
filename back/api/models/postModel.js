@@ -20,27 +20,36 @@ class postModel {
     static getpostById(id) {
         return new Promise((resolve, reject) => {
             const sql = `
-                SELECT p.*,
+                SELECT
+                    p.Id                                                              AS PostId,
+                    p.Title,
+                    p.Content,
+                    p.Create_post,
+                    p.Id_topics,
+                    p.Id_User,
+                    p.Id_PostAnswer,
+                    t.Id                                                                  AS TopicId,
+                    t.Title                                                               AS TopicTitle,
+                    t.Path,
+                    t.Create_at,
+                    t.Id_User                                                             AS TopicUserId,
                        u.Name,
                        u.Path,
                        u.Id        AS Id_User,
                        r.Label     AS Role,
-                       SUM(CASE
-                               WHEN lp.Like = 1 THEN 1
-                               WHEN lp.Like = 0 THEN -1
-                               ELSE 0
-                           END)    AS PostLikes,
-                       COUNT(m.Id) AS MessageCount
+                       s.Label                                                               AS Status,
+
+                    SUM(CASE WHEN lp.Like = 1 THEN 1 WHEN lp.Like=0 THEN -1 ELSE 0 END) AS PostLikes,
+                       (SELECT COUNT(*) FROM message WHERE message.Id_PostAnswer = p.Id) AS MessageCount
 
                 FROM posts p
-                         LEFT JOIN users u ON p.Id_User = u.Id
-                         LEFT JOIN role r ON u.Id_role = r.Id
+                         INNER JOIN topics t ON p.Id_topics = t.Id
+                         INNER JOIN users u ON p.Id_User = u.Id
+                         INNER JOIN role r ON u.Id_role = r.Id
                          LEFT JOIN likepost lp ON lp.Id_Post = p.Id
-                         LEFT JOIN message m ON p.Id = m.Id_PostAnswer
+                         INNER JOIN message m ON p.Id = m.Id_PostAnswer
                 WHERE p.Id = ?
-                GROUP BY p.Id,
-                         u.Name,
-                         r.Label`
+                GROUP BY p.Id`
             connection.query(sql, [id], (err, results) => {
                 if (err) {
                     return reject(err);
@@ -55,13 +64,13 @@ class postModel {
                     Create_post: results[0].Create_post,
                     Id_topics: results[0].Id_topics,
                     Id_PostAnswer: results[0].Id_PostAnswer,
-                    Role: results[0].Role,
                     MessageCount: results[0].MessageCount,
                     PostLikes: results[0].PostLikes,
                     User: {
                         Id: results[0].Id_User,
                         Name: results[0].Name,
                         Path: results[0].Path,
+                        Role: results[0].Role
                     }
                 }
                 return resolve(post);
@@ -239,7 +248,6 @@ class postModel {
             this.total = (await this.getTotal(sql, values.slice(0, values.length - (limitClause ? 1 : 0) - (offsetClause ? 1 : 0)))).total;
 
             sql += limitClause + offsetClause;
-            console.log(sql)
             // Execute the query with the values
             connection.query(sql, values, (err, results) => {
                 if (err) {
