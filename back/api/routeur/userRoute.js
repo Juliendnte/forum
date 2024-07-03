@@ -19,6 +19,9 @@ routeur.post("/follow", [middleware.auth.validateToken], controllerUser.Follow);
 routeur.post("/searchFriend", controllerUser.SearchFriend)
 routeur.post("/searchFollow", controllerUser.SearchFollow)
 routeur.get("/search", controllerUser.Search)
+routeur.get("/getFav", controllerUser.getFav)
+routeur.delete("/deleteFav", controllerUser.deleteFav)
+routeur.post("/postFav", controllerUser.postFav)
 routeur.patch("/user/update", [middleware.auth.validateToken, middleware.upload('user')], controllerUser.UpdateUser)
 
 //Exportation des routes

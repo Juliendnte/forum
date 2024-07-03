@@ -419,6 +419,49 @@ class UserController {
         }
     }
 
+    static async postFav (req, res){
+        const idUser = req.user.Sub;
+        const idPost = req.body.Id;
+        try {
+            const fav = user.postFav(idUser, idPost)
+            if (fav.length  === 0){
+                return res.status(404).send({
+                    message: 'Fav not found',
+                    status: 404
+                })
+            }
+            res.status(200).send({
+                message: 'fav insert',
+                status: 200
+            })
+        }catch (err){
+            res.status(500).send({
+                message: err,
+                status: 500
+            })
+        }
+    }
+
+
+    static async deleteFav(req, res) {
+        const id = req.user.Sub
+        const idPost = req.body.id
+
+        try {
+            await user.deleteFav(id, idPost)
+
+            res.status(200).send({
+                message: 'favoris bien supprimé',
+                status: 200
+            })
+        } catch (err) {
+            res.status(500).send({
+                message: err,
+                status: 500
+            })
+        }
+    }
+
     static getLiked(req, res) {
         const id = req.user.Sub
         const idPost = req.body.id

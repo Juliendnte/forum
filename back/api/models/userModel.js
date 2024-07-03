@@ -817,6 +817,20 @@ class userModel {
             connection.query(sql, id, (err, results) => err ? reject(err) : resolve(results));
         });
     }
+
+    static postFav(idUser, idPost){
+        return new Promise((resolve, reject) =>{
+            const sql = `  INSERT INTO favtopics(Id_User, Id_topics) VALUES (?, ?)`
+            connection.query(sql, [idUser, idPost], (err, results)=> err ? reject(err) : resolve(results));
+        })
+    }
+
+    static deleteFav(idUser, idPost){
+        return new Promise((resolve,reject) =>{
+            const sql ='DELETE FROM favtopics WHERE Id_User = ? AND Id_topics = ?'
+            connection.query(sql, [idUser, idPost], (err, results)=> err ? reject(err) : resolve(results));
+        } )
+    }
 }
 
 module.exports = userModel;
