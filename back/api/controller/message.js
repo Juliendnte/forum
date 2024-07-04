@@ -44,8 +44,9 @@ class messageController {
      */
     static getMessage(req, res) {
         const messageById = req.message;
+        console.log(messageById);
         try {
-            messageById.User.Path = `${baseUrl}/assets/${messageById.User.Path}`;
+            messageById.forEach((message) => message.User.Path = `${baseUrl}/assets/${message.User.Path}`);
 
             return res.status(200).send({
                 message: `Article with id ${req.params.id} successfully found`,

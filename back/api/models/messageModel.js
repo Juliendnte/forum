@@ -13,40 +13,51 @@ class messageModel {
     static getMessageById(id) {
         return new Promise((resolve, reject) => {
             const sql = `
-                SELECT m.*,
-                       u.Name,
-                       u.Path,
-                       U.Id    AS Id_User,
-                       r.Label AS Role,
-                        COUNT(m.Id_MessageAnswer) AS MessageCount
-
-                FROM message m
-                         INNER JOIN users u ON m.Id_User = u.Id
-                         INNER JOIN role r ON u.Id_role = r.Id
-                WHERE m.Id = ?`
-            connection.query(sql, [id], (err, results) => {
+                SELECT
+                    m.*,
+                    u.Name,
+                    u.Path,
+                    u.Id AS Id_User,
+                    r.Label AS Role,
+                    COUNT(m2.Id) AS MessageCount
+                FROM
+                    message m
+                        INNER JOIN
+                    users u ON m.Id_User = u.Id
+                        INNER JOIN
+                    role r ON u.Id_role = r.Id
+                        LEFT JOIN
+                    message m2 ON m.Id = m2.Id_MessageAnswer
+                WHERE
+                    m.Id_MessageAnswer = ? OR m.Id = ?
+                GROUP BY
+                    m.Id, u.Name, u.Path, u.Id, r.Label
+                ORDER BY
+                    m.Id;
+                ;`
+            connection.query(sql, [id, id], (err, results) => {
                 if (err) {
                     return reject(err);
                 }
                 if (results.length === 0) {
                     return resolve(null);
                 }
-                const message = {
-                    Id: results[0].Id,
-                    Content: results[0].Content,
-                    Create_message: results[0].Create_message,
-                    Update_message: results[0].Update_message,
-                    Id_PostAnswer: results[0].Id_PostAnswer,
-                    Id_MessageAnswer: results[0].Id_MessageAnswer,
-                    CountMessage: results[0].MessageCount,
-                    Role: results[0].Role,
+                const messages = results.map((message) => ({
+                    Id: message.Id,
+                    Content: message.Content,
+                    Create_message: message.Create_message,
+                    Update_message: message.Update_message,
+                    Id_PostAnswer: message.Id_PostAnswer,
+                    Id_MessageAnswer: message.Id_MessageAnswer,
+                    CountMessage: message.MessageCount,
                     User: {
-                        Id: results[0].Id_User,
-                        Name: results[0].Name,
-                        Path: results[0].Path,
+                        Id: message.Id_User,
+                        Name: message.Name,
+                        Path: message.Path,
+                        Role: message.Role,
                     }
-                }
-                return resolve(message);
+                }));
+                return resolve(messages);
             });
         });
     }
