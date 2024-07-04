@@ -116,6 +116,39 @@ class TreatmentPosts {
         }
     }
 
+    static async CreateMessage(req, res) {
+        try {
+            const token = req.cookies.Token;
+            if (!token) {
+                return res.redirect(`/CODER/login`);
+            }
+
+            const {Content, Id_PostAnswer, Id_MessageAnswer} = req.body;
+
+            console.log("Data received:", Content, Id_PostAnswer, Id_MessageAnswer);
+
+            const response = await axios.post(`${url}/message`, {
+                Content,
+                Id_PostAnswer,
+                Id_MessageAnswer
+            }, {
+                headers: {
+                    "Authorization": token,
+                    "Content-Type": "application/json"
+                }
+            });
+
+            res.redirect(`/CODER/p/${Id_PostAnswer}`);
+        } catch (err) {
+            console.error("Error creating post:", err);
+            if (err.response) {
+                console.error("Server responded with:", err.response.data);
+            }
+            res.status(500).send("Internal server error");
+        }
+
+    }
+
 }
 
 module
