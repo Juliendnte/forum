@@ -62,7 +62,8 @@ class messageModel {
             let sql = `SELECT m.*, users.Name, users.Path, COUNT(m.Id_MessageAnswer) AS MessageCount
 
                        FROM message m
-                                LEFT JOIN users ON m.Id_User = users.Id `
+                                INNER JOIN users ON m.Id_User = users.Id 
+                                `
 
 
             const values = [];
@@ -91,12 +92,10 @@ class messageModel {
                 sql += " WHERE " + whereClauses.join(" AND ");
             }
 
-            // Utilise la même requête sans limit ni offset
-            this.total = (await this.getTotal(sql, values.slice(0, values.length - (limitClause ? 1 : 0) - (offsetClause ? 1 : 0)))).total;
 
             // Ajouter limit et offset à la requête principale
-            sql += limitClause + offsetClause;
 
+            sql += ' GROUP BY m.Id ' + limitClause + offsetClause;
             // Exécuter la requête avec les valeurs
             connection.query(sql, values, (err, results) => {
                 if (err) {
