@@ -208,8 +208,6 @@ class postModel {
                          )
                          LEFT JOIN tagstopics tp ON posts.Id_topics = tp.Id_topics
                          LEFT JOIN userstags ut ON tp.Id_Tag = ut.Id_Tag AND ut.Id_User = ?
-                GROUP BY posts.Id, t.Id, s.Label, similarity_score
-
             `;
 
             const values = [userId, userId, userId];
@@ -242,7 +240,7 @@ class postModel {
             }
 
             // Add ORDER BY clause to sort by creation date in descending order
-            sql += " GROUP BY posts.Id ORDER BY similarity_score DESC";
+            sql += " GROUP BY posts.Id, t.Id, s.Label, similarity_score ORDER BY similarity_score DESC,  posts.Create_post DESC";
 
 
             // Use the same query without limit and offset to get the total number of results
