@@ -505,27 +505,48 @@ class userModel {
         return new Promise((resolve, reject) => {
             const searchQuery = `%${search}%`;
             const sql = `
-            (
-                SELECT 'user' AS Type, u.Id, u.Name AS Title, u.Path, u.Create_at AS CreateAt
-                FROM users u
-                WHERE u.Name LIKE ?
-            )
+            SELECT 'user' AS Type, u.Id AS Id, u.Name AS Title, u.Path AS Path, u.Create_at AS CreateAt,
+                   NULL AS Content, NULL AS PostLikes, NULL AS MessageCount, NULL AS UserName,
+                   NULL AS UserPath, NULL AS UserId, NULL AS UserRole
+            FROM users u
+            WHERE u.Name LIKE ?
+            
             UNION
-            (
-                SELECT 'post' AS Type, p.Id, p.Title, p.Content AS Path, p.Create_post AS CreateAt
-                FROM posts p
-                WHERE p.Title LIKE ? OR p.Content LIKE ?
-            )
+            
+            SELECT 
+                'post' AS Type,
+                p.Id AS Id,
+                p.Title AS Title,
+                p.Content AS Content,
+                p.Create_post AS CreateAt,
+                t.Path AS Path,
+                SUM(CASE WHEN lp.Like = 1 THEN 1 WHEN lp.Like=0 THEN -1 ELSE 0 END) AS PostLikes,
+                COUNT(m.Id) AS MessageCount,
+                u.Name AS UserName,
+                u.Path AS UserPath,
+                u.Id AS UserId,
+                r.Label AS UserRole
+            FROM posts p
+            INNER JOIN topics t ON p.Id_topics = t.Id
+            INNER JOIN users u ON p.Id_User = u.Id
+            INNER JOIN role r ON u.Id_role = r.Id
+            LEFT JOIN likepost lp ON lp.Id_Post = p.Id
+            LEFT JOIN message m ON p.Id = m.Id_PostAnswer
+            WHERE p.Title LIKE ?
+            GROUP BY p.Id
+            
             UNION
-            (
-                SELECT 'topic' AS Type, t.Id, t.Title, t.Path, t.Create_at AS CreateAt
-                FROM topics t
-                WHERE t.Title LIKE ?
-            )
+            
+            SELECT 'topic' AS Type, t.Id AS Id, t.Title AS Title, t.Path AS Path, t.Create_at AS CreateAt,
+                   NULL AS Content, NULL AS PostLikes, NULL AS MessageCount, NULL AS UserName,
+                   NULL AS UserPath, NULL AS UserId, NULL AS UserRole
+            FROM topics t
+            WHERE t.Title LIKE ?
+            
             ORDER BY CreateAt DESC
         `;
 
-            connection.query(sql, [searchQuery, searchQuery, searchQuery, searchQuery], (err, results) => {
+            connection.query(sql, [searchQuery, searchQuery, searchQuery], (err, results) => {
                 if (err) {
                     return reject(err);
                 }
@@ -534,13 +555,42 @@ class userModel {
                     return resolve(null);
                 }
 
-                const searchResults = results.map(row => ({
-                    Type: row.Type,
-                    Id: row.Id,
-                    Title: row.Title,
-                    Path: row.Path,
-                    CreateAt: row.CreateAt
-                }));
+                const searchResults = results.map(row => {
+                    if (row.Type === 'user') {
+                        return {
+                            Type: row.Type,
+                            Id: row.Id,
+                            Title: row.Title,
+                            Path: row.Path,
+                            CreateAt: row.CreateAt
+                        };
+                    } else if (row.Type === 'post') {
+                        return {
+                            Type: row.Type,
+                            Id: row.Id,
+                            Title: row.Title,
+                            Content: row.Path,
+                            CreateAt: row.CreateAt,
+                            Path: row.Content,
+                            PostLikes: row.PostLikes,
+                            MessageCount: row.MessageCount,
+                            User: {
+                                Id: row.UserId,
+                                Name: row.UserName,
+                                Path: row.UserPath,
+                                Role: row.UserRole
+                            }
+                        };
+                    } else if (row.Type === 'topic') {
+                        return {
+                            Type: row.Type,
+                            Id: row.Id,
+                            Title: row.Title,
+                            Path: row.Path,
+                            CreateAt: row.CreateAt
+                        };
+                    }
+                });
 
                 resolve(searchResults);
             });

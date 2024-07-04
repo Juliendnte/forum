@@ -37,7 +37,7 @@ class postModel {
                        u.Path,
                        u.Id        AS Id_User,
                        r.Label     AS Role,
-                       s.Label                                                               AS Status,
+                    (SELECT Label FROM status s WHERE t.Id_Status = s.Id) AS Status,
 
                     SUM(CASE WHEN lp.Like = 1 THEN 1 WHEN lp.Like=0 THEN -1 ELSE 0 END) AS PostLikes,
                        (SELECT COUNT(*) FROM message WHERE message.Id_PostAnswer = p.Id) AS MessageCount

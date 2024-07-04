@@ -305,6 +305,12 @@ class UserController {
         const searchQuery = req.query.search
         try {
             const search = await user.search(searchQuery)
+            search.forEach((search) => search.Path = `${url}assets/${search.Path}`)
+            search.forEach((search) =>{
+                if (search.Type === 'post'){
+                    search.User.Path = `${url}assets/${search.User.Path}`
+                }
+            })
             if (search.length === 0) {
                 return res.status(404).send({
                     message: 'Nous n\'avons pas trouvé de résultat pour ' + search,
