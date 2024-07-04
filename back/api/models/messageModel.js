@@ -71,14 +71,12 @@ class messageModel {
     static getAllMessage(query) {
         return new Promise(async (resolve, reject) => {
             let sql = `SELECT m.*, users.Name, users.Path, COUNT(m.Id_MessageAnswer) AS MessageCount
-
-                       FROM message m
-                                INNER JOIN users ON m.Id_User = users.Id 
-                                `
-
+                                FROM message m
+                                INNER JOIN users ON m.Id_User = users.Id
+            `
 
             const values = [];
-            const whereClauses = [];
+            const whereClauses = ['m.Id_MessageAnswer IS NULL'];
             let limitClause = "";
             let offsetClause = "";
 
@@ -144,9 +142,15 @@ class messageModel {
      */
     static createMessage(newmessage) {
         return new Promise((resolve, reject) => {
-            const sql = `INSERT INTO message (Content, Id_PostAnswer, Id_MessageAnswer, Id_User)
-                         VALUES (?, ?, ?, ?)`;
-            connection.query(sql, [newmessage.Content, newmessage.Id_PostAnswer, newmessage.Id_MessageAnswer, newmessage.Id_User], (err, results) => err ? reject(err) : resolve(results[0]));
+            if (newmessage.Id_MessageAnswer) {
+                const sql = `INSERT INTO message (Content, Id_PostAnswer, Id_MessageAnswer, Id_User)
+                             VALUES (?, ?, ?, ?)`;
+                connection.query(sql, [newmessage.Content, newmessage.Id_PostAnswer, newmessage.Id_MessageAnswer, newmessage.Id_User], (err, results) => err ? reject(err) : resolve(results[0]));
+            } else {
+                const sql = `INSERT INTO message (Content, Id_PostAnswer, Id_MessageAnswer, Id_User)
+                             VALUES (?, ?, DEFAULT, ?)`;
+                connection.query(sql, [newmessage.Content, newmessage.Id_PostAnswer, newmessage.Id_User], (err, results) => err ? reject(err) : resolve(results[0]));
+            }
         });
     }
 

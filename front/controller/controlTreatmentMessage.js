@@ -4,39 +4,7 @@ const ErrorHandler = require("./ErrorHandler");
 
 const errorHandler = new ErrorHandler();
 
-class TreatmentPosts {
-
-    static async CreateMessage(req, res) {
-        try {
-            const token = req.cookies.Token;
-            if (!token) {
-                return res.redirect(`/CODER/login`);
-            }
-
-            const {Title, Content, Id_topics, NameTopic} = req.body;
-
-            console.log("Data received:", Title, Content, Id_topics, NameTopic);
-
-            const response = await axios.post(`${url}/post`, {
-                Title,
-                Content,
-                Id_topics
-            }, {
-                headers: {
-                    "Authorization": token,
-                    "Content-Type": "application/json"
-                }
-            });
-
-            res.redirect(`/CODER/t/${NameTopic}`);
-        } catch (err) {
-            console.error("Error creating post:", err);
-            if (err.response) {
-                console.error("Server responded with:", err.response.data);
-            }
-            res.status(500).send("Internal server error");
-        }
-    }
+class TreatmentMessages {
 
     static async GetMessages(req, res) {
         try {
@@ -127,7 +95,7 @@ class TreatmentPosts {
 
             console.log("Data received:", Content, Id_PostAnswer, Id_MessageAnswer);
 
-            const response = await axios.post(`${url}/message`, {
+            await axios.post(`${url}/message`, {
                 Content,
                 Id_PostAnswer,
                 Id_MessageAnswer
@@ -151,5 +119,4 @@ class TreatmentPosts {
 
 }
 
-module
-    .exports = TreatmentPosts;
+module.exports = TreatmentMessages;
