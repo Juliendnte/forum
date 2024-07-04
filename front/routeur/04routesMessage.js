@@ -4,7 +4,7 @@ const routeur = express.Router();
 const controllerTemplate = require("../controller/controlTemplate");
 const controllerMessage = require("../controller/controlTreatmentMessage");
 
-// Configuration des routes Messages
+// Route Template
 routeur.get("/coder/m/:id", controllerTemplate.GetMessage);
 routeur.get("/coder/message/:id/update", controllerTemplate.UpdateMessage);
 

@@ -7,7 +7,7 @@ const upload = multer({ storage: storage })
 const controllerTemplate = require("../controller/controlTemplate");
 const controllerTopic = require("../controller/controlTreatmentTopic");
 
-// Configuration des routes Topics
+// Route Template
 routeur.get("/coder/create/topic", controllerTemplate.CreateTopic);
 routeur.get("/coder/t/:name", controllerTemplate.GetTopic);
 routeur.get("/coder/topic/:name/update", controllerTemplate.UpdateTopic);

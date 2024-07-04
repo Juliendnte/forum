@@ -2,10 +2,10 @@
 const express = require("express");
 const routeur = express.Router();
 const controllerTemplate = require("../controller/controlTemplate");
-
-
-// Configuration des routes Posts
 const controllerPost = require("../controller/controlTreatmentPost");
+
+
+// Route Template
 routeur.get("/coder/:nametopic/create/post", controllerTemplate.CreatePost);
 routeur.get("/coder/p/:id", controllerTemplate.GetPost);
 routeur.get("/coder/post/:id/update", controllerTemplate.UpdatePost);
