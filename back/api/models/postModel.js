@@ -58,7 +58,7 @@ class postModel {
                     return resolve(null);
                 }
                 const post = {
-                    Id: results[0].Id,
+                    Id: results[0].PostId,
                     Title: results[0].Title,
                     Content: results[0].Content,
                     Create_post: results[0].Create_post,
