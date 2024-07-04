@@ -106,6 +106,7 @@ class messageModel {
 
             sql += ' GROUP BY m.Id ' + limitClause + offsetClause;
             // Exécuter la requête avec les valeurs
+            console.log(sql)
             connection.query(sql, values, (err, results) => {
                 if (err) {
                     return reject(err);

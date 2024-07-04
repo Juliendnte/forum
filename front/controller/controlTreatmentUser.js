@@ -183,7 +183,7 @@ class TreatmentUser {
                 return res.status(400).send("No token found");
             }
 
-            const response = await axios.post(`${url}/follow`, {id}, {
+            await axios.post(`${url}/follow`, {id}, {
                 headers: {
                     "Authorization": token,
                     "Content-Type": "application/json"
@@ -219,7 +219,7 @@ class TreatmentUser {
         }
     }
 
-    static async GetTags(req, res) {
+    static async GetTags() {
         try {
             const response = await axios.get(`${url}/tags`);
 

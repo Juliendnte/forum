@@ -5,9 +5,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const cookieParser = require('cookie-parser');
-const path = require("path");
-const forumRoutes = path.join(__dirname, "./routeur/");
-const fs = require("fs");
 
 //Reglage du serveur
 const app = express();

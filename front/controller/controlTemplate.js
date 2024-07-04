@@ -322,7 +322,7 @@ class ControlTemplate {
             }
 
             const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
-            const dataTags = await controlUser.TreatmentUser.GetTags(req, res);
+            const dataTags = await controlUser.TreatmentUser.GetTags();
 
             res.render('../views/pages/UpdateProfil', {
                     dataUser,
@@ -344,7 +344,7 @@ class ControlTemplate {
             const name = req.params.name
 
             const dataTopic = await controlTopic.GetTopic(name);
-            const dataTags = await controlUser.TreatmentUser.GetTags(req, res);
+            const dataTags = await controlUser.TreatmentUser.GetTags();
 
             res.render('../views/pages/UpdateTopic', {
                 dataTopic,
