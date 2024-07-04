@@ -198,6 +198,8 @@ class ControlTemplate {
             const PathUserLog = dataUser.utilisateur.Path
             let query
 
+            console.log('attention : ' + dataMessages)
+
 
             if (dataPost && dataPost.topic && dataPost.topic.Create_at) {
                 const date = new Date(dataPost.topic.Create_at);
@@ -271,24 +273,45 @@ class ControlTemplate {
         }
     }
 
-    static async CreateMessage(req, res) {
+    static async CreateMessageForPost(req, res) {
         try {
             const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
 
             const id = req.params.id;
             const dataPost = await controlPost.GetPost(id);
 
+            let dataMessage = false
+
             console.log("dataTopic:", dataPost);
 
             res.render('../views/pages/createMessage', {
                 dataUser,
+                dataMessage,
                 dataPost
             });
         } catch (err) {
-            console.error("Error fetching data for create post:", err);
             res.status(500).send("Internal server error");
         }
     }
+
+    static async CreateMessageForMessage(req, res) {
+        try {
+            const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
+
+            const id = req.params.id;
+            const dataMessage = await controlMessage.GetMessage(id);
+            let dataPost = false
+
+            res.render('../views/pages/createMessage', {
+                dataUser,
+                dataPost,
+                dataMessage
+            });
+        } catch (err) {
+            res.status(500).send("Internal server error");
+        }
+    }
+
 
     static async UpdateProfil(req, res) {
         try {
@@ -405,6 +428,7 @@ class ControlTemplate {
             res.status(500).json({ error: 'Erreur lors de la récupération des données de recherche' });
         }
     }
+
     static async Conditions (req,res) {
         try {
             const [dataUser, dataTags] = await Promise.all([

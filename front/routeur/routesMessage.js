@@ -7,7 +7,8 @@ const controllerPost = require("../controller/controlTreatmentPost");
 
 // Route Template
 routeur.get("/coder/m/:id", controllerTemplate.GetMessage);
-routeur.get("/coder/post/:id/create/message", controllerTemplate.CreateMessage);
+routeur.get("/coder/post/:id/create/message/post", controllerTemplate.CreateMessageForPost);
+routeur.get("/coder/post/:id/create/message/message", controllerTemplate.CreateMessageForMessage);
 routeur.get("/coder/message/:id/update", controllerTemplate.UpdateMessage);
 
 // Route Treatment en rapport avec les Messages

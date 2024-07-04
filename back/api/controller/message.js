@@ -71,7 +71,7 @@ class messageController {
     static async postMessage(req, res) {
         const {Content, Id_PostAnswer, Id_MessageAnswer} = req.body;
         const Id_User = req.user.Sub;
-        if (!Content || !Id_PostAnswer || !Id_MessageAnswer) {
+        if (!Content) {
             return res.status(400).send({
                 message: "Tous les champs (Content, Id_PostAnswer, Id_MessageAnswer) sont requis.",
                 status: 400
