@@ -67,7 +67,7 @@
                         </a>
                     </div>
                     <div class="user-header-post-btn">
-                        <a href="/coder/u/<%= dataPost.post.User.Name %>">
+                        <a href="/coder/post/<%= dataPost.post.Id %>/create/message/">
                             <span>
                                 Répondre
                             </span>
@@ -150,14 +150,14 @@
             </div>
             <div class="bar-suparator-post-profil"></div>
         </section>
-        <section>
+        <section class="section-message-ctn">
             <% if (dataPost.post.MessageCount === 0 ) { %>
                 <div class="err-message-detail-ctn">
                     <span>Cette publication n'a pas de commentaires, soyez le premier à y répondre !</span>
                 </div>
             <% } else { %>
                 <% dataMessages.items.forEach(item => { %>
-                    <div class="post-profil">
+                    <div class="post-profil" style="width: 50%;">
                         <div class="post-user-header">
                             <div class="user-header-post-detail">
                                 <a href="/coder/user/<%- item.User.Name %>">

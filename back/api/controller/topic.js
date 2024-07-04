@@ -184,15 +184,10 @@ class TopicController {
 
 
         let filePath;
-        console.log(body)
-        console.log(req.file)
         if (req.file) {
             filePath = req.file.path;
             body.Path = filePath.replace('api\\assets', '');
         }
-        console.log(req.file)
-        console.log(id, body)
-
         try {
             await topic.updatePatchTopic(id, body);
             if (req.file) {
@@ -204,7 +199,6 @@ class TopicController {
             }
             return res.status(200).send({message: `Topic with id ${id} successfully updated`, status: 200});
         } catch (err) {
-             console.log(err)
             res.status(500).send({message: err, status: 500});
         }
     }

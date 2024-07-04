@@ -1,7 +1,9 @@
 const topicOwn = async (req, res, next) => {
     const user = req.user;
 
-    if (req.topic.User.Id !== user.Sub || !user.IsAdmin){
+    console.log(user);
+
+    if (req.topic.User.Id !== user.Sub && !user.IsAdmin){
         return res.status(403).send("Forbidden");
     }
     next();

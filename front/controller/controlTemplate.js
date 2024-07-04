@@ -271,6 +271,25 @@ class ControlTemplate {
         }
     }
 
+    static async CreateMessage(req, res) {
+        try {
+            const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
+
+            const id = req.params.id;
+            const dataPost = await controlPost.GetPost(id);
+
+            console.log("dataTopic:", dataPost);
+
+            res.render('../views/pages/createMessage', {
+                dataUser,
+                dataPost
+            });
+        } catch (err) {
+            console.error("Error fetching data for create post:", err);
+            res.status(500).send("Internal server error");
+        }
+    }
+
     static async UpdateProfil(req, res) {
         try {
             const token = req.cookies.Token;
@@ -386,7 +405,32 @@ class ControlTemplate {
             res.status(500).json({ error: 'Erreur lors de la récupération des données de recherche' });
         }
     }
+    static async Conditions (req,res) {
+        try {
+            const [dataUser, dataTags] = await Promise.all([
+                controlUser.TreatmentUser.GetUser(req, res),
+                controlTopic.GetTags(req, res)
+            ]);
 
+            let query
+
+            const token = req.cookies.Token;
+            let PathUserLog = null;
+
+            if (token && dataUser && dataUser.utilisateur) {
+                PathUserLog = dataUser.utilisateur.Path;
+            }
+
+            res.render('../views/pages/condition', {
+                dataUser,
+                dataTags,
+                PathUserLog,
+                query
+            });
+        }catch (err){
+            errorHandler.handleRequestError(err);
+        }
+    }
     /**
      * Render the error page.
      * @param {Object} req - The request object.
