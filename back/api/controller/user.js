@@ -305,10 +305,12 @@ class UserController {
         const searchQuery = req.query.search
         try {
             const search = await user.search(searchQuery)
-            search.forEach((search) => search.Path = `${url}assets/${search.Path}`)
             search.forEach((search) =>{
                 if (search.Type === 'post'){
-                    search.User.Path = `${url}assets/${search.User.Path}`
+                    search.Post.User.Path = `${url}assets/${search.Post.User.Path}`
+                    search.Topic.Path = `${url}assets/${search.Topic.Path}`
+                }else {
+                    search.Path = `${url}assets/${search.Path}`
                 }
             })
             if (search.length === 0) {

@@ -47,7 +47,7 @@ class postModel {
                          INNER JOIN users u ON p.Id_User = u.Id
                          INNER JOIN role r ON u.Id_role = r.Id
                          LEFT JOIN likepost lp ON lp.Id_Post = p.Id
-                         INNER JOIN message m ON p.Id = m.Id_PostAnswer
+                         LEFT JOIN message m ON p.Id = m.Id_PostAnswer
                 WHERE p.Id = ?
                 GROUP BY p.Id`
             connection.query(sql, [id], (err, results) => {

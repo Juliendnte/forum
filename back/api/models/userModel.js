@@ -209,7 +209,9 @@ class userModel {
             connection.query(sql, values, (err, results) => {
 
                 if (updateUser.Tags && Array.isArray(updateUser.Tags)) {
-                    const deleteTagsSql = `DELETE FROM userstags WHERE Id_User = ?`;
+                    const deleteTagsSql = `DELETE
+                                           FROM userstags
+                                           WHERE Id_User = ?`;
                     connection.query(deleteTagsSql, [id], (err) => {
                         if (err) {
                             return reject(err);
@@ -219,7 +221,8 @@ class userModel {
                             return resolve(results);
                         }
 
-                        const insertTagsSql = `INSERT INTO userstags (Id_User, Id_Tag) VALUES ?`;
+                        const insertTagsSql = `INSERT INTO userstags (Id_User, Id_Tag)
+                                               VALUES ?`;
                         const tagsValues = updateUser.Tags.map(tagId => [id, tagId]);
 
                         connection.query(insertTagsSql, [tagsValues], (err) => {
@@ -247,52 +250,52 @@ class userModel {
     static getPostMessage(id) {
         return new Promise((resolve, reject) => {
             const sql = `
-            SELECT p.Id          AS Id,
-                   p.Title       AS Title,
-                   p.Content     AS Content,
-                   p.Create_post AS CreateAt,
-                   p.Id_User     AS UserId,
-                   'post'        AS Type,
-                   SUM(CASE
-                           WHEN lp.Like = 1 THEN 1
-                           WHEN lp.Like = 0 THEN -1
-                           ELSE 0
-                       END)      AS PostLikes,
-                   t.Title       AS TopicTitle,
-                   t.Path        AS TopicPath,
-                   t.Id          AS TopicId,
-                   (SELECT COUNT(*)
-                    FROM message m2
-                    WHERE m2.Id_PostAnswer = p.Id) AS MessageCount
-            FROM posts p
-                     LEFT JOIN topics t ON p.Id_topics = t.Id
-                     LEFT JOIN likepost lp ON p.Id = lp.Id_Post
-                     LEFT JOIN users u ON p.Id_User = u.Id
-            WHERE p.Id_User = ?
-            GROUP BY p.Id, p.Title, p.Content, p.Create_post, p.Id_User, t.Title, t.Path, t.Id
+                SELECT p.Id                            AS Id,
+                       p.Title                         AS Title,
+                       p.Content                       AS Content,
+                       p.Create_post                   AS CreateAt,
+                       p.Id_User                       AS UserId,
+                       'post'                          AS Type,
+                       SUM(CASE
+                               WHEN lp.Like = 1 THEN 1
+                               WHEN lp.Like = 0 THEN -1
+                               ELSE 0
+                           END)                        AS PostLikes,
+                       t.Title                         AS TopicTitle,
+                       t.Path                          AS TopicPath,
+                       t.Id                            AS TopicId,
+                       (SELECT COUNT(*)
+                        FROM message m2
+                        WHERE m2.Id_PostAnswer = p.Id) AS MessageCount
+                FROM posts p
+                         LEFT JOIN topics t ON p.Id_topics = t.Id
+                         LEFT JOIN likepost lp ON p.Id = lp.Id_Post
+                         LEFT JOIN users u ON p.Id_User = u.Id
+                WHERE p.Id_User = ?
+                GROUP BY p.Id, p.Title, p.Content, p.Create_post, p.Id_User, t.Title, t.Path, t.Id
 
-            UNION ALL
+                UNION ALL
 
-            SELECT m.Id             AS Id,
-                   NULL             AS Title,
-                   m.Content        AS Content,
-                   m.Create_message AS CreateAt,
-                   m.Id_User        AS UserId,
-                   'message'        AS Type,
-                   NULL             AS MessageLikes,
-                   t.Title          AS TopicTitle,
-                   t.Path           AS TopicPath,
-                   t.Id             AS TopicId,
-                   (SELECT COUNT(*)
-                    FROM message m2
-                    WHERE m2.Id_MessageAnswer = m.Id) AS MessageCount
-            FROM message m
-                     LEFT JOIN posts p ON m.Id_PostAnswer = p.Id
-                     LEFT JOIN topics t ON p.Id_topics = t.Id
-                     LEFT JOIN users u ON m.Id_User = u.id
-            WHERE m.Id_User = ?
-            ORDER BY CreateAt;
-        `;
+                SELECT m.Id                               AS Id,
+                       NULL                               AS Title,
+                       m.Content                          AS Content,
+                       m.Create_message                   AS CreateAt,
+                       m.Id_User                          AS UserId,
+                       'message'                          AS Type,
+                       NULL                               AS MessageLikes,
+                       t.Title                            AS TopicTitle,
+                       t.Path                             AS TopicPath,
+                       t.Id                               AS TopicId,
+                       (SELECT COUNT(*)
+                        FROM message m2
+                        WHERE m2.Id_MessageAnswer = m.Id) AS MessageCount
+                FROM message m
+                         LEFT JOIN posts p ON m.Id_PostAnswer = p.Id
+                         LEFT JOIN topics t ON p.Id_topics = t.Id
+                         LEFT JOIN users u ON m.Id_User = u.id
+                WHERE m.Id_User = ?
+                ORDER BY CreateAt;
+            `;
             connection.query(sql, [id, id], (err, results) => {
                 if (err) {
                     return reject(err);
@@ -349,51 +352,51 @@ class userModel {
     static getPostMessageName(name) {
         return new Promise((resolve, reject) => {
             const sql = `
-            SELECT p.Id AS Id,
-                   p.Title AS Title,
-                   p.Content AS Content,
-                   p.Create_post AS CreateAt,
-                   p.Id_User AS UserId,
-                   'post' AS Type,
-                   SUM(CASE
-                           WHEN lp.Like = 1 THEN 1
-                           WHEN lp.Like = 0 THEN -1
-                           ELSE 0
-                       END) AS PostLikes,
-                   t.Title AS TopicTitle,
-                   t.Path AS TopicPath,
-                   t.Id AS TopicId,
-                   (SELECT COUNT(*)
-                    FROM message m2
-                    WHERE m2.Id_PostAnswer = p.Id) AS MessageCount
-            FROM posts p
-                     LEFT JOIN topics t ON p.Id_topics = t.Id
-                     LEFT JOIN likepost lp ON p.Id = lp.Id_Post
-                     LEFT JOIN users u ON p.Id_User = u.Id
-            WHERE u.Name = ?
-            GROUP BY p.Id, p.Title, p.Content, p.Create_post, p.Id_User, t.Title, t.Path, t.Id
+                SELECT p.Id                            AS Id,
+                       p.Title                         AS Title,
+                       p.Content                       AS Content,
+                       p.Create_post                   AS CreateAt,
+                       p.Id_User                       AS UserId,
+                       'post'                          AS Type,
+                       SUM(CASE
+                               WHEN lp.Like = 1 THEN 1
+                               WHEN lp.Like = 0 THEN -1
+                               ELSE 0
+                           END)                        AS PostLikes,
+                       t.Title                         AS TopicTitle,
+                       t.Path                          AS TopicPath,
+                       t.Id                            AS TopicId,
+                       (SELECT COUNT(*)
+                        FROM message m2
+                        WHERE m2.Id_PostAnswer = p.Id) AS MessageCount
+                FROM posts p
+                         LEFT JOIN topics t ON p.Id_topics = t.Id
+                         LEFT JOIN likepost lp ON p.Id = lp.Id_Post
+                         LEFT JOIN users u ON p.Id_User = u.Id
+                WHERE u.Name = ?
+                GROUP BY p.Id, p.Title, p.Content, p.Create_post, p.Id_User, t.Title, t.Path, t.Id
 
-            UNION ALL
+                UNION ALL
 
-            SELECT m.Id AS Id,
-                   NULL AS Title,
-                   m.Content AS Content,
-                   m.Create_message AS CreateAt,
-                   m.Id_User AS UserId,
-                   'message' AS Type,
-                   NULL AS MessageLikes,
-                   t.Title AS TopicTitle,
-                   t.Path AS TopicPath,
-                   t.Id AS TopicId,
-                   (SELECT COUNT(*)
-                    FROM message m2
-                    WHERE m2.Id_MessageAnswer = m.Id) AS MessageCount
-            FROM message m
-                     LEFT JOIN posts p ON m.Id_PostAnswer = p.Id
-                     LEFT JOIN topics t ON p.Id_topics = t.Id
-                     LEFT JOIN users u ON m.Id_User = u.id
-            WHERE u.Name = ?
-            ORDER BY CreateAt;`;
+                SELECT m.Id                               AS Id,
+                       NULL                               AS Title,
+                       m.Content                          AS Content,
+                       m.Create_message                   AS CreateAt,
+                       m.Id_User                          AS UserId,
+                       'message'                          AS Type,
+                       NULL                               AS MessageLikes,
+                       t.Title                            AS TopicTitle,
+                       t.Path                             AS TopicPath,
+                       t.Id                               AS TopicId,
+                       (SELECT COUNT(*)
+                        FROM message m2
+                        WHERE m2.Id_MessageAnswer = m.Id) AS MessageCount
+                FROM message m
+                         LEFT JOIN posts p ON m.Id_PostAnswer = p.Id
+                         LEFT JOIN topics t ON p.Id_topics = t.Id
+                         LEFT JOIN users u ON m.Id_User = u.id
+                WHERE u.Name = ?
+                ORDER BY CreateAt;`;
             connection.query(sql, [name, name], (err, results) => {
                 if (err) {
                     return reject(err);
@@ -505,46 +508,77 @@ class userModel {
         return new Promise((resolve, reject) => {
             const searchQuery = `%${search}%`;
             const sql = `
-            SELECT 'user' AS Type, u.Id AS Id, u.Name AS Title, u.Path AS Path, u.Create_at AS CreateAt,
-                   NULL AS Content, NULL AS PostLikes, NULL AS MessageCount, NULL AS UserName,
-                   NULL AS UserPath, NULL AS UserId, NULL AS UserRole
-            FROM users u
-            WHERE u.Name LIKE ?
-            
-            UNION
-            
-            SELECT 
-                'post' AS Type,
-                p.Id AS Id,
-                p.Title AS Title,
-                p.Content AS Content,
-                p.Create_post AS CreateAt,
-                t.Path AS Path,
-                SUM(CASE WHEN lp.Like = 1 THEN 1 WHEN lp.Like=0 THEN -1 ELSE 0 END) AS PostLikes,
-                COUNT(m.Id) AS MessageCount,
-                u.Name AS UserName,
-                u.Path AS UserPath,
-                u.Id AS UserId,
-                r.Label AS UserRole
-            FROM posts p
-            INNER JOIN topics t ON p.Id_topics = t.Id
-            INNER JOIN users u ON p.Id_User = u.Id
-            INNER JOIN role r ON u.Id_role = r.Id
-            LEFT JOIN likepost lp ON lp.Id_Post = p.Id
-            LEFT JOIN message m ON p.Id = m.Id_PostAnswer
-            WHERE p.Title LIKE ?
-            GROUP BY p.Id
-            
-            UNION
-            
-            SELECT 'topic' AS Type, t.Id AS Id, t.Title AS Title, t.Path AS Path, t.Create_at AS CreateAt,
-                   NULL AS Content, NULL AS PostLikes, NULL AS MessageCount, NULL AS UserName,
-                   NULL AS UserPath, NULL AS UserId, NULL AS UserRole
-            FROM topics t
-            WHERE t.Title LIKE ?
-            
-            ORDER BY CreateAt DESC
-        `;
+                SELECT 'user'      AS Type,
+                       u.Id        AS Id,
+                       u.Name      AS Title,
+                       u.Path      AS Path,
+                       u.Create_at AS CreateAt,
+                       NULL        AS Content,
+                       NULL        AS PostLikes,
+                       NULL        AS MessageCount,
+                       NULL        AS UserName,
+                       NULL        AS UserPath,
+                       NULL        AS UserId,
+                       NULL        AS TopicId,
+                       NULL        AS TopicTitle,
+                       NULL        AS TopicPath,
+                       NULL        AS TopicCreateAt,
+                       NULL        AS TopicUserId,
+                       NULL        AS Status
+                FROM users u
+                WHERE u.Name LIKE ?
+
+                UNION
+
+                SELECT 'post'                                                                AS Type,
+                       posts.Id                                                              AS Id,
+                       posts.Title                                                           AS Title,
+                       posts.Content                                                         AS Content,
+                       posts.Create_post                                                     AS CreateAt,
+                       NULL                                                                  AS Path,
+                       SUM(CASE WHEN lp.Like = 1 THEN 1 WHEN lp.Like = 0 THEN -1 ELSE 0 END) AS PostLikes,
+                       (SELECT COUNT(*) FROM message WHERE message.Id_PostAnswer = posts.Id) AS MessageCount,
+                       u.Name                                                                AS UserName,
+                       u.Path                                                                AS UserPath,
+                       u.Id                                                                  AS UserId,
+                       t.Id                                                                  AS TopicId,
+                       t.Title                                                               AS TopicTitle,
+                       t.Path                                                                AS TopicPath,
+                       t.Create_at                                                           AS TopicCreateAt,
+                       t.Id_User                                                             AS TopicUserId,
+                       s.Label                                                               AS Status
+                FROM posts
+                         INNER JOIN users u ON posts.Id_User = u.Id
+                         INNER JOIN topics t ON posts.Id_topics = t.Id
+                         INNER JOIN status s ON t.Id_Status = s.Id
+                         LEFT JOIN likepost lp ON posts.Id = lp.Id_Post
+                WHERE posts.Title LIKE ?
+                GROUP BY posts.Id
+
+                UNION
+
+                SELECT 'topic'     AS Type,
+                       t.Id        AS Id,
+                       t.Title     AS Title,
+                       t.Path      AS Path,
+                       t.Create_at AS CreateAt,
+                       NULL        AS Content,
+                       NULL        AS PostLikes,
+                       NULL        AS MessageCount,
+                       NULL        AS UserName,
+                       NULL        AS UserPath,
+                       NULL        AS UserId,
+                       NULL        AS TopicId,
+                       NULL        AS TopicTitle,
+                       NULL        AS TopicPath,
+                       NULL        AS TopicCreateAt,
+                       NULL        AS TopicUserId,
+                       NULL        AS Status
+                FROM topics t
+                WHERE t.Title LIKE ?
+
+                ORDER BY CreateAt DESC
+            `;
 
             connection.query(sql, [searchQuery, searchQuery, searchQuery], (err, results) => {
                 if (err) {
@@ -567,18 +601,26 @@ class userModel {
                     } else if (row.Type === 'post') {
                         return {
                             Type: row.Type,
-                            Id: row.Id,
-                            Title: row.Title,
-                            Content: row.Path,
-                            CreateAt: row.CreateAt,
-                            Path: row.Content,
-                            PostLikes: row.PostLikes,
-                            MessageCount: row.MessageCount,
-                            User: {
-                                Id: row.UserId,
-                                Name: row.UserName,
-                                Path: row.UserPath,
-                                Role: row.UserRole
+                            Post: {
+                                Id: row.Id,
+                                Title: row.Title,
+                                Create_post: row.CreateAt,
+                                Content: row.Content,
+                                Likes: row.PostLikes,
+                                MessageCount: row.MessageCount,
+                                User: {
+                                    Id: row.UserId,
+                                    Name: row.UserName,
+                                    Path: row.UserPath
+                                }
+                            },
+                            Topic: {
+                                Id: row.TopicId,
+                                Title: row.TopicTitle,
+                                Path: row.TopicPath,
+                                Create_at: row.TopicCreateAt,
+                                UserId: row.TopicUserId,
+                                Status: row.Status
                             }
                         };
                     } else if (row.Type === 'topic') {
@@ -868,18 +910,19 @@ class userModel {
         });
     }
 
-    static postFav(idUser, idPost){
-        return new Promise((resolve, reject) =>{
-            const sql = `  INSERT INTO favtopics(Id_User, Id_topics) VALUES (?, ?)`
-            connection.query(sql, [idUser, idPost], (err, results)=> err ? reject(err) : resolve(results));
+    static postFav(idUser, idPost) {
+        return new Promise((resolve, reject) => {
+            const sql = `  INSERT INTO favtopics(Id_User, Id_topics)
+                           VALUES (?, ?)`
+            connection.query(sql, [idUser, idPost], (err, results) => err ? reject(err) : resolve(results));
         })
     }
 
-    static deleteFav(idUser, idPost){
-        return new Promise((resolve,reject) =>{
-            const sql ='DELETE FROM favtopics WHERE Id_User = ? AND Id_topics = ?'
-            connection.query(sql, [idUser, idPost], (err, results)=> err ? reject(err) : resolve(results));
-        } )
+    static deleteFav(idUser, idPost) {
+        return new Promise((resolve, reject) => {
+            const sql = 'DELETE FROM favtopics WHERE Id_User = ? AND Id_topics = ?'
+            connection.query(sql, [idUser, idPost], (err, results) => err ? reject(err) : resolve(results));
+        })
     }
 }
 
