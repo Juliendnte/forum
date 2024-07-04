@@ -44,8 +44,8 @@ class topicModel {
                            END)    AS PostLikes,
                        COUNT(m.Id) AS MessageCount
                 FROM topics t
-                         LEFT JOIN status s ON t.Id_Status = s.Id
-                         LEFT JOIN users u2 ON t.Id_User = u2.Id
+                         INNER JOIN status s ON t.Id_Status = s.Id
+                         INNER JOIN users u2 ON t.Id_User = u2.Id
                          LEFT JOIN tagstopics tp ON t.Id = tp.Id_topics
                          LEFT JOIN tags ON tp.Id_Tag = tags.Id
                          LEFT JOIN posts p ON t.Id = p.Id_topics
@@ -53,8 +53,7 @@ class topicModel {
                          LEFT JOIN likepost lp ON p.Id = lp.Id_Post
                          LEFT JOIN users u ON p.Id_User = u.Id
                 WHERE t.Title = ?
-                GROUP BY t.Id, t.Title, t.Path, t.Create_at, t.Id_User, u2.Name, u2.Path, s.Label, tags.Id, tags.Path,
-                         tags.Label, p.Id, p.Title, p.Create_post, p.Content, u.Name, u.Path, u.Id
+                GROUP BY p.Create_post
                 ORDER BY p.Create_post DESC;`
             connection.query(sql, [title], (err, results) => {
                 if (err) {

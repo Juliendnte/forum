@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS `topics`;
 CREATE TABLE IF NOT EXISTS `topics`
 (
     `Id`        int         NOT NULL AUTO_INCREMENT,
-    `Title`     varchar(75) NOT NULL,
+    `Title`     varchar(75) NOT NULL UNIQUE ,
     `Path`      varchar(255)     DEFAULT 'topic/undefined.webp',
     `Create_at` timestamp   NULL DEFAULT CURRENT_TIMESTAMP,
     `Id_Status` int         NOT NULL,

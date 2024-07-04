@@ -21,8 +21,8 @@ class messageModel {
                        COUNT(m.Id_MessageAnswer) AS MessageCount
 
                 FROM message m
-                         LEFT JOIN users u ON m.Id_User = u.Id
-                         LEFT JOIN role r ON u.Id_role = r.Id
+                         INNER JOIN users u ON m.Id_User = u.Id
+                         INNER JOIN role r ON u.Id_role = r.Id
                 WHERE m.Id = ?`
             connection.query(sql, [id], (err, results) => {
                 if (err) {

@@ -20,33 +20,32 @@ class postModel {
     static getpostById(id) {
         return new Promise((resolve, reject) => {
             const sql = `
-                SELECT
-                    p.Id                                                              AS PostId,
-                    p.Title,
-                    p.Content,
-                    p.Create_post,
-                    p.Id_topics,
-                    p.Id_User,
-                    p.Id_PostAnswer,
-                    t.Id                                                                  AS TopicId,
-                    t.Title                                                               AS TopicTitle,
-                    t.Path,
-                    t.Create_at,
-                    t.Id_User                                                             AS TopicUserId,
+                SELECT p.Id                                                                  AS PostId,
+                       p.Title,
+                       p.Content,
+                       p.Create_post,
+                       p.Id_topics,
+                       p.Id_User,
+                       p.Id_PostAnswer,
+                       t.Id                                                                  AS TopicId,
+                       t.Title                                                               AS TopicTitle,
+                       t.Path,
+                       t.Create_at,
+                       t.Id_User                                                             AS TopicUserId,
                        u.Name,
                        u.Path,
-                       u.Id        AS Id_User,
-                       r.Label     AS Role,
-                    (SELECT Label FROM status s WHERE t.Id_Status = s.Id) AS Status,
+                       u.Id                                                                  AS Id_User,
+                       r.Label                                                               AS Role,
+                       (SELECT Label FROM status s WHERE t.Id_Status = s.Id)                 AS Status,
 
-                    SUM(CASE WHEN lp.Like = 1 THEN 1 WHEN lp.Like=0 THEN -1 ELSE 0 END) AS PostLikes,
-                       (SELECT COUNT(*) FROM message WHERE message.Id_PostAnswer = p.Id) AS MessageCount
+                       SUM(CASE WHEN lp.Like = 1 THEN 1 WHEN lp.Like = 0 THEN -1 ELSE 0 END) AS PostLikes,
+                       (SELECT COUNT(*) FROM message WHERE message.Id_PostAnswer = p.Id)     AS MessageCount
 
                 FROM posts p
                          INNER JOIN topics t ON p.Id_topics = t.Id
                          INNER JOIN users u ON p.Id_User = u.Id
                          INNER JOIN role r ON u.Id_role = r.Id
-                         LEFT JOIN likepost lp ON lp.Id_Post = p.Id
+                         LEFT JOIN likepost lp ON p.Id = lp.Id_Post
                          LEFT JOIN message m ON p.Id = m.Id_PostAnswer
                 WHERE p.Id = ?
                 GROUP BY p.Id`
@@ -87,28 +86,26 @@ class postModel {
     static getAllpost(query) {
         return new Promise(async (resolve, reject) => {
 
-            let sql = `SELECT
-                           posts.Id                                                              AS PostId,
-                           posts.Title,
-                           posts.Content,
-                           posts.Create_post,
-                           posts.Id_topics,
-                           posts.Id_User,
-                           posts.Id_PostAnswer,
-                           t.Id                                                                  AS TopicId,
-                           t.Title                                                               AS TopicTitle,
-                           t.Path,
-                           t.Create_at,
-                           t.Id_User                                                             AS TopicUserId,
-                           s.Label                                                               AS Status,
-                           SUM(CASE WHEN lp.Like = 1 THEN 1 WHEN lp.Like=0 THEN -1 ELSE 0 END) AS PostLikes,
-                           (SELECT COUNT(*) FROM message WHERE message.Id_PostAnswer = posts.Id) AS MessageCount
+            let sql = `SELECT posts.Id                                                              AS PostId,
+                              posts.Title,
+                              posts.Content,
+                              posts.Create_post,
+                              posts.Id_topics,
+                              posts.Id_User,
+                              posts.Id_PostAnswer,
+                              t.Id                                                                  AS TopicId,
+                              t.Title                                                               AS TopicTitle,
+                              t.Path,
+                              t.Create_at,
+                              t.Id_User                                                             AS TopicUserId,
+                              s.Label                                                               AS Status,
+                              SUM(CASE WHEN lp.Like = 1 THEN 1 WHEN lp.Like = 0 THEN -1 ELSE 0 END) AS PostLikes,
+                              (SELECT COUNT(*) FROM message WHERE message.Id_PostAnswer = posts.Id) AS MessageCount
 
-                       FROM
-                           posts
-                               INNER JOIN topics t ON posts.Id_topics = t.Id
-                               INNER JOIN status s ON t.Id_Status = s.Id
-                               LEFT JOIN likepost AS lp ON posts.Id = lp.Id_Post`;
+                       FROM posts
+                                INNER JOIN topics t ON posts.Id_topics = t.Id
+                                INNER JOIN status s ON t.Id_Status = s.Id
+                                LEFT JOIN likepost AS lp ON posts.Id = lp.Id_Post`;
 
             const values = [];
             const whereClauses = ['s.Label = ?'];
@@ -181,35 +178,37 @@ class postModel {
     static getAllPostWithMiddleware(query, userId) {
         return new Promise(async (resolve, reject) => {
             let sql = `
-            SELECT  posts.Id  AS PostId,
-                    posts.Title,
-                    posts.Content,
-                    posts.Create_post,
-                    posts.Id_topics,
-                    posts.Id_User,
-                    posts.Id_PostAnswer,
-                    t.Id      AS TopicId,
-                    t.Title   AS TopicTitle,
-                    t.Path,
-                    t.Create_at,
-                    t.Id_User AS TopicUserId,
-                    s.Label   AS Status,
-                    SUM(CASE WHEN lp.Like = 1 THEN 1 WHEN lp.Like=0 THEN -1 ELSE 0 END) AS PostLikes,
-                    (SELECT COUNT(*) FROM message WHERE message.Id_PostAnswer = posts.Id) AS MessageCount ,
-                   (
-                       tp.Id_Tag = ut.Id_Tag
-                       ) AS similarity_score
-            FROM posts
-                     INNER JOIN topics t ON posts.Id_topics = t.Id
-                     INNER JOIN status s ON t.Id_Status = s.Id
-                     LEFT JOIN likepost lp ON posts.Id = lp.Id_Post
-                 LEFT JOIN friendship f ON (
-                     (f.Id_User1 = ? AND f.Id_User2 = posts.Id_User AND f.status = 'friend') OR
-                     (f.Id_User2 = ? AND f.Id_User1 = posts.Id_User AND f.status = 'friend')
-                 )
-                     LEFT JOIN tagstopics tp ON posts.Id_topics = tp.Id_topics
-                     LEFT JOIN userstags ut ON tp.Id_Tag = ut.Id_Tag AND ut.Id_User = ?
-        `;
+                SELECT posts.Id                                                              AS PostId,
+                       posts.Title,
+                       posts.Content,
+                       posts.Create_post,
+                       posts.Id_topics,
+                       posts.Id_User,
+                       posts.Id_PostAnswer,
+                       t.Id                                                                  AS TopicId,
+                       t.Title                                                               AS TopicTitle,
+                       t.Path,
+                       t.Create_at,
+                       t.Id_User                                                             AS TopicUserId,
+                       s.Label                                                               AS Status,
+                       SUM(CASE
+                               WHEN lp.Like = 1 THEN 1
+                               WHEN lp.Like = 0 THEN -1
+                               ELSE 0
+                           END)                                                              AS PostLikes,
+                       (SELECT COUNT(*) FROM message WHERE message.Id_PostAnswer = posts.Id) AS MessageCount,
+                       (tp.Id_Tag = ut.Id_Tag)                                               AS similarity_score
+                FROM posts
+                         INNER JOIN topics t ON posts.Id_topics = t.Id
+                         INNER JOIN status s ON t.Id_Status = s.Id
+                         LEFT JOIN likepost lp ON posts.Id = lp.Id_Post
+                         LEFT JOIN friendship f ON (
+                         (f.Id_User1 = ? AND f.Id_User2 = posts.Id_User AND f.status = 'friend') OR
+                         (f.Id_User2 = ? AND f.Id_User1 = posts.Id_User AND f.status = 'friend')
+                         )
+                         LEFT JOIN tagstopics tp ON posts.Id_topics = tp.Id_topics
+                         LEFT JOIN userstags ut ON tp.Id_Tag = ut.Id_Tag AND ut.Id_User = ?
+            `;
 
             const values = [userId, userId, userId];
             const whereClauses = ["(t.Id_Status = 1 OR (f.status = 'friend' AND t.Id_Status = 2) OR posts.Id_User = ?)"];
@@ -241,7 +240,7 @@ class postModel {
             }
 
             // Add ORDER BY clause to sort by creation date in descending order
-            sql += " GROUP BY posts.Id ORDER BY similarity_score DESC";
+            sql += " GROUP BY posts.Id, t.Id, s.Label, similarity_score ORDER BY similarity_score DESC,  posts.Create_post DESC";
 
 
             // Use the same query without limit and offset to get the total number of results
@@ -356,7 +355,7 @@ class postModel {
         return new Promise((resolve, reject) => {
             const sql = `SELECT *
                          FROM likepost
-                         WHERE  Id_User = ?`
+                         WHERE Id_User = ?`
             connection.query(sql, [id], (err, results) => err ? reject(err) : resolve(results));
         });
     }
