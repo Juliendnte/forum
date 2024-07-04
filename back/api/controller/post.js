@@ -2,7 +2,7 @@ const post = require("../models/postModel");
 require('dotenv').config();
 const baseUrl = process.env.BASE_URL;
 
-const pagination = 5;
+const pagination = 10;
 
 /**
  * Function that build a query without limit and offset
