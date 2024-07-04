@@ -18,10 +18,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors());
 
-fs.readdirSync(forumRoutes).forEach((file) => {
-    const route = require(path.join(forumRoutes, file));
-    app.use(route);
-});
+//Importation des routes
+const routeUser = require("./routeur/routesUser");
+app.use(routeUser);
+const routePost = require("./routeur/routesPost");
+app.use(routePost);
+const routeTopic = require("./routeur/routesTopic");
+app.use(routeTopic);
+const routeMessage = require("./routeur/routesMessage");
+app.use(routeMessage);
+const routeAnnexe = require("./routeur/routesAnnexe");
+app.use(routeMessage);
 
 //Lancement du serveur web
 const port = 3000;
