@@ -7,6 +7,6 @@ const controllerTemplate = require("../controller/controlTemplate");
 routeur.get("/coder/recherche", controllerTemplate.SearchGlobal);
 
 // Route Erreur
-routeur.get("/:err", controllerTemplate.Error);
+routeur.get("/coder/:err", controllerTemplate.Error);
 
 module.exports = routeur;

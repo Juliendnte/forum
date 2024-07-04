@@ -1,6 +1,7 @@
 const topicOwn = async (req, res, next) => {
     const user = req.user;
-    if (req.topic.Id_User !== user.Sub || !user.isAdmin){
+
+    if (req.topic.User.Id !== user.Sub || !user.IsAdmin){
         return res.status(403).send("Forbidden");
     }
     next();
@@ -8,7 +9,7 @@ const topicOwn = async (req, res, next) => {
 
 const everyRight = async (req, res, next) => {
     const user = req.user;
-    if (req.topic.Id_User !== user.Sub || !user.isAdmin || !user.isModo){
+    if (req.topic.User.Id !== user.Sub || !user.IsAdmin || !user.IsModo){
         return res.status(403).send("Forbidden");
     }
     next();

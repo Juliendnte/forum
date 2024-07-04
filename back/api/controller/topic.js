@@ -176,21 +176,35 @@ class TopicController {
      * @returns {Object} - The response object, containing a success message.
      */
     static async patchTopic(req, res) {
-        const id = req.params.id;
+        const id = req.user.Sub;
         const body = req.body;
-
-        if (!body || !Object.keys(body).some(key => ["Title", "Description", "Id_Status", "Id_User"].includes(key))) {
-            return res.status(400).send({
-                message: "Au moins un des champs (Title, Description, Id_Status, Id_User) doit être modifié",
-                status: 400
-            });
+        while (typeof body.Tags == 'string'){
+            body.Tags = JSON.parse(body.Tags);
         }
+
+
+        let filePath;
+        console.log(body)
+        console.log(req.file)
+        if (req.file) {
+            filePath = req.file.path;
+            body.Path = filePath.replace('api\\assets', '');
+        }
+        console.log(req.file)
+        console.log(id, body)
 
         try {
             await topic.updatePatchTopic(id, body);
-
+            if (req.file) {
+                return res.download(filePath, (err) => {
+                    if (err) {
+                        console.log(err);
+                    }
+                });
+            }
             return res.status(200).send({message: `Topic with id ${id} successfully updated`, status: 200});
         } catch (err) {
+             console.log(err)
             res.status(500).send({message: err, status: 500});
         }
     }

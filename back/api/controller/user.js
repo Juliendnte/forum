@@ -96,11 +96,12 @@ class UserController {
                 });
             }
             const hashedPassword = hashPassword(password, utilisateur.Salt);//Récupere le password hashé
+            console.log(utilisateur)
             if (hashedPassword.hashedPassword === utilisateur.Password) {//Test s'il est egale au password de l'utilisateur a l'email donné par l'utilisateur
                 const Token = jwt.sign({
                     Sub: utilisateur.Id,
-                    IsAdmin: utilisateur.Role === 1,
-                    IsModo: utilisateur.Role === 2
+                    IsAdmin: utilisateur.Id_role === 1,
+                    IsModo: utilisateur.Id_role === 2
                 }, jwtkey, {expiresIn: remember ? '365d' : '24h'});//Me passe un token pendant 24h et le régle avec le jwtkey
                 res.status(200).send({Token});//Je renvoie un nouveau token a chaque login
             } else {
@@ -226,9 +227,12 @@ class UserController {
 
         const id = req.user.Sub;
         const body = req.body;
-        body.Tags = JSON.parse(JSON.parse(body.Tags));
-        let filePath;
-
+        while (typeof body.Tags == 'string'){
+            body.Tags = JSON.parse(body.Tags);
+        }
+         let filePath;
+        console.log(body)
+        console.log(req.file)
         if (req.file) {
             filePath = req.file.path;
             body.Path = filePath.replace('api\\assets', '');

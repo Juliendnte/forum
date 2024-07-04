@@ -111,6 +111,7 @@ class topicModel {
         });
     }
 
+
     /**
      * Get all topics based on a query.
      *
@@ -261,21 +262,59 @@ class topicModel {
      */
     static updatePatchTopic(id, updateTopic) {
         return new Promise((resolve, reject) => {
-            let sql = `UPDATE topics
-                       SET `;
-            const values = [];
+            const sql0 = `SELECT Id
+                          FROM status
+                          WHERE Label = ?`;
+            connection.query(sql0, updateTopic.Status, (err, statusResults) => {
+                if (err) return reject(err);
 
-            Object.entries(updateTopic).forEach(([key, value], index, entries) => {
-                sql += `${key}=?`;
-                values.push(value);
-                if (index < entries.length - 1) {
-                    sql += `, `;
-                }
+                const statusId = statusResults[0].Id;
+
+                let sql1 = `UPDATE topics
+                            SET `;
+                const values1 = [];
+
+                Object.entries(updateTopic).forEach(([key, value], index, entries) => {
+                    if (key !== 'Status' && key !== 'Tags') {
+                        sql1 += `${key} = ?`;
+                        values1.push(value);
+                        if (index < entries.length - ((updateTopic.Tags ? 1 : 0) + (updateTopic.Status ? 1 : 0))) {
+                            sql1 += `, `;
+                        }
+                    } else if (key === 'Status') {
+                        sql1 += 'Id_Status = ?';
+                        values1.push(statusId);
+                        if (index < entries.length -  ((updateTopic.Tags ? 1 : 0) + (updateTopic.Status ? 1 : 0))) {
+                            sql1 += `, `;
+                        }
+                    }
+                });
+                sql1 += ` WHERE Id = ?`;
+                values1.push(id);
+
+                connection.query(sql1, values1, (err, topicResults) => {
+                    if (err) return reject(err);
+
+                    if (updateTopic.Tags && Array.isArray(updateTopic.Tags)) {
+                        const sql2 = `DELETE
+                                      FROM tagstopics
+                                      WHERE Id_topics = ?`;
+                        connection.query(sql2, id, (err) => {
+                            if (err) return reject(err);
+
+                            const sql3 = `INSERT INTO tagstopics (Id_topics, Id_Tag)
+                                          VALUES ?`;
+                            const tagValues = updateTopic.Tags.map(tagId => [id, tagId]);
+
+                            connection.query(sql3, [tagValues], (err) => {
+                                if (err) return reject(err);
+
+                            });
+                        });
+                    }
+                    resolve({topicResults});
+                });
             });
-            sql += ` WHERE id=?`;
-            values.push(id);
-
-            connection.query(sql, values, (err, results) => err ? reject(err) : resolve(results[0]));
         });
     }
 
