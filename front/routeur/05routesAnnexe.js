@@ -8,6 +8,6 @@ const path = require("node:path");
 routeur.get("/coder/recherche", controllerTemplate.SearchGlobal);
 routeur.get("/coder/terms-and-conditions", controllerTemplate.Conditions);
 // Route Erreur
-routeur.get("/:err", controllerTemplate.Error);
+routeur.get("/coder/:err", controllerTemplate.Error);
 
 module.exports = routeur;

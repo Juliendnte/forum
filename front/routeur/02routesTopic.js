@@ -14,6 +14,6 @@ routeur.get("/coder/topic/:name/update", controllerTemplate.UpdateTopic);
 
 // Route Traitement en rapport avec les Topics
 routeur.post("/treatment/createTopic", controllerTopic.CreateTopicTreatment);
-routeur.post("/treatment/update/topic/:id", upload.single('ProfileImage'), controllerTopic.UpdateTopic);
+routeur.post("/treatment/update/topic/:name", upload.single('TopicImage'), controllerTopic.UpdateTopic);
 
 module.exports = routeur;

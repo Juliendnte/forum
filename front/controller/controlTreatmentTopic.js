@@ -1,6 +1,8 @@
 const url = "http://localhost:4000";
 const axios = require("axios");
 const ErrorHandler = require("./ErrorHandler");
+const {Blob} = require('blob-polyfill');
+
 
 const errorHandler = new ErrorHandler();
 
@@ -63,22 +65,30 @@ class TreatmentTopic {
                 return res.status(400).send("No token found");
             }
 
-            const dataUpdate = req.body;
-            dataUpdate.Tags = JSON.parse(dataUpdate.Tags)
+            const formData = new FormData();
+            let blobFile;
 
-            const id = req.params.id;
+            formData.append('Title', req.body.Title);
+            formData.append('Status', req.body.Status);
+            formData.append('Tags', JSON.stringify(req.body.Tags));
 
-            await axios.patch(`${url}/topic/${id}`, dataUpdate,
+            if (req.file) {
+                blobFile = new Blob([req.file.buffer], {type: req.file.mimetype});
+                formData.append('TopicImage', blobFile, req.file.originalname);
+            }
+
+            const name = req.params.name;
+            console.log(formData)
+            await axios.patch(`${url}/topic/${name}`, formData,
                 {
                     headers: {
                         "Authorization": token,
-                        "Content-Type": "application/json"
+                        "Content-Type": "multipart/form-data"
                     },
                 });
 
             res.redirect('/CODER');
         } catch (err) {
-            console.log(err)
             errorHandler.handleRequestError(err)
             res.redirect('/CODER/err')
         }

@@ -189,3 +189,10 @@ textarea {
 .active-search {
     background: #C9D7DE;
 }
+
+.section-message-ctn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

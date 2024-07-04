@@ -271,6 +271,25 @@ class ControlTemplate {
         }
     }
 
+    static async CreateMessage(req, res) {
+        try {
+            const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
+
+            const id = req.params.id;
+            const dataPost = await controlPost.GetPost(id);
+
+            console.log("dataTopic:", dataPost);
+
+            res.render('../views/pages/createMessage', {
+                dataUser,
+                dataPost
+            });
+        } catch (err) {
+            console.error("Error fetching data for create post:", err);
+            res.status(500).send("Internal server error");
+        }
+    }
+
     static async UpdateProfil(req, res) {
         try {
             const token = req.cookies.Token;

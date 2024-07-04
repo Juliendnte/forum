@@ -20,13 +20,13 @@
 </div>
 <div class="container" id="container">
     <div class="form-container sign-in">
-        <form id="tags-form" action="/treatment/update/topic/<%= dataTopic.topic.TopicId %>" method="POST">
+        <form id="tags-form" action="/treatment/update/topic/<%= dataTopic.topic.Title %>" method="POST" enctype="multipart/form-data">
             <h1>Modifier le topic</h1>
             <div class="input-topic-info-update-ctn">
                 <div class="input-topic-info-update-img">
                     <img id="profileImagePreview" src="<%= dataTopic.topic.TopicPath %>" alt="Topic Image" style="max-width: 100px; max-height: 100px;">
-                    <input type="file" id="profileImageInput" name="Path" accept="image/*">
-                    <input type="hidden" name="ProfileImage" value="<%= dataTopic.topic.TopicPath %>">
+                    <input type="file" id="profileImageInput" name="TopicImage" accept="image/*">
+                    <input type="hidden" value="<%= dataTopic.topic.TopicPath %>">
                 </div>
                 <div class="input-topic-info-update-global">
                     <input type="text" name="Title" placeholder="Nom du topic *"
