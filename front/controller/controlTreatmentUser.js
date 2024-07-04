@@ -1,7 +1,7 @@
 const url = "http://localhost:4000";
 const axios = require("axios");
 const ErrorHandler = require("./ErrorHandler");
-const { Blob } = require('blob-polyfill');
+const {Blob} = require('blob-polyfill');
 
 let user
 
@@ -241,15 +241,15 @@ class TreatmentUser {
                 return res.status(400).send("No token found");
             }
             const formData = new FormData();
-            let blobFile ;
+            let blobFile;
 
-            formData.append('Name' , req.body.Name);
-            formData.append('Email' , req.body.Email);
+            formData.append('Name', req.body.Name);
+            formData.append('Email', req.body.Email);
             formData.append('Biography', req.body.Biography);
             formData.append('Tags', JSON.stringify(req.body.Tags));
-            if (req.file){
-                blobFile = new Blob([req.file.buffer], { type: req.file.mimetype });
-                formData.append('ProfileImage',blobFile, req.file.originalname);
+            if (req.file) {
+                blobFile = new Blob([req.file.buffer], {type: req.file.mimetype});
+                formData.append('ProfileImage', blobFile, req.file.originalname);
             }
 
             await axios.patch(`${url}/user/update`, formData,
@@ -261,7 +261,7 @@ class TreatmentUser {
                 });
 
 
-            res.redirect('/CODER/user/'+ req.body.Name);
+            res.redirect('/CODER/user/' + req.body.Name);
         } catch (err) {
             console.log(err)
             errorHandler.handleRequestError(err)
@@ -275,14 +275,76 @@ class TreatmentUser {
 
             const response = await axios.get(`${url}/getLiked`,
                 {
-                headers: {
-                    "Authorization": token,
-                    "Content-Type": "application/json"
-                },
-            });
+                    headers: {
+                        "Authorization": token,
+                        "Content-Type": "application/json"
+                    },
+                });
 
             return response.data
 
+        } catch (err) {
+            errorHandler.handleRequestError(err);
+        }
+    }
+
+    static async AddFavorite(req, res) {
+        try {
+            const Id = req.params.id;
+            const token = req.cookies.Token;
+
+            const response = await axios.post(`${url}/postFav`,
+                {
+                    Id
+                },
+                {
+                    headers: {
+                        "Authorization": token,
+                        "Content-Type": "application/json"
+                    },
+                });
+
+            return response.data
+        } catch (err) {
+            errorHandler.handleRequestError(err);
+        }
+    }
+
+    static async RemoveFavorite(req, res) {
+        try {
+            const Id = req.params.id;
+            const token = req.cookies.Token;
+
+            const response = await axios.delete(`${url}/deleteFav`,
+                {
+                    Id
+                },
+                {
+                    headers: {
+                        "Authorization": token,
+                        "Content-Type": "application/json"
+                    },
+                });
+
+            return response.data
+        } catch (err) {
+            errorHandler.handleRequestError(err);
+        }
+    }
+
+    static async GetFavorite(req, res) {
+        try {
+            const token = req.cookies.Token;
+
+            const response = await axios.get(`${url}/getFav`,
+                {
+                    headers: {
+                        "Authorization": token,
+                        "Content-Type": "application/json"
+                    },
+                });
+
+            return response.data
         } catch (err) {
             errorHandler.handleRequestError(err);
         }

@@ -5,12 +5,9 @@
                 <p>Suivi(e)s</p>
                 <button class="btn-friend-popUp" id="btnClosePopUPFriend">
                     <div class="_abm0">
-                        <svg aria-label="Fermer" class="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="18"
-                             role="img" viewBox="0 0 24 24" width="18"><title>Fermer</title>
-                            <polyline fill="none" points="20.643 3.357 12 12 3.353 20.647" stroke="currentColor"
-                                      stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></polyline>
-                            <line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                  stroke-width="3" x1="20.649" x2="3.354" y1="20.649" y2="3.354"></line>
+                        <svg aria-label="Fermer" class="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="18" role="img" viewBox="0 0 24 24" width="18"><title>Fermer</title>
+                            <polyline fill="none" points="20.643 3.357 12 12 3.353 20.647" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></polyline>
+                            <line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" x1="20.649" x2="3.354" y1="20.649" y2="3.354"></line>
                         </svg>
                     </div>
                 </button>
@@ -26,49 +23,47 @@
                                 </path>
                             </g>
                         </svg>
-                        <input class="input" type="search" placeholder="Recherche"/>
+                        <input class="input" type="search" id="searchFriend" placeholder="Recherche"/>
                     </div>
-                    <div class="UserFriend-ctn">
-                        <div class="UserFriend-ctn">
-                            <% if (dataUser.utilisateur.Suivie.length > 0 || dataUser.utilisateur.Friends.length > 0) { %>
-                                <% dataUser.utilisateur.Suivie.forEach(Suivie => { %>
-                                    <div class="UserFriend-div-global">
-                                        <a href="/coder/user/<%= Suivie.Name %>">
-                                            <div class="UserFriend-global">
-                                                <div class="UserFriend-img">
-                                                    <img src="<%= Suivie.Path %>" alt="Photo de <%= Suivie.Name %>">
-                                                </div>
-                                                <div class="UserFriend-name">
-                                                    <span><%= Suivie.Name %></span>
-                                                </div>
+                    <div class="UserFriend-ctn" id="UserFriendList">
+                        <% if (dataUser.utilisateur.Suivie.length > 0 || dataUser.utilisateur.Friends.length > 0) { %>
+                            <% dataUser.utilisateur.Suivie.forEach(Suivie => { %>
+                                <div class="UserFriend-div-global UserFriend-item" data-name="<%= Suivie.Name.toLowerCase() %>">
+                                    <a href="/coder/user/<%= Suivie.Name %>">
+                                        <div class="UserFriend-global">
+                                            <div class="UserFriend-img">
+                                                <img src="<%= Suivie.Path %>" alt="Photo de <%= Suivie.Name %>">
                                             </div>
-                                            <div class="UserFriend-btn-friend">
-                                                <button>Voir Profil</button>
+                                            <div class="UserFriend-name">
+                                                <span><%= Suivie.Name %></span>
                                             </div>
-                                        </a>
-                                    </div>
-                                <% }); %>
-                                <% dataUser.utilisateur.Friends.forEach(friend => { %>
-                                    <div class="UserFriend-div-global">
-                                        <a href="/coder/user/<%= friend.Name %>">
-                                            <div class="UserFriend-global">
-                                                <div class="UserFriend-img">
-                                                    <img src="<%= friend.Path %>" alt="Photo de <%= friend.Name %>">
-                                                </div>
-                                                <div class="UserFriend-name">
-                                                    <span><%= friend.Name %></span>
-                                                </div>
+                                        </div>
+                                        <div class="UserFriend-btn-friend">
+                                            <button>Voir Profil</button>
+                                        </div>
+                                    </a>
+                                </div>
+                            <% }); %>
+                            <% dataUser.utilisateur.Friends.forEach(friend => { %>
+                                <div class="UserFriend-div-global UserFriend-item" data-name="<%= friend.Name.toLowerCase() %>">
+                                    <a href="/coder/user/<%= friend.Name %>">
+                                        <div class="UserFriend-global">
+                                            <div class="UserFriend-img">
+                                                <img src="<%= friend.Path %>" alt="Photo de <%= friend.Name %>">
                                             </div>
-                                            <div class="UserFriend-btn-friend">
-                                                <button>Voir Profil</button>
+                                            <div class="UserFriend-name">
+                                                <span><%= friend.Name %></span>
                                             </div>
-                                        </a>
-                                    </div>
-                                <% }); %>
-                            <% } else { %>
-                                <p class="message-friend-not-found" )>Aucun suivi(e)s trouvé.</p>
-                            <% } %>
-                        </div>
+                                        </div>
+                                        <div class="UserFriend-btn-friend">
+                                            <button>Voir Profil</button>
+                                        </div>
+                                    </a>
+                                </div>
+                            <% }); %>
+                        <% } else { %>
+                            <p class="message-friend-not-found">Aucun suivi(e)s trouvé.</p>
+                        <% } %>
                     </div>
                 </div>
             </div>

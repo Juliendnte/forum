@@ -59,7 +59,7 @@
                                 </span>
                             </button>
                         </a>
-                        <% if (dataTopic.topic.User.Name === dataUser.utilisateur.Name) { %>
+                        <% if (dataTopic.topic.User.Name === dataUser.utilisateur.Name || dataUser.utilisateur.Role === 'Admin' ) { %>
                             <a href="/coder/topic/<%= dataTopic.topic.Title %>/update">
                                 <button style="border-radius: 0px; border: none;">
                                 <span class="pop-up_post-btn-span">
@@ -76,7 +76,7 @@
                                 </span>
                                 </button>
                             </a>
-                            <a href="/coder/post/<%= dataTopic.topic.TopicId %>/update">
+                            <a href="/coder/post/<%= dataTopic.topic.TopicId %>/delete">
                                 <button style="border-radius: 0px; border: none; color: red;">
                                 <span class="pop-up_post-btn-span">
                                     <span>
@@ -138,7 +138,7 @@
 
                         return 'à l\'instant';
                     } %>
-                    <% if (dataTopic.topic.Posts.length === 0 ) { %>
+                    <% if (dataTopic.topic.Posts.length !== 0 ) { %>
                         <% dataTopic.topic.Posts.forEach(function(item){ %>
                             <div class="post">
                                 <div class="post-user-header">
@@ -248,7 +248,9 @@
                             <span>t/<%= dataTopic.topic.Title %></span>
                         </div>
                         <div class="content-aside-creator">
-                            <span>Créer par <a href="/coder/user/<%= dataTopic.topic.User.Name %>"><strong><%= dataTopic.topic.User.Name %></a></strong><a
+                            <span>Créer par <a
+                                        href="/coder/user/<%= dataTopic.topic.User.Name %>"><strong><%= dataTopic.topic.User.Name %></a></strong>
+                                <a
                                         href="CODER/user/"><strong><%= dataTopic.topic.UserName %></strong></a></span>
                             <span>le <%= dataTopic.topic.Create_at_formatted %></span>
                         </div>

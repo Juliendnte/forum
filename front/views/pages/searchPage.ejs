@@ -52,7 +52,7 @@
         } %>
         <% if (!dataSearch) { %>
             <div class="err-message-detail-ctn">
-                <span>Echec de votre recherche connard</span>
+                <span><p>Hm... nous n'avons trouvé aucun résultat pour <strong>"<%= query %>"</strong></p></span>
             </div>
         <% } else { %>
             <div class="header-btn-search-categorie-ctn">
@@ -64,21 +64,50 @@
             </div>
 
             <div id="search-results">
-                <% dataSearch.search.forEach(function(item) { %>
+                <%
+                    let hasTopic = false;
+                    let hasPost = false;
+                    let hasUser = false;
+
+                dataSearch.search.forEach(function(item) {
+                %>
                     <% if (item.Type === 'topic') { %>
                         <section class="topic-page-search-global" data-type="topic">
                             <%= item.Id %>
                         </section>
-                    <% } else if (item.Type === 'post') { %>
+                        <% hasTopic = true; %>
+                    <% } %>
+
+                    <% if (item.Type === 'post') { %>
                         <section class="post-page-search-global" data-type="post">
                             <%= item.Id %>
                         </section>
-                    <% } else if (item.Type === 'user') { %>
+                        <% hasPost = true; %>
+                    <% } %>
+
+                    <% if (item.Type === 'user') { %>
                         <section class="user-page-search-global" data-type="user">
                             <%= item.Id %>
                         </section>
+                        <% hasUser = true; %>
                     <% } %>
                 <% }); %>
+
+                <% if (!hasTopic) { %>
+                    <section class="user-page-search-global-err" data-type="topic">
+                        <p>Hm... nous n'avons trouvé aucun résultat pour <strong>"<%= query %>"</strong></p>
+                    </section>
+                <% } %>
+                <% if (!hasPost) { %>
+                    <section class="user-page-search-global-err" data-type="post">
+                        <p>Hm... nous n'avons trouvé aucun résultat pour <strong>"<%= query %>"</strong></p>
+                    </section>
+                <% } %>
+                <% if (!hasUser) { %>
+                    <section class="user-page-search-global-err" data-type="user">
+                        <p>Hm... nous n'avons trouvé aucun résultat pour <strong>"<%= query %>"</strong></p>
+                    </section>
+                <% } %>
             </div>
         <% } %>
     </section>
