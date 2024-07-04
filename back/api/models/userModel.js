@@ -409,9 +409,9 @@ class userModel {
                 const posts = results.map(row => {
                     if (row.Type === 'post') {
                         return {
-                            Id: row.Id,
-                            Title: row.Title,
-                            Content: row.Content,
+                            PostId: row.Id,
+                            PostTitle: row.Title,
+                            PostContent: row.Content,
                             CreateAt: row.CreateAt,
                             UserId: row.UserId,
                             Type: row.Type,
@@ -425,8 +425,8 @@ class userModel {
                         };
                     } else {
                         return {
-                            Id: row.Id,
-                            Content: row.Content,
+                            MessageId: row.Id,
+                            MessageContent: row.Content,
                             CreateAt: row.CreateAt,
                             UserId: row.UserId,
                             Type: row.Type,

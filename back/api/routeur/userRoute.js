@@ -19,8 +19,8 @@ routeur.post("/follow", [middleware.auth.validateToken], controllerUser.Follow);
 routeur.post("/searchFriend", controllerUser.SearchFriend)
 routeur.post("/searchFollow", controllerUser.SearchFollow)
 routeur.get("/search", controllerUser.Search)
-routeur.get("/getFav", controllerUser.getFav)
-routeur.delete("/deleteFav", controllerUser.deleteFav)
+routeur.get("/getFav", middleware.auth.validateToken, controllerUser.getFav)
+routeur.delete("/deleteFav", middleware.auth.validateToken ,controllerUser.deleteFav)
 routeur.post("/postFav", controllerUser.postFav)
 routeur.patch("/user/update", [middleware.auth.validateToken, middleware.upload('user')], controllerUser.UpdateUser)
 
