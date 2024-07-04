@@ -289,8 +289,8 @@ class topicModel {
                         }
                     }
                 });
-                sql1 += ` WHERE Id = ?`;
-                values1.push(id);
+                sql1 += ` WHERE Title = ?`;
+                values1.push(updateTopic.Title);
 
                 connection.query(sql1, values1, (err, topicResults) => {
                     if (err) return reject(err);

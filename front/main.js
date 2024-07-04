@@ -28,7 +28,7 @@ app.use(routeTopic);
 const routeMessage = require("./routeur/routesMessage");
 app.use(routeMessage);
 const routeAnnexe = require("./routeur/routesAnnexe");
-app.use(routeMessage);
+app.use(routeAnnexe);
 
 //Lancement du serveur web
 const port = 3000;
