@@ -386,7 +386,32 @@ class ControlTemplate {
             res.status(500).json({ error: 'Erreur lors de la récupération des données de recherche' });
         }
     }
+    static async Conditions (req,res) {
+        try {
+            const [dataUser, dataTags] = await Promise.all([
+                controlUser.TreatmentUser.GetUser(req, res),
+                controlTopic.GetTags(req, res)
+            ]);
 
+            let query
+
+            const token = req.cookies.Token;
+            let PathUserLog = null;
+
+            if (token && dataUser && dataUser.utilisateur) {
+                PathUserLog = dataUser.utilisateur.Path;
+            }
+
+            res.render('../views/pages/condition', {
+                dataUser,
+                dataTags,
+                PathUserLog,
+                query
+            });
+        }catch (err){
+            errorHandler.handleRequestError(err);
+        }
+    }
     /**
      * Render the error page.
      * @param {Object} req - The request object.
