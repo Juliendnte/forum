@@ -13,27 +13,23 @@ class messageModel {
     static getMessageById(id) {
         return new Promise((resolve, reject) => {
             const sql = `
-                SELECT
-                    m.*,
-                    u.Name,
-                    u.Path,
-                    u.Id AS Id_User,
-                    r.Label AS Role,
-                    COUNT(m2.Id) AS MessageCount
-                FROM
-                    message m
-                        INNER JOIN
-                    users u ON m.Id_User = u.Id
-                        INNER JOIN
-                    role r ON u.Id_role = r.Id
-                        LEFT JOIN
-                    message m2 ON m.Id = m2.Id_MessageAnswer
-                WHERE
-                    m.Id_MessageAnswer = ? OR m.Id = ?
-                GROUP BY
-                    m.Id, u.Name, u.Path, u.Id, r.Label
-                ORDER BY
-                    m.Id;
+                SELECT m.*,
+                       u.Name,
+                       u.Path,
+                       u.Id         AS Id_User,
+                       r.Label      AS Role,
+                       COUNT(m2.Id) AS MessageCount
+                FROM message m
+                         INNER JOIN
+                     users u ON m.Id_User = u.Id
+                         INNER JOIN
+                     role r ON u.Id_role = r.Id
+                         LEFT JOIN
+                     message m2 ON m.Id = m2.Id_MessageAnswer
+                WHERE m.Id_MessageAnswer = ?
+                   OR m.Id = ?
+                GROUP BY m.Id, u.Name, u.Path, u.Id, r.Label
+                ORDER BY m.Id;
                 ;`
             connection.query(sql, [id, id], (err, results) => {
                 if (err) {
@@ -70,13 +66,19 @@ class messageModel {
      */
     static getAllMessage(query) {
         return new Promise(async (resolve, reject) => {
-            let sql = `SELECT m.*, users.Name, users.Path, COUNT(m.Id_MessageAnswer) AS MessageCount
-                                FROM message m
-                                INNER JOIN users ON m.Id_User = users.Id
+            let sql = `SELECT m.*,
+                              users.Name,
+                              users.Path,
+                              COUNT(m2.Id) AS MessageCount
+                       FROM message m
+                                INNER JOIN
+                            users ON m.Id_User = users.Id
+                                LEFT JOIN
+                            message m2 ON m.Id = m2.Id_MessageAnswer
             `
 
             const values = [];
-            const whereClauses = ['m.Id_MessageAnswer IS NULL'];
+            const whereClauses = [];
             let limitClause = "";
             let offsetClause = "";
 
@@ -104,9 +106,8 @@ class messageModel {
 
             // Ajouter limit et offset à la requête principale
 
-            sql += ' GROUP BY m.Id ' + limitClause + offsetClause;
+            sql += ' GROUP BY m.Id, users.Name, users.Path ' + limitClause + offsetClause;
             // Exécuter la requête avec les valeurs
-            console.log(sql)
             connection.query(sql, values, (err, results) => {
                 if (err) {
                     return reject(err);
@@ -116,21 +117,26 @@ class messageModel {
                     return resolve([]);
                 }
 
-                const messages = results.map((message) => ({
-                    Id: message.Id,
-                    Content: message.Content,
-                    Create_message: message.Create_message,
-                    Update_message: message.Update_message,
-                    Id_PostAnswer: message.Id_PostAnswer,
-                    Id_MessageAnswer: message.Id_MessageAnswer,
-                    CountMessage: message.MessageCount,
-                    User: {
-                        Id: message.Id_User,
-                        Name: message.Name,
-                        Path: message.Path,
+                const messages = results.map((message) => {
+                    if (!message.Id_MessageAnswer) {
+                        return {
+                            Id: message.Id,
+                            Content: message.Content,
+                            Create_message: message.Create_message,
+                            Update_message: message.Update_message,
+                            Id_PostAnswer: message.Id_PostAnswer,
+                            Id_MessageAnswer: message.Id_MessageAnswer,
+                            CountMessage: message.MessageCount,
+                            User: {
+                                Id: message.Id_User,
+                                Name: message.Name,
+                                Path: message.Path,
+                            }
+                        };
                     }
-                }));
-                return resolve(messages);
+                    return null;
+                }).filter(message => message !== null);
+                resolve(messages)
             });
         });
     }
