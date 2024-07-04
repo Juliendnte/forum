@@ -1,5 +1,5 @@
 function validateModo(req, res, next) {
-    if (!req.user.isModo || !req.user.isAdmin){
+    if (!req.user.IsModo || !req.user.IsAdmin){
         return res.status(403).send("Forbidden");
     }
     next();

@@ -1,5 +1,5 @@
 function validateAdmin(req, res, next) {
-    if (!req.user.isAdmin){
+    if (!req.user.IsAdmin){
         return res.status(403).send("Forbidden");
     }
     next();
