@@ -149,11 +149,11 @@ class TopicController {
      * @returns {Object} - The response object, containing a success message.
      */
     static async postTopic(req, res) {
-        const {Title, Status} = req.body;
+        const {Title, Status, Content} = req.body;
         const Id_User = req.user.Sub;
 
-        if (!Title || !Status || !Id_User) {
-            return res.status(400).send({message: "Les champs Title et Status est requis.", status: 400});
+        if (!Title || !Status || !Id_User || !Content) {
+            return res.status(400).send({message: "Les champs Title , Status et Content sont requis.", status: 400});
         }
 
         if (Title.includes(' ')) {
@@ -161,8 +161,7 @@ class TopicController {
         }
 
         try {
-            const NewTopic = await topic.createTopic({Title, Status, Id_User});
-
+            const NewTopic = await topic.createTopic({Title, Status, Id_User, Content});
             return res.status(201).send({message: `Topic successfully created`, status: 201, NewTopic});
         } catch (err) {
             res.status(500).send({message: err, status: 500});
@@ -216,28 +215,6 @@ class TopicController {
             await topic.deleteTopic(id);
 
             return res.status(200).send({message: `Topic with id ${id} successfully delete`, status: 200});
-        } catch (err) {
-            res.status(500).send({message: err, status: 500});
-        }
-    }
-
-    /**
-     * Upload an image for a specific topic.
-     * @param {Object} req - The request object, containing the image file in the body.
-     * @param {Object} res - The response object.
-     * @returns {Object} - The response object, containing a success message.
-     */
-    static async UploadImage(req, res) {
-        const id = req.user.Sub;
-
-        try {
-            const filePath = req.file.path
-            console.log(filePath);
-            res.download(filePath, err => {
-                if (err)
-                    res.status(500).send({message: err, status: 500});
-            });
-            await topic.updatePatchTopic(id, {Path: filePath.replace('assets', '')});
         } catch (err) {
             res.status(500).send({message: err, status: 500});
         }

@@ -21,6 +21,7 @@ class topicModel {
             const sql = `
                 SELECT t.Id        AS TopicId,
                        t.Title,
+                       t.Content,
                        t.Path      AS TopicPath,
                        t.Create_at,
                        t.Id_User,
@@ -120,7 +121,7 @@ class topicModel {
     static getAllTopic(query) {
         return new Promise(async (resolve, reject) => {
             let sql = `
-                SELECT t.Id AS TopicId, t.Title, t.Path, t.Create_at, t.Id_User, s.Label AS Status
+                SELECT t.Id AS TopicId, t.Title, t.Content, t.Path, t.Create_at, t.Id_User, s.Label AS Status
                 FROM topics t
                          LEFT JOIN status s ON t.Id_Status = s.Id
                          LEFT JOIN tagstopics tp ON t.Id = tp.Id_topics
@@ -172,7 +173,7 @@ class topicModel {
     static getAllTopicMiddleware(query, UserId) {
         return new Promise(async (resolve, reject) => {
             let sql = `
-                SELECT t.Id AS TopicId, t.Title, t.Path, t.Create_at, t.Id_User, s.Label AS Status
+                SELECT t.Id AS TopicId, t.Title, t.Content, t.Path, t.Create_at, t.Id_User, s.Label AS Status
                 FROM topics t
                          LEFT JOIN status s ON t.Id_Status = s.Id
                          LEFT JOIN tagstopics tp ON t.Id = tp.Id_topics
@@ -245,10 +246,10 @@ class topicModel {
      */
     static createTopic(newTopic) {
         return new Promise((resolve, reject) => {
-            const sql = `INSERT INTO topics (Title, Id_Status, Id_User)
-                         VALUES (?, ?, ?)`;
+            const sql = `INSERT INTO topics (Title, Content, Id_Status, Id_User)
+                         VALUES (?,? , ?, ?)`;
 
-            connection.query(sql, [newTopic.Title, newTopic.Status === 'Public' ? 1 : 2, newTopic.Id_User], (err, results) => err ? reject(err) : resolve(results[0]));
+            connection.query(sql, [newTopic.Title, newTopic.Content ,newTopic.Status === 'Public' ? 1 : 2, newTopic.Id_User], (err, results) => err ? reject(err) : resolve(results[0]));
         });
     }
 
