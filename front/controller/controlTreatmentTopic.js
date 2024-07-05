@@ -113,6 +113,16 @@ class TreatmentTopic {
             errorHandler.setError('Erreur lors de la recherche', 500)
         }
     }
+
+    static async SearchTags(tag) {
+        try {
+            const response = await axios.get(`${url}/topics?tags=${tag}`);
+
+            return response.data;
+        } catch (err) {
+            errorHandler.setError('Erreur lors de la recherche', 500)
+        }
+    }
 }
 
 module.exports = TreatmentTopic;
