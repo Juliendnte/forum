@@ -71,6 +71,7 @@ class topicModel {
                     TopicPath: results[0].TopicPath,
                     Create_at: results[0].Create_at,
                     Status: results[0].Status,
+                    Content: results[0].TopicContent,
                     Tag: [],
                     User: {
                         Name: results[0].UserName,
@@ -86,7 +87,6 @@ class topicModel {
                             Id: row.TagId,
                             Label: row.TagLabel,
                             Path: row.TagPath,
-                            Content: row.TopicContent,
                         })
                     }
                     user.Posts.push({

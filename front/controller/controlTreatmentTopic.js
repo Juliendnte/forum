@@ -19,11 +19,12 @@ class TreatmentTopic {
             return res.status(401).send("Unauthorized: No token provided");
         }
 
-        const { Title, Status } = req.body;
+        const {Title, Status, Content} = req.body;
         try {
             const response = await axios.post(`${url}/topic`, {
                     Title,
                     Status,
+                    Content,
                 },
                 {
                     headers: {
@@ -70,6 +71,7 @@ class TreatmentTopic {
 
             formData.append('Title', req.body.Title);
             formData.append('Status', req.body.Status);
+            formData.append('Content', req.body.Content);
             formData.append('Tags', JSON.stringify(req.body.Tags));
 
             if (req.file) {

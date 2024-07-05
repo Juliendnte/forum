@@ -31,19 +31,23 @@
                 <div class="input-topic-info-update-global">
                     <input type="text" name="Title" placeholder="Nom du topic *"
                            value="<%= dataTopic.topic.Title %>" required>
+                    <textarea name="Content" placeholder="Description du Topic *"
+                              required oninput="autoResize(this)"></textarea>
                     <div class="radio-create-topic">
                         <span>Type du topic : </span>
-                        <div class="radio-topic">
-                            <input type="radio" id="Public" name="Status" value="Public" <% if (dataTopic.topic.Status === 'Public') {%> checked <% }; %>>
-                            <label for="Public">Public</label><br>
-                        </div>
-                        <div class="radio-topic">
-                            <input type="radio" id="Private" name="Status" value="Private" <% if (dataTopic.topic.Status === 'Private') {%> checked <% }; %>>
-                            <label for="Private">Privé</label><br>
-                        </div>
-                        <div class="radio-topic">
-                            <input type="radio" id="Private" name="Status" value="Archived" <% if (dataTopic.topic.Status === 'Archived') {%> checked <% }; %>>
-                            <label for="Private">Archivé</label><br>
+                        <div class="radio-create-topic-radio">
+                            <div class="radio-topic">
+                                <input type="radio" id="Public" name="Status" value="Public" <% if (dataTopic.topic.Status === 'Public') {%> checked <% }; %>>
+                                <label for="Public">Public</label><br>
+                            </div>
+                            <div class="radio-topic">
+                                <input type="radio" id="Private" name="Status" value="Private" <% if (dataTopic.topic.Status === 'Private') {%> checked <% }; %>>
+                                <label for="Private">Privé</label><br>
+                            </div>
+                            <div class="radio-topic">
+                                <input type="radio" id="Private" name="Status" value="Archived" <% if (dataTopic.topic.Status === 'Archived') {%> checked <% }; %>>
+                                <label for="Private">Archivé</label><br>
+                            </div>
                         </div>
                     </div>
                 </div>

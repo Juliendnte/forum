@@ -28,6 +28,8 @@
                 <span>Un nom aide les gens à comprendre ce qu'est votre communauté</span>
             </div>
             <input type="text" name="Title" placeholder="Nom du topic" required>
+            <textarea name="Content" placeholder="Description du Topic *"
+                      required oninput="autoResize(this)"></textarea>
             <div class="radio-create-topic">
                 <span>Type du topic : </span>
                 <div class="radio-topic">

@@ -181,6 +181,7 @@ class TopicController {
             body.Tags = JSON.parse(body.Tags);
         }
 
+        console.log(body)
 
         let filePath;
         if (req.file) {

@@ -96,7 +96,6 @@ class UserController {
                 });
             }
             const hashedPassword = hashPassword(password, utilisateur.Salt);//Récupere le password hashé
-            console.log(utilisateur)
             if (hashedPassword.hashedPassword === utilisateur.Password) {//Test s'il est egale au password de l'utilisateur a l'email donné par l'utilisateur
                 const Token = jwt.sign({
                     Sub: utilisateur.Id,
@@ -157,12 +156,10 @@ class UserController {
             utilisateur.Tags = utilisateur.Tags.map((tag) => `${url}assets${tag}`);
 
             utilisateur.VueEnsemble = userName ? await user.getPostMessageName(userName) : await user.getPostMessage(userId);
-            console.log(utilisateur)
             utilisateur.VueEnsemble.forEach((vue) => {
                 vue.TopicLike = vue.TopicLike === 0 ? -1 : vue.TopicLike
                 vue.Topic.Path = `${url}assets/${vue.Topic.Path}`
             });
-            console.log(7)
             res.status(200).send({
                 message: 'User successfully found',
                 status: 200,
@@ -236,8 +233,7 @@ class UserController {
             body.Tags = JSON.parse(body.Tags);
         }
          let filePath;
-        console.log(body)
-        console.log(req.file)
+
         if (req.file) {
             filePath = req.file.path;
             body.Path = filePath.replace('api\\assets', '');

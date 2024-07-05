@@ -14,7 +14,6 @@
 .radio-topic {
     display: flex;
     gap: 15px;
-    padding-left: 25px;
 }
 .titre-form {
     display: flex;
@@ -294,4 +293,15 @@ textarea {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap; /* Prevent text from wrapping to next line */
+}
+
+.radio-create-topic-radio {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.radio-topic {
+    display: flex;
+    align-items: center;
 }
