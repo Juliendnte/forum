@@ -302,7 +302,7 @@ class userModel {
                 }
 
                 if (results.length === 0) {
-                    return resolve(null);
+                    return resolve([]);
                 }
 
                 const posts = results.map(row => {
@@ -403,7 +403,7 @@ class userModel {
                 }
 
                 if (results.length === 0) {
-                    return resolve(null);
+                    return resolve([]);
                 }
 
                 const posts = results.map(row => {
