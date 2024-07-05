@@ -21,7 +21,7 @@ class topicModel {
             const sql = `
                 SELECT t.Id        AS TopicId,
                        t.Title,
-                       t.Content  AS TopicContent,
+                       t.Content   AS TopicContent,
                        t.Path      AS TopicPath,
                        t.Create_at,
                        t.Id_User,
@@ -80,33 +80,33 @@ class topicModel {
                     },
                     Posts: []
                 };
+                if (results[0].PostId) {
+                    results.forEach(row => {
+                        if (!(user.Tag.some(tag => tag.Id === row.TagId))) {
+                            user.Tag.push({
+                                Id: row.TagId,
+                                Label: row.TagLabel,
+                                Path: row.TagPath,
+                            })
+                        }
+                        user.Posts.push({
+                            User: {
+                                Name: row.UserNamePost,
+                                Path: row.UserPathPost,
+                                Id: row.UserIdPost
+                            },
+                            Post: {
+                                Id: row.PostId,
+                                Title: row.PostTitle,
+                                Create_post: row.Create_post,
+                                Content: row.Content,
+                                Likes: row.PostLikes,
+                                MessageCount: row.MessageCount
 
-                results.forEach(row => {
-                    if (!(user.Tag.some(tag => tag.Id === row.TagId))) {
-                        user.Tag.push({
-                            Id: row.TagId,
-                            Label: row.TagLabel,
-                            Path: row.TagPath,
-                        })
-                    }
-                    user.Posts.push({
-                        User: {
-                            Name: row.UserNamePost,
-                            Path: row.UserPathPost,
-                            Id: row.UserIdPost
-                        },
-                        Post: {
-                            Id: row.PostId,
-                            Title: row.PostTitle,
-                            Create_post: row.Create_post,
-                            Content: row.Content,
-                            Likes: row.PostLikes,
-                            MessageCount: row.MessageCount
-
-                        },
+                            },
+                        });
                     });
-                });
-
+                }
                 resolve(user);
             });
         });
@@ -248,9 +248,9 @@ class topicModel {
     static createTopic(newTopic) {
         return new Promise((resolve, reject) => {
             const sql = `INSERT INTO topics (Title, Content, Id_Status, Id_User)
-                         VALUES (?,? , ?, ?)`;
+                         VALUES (?, ?, ?, ?)`;
 
-            connection.query(sql, [newTopic.Title, newTopic.Content ,newTopic.Status === 'Public' ? 1 : 2, newTopic.Id_User], (err, results) => err ? reject(err) : resolve(results[0]));
+            connection.query(sql, [newTopic.Title, newTopic.Content, newTopic.Status === 'Public' ? 1 : 2, newTopic.Id_User], (err, results) => err ? reject(err) : resolve(results[0]));
         });
     }
 
@@ -285,7 +285,7 @@ class topicModel {
                     } else if (key === 'Status') {
                         sql1 += 'Id_Status = ?';
                         values1.push(statusId);
-                        if (index < entries.length -  ((updateTopic.Tags ? 1 : 0) + (updateTopic.Status ? 1 : 0))) {
+                        if (index < entries.length - ((updateTopic.Tags ? 1 : 0) + (updateTopic.Status ? 1 : 0))) {
                             sql1 += `, `;
                         }
                     }

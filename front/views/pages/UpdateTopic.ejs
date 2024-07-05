@@ -32,7 +32,7 @@
                     <input type="text" name="Title" placeholder="Nom du topic *"
                            value="<%= dataTopic.topic.Title %>" required>
                     <textarea name="Content" placeholder="Description du Topic *"
-                              required oninput="autoResize(this)"></textarea>
+                              required oninput="autoResize(this)"><%= dataTopic.topic.Content %></textarea>
                     <div class="radio-create-topic">
                         <span>Type du topic : </span>
                         <div class="radio-create-topic-radio">
