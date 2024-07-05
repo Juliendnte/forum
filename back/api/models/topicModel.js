@@ -21,7 +21,7 @@ class topicModel {
             const sql = `
                 SELECT t.Id        AS TopicId,
                        t.Title,
-                       t.Content,
+                       t.Content  AS TopicContent,
                        t.Path      AS TopicPath,
                        t.Create_at,
                        t.Id_User,
@@ -85,7 +85,8 @@ class topicModel {
                         user.Tag.push({
                             Id: row.TagId,
                             Label: row.TagLabel,
-                            Path: row.TagPath
+                            Path: row.TagPath,
+                            Content: row.TopicContent,
                         })
                     }
                     user.Posts.push({
