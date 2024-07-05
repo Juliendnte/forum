@@ -533,9 +533,9 @@ class userModel {
                 SELECT 'post'                                                            AS Type,
                        p.Id                                                              AS Id,
                        p.Title                                                           AS Title,
-                       p.Content                                                         AS Content,
-                       p.Create_post                                                     AS CreateAt,
                        NULL                                                              AS Path,
+                       p.Create_post                                                     AS CreateAt,
+                       p.Content                                                         AS Content,
                        COALESCE(pl.PostLikes, 0)                                         AS PostLikes,
                        (SELECT COUNT(*) FROM message WHERE message.Id_PostAnswer = p.Id) AS MessageCount,
                        u.Name                                                            AS UserName,
@@ -556,7 +556,7 @@ class userModel {
                                     FROM likepost lp
                                     GROUP BY lp.Id_Post) pl ON p.Id = pl.Id_Post
                 WHERE p.Title LIKE ?
-                GROUP BY p.Id, p.Content, u.Name, t.Id, s.Label, pl.PostLikes
+                GROUP BY p.Id, u.Name, t.Id, s.Label, pl.PostLikes
 
                 UNION
 
