@@ -211,3 +211,7 @@
     font-weight: bold;
     color: #555;
 }
+
+.form-container-header {
+    width: 50%;
+}

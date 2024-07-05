@@ -1,5 +1,5 @@
 INSERT INTO `tags` (`Label`, Path)
-VALUES ('c#', '/languages/Csharp-icon.png'),
+VALUES ('c sharp', '/languages/Csharp-icon.png'),
        ('cpp', '/languages/C++-icon.png'),
        ('c', '/languages/C-icon.png'),
        ('css', '/languages/CSS-icon.png'),

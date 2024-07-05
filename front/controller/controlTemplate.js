@@ -312,7 +312,6 @@ class ControlTemplate {
         }
     }
 
-
     static async UpdateProfil(req, res) {
         try {
             const token = req.cookies.Token;
@@ -426,6 +425,41 @@ class ControlTemplate {
         } catch (err) {
             errorHandler.handleRequestError(err);
             res.status(500).json({ error: 'Erreur lors de la récupération des données de recherche' });
+        }
+    }
+
+    static async SearchTag(req, res) {
+        try {
+            const tag = req.params.tag;
+
+            const [dataUser, dataLike, dataTags, dataSearch] = await Promise.all([
+                controlUser.TreatmentUser.GetUser(req, res),
+                controlUser.TreatmentUser.GetLiked(req, res),
+                controlTopic.GetTags(req, res),
+                controlTopic.SearchTags(tag)
+            ]);
+
+            const token = req.cookies.Token;
+            let PathUserLog = null;
+
+            if (token && dataUser && dataUser.utilisateur) {
+                PathUserLog = dataUser.utilisateur.Path;
+            }
+            let query
+
+            // Rendre la page de recherche avec les données récupérées
+            res.render('../views/pages/searchTopicTags', {
+                dataUser,
+                dataLike,
+                dataSearch,
+                dataTags,
+                PathUserLog,
+                tag,
+                query
+            });
+
+        } catch(err) {
+            errorHandler.handleRequestError(err);
         }
     }
 

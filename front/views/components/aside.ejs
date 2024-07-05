@@ -46,7 +46,7 @@
                         <% if (dataTags) { %>
                             <% dataTags.tags.forEach(function(item) { %>
                                 <li>
-                                    <a href="#">
+                                    <a href="/coder/recherche/topic/<%= item.Label %>">
                                         <img src="<%= item.Path %>" alt="<%= item.Label %> icon" style="width: 25px; height: 25px;">
                                         <%= item.Label %>
                                     </a>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>CODER</title>
+    <%- include('../components/head'); %>
+</head>
+
+<% function timeAgo(date) {
+    const now = new Date();
+    const past = new Date(date);
+    const seconds = Math.floor((now - past) / 1000);
+
+    const intervals = {
+        annee: 31536000,
+        mois: 2592000,
+        semaine: 604800,
+        jour: 86400,
+        heure: 3600,
+        minute: 60,
+        seconde: 1
+    };
+
+    for (const key in intervals) {
+        const interval = intervals[key];
+        if (seconds >= interval) {
+            const count = Math.floor(seconds / interval);
+            switch (key) {
+                case 'annee':
+                    return `il y a ${count} an${count > 1 ? 's' : ''}`;
+                case 'mois':
+                    return `il y a ${count} mois`;
+                case 'semaine':
+                    return `il y a ${count} semaine${count > 1 ? 's' : ''}`;
+                case 'jour':
+                    return `il y a ${count} jour${count > 1 ? 's' : ''}`;
+                case 'heure':
+                    return `il y a ${count} heure${count > 1 ? 's' : ''}`;
+                case 'minute':
+                    return `il y a ${count} minute${count > 1 ? 's' : ''}`;
+                case 'seconde':
+                    return `il y a ${count} seconde${count > 1 ? 's' : ''}`;
+            }
+        }
+    }
+    return 'à l\'instant';
+} %>
+
+<body>
+<%- include('../components/header', {PathUserLog: PathUserLog}); %>
+<section class="section-global">
+    <%- include('../components/aside', {dataTags: dataTags}); %>
+    <section class="section-post">
+        <% function timeAgo(date) {
+            const now = new Date();
+            const past = new Date(date);
+            const seconds = Math.floor((now - past) / 1000);
+
+            const intervals = {
+                annee: 31536000,
+                mois: 2592000,
+                semaine: 604800,
+                jour: 86400,
+                heure: 3600,
+                minute: 60,
+                seconde: 1
+            };
+
+            for (const key in intervals) {
+                const interval = intervals[key];
+                if (seconds >= interval) {
+                    const count = Math.floor(seconds / interval);
+                    switch (key) {
+                        case 'annee':
+                            return `il y a ${count} an${count > 1 ? 's' : ''}`;
+                        case 'mois':
+                            return `il y a ${count} mois`;
+                        case 'semaine':
+                            return `il y a ${count} semaine${count > 1 ? 's' : ''}`;
+                        case 'jour':
+                            return `il y a ${count} jour${count > 1 ? 's' : ''}`;
+                        case 'heure':
+                            return `il y a ${count} heure${count > 1 ? 's' : ''}`;
+                        case 'minute':
+                            return `il y a ${count} minute${count > 1 ? 's' : ''}`;
+                        case 'seconde':
+                            return `il y a ${count} seconde${count > 1 ? 's' : ''}`;
+                    }
+                }
+            }
+            return 'à l\'instant';
+        } %>
+        <% if (!dataSearch) { %>
+            <div class="err-message-detail-ctn">
+                <span>Hm... nous n'avons trouvé aucun résultat pour <strong>"<%= tag %>"</strong></span>
+            </div>
+        <% } else { %>
+            <div id="search-results" style="margin-top: 25px">
+                <% dataSearch.articles.items.forEach(function(item) { %>
+                    <section class="topic-page-search-global" data-type="topic">
+                        <a href="/coder/t/<%= item.Title %>" class="hover-a-ctn">
+                            <div class="topic-page-search-ctn">
+                                <div class="topic-page-search-img-title">
+                                    <div class="topic-page-search-img">
+                                        <img src="<%= item.Path %>" alt="image topic <%= item.Title %>">
+                                    </div>
+                                    <div class="topic-page-search-title">
+                                        <span>t/<%= item.Title %></span>
+                                        <span>• Créer <%= timeAgo(item.CreateAt) %></span>
+                                    </div>
+                                </div>
+                                <div class="topic-page-search-content">
+                                    <p></p>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="bar-suparator-post-profil" style=" width: 57%; margin: 5px 15rem"></div>
+                    </section>
+                <% }); %>
+            </div>
+        <% } %>
+    </section>
+    <section class="section-friend-ctn">
+        <div class="section-friend-global">
+            <%- include('../components/friends', {dataUser: dataUser}); %>
+            <%- include('../components/footer'); %>
+        </div>
+    </section>
+</section>
+</body>
+
+</html>
