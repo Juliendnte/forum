@@ -240,7 +240,7 @@ class postModel {
             }
 
             // Add ORDER BY clause to sort by creation date in descending order
-            sql += " GROUP BY posts.Id, t.Id, s.Label, similarity_score ORDER BY similarity_score DESC,  posts.Create_post DESC";
+            sql += " GROUP BY posts.Id, t.Id, s.Label, similarity_score ORDER BY similarity_score DESC, PostLikes DESC, posts.Create_post DESC";
 
 
             // Use the same query without limit and offset to get the total number of results

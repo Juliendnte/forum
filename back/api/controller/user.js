@@ -144,20 +144,25 @@ class UserController {
                     status: 404
                 });
             }
-
             utilisateur.Friends = userName ? await user.getFriendsName(userName) : await user.getFriends(userId);
             utilisateur.Friends.forEach((friend) => friend.Path = `${url}assets/${friend.Path}`)
+
             utilisateur.Follow = userName ? await user.getFollowName(userName) : await user.getFollow(userId);
             utilisateur.Follow.forEach((follow) => follow.Path = `${url}assets/${follow.Path}`)
+
             utilisateur.Suivie = userName ? await user.getFollowedName(userName) : await user.getFollowed(userId);
             utilisateur.Suivie.forEach((follow) => follow.Path = `${url}assets/${follow.Path}`)
+
             utilisateur.Path = `${url}assets/${utilisateur.Path}`;
             utilisateur.Tags = utilisateur.Tags.map((tag) => `${url}assets${tag}`);
+
             utilisateur.VueEnsemble = userName ? await user.getPostMessageName(userName) : await user.getPostMessage(userId);
+            console.log(utilisateur)
             utilisateur.VueEnsemble.forEach((vue) => {
                 vue.TopicLike = vue.TopicLike === 0 ? -1 : vue.TopicLike
                 vue.Topic.Path = `${url}assets/${vue.Topic.Path}`
             });
+            console.log(7)
             res.status(200).send({
                 message: 'User successfully found',
                 status: 200,
