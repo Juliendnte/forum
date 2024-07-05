@@ -45,7 +45,7 @@ class TopicController {
             return res.status(200).send({
                 message: `Topics successfully found`,
                 status: 200,
-                articles: {
+                topics: {
                     href,
                     offset,
                     limit,
@@ -83,7 +83,7 @@ class TopicController {
             return res.status(200).send({
                 message: `Topics successfully found`,
                 status: 200,
-                articles: {
+                topics: {
                     href,
                     offset,
                     limit,

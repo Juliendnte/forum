@@ -20,35 +20,51 @@ class postModel {
     static getpostById(id) {
         return new Promise((resolve, reject) => {
             const sql = `
-                SELECT p.Id                                                                  AS PostId,
-                       p.Title,
-                       p.Content,
-                       p.Create_post,
-                       p.Id_topics,
-                       p.Id_User,
-                       p.Id_PostAnswer,
-                       t.Id                                                                  AS TopicId,
-                       t.Title                                                               AS TopicTitle,
-                       t.Path,
-                       t.Create_at,
-                       t.Id_User                                                             AS TopicUserId,
-                       u.Name,
-                       u.Path,
-                       u.Id                                                                  AS Id_User,
-                       r.Label                                                               AS Role,
-                       (SELECT Label FROM status s WHERE t.Id_Status = s.Id)                 AS Status,
-
-                       SUM(CASE WHEN lp.Like = 1 THEN 1 WHEN lp.Like = 0 THEN -1 ELSE 0 END) AS PostLikes,
-                       (SELECT COUNT(*) FROM message WHERE message.Id_PostAnswer = p.Id)     AS MessageCount
-
-                FROM posts p
-                         INNER JOIN topics t ON p.Id_topics = t.Id
-                         INNER JOIN users u ON p.Id_User = u.Id
-                         INNER JOIN role r ON u.Id_role = r.Id
-                         LEFT JOIN likepost lp ON p.Id = lp.Id_Post
-                         LEFT JOIN message m ON p.Id = m.Id_PostAnswer
-                WHERE p.Id = ?
-                GROUP BY p.Id`
+                SELECT
+                    p.Id AS PostId,
+                    p.Title,
+                    p.Content,
+                    p.Create_post,
+                    p.Id_topics,
+                    p.Id_User,
+                    p.Id_PostAnswer,
+                    t.Id AS TopicId,
+                    t.Title AS TopicTitle,
+                    t.Path,
+                    t.Create_at,
+                    t.Id_User AS TopicUserId,
+                    u.Name,
+                    u.Path,
+                    u.Id AS Id_User,
+                    r.Label AS Role,
+                    (SELECT Label FROM status s WHERE t.Id_Status = s.Id) AS Status,
+                    CASE
+                        WHEN pl.PostLikes IS NOT NULL THEN pl.PostLikes
+                        ELSE 0
+                        END AS PostLikes,
+                    (SELECT COUNT(*) FROM message WHERE message.Id_PostAnswer = p.Id) AS MessageCount
+                FROM
+                    posts p
+                        INNER JOIN
+                    topics t ON p.Id_topics = t.Id
+                        INNER JOIN
+                    users u ON p.Id_User = u.Id
+                        INNER JOIN
+                    role r ON u.Id_role = r.Id
+                        LEFT JOIN (
+                        SELECT
+                            lp.Id_Post,
+                            SUM(CASE WHEN lp.Like = 1 THEN 1 WHEN lp.Like = 0 THEN -1 ELSE 0 END) AS PostLikes
+                        FROM
+                            likepost lp
+                        GROUP BY
+                            lp.Id_Post
+                    ) pl ON p.Id = pl.Id_Post
+                WHERE
+                    p.Id = ?
+                GROUP BY
+                    p.Id, t.Id, u.Id, r.Label, t.Title, t.Path, t.Create_at, t.Id_User, u.Name, u.Path
+            `
             connection.query(sql, [id], (err, results) => {
                 if (err) {
                     return reject(err);

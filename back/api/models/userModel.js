@@ -530,30 +530,33 @@ class userModel {
 
                 UNION
 
-                SELECT 'post'                                                                AS Type,
-                       posts.Id                                                              AS Id,
-                       posts.Title                                                           AS Title,
-                       posts.Content                                                         AS Content,
-                       posts.Create_post                                                     AS CreateAt,
-                       NULL                                                                  AS Path,
-                       SUM(CASE WHEN lp.Like = 1 THEN 1 WHEN lp.Like = 0 THEN -1 ELSE 0 END) AS PostLikes,
-                       (SELECT COUNT(*) FROM message WHERE message.Id_PostAnswer = posts.Id) AS MessageCount,
-                       u.Name                                                                AS UserName,
-                       u.Path                                                                AS UserPath,
-                       u.Id                                                                  AS UserId,
-                       t.Id                                                                  AS TopicId,
-                       t.Title                                                               AS TopicTitle,
-                       t.Path                                                                AS TopicPath,
-                       t.Create_at                                                           AS TopicCreateAt,
-                       t.Id_User                                                             AS TopicUserId,
-                       s.Label                                                               AS Status
-                FROM posts
-                         INNER JOIN users u ON posts.Id_User = u.Id
-                         INNER JOIN topics t ON posts.Id_topics = t.Id
+                SELECT 'post'                                                            AS Type,
+                       p.Id                                                              AS Id,
+                       p.Title                                                           AS Title,
+                       p.Content                                                         AS Content,
+                       p.Create_post                                                     AS CreateAt,
+                       NULL                                                              AS Path,
+                       COALESCE(pl.PostLikes, 0)                                         AS PostLikes,
+                       (SELECT COUNT(*) FROM message WHERE message.Id_PostAnswer = p.Id) AS MessageCount,
+                       u.Name                                                            AS UserName,
+                       u.Path                                                            AS UserPath,
+                       u.Id                                                              AS UserId,
+                       t.Id                                                              AS TopicId,
+                       t.Title                                                           AS TopicTitle,
+                       t.Path                                                            AS TopicPath,
+                       t.Create_at                                                       AS TopicCreateAt,
+                       t.Id_User                                                         AS TopicUserId,
+                       s.Label                                                           AS Status
+                FROM posts p
+                         INNER JOIN users u ON p.Id_User = u.Id
+                         INNER JOIN topics t ON p.Id_topics = t.Id
                          INNER JOIN status s ON t.Id_Status = s.Id
-                         LEFT JOIN likepost lp ON posts.Id = lp.Id_Post
-                WHERE posts.Title LIKE ?
-                GROUP BY posts.Id
+                         LEFT JOIN (SELECT lp.Id_Post,
+                                           SUM(CASE WHEN lp.Like = 1 THEN 1 WHEN lp.Like = 0 THEN -1 ELSE 0 END) AS PostLikes
+                                    FROM likepost lp
+                                    GROUP BY lp.Id_Post) pl ON p.Id = pl.Id_Post
+                WHERE p.Title LIKE ?
+                GROUP BY p.Id, p.Content, u.Name, t.Id, s.Label, pl.PostLikes
 
                 UNION
 
@@ -577,7 +580,8 @@ class userModel {
                 FROM topics t
                 WHERE t.Title LIKE ?
 
-                ORDER BY CreateAt DESC
+                ORDER BY CreateAt DESC;
+
             `;
 
             connection.query(sql, [searchQuery, searchQuery, searchQuery], (err, results) => {
