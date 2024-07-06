@@ -306,6 +306,7 @@ textarea {
     align-items: center;
 }
 
+<<<<<<< HEAD
 .intro-text {
     margin: 10px;
 }
@@ -346,3 +347,11 @@ textarea {
     margin: 10px;
     margin-bottom: 50px;
 }
+=======
+.message-global-ctn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+>>>>>>> f8237c3ac77cf14d11874fb8c5f767d68fb95ed4

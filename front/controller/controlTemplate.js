@@ -320,6 +320,8 @@ class ControlTemplate {
             const dataMessage = await controlMessage.GetMessage(id);
             let dataPost = false
 
+            console.log(dataMessage);
+
             res.render('../views/pages/createMessage', {
                 dataUser,
                 dataPost,
