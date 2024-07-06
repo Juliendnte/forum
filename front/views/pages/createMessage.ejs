@@ -30,9 +30,9 @@
                        value="<% if (dataMessage) { %><%= dataMessage.commentaire.Id %><% } %>">
             <% } else { %>
                 <input type="hidden" name="Id_PostAnswer"
-                       value="<% if (dataPost) { %><%= dataPost.post.Id %><% } else if (dataMessage) { %><%= dataMessage.commentaire.Id_PostAnswer %><% } else { %>null<% } %>">
+                       value="<% if (dataPost) { %><%= dataPost.post.Id %><% } else if (dataMessage) { %><%= dataMessage.commentaire[0].Id_PostAnswer %><% } else { %>null<% } %>">
                 <input type="hidden" name="Id_MessageAnswer"
-                       value="<% if (dataMessage) { %><%= dataMessage.commentaire.Id %><% } %>">
+                       value="<% if (dataMessage) { %><%= dataMessage.commentaire[0].Id %><% } %>">
             <% } %>
             <div class="titre-form">
                 <% if (dataPost && dataPost.post) { %>

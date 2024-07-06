@@ -305,3 +305,10 @@ textarea {
     display: flex;
     align-items: center;
 }
+
+.message-global-ctn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
