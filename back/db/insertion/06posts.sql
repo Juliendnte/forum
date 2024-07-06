@@ -110,4 +110,123 @@ VALUES ('Faut mieux faire un carrousel en natif ou avec bibliothèque ?',
 
        ('Utilisation des Web Components',
         'Salut, je m\'intéresse aux Web Components pour construire des éléments réutilisables sur mon site. Comment commencer avec cette technologie ?',
-        1, 1, '2024-05-03');
+        1, 1, '2024-05-03'),
+       ('Création d\'un système de commentaires',
+        'Bonjour, je souhaite ajouter un système de commentaires à mon blog. Quelles sont les meilleures pratiques pour le faire en toute sécurité ?',
+        1, 1, '2024-05-04'),
+
+       ('Comparaison entre MySQL et MongoDB',
+        'Je dois choisir une base de données pour mon application web. Quels sont les avantages et les inconvénients de MySQL par rapport à MongoDB ?',
+        2, 2, '2024-05-05'),
+
+       ('Problème de performance avec React',
+        'Salut, mon application React commence à devenir lente. Quelles techniques puis-je utiliser pour améliorer les performances ?',
+        1, 3, '2024-05-06'),
+
+       ('Utilisation de Docker pour le développement',
+        'Bonjour, je souhaite utiliser Docker pour mon environnement de développement. Quelles sont les étapes de base pour commencer ?',
+        1, 1, '2024-05-07'),
+
+       ('Test unitaire en JavaScript',
+        'Je veux mettre en place des tests unitaires pour mon projet JavaScript. Quels frameworks recommandez-vous et pourquoi ?',
+        2, 2, '2024-05-08'),
+
+       ('Sécurisation des API REST',
+        'Salut, je développe une API REST et je veux la sécuriser. Quelles sont les meilleures pratiques pour protéger les endpoints et les données ?',
+        1, 3, '2024-05-09'),
+
+       ('Utilisation de GraphQL avec Node.js',
+        'Bonjour, je m\'intéresse à l\'utilisation de GraphQL avec Node.js pour mon application. Quels sont les avantages et comment commencer ?',
+        1, 2, '2024-05-10'),
+
+       ('Configuration de Nginx pour un site web',
+        'Salut, je dois configurer Nginx pour héberger mon site web. Quels sont les points clés à prendre en compte pour une configuration optimale ?',
+        2, 1, '2024-05-11'),
+
+       ('Mise en place d\'un système de notifications push',
+        'Bonjour, je veux ajouter des notifications push à mon application web. Quelle est la meilleure façon de le faire ?',
+        1, 3, '2024-05-12'),
+
+       ('Utilisation de TypeScript avec React',
+        'Je commence un projet React et je veux utiliser TypeScript. Quelles sont les meilleures pratiques pour structurer un projet React avec TypeScript ?',
+        1, 1, '2024-05-13'),
+
+       ('Problème de mémoire avec Node.js',
+        'Salut, mon application Node.js semble avoir des fuites de mémoire. Comment puis-je identifier et corriger ce problème ?',
+        2, 2, '2024-05-14'),
+
+       ('Gestion des sessions en PHP',
+        'Bonjour, je dois gérer les sessions utilisateur dans une application PHP. Quelles sont les meilleures pratiques pour sécuriser les sessions ?',
+        1, 3, '2024-05-15'),
+
+       ('Optimisation des requêtes SQL',
+        'Salut, mes requêtes SQL prennent trop de temps à s\'exécuter. Quels sont vos conseils pour optimiser les performances des requêtes SQL ?',
+        2, 1, '2024-05-16'),
+
+       ('Utilisation de Redux pour la gestion d\'état',
+        'Bonjour, je veux utiliser Redux pour gérer l\'état dans mon application React. Quels sont les avantages et les inconvénients de Redux ?',
+        1, 2, '2024-05-17'),
+
+       ('Développement d\'une API GraphQL',
+        'Salut, je dois développer une API GraphQL pour mon application. Quelles sont les étapes essentielles pour la création d\'une API GraphQL ?',
+        2, 3, '2024-05-18'),
+
+       ('Mise en place d\'un reverse proxy avec Nginx',
+        'Bonjour, je souhaite utiliser Nginx comme reverse proxy pour mon application. Comment puis-je configurer Nginx pour cela ?',
+        1, 1, '2024-05-19'),
+
+       ('Gestion des permissions en base de données',
+        'Salut, je dois implémenter un système de permissions dans ma base de données. Quelles sont les meilleures pratiques pour gérer les rôles et les permissions ?',
+        1, 3, '2024-05-20'),
+
+       ('Utilisation des hooks dans React',
+        'Bonjour, je découvre les hooks en React et j\'aimerais savoir comment les utiliser efficacement. Quels sont les cas d\'usage courants des hooks ?',
+        2, 2, '2024-05-21'),
+
+       ('Mise en place d\'un serveur de mail',
+        'Salut, je dois configurer un serveur de mail pour mon application. Quels sont les logiciels et les configurations recommandés pour un serveur de mail sécurisé ?',
+        1, 1, '2024-05-22'),
+
+       ('Problème de compatibilité mobile avec CSS Grid',
+        'Bonjour, j\'utilise CSS Grid pour ma mise en page, mais j\'ai des problèmes de compatibilité sur mobile. Comment puis-je résoudre ces problèmes ?',
+        2, 2, '2024-05-23'),
+
+       ('Utilisation de l\'API WebRTC',
+        'Salut, je veux implémenter des fonctionnalités de communication vidéo en temps réel sur mon site avec WebRTC. Comment puis-je commencer ?',
+        1, 3, '2024-05-24'),
+
+       ('Déploiement d\'une application avec Heroku',
+        'Bonjour, je souhaite déployer mon application web sur Heroku. Quelles sont les étapes à suivre pour un déploiement réussi sur Heroku ?',
+        1, 1, '2024-05-25'),
+
+       ('Gestion des erreurs en PHP',
+        'Salut, je veux améliorer la gestion des erreurs dans mon code PHP. Quelles sont les meilleures pratiques pour cela ?',
+        2, 2, '2024-05-26'),
+
+       ('Utilisation de Tailwind CSS pour le design',
+        'Bonjour, je commence à utiliser Tailwind CSS pour styliser mon site web. Avez-vous des astuces ou des bonnes pratiques à partager ?',
+        1, 3, '2024-05-27'),
+
+       ('Problème de rendu avec WebGL',
+        'Salut, je développe une application WebGL et je rencontre des problèmes de rendu. Quelles peuvent être les causes et comment les résoudre ?',
+        2, 1, '2024-05-28'),
+
+       ('Comparaison entre Next.js et Gatsby',
+        'Bonjour, je dois choisir entre Next.js et Gatsby pour un projet. Quels sont les avantages et les inconvénients de chaque framework ?',
+        1, 2, '2024-05-29'),
+
+       ('Utilisation de Firebase pour le backend',
+        'Salut, je veux utiliser Firebase pour le backend de mon application web. Quels sont les avantages et les limitations de Firebase ?',
+        1, 3, '2024-05-30'),
+
+       ('Sécurisation des données utilisateurs',
+        'Bonjour, je souhaite sécuriser les données des utilisateurs sur mon site. Quelles sont les meilleures pratiques pour assurer la sécurité des données ?',
+        1, 1, '2024-05-31'),
+
+       ('Développement d\'une application mobile avec Flutter',
+        'Salut, je commence à développer une application mobile avec Flutter. Avez-vous des conseils ou des ressources pour bien démarrer ?',
+        2, 2, '2024-06-01'),
+
+       ('Problème de performance avec les animations JavaScript',
+        'Bonjour, j\'ai des animations en JavaScript sur mon site qui causent des ralentissements. Comment puis-je optimiser ces animations pour de meilleures performances ?',
+        1, 3, '2024-06-02');
