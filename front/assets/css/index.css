@@ -305,3 +305,44 @@ textarea {
     display: flex;
     align-items: center;
 }
+
+.intro-text {
+    margin: 10px;
+}
+.collect-info p:first-child {
+    font-weight: bold;
+    margin: 10px;
+}
+.account-info {
+    margin: 10px;
+}
+
+.account-coder p {
+    margin: 10px;
+}
+
+.auto-info {
+    margin: 10px;
+}
+.info-collected p {
+    margin: 10px;
+}
+.info p {
+    margin: 10px;
+}
+.community p {
+    margin: 10px;
+}
+.shared {
+    margin: 10px;
+}
+.access p {
+    margin: 10px;
+}
+.mesures p {
+    margin: 10px;
+}
+.contact p {
+    margin: 10px;
+    margin-bottom: 50px;
+}
