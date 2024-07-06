@@ -39,7 +39,7 @@ class TreatmentMessages {
             }
         } catch (err) {
             errorHandler.handleRequestError(err);
-            res.redirect("/CODER/err")
+            res.redirect("/coder/err")
         }
     }
 
@@ -55,7 +55,7 @@ class TreatmentMessages {
             }
         } catch (err) {
             errorHandler.handleRequestError(err);
-            res.redirect("/CODER/err")
+            res.redirect("/coder/err")
         }
     }
 
@@ -82,7 +82,7 @@ class TreatmentMessages {
             res.redirect('/coder/m/' + id);
         } catch (err) {
             errorHandler.handleRequestError(err);
-            res.redirect("/CODER/err")
+            res.redirect("/coder/err")
         }
     }
 
@@ -90,7 +90,7 @@ class TreatmentMessages {
         try {
             const token = req.cookies.Token;
             if (!token) {
-                return res.redirect(`/CODER/login`);
+                return res.redirect(`/coder/login`);
             }
 
             const {Content, Id_PostAnswer, Id_MessageAnswer} = req.body;
@@ -108,10 +108,10 @@ class TreatmentMessages {
                 }
             });
 
-            res.redirect(`/CODER/p/${Id_PostAnswer}`);
+            res.redirect(`/coder/p/${Id_PostAnswer}`);
         } catch (err) {
             errorHandler.handleRequestError(err);
-            res.redirect("/CODER/err")
+            res.redirect("/coder/err")
         }
 
     }

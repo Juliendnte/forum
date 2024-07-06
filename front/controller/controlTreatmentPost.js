@@ -10,7 +10,7 @@ class TreatmentPosts {
         try {
             const token = req.cookies.Token;
             if (!token) {
-                return res.redirect(`/CODER/login`);
+                return res.redirect(`/coder/login`);
             }
 
             const {Title, Content, Id_topics, NameTopic} = req.body;
@@ -28,10 +28,10 @@ class TreatmentPosts {
                 }
             });
 
-            res.redirect(`/CODER/t/${NameTopic}`);
+            res.redirect(`/coder/t/${NameTopic}`);
         } catch (err) {
             errorHandler.handleRequestError(err);
-            res.redirect("/CODER/err")
+            res.redirect("/coder/err")
         }
     }
 
@@ -87,7 +87,7 @@ class TreatmentPosts {
             res.redirect('/coder/p/' + id);
         } catch (err) {
             errorHandler.handleRequestError(err);
-            res.redirect("/CODER/err")
+            res.redirect("/coder/err")
         }
     }
 
@@ -129,7 +129,7 @@ class TreatmentPosts {
             }
         } catch (err) {
             errorHandler.handleRequestError(err);
-            res.redirect("/CODER/err")
+            res.redirect("/coder/err")
         }
     }
 
@@ -161,7 +161,7 @@ class TreatmentPosts {
             }
         } catch (err) {
             errorHandler.handleRequestError(err);
-            res.redirect("/CODER/err")
+            res.redirect("/coder/err")
         }
     }
 
@@ -190,7 +190,7 @@ class TreatmentPosts {
             });
         } catch (err) {
             errorHandler.handleRequestError(err);
-            res.redirect("/CODER/err")
+            res.redirect("/coder/err")
         }
     }
 

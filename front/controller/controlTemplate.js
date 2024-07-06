@@ -52,7 +52,7 @@ class ControlTemplate {
      * @param {Object} res - The response object.
      */
     static async Login(req, res) {
-        res.render('../views/pages/login');
+        res.render('../views/pages/login', { message: null });
     }
 
     /**
@@ -127,7 +127,7 @@ class ControlTemplate {
         } catch (err) {
             console.log(err)
             errorHandler.handleRequestError(err);
-            res.redirect("/CODER/err")
+            res.redirect("/coder/err")
         }
     }
 
@@ -144,7 +144,7 @@ class ControlTemplate {
             res.render('../views/pages/createTopic', {dataUser});
         } catch (err) {
             errorHandler.handleRequestError(err);
-            res.redirect("/CODER/login")
+            res.redirect("/coder/login")
         }
     }
 
@@ -187,7 +187,7 @@ class ControlTemplate {
             });
         } catch (err) {
             errorHandler.handleRequestError(err);
-            res.redirect("/CODER/err")
+            res.redirect("/coder/err")
         }
     }
 
@@ -213,9 +213,6 @@ class ControlTemplate {
             }
             let query
 
-            console.log('attention : ' + dataMessages)
-
-
             if (dataPost && dataPost.topic && dataPost.topic.Create_at) {
                 const date = new Date(dataPost.topic.Create_at);
                 const options = {year: 'numeric', month: 'long', day: 'numeric'};
@@ -235,7 +232,7 @@ class ControlTemplate {
         } catch (err) {
             console.log(err)
             errorHandler.handleRequestError(err);
-            res.redirect("/CODER/err")
+            res.redirect("/coder/err")
         }
     }
 
@@ -267,7 +264,7 @@ class ControlTemplate {
             });
         } catch (err) {
             errorHandler.handleRequestError(err);
-            res.redirect("/CODER/err")
+            res.redirect("/coder/err")
         }
     }
 
@@ -286,7 +283,7 @@ class ControlTemplate {
             });
         } catch (err) {
             errorHandler.handleRequestError(err);
-            res.redirect("/CODER/err")
+            res.redirect("/coder/err")
         }
     }
 
@@ -308,7 +305,7 @@ class ControlTemplate {
             });
         } catch (err) {
             errorHandler.handleRequestError(err);
-            res.redirect("/CODER/err")
+            res.redirect("/coder/err")
         }
     }
 
@@ -329,7 +326,7 @@ class ControlTemplate {
             });
         } catch (err) {
             errorHandler.handleRequestError(err);
-            res.redirect("/CODER/err")
+            res.redirect("/coder/err")
         }
     }
 
@@ -338,7 +335,7 @@ class ControlTemplate {
             const token = req.cookies.Token;
 
             if (!token) {
-                return res.redirect('/CODER/login');
+                return res.redirect('/coder/login');
             }
 
             const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
@@ -350,7 +347,7 @@ class ControlTemplate {
                 });
         } catch (err) {
             errorHandler.handleRequestError(err);
-            res.redirect("/CODER/err")
+            res.redirect("/coder/err")
         }
     }
 
@@ -359,7 +356,7 @@ class ControlTemplate {
             const token = req.cookies.Token;
 
             if (!token) {
-                return res.redirect('/CODER/login');
+                return res.redirect('/coder/login');
             }
 
             const name = req.params.name
@@ -373,7 +370,7 @@ class ControlTemplate {
             });
         } catch (err) {
             errorHandler.handleRequestError(err);
-            res.redirect("/CODER/err")
+            res.redirect("/coder/err")
         }
     }
 
@@ -382,7 +379,7 @@ class ControlTemplate {
             const token = req.cookies.Token;
 
             if (!token) {
-                return res.redirect('/CODER/login');
+                return res.redirect('/coder/login');
             }
 
             const id = req.params.id
@@ -394,7 +391,7 @@ class ControlTemplate {
             });
         } catch (err) {
             errorHandler.handleRequestError(err);
-            res.redirect("/CODER/err")
+            res.redirect("/coder/err")
         }
     }
 
@@ -403,7 +400,7 @@ class ControlTemplate {
             const token = req.cookies.Token;
 
             if (!token) {
-                return res.redirect('/CODER/login');
+                return res.redirect('/coder/login');
             }
 
             const id = req.params.id
@@ -415,7 +412,7 @@ class ControlTemplate {
             });
         } catch (err) {
             errorHandler.handleRequestError(err);
-            res.redirect("/CODER/err")
+            res.redirect("/coder/err")
         }
     }
 
@@ -449,7 +446,7 @@ class ControlTemplate {
 
         } catch (err) {
             errorHandler.handleRequestError(err);
-            res.redirect("/CODER/err")
+            res.redirect("/coder/err")
         }
     }
 
@@ -485,7 +482,7 @@ class ControlTemplate {
 
         } catch(err) {
             errorHandler.handleRequestError(err);
-            res.redirect("/CODER/err")
+            res.redirect("/coder/err")
         }
     }
 
@@ -513,7 +510,7 @@ class ControlTemplate {
             });
         }catch (err){
             errorHandler.handleRequestError(err);
-            res.redirect("/CODER/err")
+            res.redirect("/coder/err")
         }
     }
     /**

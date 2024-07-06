@@ -33,13 +33,13 @@ class TreatmentTopic {
                     }
                 });
             if (response.status === 201) {
-                res.redirect(`/CODER`);
+                res.redirect(`/coder/t/${Title}`);
             } else {
                 res.status(response.status).send(response.data);
             }
         } catch (err) {
             errorHandler.handleRequestError(err);
-            res.redirect("/CODER/err")
+            res.redirect("/coder/err")
         }
     }
 
@@ -85,10 +85,10 @@ class TreatmentTopic {
                     },
                 });
 
-            res.redirect('/CODER');
+            res.redirect('/coder');
         } catch (err) {
             errorHandler.handleRequestError(err)
-            res.redirect('/CODER/err')
+            res.redirect('/coder/err')
         }
     }
 

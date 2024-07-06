@@ -27,7 +27,7 @@ class TreatmentUser {
         const {name, password, remember} = req.body;
         if (!name) {
             errorHandler.setError("The username/Email field must be filled", 401);
-            return res.redirect('/CODER/login');
+            return res.redirect('/coder/login');
         }
 
         const {username, email} = isValidEmail(name) ? {email: name} : {username: name};
@@ -62,8 +62,8 @@ class TreatmentUser {
             }
         } catch (err) {
             errorHandler.handleRequestError(err);
+            res.redirect("/coder/login");
         }
-        res.redirect("/CODER");
     }
 
     /**
@@ -81,12 +81,12 @@ class TreatmentUser {
                 email,
             });
             if (response.data.status === 201) {
-                return res.redirect("/CODER/login");
+                return res.redirect("/coder/login");
             }
         } catch (err) {
             errorHandler.handleRequestError(err);
         }
-        res.redirect("/CODER/login");
+        res.redirect("/coder/login");
     }
 
     /**
@@ -140,10 +140,10 @@ class TreatmentUser {
             // Suppression du cookie de session
             res.clearCookie('Token');
             user = undefined;
-            res.redirect('/CODER'); // Redirection vers la page précédente
+            res.redirect('/coder'); // Redirection vers la page précédente
         } catch (err) {
             errorHandler.handleRequestError(err);
-            res.redirect("/CODER/err")
+            res.redirect("/coder/err")
         }
     }
 
@@ -200,7 +200,7 @@ class TreatmentUser {
             }
         } catch (err) {
             errorHandler.handleRequestError(err);
-            res.redirect("/CODER/err")
+            res.redirect("/coder/err")
         }
     }
 
@@ -232,10 +232,10 @@ class TreatmentUser {
                 });
 
 
-            res.redirect('/CODER/user/' + req.body.Name);
+            res.redirect('/coder/user/' + req.body.Name);
         } catch (err) {
             errorHandler.handleRequestError(err)
-            res.redirect('/CODER/err')
+            res.redirect('/coder/err')
         }
     }
 
@@ -278,7 +278,7 @@ class TreatmentUser {
             return response.data
         } catch (err) {
             errorHandler.handleRequestError(err);
-            res.redirect("/CODER/err")
+            res.redirect("/coder/err")
         }
     }
 
@@ -301,7 +301,7 @@ class TreatmentUser {
             return response.data
         } catch (err) {
             errorHandler.handleRequestError(err);
-            res.redirect("/CODER/err")
+            res.redirect("/coder/err")
         }
     }
 
@@ -320,7 +320,7 @@ class TreatmentUser {
             return response.data
         } catch (err) {
             errorHandler.handleRequestError(err);
-            res.redirect("/CODER/err")
+            res.redirect("/coder/err")
         }
     }
 
