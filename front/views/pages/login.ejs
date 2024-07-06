@@ -25,19 +25,30 @@
         <form action="/treatment/register" method="POST">
             <div class="titre-form">
                 <h1>Creer un compte</h1>
-                <span>ou utilisez votre email pour l'inscription</span>
+                <span>Utilisez votre email pour l'inscription</span>
             </div>
             <input type="text" name="username" placeholder="Pseudo *">
             <input type="email" name="email" placeholder="Email *">
-            <input type="password" name="password" placeholder="Mot de passe *">
-            <button>Inscrivez-vous</button>
+            <input type="password" id="password" name="password" placeholder="Mot de passe *" required>
+            <div id="password-requirements">
+                <ul>
+                    <li id="length">8 caractères minimum </li>
+                    <li> | </li>
+                    <li id="number"> 1 chiffre </li>
+                    <li> | </li>
+                    <li id="uppercase"> 1 majuscule </li>
+                    <li> | </li>
+                    <li id="special"> 1 caractère spécial</li>
+                </ul>
+            </div>
+            <button class="btn-inscription">Inscrivez-vous</button>
         </form>
     </div>
     <div class="form-container sign-in">
         <form action="/treatment/login" method="POST">
             <div class="titre-form">
                 <h1>Connectez-vous</h1>
-                <span>ou utilisez votre mot de passe email</span>
+                <span>Utilisez votre mot de passe & email</span>
             </div>
             <input type="text" name="name" placeholder="Email ou pseudo *" required>
             <input type="password" name="password" placeholder="Mot de passe *" required>

@@ -355,3 +355,58 @@
         opacity: 1;
     }
 }
+
+button:disabled {
+    background-color: #ccc !important;
+    cursor: not-allowed;
+}
+
+#password-requirements {
+    width: 100%;
+    margin-bottom: 0.5rem;
+    font-size: 0.9em;
+}
+
+.toggle-password {
+    background: none !important;
+    border: none !important;
+    cursor: pointer !important;
+    font-size: 1.2em !important;
+    padding: 10px !important;
+    color: black !important;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 20px;
+    height: 20px;
+}
+
+#password-requirements p {
+    margin: 0;
+}
+
+#password-requirements ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+    list-style: none;
+    padding: 0;
+}
+
+#password-requirements li {
+    margin: 5px 0;
+}
+
+.valid {
+    color: var(--color-green);
+}
+
+.invalid {
+    color: red;
+}
+.password-container {
+    width: 100%;
+    position: relative;
+    translate: -15px;
+}
