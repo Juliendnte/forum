@@ -7,6 +7,5 @@ CREATE TABLE IF NOT EXISTS `posts`
     `Create_post`   timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `Id_topics`     int          NOT NULL,
     `Id_User`       int          NOT NULL,
-    `Id_PostAnswer` int                   DEFAULT NULL,
     PRIMARY KEY (`Id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;

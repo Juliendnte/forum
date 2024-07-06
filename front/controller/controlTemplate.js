@@ -40,7 +40,6 @@ class ControlTemplate {
                 query
             });
         } catch (err) {
-            console.error(err);
             errorHandler.handleRequestError(err);
             res.redirect('/coder/error');
         }
@@ -74,12 +73,20 @@ class ControlTemplate {
         try {
             let dataUser = await controlUser.TreatmentUser.GetUser(req, res);
             const dataTags = await controlTopic.GetTags(req, res);
-            const Name = dataUser.utilisateur.Name;
+            let Name
+            let IdUserLog
+            let PathUserLog
             let Own = true;
-            const IdUserLog = dataUser.utilisateur.Id;
-            const PathUserLog = dataUser.utilisateur.Path
+            if (dataUser) {
+                Name = dataUser.utilisateur.Name;
+                IdUserLog = dataUser.utilisateur.Id;
+                PathUserLog = dataUser.utilisateur.Path
+            }else {
+                dataUser = await controlUser.TreatmentUser.GetUsers(req, res);
+                Own = false;
+            }
 
-            if (dataUser.utilisateur.Name !== req.params.name) {
+            if (Own && dataUser && (dataUser.utilisateur.Name !== req.params.name)) {
                 dataUser = await controlUser.TreatmentUser.GetUsers(req, res);
                 Own = false;
             }
@@ -102,9 +109,6 @@ class ControlTemplate {
             });
 
             const dataLike = await controlUser.TreatmentUser.GetLiked(req, res);
-
-            console.log('dataLike: ', dataLike);
-
             let query
 
             res.render('../views/pages/profiluser', {
@@ -121,7 +125,9 @@ class ControlTemplate {
             });
 
         } catch (err) {
+            console.log(err)
             errorHandler.handleRequestError(err);
+            res.redirect("/CODER/err")
         }
     }
 
@@ -135,11 +141,10 @@ class ControlTemplate {
         try {
             const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
 
-            res.render('../views/pages/createTopic', {
-                dataUser
-            });
+            res.render('../views/pages/createTopic', {dataUser});
         } catch (err) {
             errorHandler.handleRequestError(err);
+            res.redirect("/CODER/login")
         }
     }
 
@@ -151,14 +156,17 @@ class ControlTemplate {
     static async GetTopic(req, res) {
         try {
             const topicName = req.params.name;
+            let PathUserLog
             const [dataUser, dataTopic, dataAdmin, dataTags] = await Promise.all([
                 controlUser.TreatmentUser.GetUser(req, res),
                 controlTopic.GetTopic(topicName),
                 controlUser.TreatmentUser.GetAdmin(req, res),
                 controlTopic.GetTags(req, res)
             ]);
-            const PathUserLog = dataUser.utilisateur.Path
 
+            if (dataUser && dataUser.utilisateur) {
+                PathUserLog = dataUser.utilisateur.Path
+            }
             if (dataTopic && dataTopic.topic && dataTopic.topic.Create_at) {
                 const date = new Date(dataTopic.topic.Create_at);
                 const options = {year: 'numeric', month: 'long', day: 'numeric'};
@@ -178,8 +186,8 @@ class ControlTemplate {
                 query
             });
         } catch (err) {
-            console.error("Error fetching topic data:", err);
-            res.status(500).send("Internal server error");
+            errorHandler.handleRequestError(err);
+            res.redirect("/CODER/err")
         }
     }
 
@@ -191,11 +199,18 @@ class ControlTemplate {
     static async GetPost(req, res) {
         try {
             const postId = req.params.id;
-            const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
-            const dataTags = await controlTopic.GetTags(req, res);
-            const dataMessages = await controlPost.GetMessagesPost(req, res);
-            const dataPost = await controlPost.GetPost(postId);
-            const PathUserLog = dataUser.utilisateur.Path
+            let PathUserLog
+            const [dataUser, dataTags, dataMessages, dataPost, dataLike] = await Promise.all([
+                controlUser.TreatmentUser.GetUser(req, res),
+                controlTopic.GetTags(req, res),
+                controlPost.GetMessagesPost(req, res),
+                controlPost.GetPost(postId),
+                controlUser.TreatmentUser.GetLiked(req, res)
+            ]);
+
+            if (dataUser && dataUser.utilisateur) {
+                PathUserLog = dataUser.utilisateur.Path
+            }
             let query
 
             console.log('attention : ' + dataMessages)
@@ -207,7 +222,6 @@ class ControlTemplate {
                 dataPost.topic.Create_at_formatted = date.toLocaleDateString('fr-FR', options);
             }
 
-            const dataLike = await controlUser.TreatmentUser.GetLiked(req, res);
 
             res.render('../views/pages/detailPost', {
                 dataUser,
@@ -219,7 +233,9 @@ class ControlTemplate {
                 query
             });
         } catch (err) {
+            console.log(err)
             errorHandler.handleRequestError(err);
+            res.redirect("/CODER/err")
         }
     }
 
@@ -251,6 +267,7 @@ class ControlTemplate {
             });
         } catch (err) {
             errorHandler.handleRequestError(err);
+            res.redirect("/CODER/err")
         }
     }
 
@@ -268,8 +285,8 @@ class ControlTemplate {
                 dataTopic
             });
         } catch (err) {
-            console.error("Error fetching data for create post:", err);
-            res.status(500).send("Internal server error");
+            errorHandler.handleRequestError(err);
+            res.redirect("/CODER/err")
         }
     }
 
@@ -290,7 +307,8 @@ class ControlTemplate {
                 dataPost
             });
         } catch (err) {
-            res.status(500).send("Internal server error");
+            errorHandler.handleRequestError(err);
+            res.redirect("/CODER/err")
         }
     }
 
@@ -308,7 +326,8 @@ class ControlTemplate {
                 dataMessage
             });
         } catch (err) {
-            res.status(500).send("Internal server error");
+            errorHandler.handleRequestError(err);
+            res.redirect("/CODER/err")
         }
     }
 
@@ -329,6 +348,7 @@ class ControlTemplate {
                 });
         } catch (err) {
             errorHandler.handleRequestError(err);
+            res.redirect("/CODER/err")
         }
     }
 
@@ -351,6 +371,7 @@ class ControlTemplate {
             });
         } catch (err) {
             errorHandler.handleRequestError(err);
+            res.redirect("/CODER/err")
         }
     }
 
@@ -371,6 +392,7 @@ class ControlTemplate {
             });
         } catch (err) {
             errorHandler.handleRequestError(err);
+            res.redirect("/CODER/err")
         }
     }
 
@@ -391,6 +413,7 @@ class ControlTemplate {
             });
         } catch (err) {
             errorHandler.handleRequestError(err);
+            res.redirect("/CODER/err")
         }
     }
 
@@ -424,7 +447,7 @@ class ControlTemplate {
 
         } catch (err) {
             errorHandler.handleRequestError(err);
-            res.status(500).json({ error: 'Erreur lors de la récupération des données de recherche' });
+            res.redirect("/CODER/err")
         }
     }
 
@@ -460,6 +483,7 @@ class ControlTemplate {
 
         } catch(err) {
             errorHandler.handleRequestError(err);
+            res.redirect("/CODER/err")
         }
     }
 
@@ -487,6 +511,7 @@ class ControlTemplate {
             });
         }catch (err){
             errorHandler.handleRequestError(err);
+            res.redirect("/CODER/err")
         }
     }
     /**

@@ -39,6 +39,7 @@ class TreatmentMessages {
             }
         } catch (err) {
             errorHandler.handleRequestError(err);
+            res.redirect("/CODER/err")
         }
     }
 
@@ -54,6 +55,7 @@ class TreatmentMessages {
             }
         } catch (err) {
             errorHandler.handleRequestError(err);
+            res.redirect("/CODER/err")
         }
     }
 
@@ -79,8 +81,8 @@ class TreatmentMessages {
                 })
             res.redirect('/coder/m/' + id);
         } catch (err) {
-            console.log(err.response.data)
-            errorHandler.handleRequestError(err)
+            errorHandler.handleRequestError(err);
+            res.redirect("/CODER/err")
         }
     }
 
@@ -108,11 +110,8 @@ class TreatmentMessages {
 
             res.redirect(`/CODER/p/${Id_PostAnswer}`);
         } catch (err) {
-            console.error("Error creating post:", err);
-            if (err.response) {
-                console.error("Server responded with:", err.response.data);
-            }
-            res.status(500).send("Internal server error");
+            errorHandler.handleRequestError(err);
+            res.redirect("/CODER/err")
         }
 
     }

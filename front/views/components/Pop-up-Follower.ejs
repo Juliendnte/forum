@@ -26,7 +26,7 @@
                         <input class="input" type="search" id="searchFollower" placeholder="Recherche"/>
                     </div>
                     <div class="UserFriend-ctn" id="UserFollowerList">
-                        <% if (dataUser.utilisateur.Follow.length > 0 || dataUser.utilisateur.Friends.length > 0) { %>
+                        <% if (dataUser && (dataUser.utilisateur.Follow.length > 0 || dataUser.utilisateur.Friends.length > 0)) { %>
                             <% dataUser.utilisateur.Follow.forEach(follow => { %>
                                 <div class="UserFriend-div-global UserFriend-item" data-name="<%= follow.Name.toLowerCase() %>">
                                     <a href="/coder/user/<%= follow.Name %>">

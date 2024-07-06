@@ -30,11 +30,8 @@ class TreatmentPosts {
 
             res.redirect(`/CODER/t/${NameTopic}`);
         } catch (err) {
-            console.error("Error creating post:", err);
-            if (err.response) {
-                console.error("Server responded with:", err.response.data);
-            }
-            res.status(500).send("Internal server error");
+            errorHandler.handleRequestError(err);
+            res.redirect("/CODER/err")
         }
     }
 
@@ -62,15 +59,11 @@ class TreatmentPosts {
     static async GetPost(id) {
         try {
             const response = await axios.get(`${url}/post/${id}`)
+            return response.data;
 
-            if (response.status === 200) {
-                return response.data;
-            } else {
-                errorHandler.setError("Failed to fetch topic data", 401)
-                return undefined;
-            }
         } catch (err) {
-            errorHandler.handleRequestError(err);
+            errorHandler.setError("Failed to fetch topic data", 401)
+            return undefined;
         }
     }
 
@@ -82,9 +75,6 @@ class TreatmentPosts {
             }
 
             const dataUpdate = req.body;
-
-            console.log(dataUpdate)
-
             const id = req.params.id;
 
             await axios.patch(`${url}/post/${id}`, dataUpdate,
@@ -96,23 +86,18 @@ class TreatmentPosts {
                 })
             res.redirect('/coder/p/' + id);
         } catch (err) {
-            console.log(err.response.data)
-            errorHandler.handleRequestError(err)
+            errorHandler.handleRequestError(err);
+            res.redirect("/CODER/err")
         }
     }
 
     static async GetMessagesPost(req, res) {
         try {
             const response = await axios.get(`${url}/messages?m.Id_PostAnswer=${req.params.id}`)
-
-            if (response.status === 200) {
-                return response.data;
-            } else {
-                errorHandler.setError("Failed to fetch topic data", 401)
-                return undefined;
-            }
+            return response.data;
         } catch (err) {
-            errorHandler.handleRequestError(err);
+            errorHandler.setError("Failed to fetch topic data", 401)
+            return undefined;
         }
     }
 
@@ -144,6 +129,7 @@ class TreatmentPosts {
             }
         } catch (err) {
             errorHandler.handleRequestError(err);
+            res.redirect("/CODER/err")
         }
     }
 
@@ -175,6 +161,7 @@ class TreatmentPosts {
             }
         } catch (err) {
             errorHandler.handleRequestError(err);
+            res.redirect("/CODER/err")
         }
     }
 
@@ -202,12 +189,8 @@ class TreatmentPosts {
                 status: 200
             });
         } catch (err) {
-            console.error(err);
-            errorHandler.setError('An error occurred while deleting the post', 500);
-            return res.status(500).send({
-                message: 'An error occurred while deleting the post',
-                status: 500
-            });
+            errorHandler.handleRequestError(err);
+            res.redirect("/CODER/err")
         }
     }
 

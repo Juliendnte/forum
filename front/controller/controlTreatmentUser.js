@@ -26,7 +26,6 @@ class TreatmentUser {
     static async LoginTreatment(req, res) {
         const {name, password, remember} = req.body;
         if (!name) {
-            console.log({name, password, remember});
             errorHandler.setError("The username/Email field must be filled", 401);
             return res.redirect('/CODER/login');
         }
@@ -55,9 +54,7 @@ class TreatmentUser {
                             "Content-Type": "application/json"
                         }
                     });
-                    return res.redirect("/CODER");
                 } else {
-                    console.error("No Token found in response data");
                     errorHandler.setError("Login failed: No Token received", 401);
                 }
             } else {
@@ -66,7 +63,6 @@ class TreatmentUser {
         } catch (err) {
             errorHandler.handleRequestError(err);
         }
-        console.log({name, password, remember});
         res.redirect("/CODER");
     }
 
@@ -86,13 +82,10 @@ class TreatmentUser {
             });
             if (response.data.status === 201) {
                 return res.redirect("/CODER/login");
-            } else {
-                errorHandler.setError(response.data.message, response.data.status);
             }
         } catch (err) {
             errorHandler.handleRequestError(err);
         }
-        console.log({username, password, email})
         res.redirect("/CODER/login");
     }
 
@@ -115,16 +108,10 @@ class TreatmentUser {
                     "Content-Type": "application/json"
                 }
             });
-
-            if (response.status === 200) {
-                return response.data;
-            } else {
-                console.error("Unexpected response status when fetching user data: ", response.status);
-                res.status(401).send("Failed to fetch user data");
-                return undefined;
-            }
+            return response.data;
         } catch (err) {
-            errorHandler.handleRequestError(err);
+            errorHandler.setError("Failed to fetch user data", 401);
+            return undefined;
         }
     }
 
@@ -136,16 +123,10 @@ class TreatmentUser {
     static async GetUsers(req, res) {
         try {
             const response = await axios.get(`${url}/user/${req.params.name}`);
-
-            if (response.status === 200) {
-                return response.data;
-            } else {
-                console.error("Unexpected response status when fetching user data: ", response.status);
-                res.status(401).send("Failed to fetch user data");
-                return undefined;
-            }
+            return response.data;
         } catch (err) {
             errorHandler.handleRequestError(err);
+            return undefined;
         }
     }
 
@@ -156,18 +137,13 @@ class TreatmentUser {
      */
     static async DisconnectTreatment(req, res) {
         try {
-            const token = req.cookies.Token;
-
-            if (!token) {
-                return res.status(400).send("No token found");
-            }
-
             // Suppression du cookie de session
             res.clearCookie('Token');
             user = undefined;
             res.redirect('/CODER'); // Redirection vers la page précédente
         } catch (err) {
             errorHandler.handleRequestError(err);
+            res.redirect("/CODER/err")
         }
     }
 
@@ -205,16 +181,10 @@ class TreatmentUser {
     static async GetAdmin(req, res) {
         try {
             const response = await axios.get(`${url}/admin/`);
+            return response.data.admin; // Return the array of admin and moderators
 
-            if (response.status === 200) {
-                return response.data.admin; // Return the array of admin and moderators
-            } else {
-                console.error("Unexpected response status when fetching user data: ", response.status);
-                res.status(401).send("Failed to fetch user data");
-                return [];
-            }
         } catch (err) {
-            errorHandler.setError("Internal server error", 500)
+            errorHandler.handleRequestError(err);
             return [];
         }
     }
@@ -229,7 +199,8 @@ class TreatmentUser {
                 errorHandler.setError("Failed to fetch user data", 401)
             }
         } catch (err) {
-            errorHandler.handleRequestError(err)
+            errorHandler.handleRequestError(err);
+            res.redirect("/CODER/err")
         }
     }
 
@@ -263,7 +234,6 @@ class TreatmentUser {
 
             res.redirect('/CODER/user/' + req.body.Name);
         } catch (err) {
-            console.log(err)
             errorHandler.handleRequestError(err)
             res.redirect('/CODER/err')
         }
@@ -285,6 +255,7 @@ class TreatmentUser {
 
         } catch (err) {
             errorHandler.handleRequestError(err);
+            return undefined
         }
     }
 
@@ -307,6 +278,7 @@ class TreatmentUser {
             return response.data
         } catch (err) {
             errorHandler.handleRequestError(err);
+            res.redirect("/CODER/err")
         }
     }
 
@@ -329,6 +301,7 @@ class TreatmentUser {
             return response.data
         } catch (err) {
             errorHandler.handleRequestError(err);
+            res.redirect("/CODER/err")
         }
     }
 
@@ -347,6 +320,7 @@ class TreatmentUser {
             return response.data
         } catch (err) {
             errorHandler.handleRequestError(err);
+            res.redirect("/CODER/err")
         }
     }
 

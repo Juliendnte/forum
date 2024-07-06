@@ -59,7 +59,7 @@
                                 </span>
                             </button>
                         </a>
-                        <% if (dataTopic.topic.User.Name === dataUser.utilisateur.Name || dataUser.utilisateur.Role === 'Admin' ) { %>
+                        <% if (dataUser && (dataTopic.topic.User.Name === dataUser.utilisateur.Name || dataUser.utilisateur.Role === 'Admin' )) { %>
                             <a href="/coder/topic/<%= dataTopic.topic.Title %>/update">
                                 <button style="border-radius: 0px; border: none;">
                                 <span class="pop-up_post-btn-span">

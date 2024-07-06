@@ -39,22 +39,17 @@ class TreatmentTopic {
             }
         } catch (err) {
             errorHandler.handleRequestError(err);
+            res.redirect("/CODER/err")
         }
     }
 
     static async GetTopic(name) {
         try {
             const response = await axios.get(`${url}/topic/${name}`)
-
-            if (response.status === 200) {
-                return response.data;
-            } else {
-                errorHandler.setError("Failed to fetch topic data", 401)
-                return undefined;
-            }
-        } catch
-            (err) {
-            errorHandler.handleRequestError(err);
+            return response.data;
+        } catch (err) {
+            errorHandler.setError("Failed to fetch topic data", 401);
+            return undefined;
         }
     }
 
@@ -103,16 +98,17 @@ class TreatmentTopic {
             return response.data
         } catch (err) {
             errorHandler.handleRequestError(err);
+            return undefined;
         }
     }
 
     static async Search(query) {
         try {
             const response = await axios.get(`${url}/search?search=${query}`);
-
             return response.data;
         } catch (err) {
             errorHandler.setError('Erreur lors de la recherche', 500)
+            return undefined;
         }
     }
 
