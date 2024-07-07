@@ -62,8 +62,9 @@ class TreatmentUser {
             }
         } catch (err) {
             errorHandler.handleRequestError(err);
-            res.redirect("/coder/login");
+            return res.redirect("/coder/login");
         }
+        res.redirect("/coder");
     }
 
     /**

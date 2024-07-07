@@ -113,13 +113,17 @@ class postModel {
                               t.Create_at,
                               t.Id_User                                                             AS TopicUserId,
                               s.Label                                                               AS Status,
-                              SUM(CASE WHEN lp.Like = 1 THEN 1 WHEN lp.Like = 0 THEN -1 ELSE 0 END) AS PostLikes,
+                              COALESCE(pl.PostLikes, 0)                                             AS PostLikes,
                               (SELECT COUNT(*) FROM message WHERE message.Id_PostAnswer = posts.Id) AS MessageCount
 
                        FROM posts
                                 INNER JOIN topics t ON posts.Id_topics = t.Id
                                 INNER JOIN status s ON t.Id_Status = s.Id
-                                LEFT JOIN likepost AS lp ON posts.Id = lp.Id_Post`;
+                                LEFT JOIN likepost AS lp ON posts.Id = lp.Id_Post
+                                LEFT JOIN (SELECT lp.Id_Post,
+                                                  SUM(CASE WHEN lp.Like = 1 THEN 1 WHEN lp.Like = 0 THEN -1 ELSE 0 END) AS PostLikes
+                                           FROM likepost lp
+                                           GROUP BY lp.Id_Post) pl ON posts.Id = pl.Id_Post`;
 
             const values = [];
             const whereClauses = ['s.Label = ?'];
@@ -204,17 +208,17 @@ class postModel {
                        t.Create_at,
                        t.Id_User                                                             AS TopicUserId,
                        s.Label                                                               AS Status,
-                       SUM(CASE
-                               WHEN lp.Like = 1 THEN 1
-                               WHEN lp.Like = 0 THEN -1
-                               ELSE 0
-                           END)                                                              AS PostLikes,
+                       COALESCE(pl.PostLikes, 0)                                             AS PostLikes,
                        (SELECT COUNT(*) FROM message WHERE message.Id_PostAnswer = posts.Id) AS MessageCount,
                        (tp.Id_Tag = ut.Id_Tag)                                               AS similarity_score
                 FROM posts
                          INNER JOIN topics t ON posts.Id_topics = t.Id
                          INNER JOIN status s ON t.Id_Status = s.Id
                          LEFT JOIN likepost lp ON posts.Id = lp.Id_Post
+                         LEFT JOIN (SELECT lp.Id_Post,
+                                           SUM(CASE WHEN lp.Like = 1 THEN 1 WHEN lp.Like = 0 THEN -1 ELSE 0 END) AS PostLikes
+                                    FROM likepost lp
+                                    GROUP BY lp.Id_Post) pl ON posts.Id = pl.Id_Post
                          LEFT JOIN friendship f ON (
                          (f.Id_User1 = ? AND f.Id_User2 = posts.Id_User AND f.status = 'friend') OR
                          (f.Id_User2 = ? AND f.Id_User1 = posts.Id_User AND f.status = 'friend')
