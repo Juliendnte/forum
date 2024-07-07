@@ -43,14 +43,13 @@ class topicModel {
                                WHEN lp.Like = 0 THEN -1
                                ELSE 0
                            END)    AS PostLikes,
-                       COUNT(m.Id) AS MessageCount
+                       (SELECT COUNT(*) FROM message WHERE message.Id_PostAnswer = p.Id) AS MessageCount
                 FROM topics t
                          INNER JOIN status s ON t.Id_Status = s.Id
                          INNER JOIN users u2 ON t.Id_User = u2.Id
                          LEFT JOIN tagstopics tp ON t.Id = tp.Id_topics
                          LEFT JOIN tags ON tp.Id_Tag = tags.Id
                          LEFT JOIN posts p ON t.Id = p.Id_topics
-                         LEFT JOIN message m ON p.Id = m.Id_PostAnswer
                          LEFT JOIN likepost lp ON p.Id = lp.Id_Post
                          LEFT JOIN users u ON p.Id_User = u.Id
                 WHERE t.Title = ?

@@ -84,7 +84,7 @@ VALUES ('Moi je préfére faire mes carrousels avec Swiper', 2, 1, '2024-04-14 0
        ('Des astuces pour l\'optimisation SEO d\'un blog ?', 2, 3, '2024-09-21 08:30:00'),
        ('Je veux utiliser Redux dans mon projet React, comment commencer ?', 2, 1, '2024-09-22 16:44:11'),
        ('Des conseils pour la gestion des erreurs en PHP ?', 2, 2, '2024-09-23 11:11:22'),
-       ('Quel framework JS est le plus adapté pour un projet en temps réel ?', 2, 3, '2024-09-24 09:33:27')
+       ('Quel framework JS est le plus adapté pour un projet en temps réel ?', 2, 3, '2024-09-24 09:33:27'),
        ('Comment choisir entre Angular et React pour un nouveau projet ?', 2, 2, '2024-09-25 07:55:27'),
        ('Quelqu\'un a-t-il de l\'expérience avec les API RESTful en Go ?', 2, 1, '2024-09-26 09:18:54'),
        ('Je rencontre des bugs intermittents avec une animation CSS, quelqu\'un peut m\'aider ?', 2, 3, '2024-09-27 18:45:47'),
