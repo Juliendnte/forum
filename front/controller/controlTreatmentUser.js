@@ -70,7 +70,6 @@ class TreatmentUser {
             errorHandler.handleRequestError(err);
             TreatmentUser.error = errorHandler.getError();
             console.log(TreatmentUser.error);
-            res.redirect("/coder/login");
             return res.redirect("/coder/login");
         }
         res.redirect("/coder");
