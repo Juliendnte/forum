@@ -306,51 +306,127 @@ textarea {
     align-items: center;
 }
 
-<<<<<<< HEAD
-.intro-text {
-    margin: 10px;
-}
-.collect-info p:first-child {
-    font-weight: bold;
-    margin: 10px;
-}
-.account-info {
-    margin: 10px;
-}
-
-.account-coder p {
-    margin: 10px;
-}
-
-.auto-info {
-    margin: 10px;
-}
-.info-collected p {
-    margin: 10px;
-}
-.info p {
-    margin: 10px;
-}
-.community p {
-    margin: 10px;
-}
-.shared {
-    margin: 10px;
-}
-.access p {
-    margin: 10px;
-}
-.mesures p {
-    margin: 10px;
-}
-.contact p {
-    margin: 10px;
-    margin-bottom: 50px;
-}
-.message-global-ctn {
+.terms-global-ctn {
+    margin: 0 20rem;
+    padding: 32px 24px 16px;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    flex-direction: row;
+    gap: 6rem;
 }
 
+.aside-jump-to-ctn {
+    width: 15rem;
+}
+
+.aside-jump-to-ul-ctn {
+    font-size: 14px;
+    margin: 14px 0;
+    padding: 0 0 0 40px;
+}
+
+.aside-jump-to-ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.aside-jump-to-ul li {
+    position: relative;
+    padding-left: 1.5em;
+    margin-bottom: 0.5em;
+}
+
+.aside-jump-to-ul li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #000000;
+    font-size: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.aside-jump-to-ul a {
+    text-decoration: none;
+    color: #115bcA;
+}
+
+.aside-jump-to-ul a:hover {
+    text-decoration: underline;
+    color: #0A449B;
+}
+
+.terms-ctn a {
+    text-decoration: none;
+    color: #115bcA;
+}
+
+.terms-ctn a:hover {
+    text-decoration: underline;
+    color: #0A449B;
+}
+
+.terms-ctn {
+    width: 51rem;
+    font-size: 14px;
+}
+
+.terms-ctn {
+    overflow-y: auto;
+    height: calc(100vh - 150px);
+    max-height: calc(100vh - 150px);
+}
+
+.terms-ctn::-webkit-scrollbar {
+    display: none;
+}
+
+.terms-ctn h1 {
+    margin: 32px 0 16px;
+    font-size: 2rem;
+    line-height: 2.25rem;
+    font-weight: normal;
+}
+
+.terms-ctn h2 {
+    font-weight: normal;
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+    margin: 1rem 0;
+}
+.terms-ctn p {
+    font-size: 14px;
+    color: #131313;
+    margin: 14px 0 16px;
+    line-height: 1.5;
+}
+
+tbody {
+    display: table-row-group;
+    vertical-align: middle;
+    unicode-bidi: isolate;
+    border-color: inherit;
+}
+
+.information-collected table {
+    width: 100%;
+    word-break: normal;
+    margin-bottom: 1rem;
+    border-collapse: collapse;
+    display: table;
+    box-sizing: border-box;
+    text-indent: initial;
+    unicode-bidi: isolate;
+    border-spacing: 2px;
+    border-color: gray;
+}
+.information-collected td {
+    padding: .5rem;
+    text-align: left;
+}
+
+tr:nth-child(even) {
+    background: #f8f8f8;
+}
+
+.information-use li {
+    margin-top: .25rem;
+}
