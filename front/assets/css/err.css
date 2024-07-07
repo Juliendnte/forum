@@ -74,3 +74,7 @@
     justify-content: center;
     align-items: center;
 }
+
+.err-text {
+    color: red;
+}

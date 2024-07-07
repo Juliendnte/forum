@@ -22,13 +22,13 @@
 </div>
 <div class="container" id="container">
     <div class="form-container sign-up">
-        <p>
-            <% if (err) { %><%= err.message %><% } %>
-        </p>
         <form action="/treatment/register" method="POST">
             <div class="titre-form">
                 <h1>Creer un compte</h1>
                 <span>Utilisez votre email pour l'inscription</span>
+                <p class="err-text">
+                    <% if (err.status === 402) { %><%= err.message %><% } %>
+                </p>
             </div>
             <input type="text" name="username" placeholder="Pseudo *">
             <input type="email" name="email" placeholder="Email *">
@@ -52,6 +52,9 @@
             <div class="titre-form">
                 <h1>Connectez-vous</h1>
                 <span>Utilisez votre mot de passe & email</span>
+                <p class="err-text">
+                    <% if (err.status === 401 ) { %><%= err.message %><% } %>
+                </p>
             </div>
             <input type="text" name="name" placeholder="Email ou pseudo *" required>
             <input type="password" name="password" placeholder="Mot de passe *" required>

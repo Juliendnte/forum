@@ -52,9 +52,8 @@ class ControlTemplate {
      * @param {Object} res - The response object.
      */
     static async Login(req, res) {
-        console.log(controlUser.TreatmentUser.error)
         res.render('../views/pages/login', {err: controlUser.TreatmentUser.error});
-        errorHandler.resetError()
+        controlUser.TreatmentUser.error = {};
     }
 
     /**

@@ -69,7 +69,6 @@ class TreatmentUser {
         } catch (err) {
             errorHandler.handleRequestError(err);
             TreatmentUser.error = errorHandler.getError();
-            console.log(TreatmentUser.error);
             return res.redirect("/coder/login");
         }
         res.redirect("/coder");
@@ -94,6 +93,8 @@ class TreatmentUser {
             }
         } catch (err) {
             errorHandler.handleRequestError(err);
+            TreatmentUser.error = errorHandler.getError();
+            return res.redirect("/coder/login");
         }
         res.redirect("/coder/login");
     }

@@ -50,14 +50,14 @@ class UserController {
     static async Register(req, res) {
         const {username, email, password} = req.body;
         if (!isValidEmail(email)) {
-            return res.status(401).send({
+            return res.status(402).send({
                 message: 'Email invalid',
-                status: 401
+                status: 402
             })
         } else if (!username) {
-            return res.status(401).send({
+            return res.status(402).send({
                 message: 'Username invalid',
-                status: 401
+                status: 402
             })
         }
         const Password = hashPassword(password, crypto.randomBytes(16).toString('hex'));//hash mon password
@@ -68,9 +68,9 @@ class UserController {
                 status: 201
             })
         } catch (err) {
-            res.status(500).send({
-                message: err,
-                status: 500
+            res.status(402).send({
+                message: 'Invalid username, email or password',
+                status: 402
             });
         }
     }
