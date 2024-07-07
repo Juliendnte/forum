@@ -18,6 +18,9 @@ function isValidEmail(email) {
 }
 
 class TreatmentUser {
+
+    static error = {};
+
     /**
      * Handle login form submission.
      * @param {Object} req - The request object.
@@ -48,20 +51,25 @@ class TreatmentUser {
                         secure: false, // Change to true if using HTTPS
                         sameSite: "Lax",
                     });
-                    user = await axios.get(url + "/user", {
+                    const userResponse = await axios.get(`${url}/user`, {
                         headers: {
                             "Authorization": Token,
                             "Content-Type": "application/json"
                         }
                     });
+                    // Assuming you do something with the userResponse
                 } else {
                     errorHandler.setError("Login failed: No Token received", 401);
+                    TreatmentUser.error = errorHandler.getError();
                 }
             } else {
                 errorHandler.setError(response.data.message, response.data.status);
+                TreatmentUser.error = errorHandler.getError();
             }
         } catch (err) {
             errorHandler.handleRequestError(err);
+            TreatmentUser.error = errorHandler.getError();
+            console.log(TreatmentUser.error);
             res.redirect("/coder/login");
         }
     }

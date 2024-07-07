@@ -22,6 +22,9 @@
 </div>
 <div class="container" id="container">
     <div class="form-container sign-up">
+        <p>
+            <% if (err) { %><%= err.message %><% } %>
+        </p>
         <form action="/treatment/register" method="POST">
             <div class="titre-form">
                 <h1>Creer un compte</h1>
@@ -32,12 +35,12 @@
             <input type="password" id="password" name="password" placeholder="Mot de passe *" required>
             <div id="password-requirements">
                 <ul>
-                    <li id="length">8 caractères minimum </li>
-                    <li> | </li>
-                    <li id="number"> 1 chiffre </li>
-                    <li> | </li>
-                    <li id="uppercase"> 1 majuscule </li>
-                    <li> | </li>
+                    <li id="length">8 caractères minimum</li>
+                    <li> |</li>
+                    <li id="number"> 1 chiffre</li>
+                    <li> |</li>
+                    <li id="uppercase"> 1 majuscule</li>
+                    <li> |</li>
                     <li id="special"> 1 caractère spécial</li>
                 </ul>
             </div>
