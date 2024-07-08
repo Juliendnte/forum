@@ -181,7 +181,9 @@ class TopicController {
             body.Tags = JSON.parse(body.Tags);
         }
 
-        console.log(body)
+        if (body.Title.includes(' ')) {
+            return res.status(400).send({message: "Le titre ne doit pas contenir d'espace.", status: 400});
+        }
 
         let filePath;
         if (req.file) {
@@ -199,7 +201,7 @@ class TopicController {
             }
             return res.status(200).send({message: `Topic with id ${id} successfully updated`, status: 200});
         } catch (err) {
-            res.status(500).send({message: err, status: 500});
+            res.status(401).send({message: 'Ce nom de topic est déjà pris', status: 401});
         }
     }
 

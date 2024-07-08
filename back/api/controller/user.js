@@ -232,6 +232,18 @@ class UserController {
         while (typeof body.Tags == 'string'){
             body.Tags = JSON.parse(body.Tags);
         }
+        if (!isValidEmail(body.Email)) {
+            return res.status(401).send({
+                message: 'Email invalid',
+                status: 401
+            })
+        } else if (!body.Name) {
+            return res.status(401).send({
+                message: 'Username invalid',
+                status: 401
+            })
+        }
+
          let filePath;
 
         if (req.file) {
@@ -253,9 +265,9 @@ class UserController {
                 status: 200
             })
         } catch (err) {
-            return res.status(500).send({
-                message: err,
-                status: 500
+            res.status(401).send({
+                message: 'Username or Email invalid',
+                status: 401
             })
         }
     }
