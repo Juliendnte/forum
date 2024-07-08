@@ -897,35 +897,28 @@ class userModel {
     static getFav(id) {
         return new Promise((resolve, reject) => {
             const sql = `
-                SELECT p.Id,
-                       p.Title,
-                       p.Content,
-                       p.Create_post,
-                       p.Id_User,
-                       t.Title AS TopicTitle,
-                       t.Path  AS TopicPath,
-                       t.Id    AS TopicId
-                FROM posts p
-                         LEFT JOIN favtopics fp ON p.Id_topics = fp.Id_topics
-                         LEFT JOIN topics t ON p.Id_topics = t.Id
-                WHERE fp.Id_User = ?
+                SELECT t.Id AS TopicId, t.Title, t.Content, t.Path, t.Create_at, t.Id_User, s.Label AS Status
+                FROM topics t
+                         LEFT JOIN status s ON t.Id_Status = s.Id
+                         LEFT JOIN tagstopics tp ON t.Id = tp.Id_topics
+                         LEFT JOIN tags ON tp.Id_Tag = tags.Id
+                        INNER JOIN favtopics fp ON fp.Id_topics = t.Id
             `;
             connection.query(sql, id, (err, results) => err ? reject(err) : resolve(results));
         });
     }
 
-    static postFav(idUser, idPost) {
+    static postFav(idUser, idTopic) {
         return new Promise((resolve, reject) => {
-            const sql = `  INSERT INTO favtopics(Id_User, Id_topics)
-                           VALUES (?, ?)`
-            connection.query(sql, [idUser, idPost], (err, results) => err ? reject(err) : resolve(results));
+            const sql = `  INSERT INTO favtopics(Id_User, Id_topics) VALUES (?, ?)`
+            connection.query(sql, [idUser, idTopic], (err, results) => err ? reject(err) : resolve(results));
         })
     }
 
-    static deleteFav(idUser, idPost) {
+    static deleteFav(idUser, idTopic) {
         return new Promise((resolve, reject) => {
             const sql = 'DELETE FROM favtopics WHERE Id_User = ? AND Id_topics = ?'
-            connection.query(sql, [idUser, idPost], (err, results) => err ? reject(err) : resolve(results));
+            connection.query(sql, [idUser, idTopic], (err, results) => err ? reject(err) : resolve(results));
         })
     }
 }

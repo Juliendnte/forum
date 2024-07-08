@@ -1079,7 +1079,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
     </schema>
     <schema id="293" parent="1" name="forum">
       <Current>1</Current>
-      <LastIntrospectionLocalTimestamp>2024-07-06.14:52:50</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2024-07-08.21:16:20</LastIntrospectionLocalTimestamp>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
     <user id="294" parent="1" name="forum_user">
@@ -1273,7 +1273,7 @@ Id_Post</ColNames>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
     <column id="334" parent="302" name="Id">
-      <AutoIncrement>12</AutoIncrement>
+      <AutoIncrement>169</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -1348,7 +1348,7 @@ Id_Post</ColNames>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
     <column id="349" parent="303" name="Id">
-      <AutoIncrement>32</AutoIncrement>
+      <AutoIncrement>37</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
