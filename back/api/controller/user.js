@@ -430,7 +430,7 @@ class UserController {
                     status: 404
                 })
             }
-            fav.forEach((fav) => fav.TopicPath = `${url}assets/${fav.TopicPath}`)
+            fav.forEach((fav) => fav.Type === 'Topic' ? fav.Path = `${url}assets/${fav.Path}` : null)
             res.status(200).send({
                 message: 'Fav found',
                 status: 200,
@@ -444,11 +444,17 @@ class UserController {
         }
     }
 
-    static async postFav (req, res){
+    static async postFavTopic (req, res){
         const idUser = req.user.Sub;
-        const idPost = req.body.Id;
+        const idTopic = req.body.idTopic;
+        if (!idTopic){
+            return res.status(404).send({
+                message: 'Topic not found',
+                status: 404
+            })
+        }
         try {
-            const fav = user.postFav(idUser, idPost)
+            const fav = user.postFavTopic(idUser, idTopic)
             if (fav.length  === 0){
                 return res.status(404).send({
                     message: 'Fav not found',
@@ -468,12 +474,77 @@ class UserController {
     }
 
 
-    static async deleteFav(req, res) {
+    static async deleteFavTopic(req, res) {
         const id = req.user.Sub
-        const idPost = req.body.id
+        const idTopic = req.body.idTopic
+
+        if (!idTopic){
+            return res.status(404).send({
+                message: 'Topic not found',
+                status: 404
+            })
+        }
 
         try {
-            await user.deleteFav(id, idPost)
+            await user.deleteFavTopic(id, idTopic)
+
+            res.status(200).send({
+                message: 'favoris bien supprimé',
+                status: 200
+            })
+        } catch (err) {
+            res.status(500).send({
+                message: err,
+                status: 500
+            })
+        }
+    }
+
+    static async postFavPost (req, res){
+        const idUser = req.user.Sub;
+        const idPost = req.body.idPost;
+
+        if (!idPost){
+            return res.status(404).send({
+                message: 'Post not found',
+                status: 404
+            })
+        }
+
+        try {
+            const fav = user.postFavPost(idUser, idPost)
+            if (fav.length  === 0){
+                return res.status(404).send({
+                    message: 'Fav not found',
+                    status: 404
+                })
+            }
+            res.status(200).send({
+                message: 'fav insert',
+                status: 200
+            })
+        }catch (err){
+            res.status(500).send({
+                message: err,
+                status: 500
+            })
+        }
+    }
+
+
+    static async deleteFavPost(req, res) {
+        const id = req.user.Sub
+        const idPost = req.body.idPost
+
+        if (!idPost){
+            return res.status(404).send({
+                message: 'Post not found',
+                status: 404
+            })
+        }
+
+        try {
+            await user.deleteFavPost(id, idPost)
 
             res.status(200).send({
                 message: 'favoris bien supprimé',

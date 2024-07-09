@@ -22,6 +22,10 @@ ALTER TABLE `favtopics`
     ADD CONSTRAINT `FK_Favtopics_Topics` FOREIGN KEY (`Id_topics`) REFERENCES `topics` (`Id`) ON DELETE CASCADE,
     ADD CONSTRAINT `FK_Favtopics_Users` FOREIGN KEY (`Id_User`) REFERENCES `users` (`Id`) ON DELETE CASCADE;
 
+ALTER TABLE `favposts`
+    ADD CONSTRAINT `FK_Favposts_Post` FOREIGN KEY (`Id_Post`) REFERENCES `posts` (`Id`) ON DELETE CASCADE,
+    ADD CONSTRAINT `FK_Favposts_Users` FOREIGN KEY (`Id_User`) REFERENCES `users` (`Id`) ON DELETE CASCADE;
+
 ALTER TABLE `friendship`
     ADD CONSTRAINT `FK_Friendship_User1` FOREIGN KEY (`Id_User1`) REFERENCES `users` (`Id`) ON DELETE CASCADE,
     ADD CONSTRAINT `FK_Friendship_User2` FOREIGN KEY (`Id_User2`) REFERENCES `users` (`Id`) ON DELETE CASCADE;
