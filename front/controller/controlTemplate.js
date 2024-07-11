@@ -15,11 +15,12 @@ class ControlTemplate {
      */
     static async Index(req, res) {
         try {
-            const [dataUser, dataPost, dataLike, dataTags] = await Promise.all([
+            const [dataUser, dataPost, dataLike, dataTags, dataFav] = await Promise.all([
                 controlUser.TreatmentUser.GetUser(req, res),
                 controlPost.GetPosts(req, res),
                 controlUser.TreatmentUser.GetLiked(req, res),
-                controlTopic.GetTags(req, res)
+                controlTopic.GetTags(req, res),
+                controlUser.TreatmentUser.GetFavorite(req, res)
             ]);
 
             let query
@@ -37,6 +38,7 @@ class ControlTemplate {
                 dataLike,
                 dataTags,
                 PathUserLog,
+                dataFav,
                 query
             });
         } catch (err) {
