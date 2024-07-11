@@ -25,10 +25,32 @@
                     <p>Favoris</p>
                 </div>
             </div>
-        <% } else { %>
         <% } %>
     </div>
     <div class="bar"></div>
+    <% if (dataUser && dataTopicOwn) { %>
+        <div class="topic-own-ctn">
+            <div>
+                <span>Vos topics</span>
+            </div>
+            <div class="topic-own-global-plus">
+                <% dataTopicOwn.topics.items.forEach(function(item) { %>
+                    <a href="/coder/t/<%= item.Title %>">
+                        <div class="topic-own-global">
+                            <div class="topic-own-img">
+                                <img src="<%= item.Path %>" alt="<%= item.Title %>">
+                                <span><%= item.Title %></span>
+                            </div>
+                            <div class="topic-own-status">
+                                <span><%= item.Status %></span>
+                            </div>
+                        </div>
+                    </a>
+                <% }); %>
+            </div>
+        </div>
+        <div class="bar"></div>
+    <% } %>
     <div class="nav-categories">
         <nav>
             <ul>
@@ -47,7 +69,8 @@
                             <% dataTags.tags.forEach(function(item) { %>
                                 <li>
                                     <a href="/coder/recherche/topic/<%= item.Label %>">
-                                        <img src="<%= item.Path %>" alt="<%= item.Label %> icon" style="width: 25px; height: 25px;">
+                                        <img src="<%= item.Path %>" alt="<%= item.Label %> icon"
+                                             style="width: 25px; height: 25px;">
                                         <%= item.Label %>
                                     </a>
                                 </li>

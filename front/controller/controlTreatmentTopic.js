@@ -121,6 +121,16 @@ class TreatmentTopic {
             errorHandler.setError('Erreur lors de la recherche', 500)
         }
     }
+
+    static async GetTopicOwn(idUser) {
+        try {
+            const response = await axios.get(`${url}/topics?Id_User=${idUser}`)
+            return response.data
+        } catch(err) {
+            errorHandler.setError('Erreur lors de la recherche', 500)
+            return undefined;
+        }
+    }
 }
 
 module.exports = TreatmentTopic;

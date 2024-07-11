@@ -20,8 +20,10 @@ class ControlTemplate {
                 controlPost.GetPosts(req, res),
                 controlUser.TreatmentUser.GetLiked(req, res),
                 controlTopic.GetTags(req, res),
-                controlUser.TreatmentUser.GetFavorite(req, res)
+                controlUser.TreatmentUser.GetFavorite(req, res),
             ]);
+
+            const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser.utilisateur.Id);
 
             let query
 
@@ -39,9 +41,11 @@ class ControlTemplate {
                 dataTags,
                 PathUserLog,
                 dataFav,
+                dataTopicOwn,
                 query
             });
         } catch (err) {
+            console.log(err)
             errorHandler.handleRequestError(err);
             res.redirect('/coder/error');
         }
@@ -111,6 +115,8 @@ class ControlTemplate {
                 }
             });
 
+            const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser.utilisateur.Id);
+
             const dataLike = await controlUser.TreatmentUser.GetLiked(req, res);
             let query
 
@@ -124,6 +130,7 @@ class ControlTemplate {
                 IdUserLog,
                 PathUserLog,
                 dataLike,
+                dataTopicOwn,
                 query
             });
 
@@ -160,11 +167,12 @@ class ControlTemplate {
         try {
             const topicName = req.params.name;
             let PathUserLog
-            const [dataUser, dataTopic, dataAdmin, dataTags] = await Promise.all([
+            const [dataUser, dataTopic, dataAdmin, dataTags, dataFav] = await Promise.all([
                 controlUser.TreatmentUser.GetUser(req, res),
                 controlTopic.GetTopic(topicName),
                 controlUser.TreatmentUser.GetAdmin(req, res),
-                controlTopic.GetTags(req, res)
+                controlTopic.GetTags(req, res),
+                controlUser.TreatmentUser.GetFavorite(req, res)
             ]);
 
             if (dataUser && dataUser.utilisateur) {
@@ -176,6 +184,8 @@ class ControlTemplate {
                 dataTopic.topic.Create_at_formatted = date.toLocaleDateString('fr-FR', options);
             }
 
+            const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser.utilisateur.Id);
+
             const dataLike = await controlUser.TreatmentUser.GetLiked(req, res);
             let query
 
@@ -186,6 +196,8 @@ class ControlTemplate {
                 dataAdmin,
                 dataTags,
                 PathUserLog,
+                dataFav,
+                dataTopicOwn,
                 query
             });
         } catch (err) {
@@ -211,6 +223,8 @@ class ControlTemplate {
                 controlUser.TreatmentUser.GetLiked(req, res)
             ]);
 
+            const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser.utilisateur.Id);
+
             if (dataUser && dataUser.utilisateur) {
                 PathUserLog = dataUser.utilisateur.Path
             }
@@ -230,6 +244,7 @@ class ControlTemplate {
                 dataTags,
                 dataMessages,
                 PathUserLog,
+                dataTopicOwn,
                 query
             });
         } catch (err) {
@@ -247,6 +262,7 @@ class ControlTemplate {
             const dataMessage = await controlMessage.GetMessage(id)
             const dataMessages = await controlMessage.GetMessagestoMessage(req, res)
             const dataTags = await controlTopic.GetTags(req, res);
+            const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser.utilisateur.Id);
             let query
 
             const PathUserLog = dataUser.utilisateur.Path
@@ -263,6 +279,7 @@ class ControlTemplate {
                 dataMessages,
                 dataTags,
                 PathUserLog,
+                dataTopicOwn,
                 query
             });
         } catch (err) {
@@ -430,6 +447,8 @@ class ControlTemplate {
                 controlTopic.Search(query)
             ]);
 
+            const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser.utilisateur.Id);
+
             const token = req.cookies.Token;
             let PathUserLog = null;
 
@@ -444,6 +463,7 @@ class ControlTemplate {
                 dataSearch,
                 dataTags,
                 PathUserLog,
+                dataTopicOwn,
                 query
             });
 
@@ -464,6 +484,8 @@ class ControlTemplate {
                 controlTopic.SearchTags(tag)
             ]);
 
+            const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser.utilisateur.Id);
+
             const token = req.cookies.Token;
             let PathUserLog = null;
 
@@ -479,6 +501,7 @@ class ControlTemplate {
                 dataSearch,
                 dataTags,
                 PathUserLog,
+                dataTopicOwn,
                 tag,
                 query
             });

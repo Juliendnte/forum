@@ -344,7 +344,7 @@ class TreatmentUser {
                 return undefined;
             }
 
-            const response = await axios.delete(`${url}/FavPost`,
+            const response = await axios.post(`${url}/FavPost/delete`,
                 {
                     idPost
                 },
@@ -362,6 +362,83 @@ class TreatmentUser {
                 errorHandler.setError("Failed to fetch topic data", 401)
                 return undefined;
             }
+        } catch (err) {
+            console.log(err)
+            errorHandler.handleRequestError(err);
+            res.redirect("/coder/err")
+        }
+    }
+
+    static async AddFavoriteTopic(req, res){
+        try {
+            const idTopic = req.params.id
+            if (!idTopic) {
+                return undefined;
+            }
+
+            const token = req.cookies.Token;
+            if (!token) {
+                return undefined;
+            }
+
+            const response = await axios.post(`${url}/FavTopic`,
+                {
+                    idTopic
+                },
+                {
+                    headers: {
+                        "Authorization": token,
+                        "Content-Type": "application/json"
+                    },
+                });
+
+            if (response.status === 200) {
+                res.redirect(`back`);
+                return response.data;
+            } else {
+                errorHandler.setError("Failed to fetch topic data", 401)
+                return undefined;
+            }
+
+
+        } catch (err) {
+            errorHandler.handleRequestError(err);
+            res.redirect("/coder/err")
+        }
+    }
+
+    static async RemoveFavoriteTopic(req, res){
+        try {
+            const idTopic = req.params.id
+            if (!idTopic) {
+                return undefined;
+            }
+
+            const token = req.cookies.Token;
+            if (!token) {
+                return undefined;
+            }
+
+            const response = await axios.post(`${url}/FavTopic/delete`,
+                {
+                    idTopic
+                },
+                {
+                    headers: {
+                        "Authorization": token,
+                        "Content-Type": "application/json"
+                    },
+                });
+
+            if (response.status === 200) {
+                res.redirect(`back`);
+                return response.data;
+            } else {
+                errorHandler.setError("Failed to fetch topic data", 401)
+                return undefined;
+            }
+
+
         } catch (err) {
             errorHandler.handleRequestError(err);
             res.redirect("/coder/err")
