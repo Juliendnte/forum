@@ -352,32 +352,33 @@ class TreatmentUser {
         }
     }
     static async RemoveFavoritePost(req, res) {
-            const idPost = req.params.id;
-            if (!idPost) {
-                return undefined;
-            }
+        const idPost = req.params.id;
+        if (!idPost) {
+            return undefined;
+        }
 
         const token = req.cookies.Token;
 
         if (!token) {
-                return undefined;
-            }
-            const response = await axios.delete(`${url}/FavPost`,
-                {
-                    idPost
-                }, {
-                    headers: {
-                        "Authorization": token,
-                        "Content-Type": "application/json"
-                    },
-                });
-            if (response.status === 200) {
-                res.redirect(`back`);
-                return response.data;
-            } else {
-                errorHandler.setError("Failed to fetch topic data", 401)
-                return undefined;
-            }
+            return undefined;
+        }
+        const response = await axios.delete(`${url}/FavPost`,
+            {
+                idPost
+            }, {
+                headers: {
+                    "Authorization": token,
+                    "Content-Type": "application/json"
+                },
+            });
+        if (response.status === 200) {
+            res.redirect(`back`);
+            return response.data;
+        } else {
+            errorHandler.setError("Failed to fetch topic data", 401)
+            return undefined;
+        }
+    }
 }
 
 module.exports = {TreatmentUser};
