@@ -453,6 +453,13 @@ class UserController {
                 status: 404
             })
         }
+        const fav = user.getFavIdTopic(idUser, idTopic)
+        if (fav.length !== 0){
+            return res.status(400).send({
+                message: 'Fav already exist',
+                status: 400
+            })
+        }
         try {
             const fav = user.postFavTopic(idUser, idTopic)
             if (fav.length  === 0){
@@ -508,6 +515,14 @@ class UserController {
             return res.status(404).send({
                 message: 'Post not found',
                 status: 404
+            })
+        }
+
+        const fav = user.getFavIdPost(idUser, idPost)
+        if (fav.length !== 0){
+            return res.status(400).send({
+                message: 'Fav already exist',
+                status: 400
             })
         }
 
