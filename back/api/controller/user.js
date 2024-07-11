@@ -518,7 +518,11 @@ class UserController {
             })
         }
 
-        const fav = user.getFavIdPost(idUser, idPost)
+        console.log(idPost)
+        console.log(idUser)
+
+        const fav = await user.getFavIdPost(idUser, idPost)
+        console.log(fav)
         if (fav.length !== 0){
             return res.status(400).send({
                 message: 'Fav already exist',
@@ -527,7 +531,7 @@ class UserController {
         }
 
         try {
-            const fav = user.postFavPost(idUser, idPost)
+            const fav = await user.postFavPost(idUser, idPost)
             if (fav.length  === 0){
                 return res.status(404).send({
                     message: 'Fav not found',
@@ -549,8 +553,6 @@ class UserController {
     static async deleteFavPost(req, res) {
         const id = req.user.Sub
         const idPost = req.body.idPost
-
-        console.log("caca"+id)
 
         if (!idPost){
             return res.status(404).send({
