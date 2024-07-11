@@ -6,27 +6,11 @@ const errorHandler = new ErrorHandler();
 
 class TreatmentMessages {
 
-    static async GetMessages(req, res) {
-        try {
-            const token = req.cookies.Token;
-            let response = await axios.get(`${url}/messages`, {
-                headers: {
-                    "Authorization": token,
-                    "Content-Type": "application/json"
-                }
-            });
-
-            if (response.status === 200) {
-                return response.data;
-            } else {
-                errorHandler.setError("Failed to fetch topic data", 401)
-                return undefined;
-            }
-        } catch (err) {
-            return (await axios.get(`${url}/posts`)).data
-        }
-    }
-
+    /**
+     * Fetches a specific message by ID.
+     * @param {string} id - The ID of the message to fetch.
+     * @returns {Promise<Object|undefined>} The message data or undefined if an error occurs.
+     */
     static async GetMessage(id) {
         try {
             const response = await axios.get(`${url}/message/${id}`)
@@ -43,6 +27,12 @@ class TreatmentMessages {
         }
     }
 
+    /**
+     * Fetches messages that are replies to a specific message.
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     * @returns {Promise<Object|undefined>} The messages data or undefined if an error occurs.
+     */
     static async GetMessagestoMessage(req, res) {
         try {
             const response = await axios.get(`${url}/messages?m.Id_MessageAnswer=${req.params.id}`)
@@ -59,6 +49,15 @@ class TreatmentMessages {
         }
     }
 
+    /**
+     * Updates a specific message by ID.
+     * @param {Object} req - The request object.
+     * @param {string} req.cookies.Token - The authorization token.
+     * @param {Object} req.body - The body of the request containing the update data.
+     * @param {string} req.params.id - The ID of the message to update.
+     * @param {Object} res - The response object.
+     * @returns {Promise<void>} Redirects to the updated message page or error page.
+     */
     static async UpdateMessage(req, res) {
         try {
             const token = req.cookies.Token;
@@ -86,6 +85,14 @@ class TreatmentMessages {
         }
     }
 
+    /**
+     * Creates a new message.
+     * @param {Object} req - The request object.
+     * @param {string} req.cookies.Token - The authorization token.
+     * @param {Object} req.body - The body of the request containing the message data.
+     * @param {Object} res - The response object.
+     * @returns {Promise<void>} Redirects to the post page or error page.
+     */
     static async CreateMessage(req, res) {
         try {
             const token = req.cookies.Token;
@@ -95,7 +102,6 @@ class TreatmentMessages {
 
             const {Content, Id_PostAnswer, Id_MessageAnswer} = req.body;
 
-            console.log("Data received:", Content, Id_PostAnswer, Id_MessageAnswer);
 
             await axios.post(`${url}/message`, {
                 Content,
@@ -113,9 +119,7 @@ class TreatmentMessages {
             errorHandler.handleRequestError(err);
             res.redirect("/coder/err")
         }
-
     }
-
 }
 
 module.exports = TreatmentMessages;

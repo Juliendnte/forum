@@ -6,6 +6,11 @@ const errorHandler = new ErrorHandler();
 
 class TreatmentPosts {
 
+    /**
+     * Create a new post.
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
     static async CreatePost(req, res) {
         try {
             const token = req.cookies.Token;
@@ -35,6 +40,11 @@ class TreatmentPosts {
         }
     }
 
+    /**
+     * Handle to get all posts when the user is connected or not.
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
     static async GetPosts(req, res) {
         try {
             const token = req.cookies.Token
@@ -56,6 +66,10 @@ class TreatmentPosts {
         }
     }
 
+    /**
+     * Handle getting a specific post by ID.
+     * @param id The ID of the post to get.
+     */
     static async GetPost(id) {
         try {
             const response = await axios.get(`${url}/post/${id}`)
@@ -67,6 +81,11 @@ class TreatmentPosts {
         }
     }
 
+    /**
+     * Handle to update a specific post by ID.
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
     static async UpdatePost(req, res) {
         try {
             const token = req.cookies.Token;
@@ -91,6 +110,11 @@ class TreatmentPosts {
         }
     }
 
+    /**
+     * Getting all messages for a specific post.
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
     static async GetMessagesPost(req, res) {
         try {
             const response = await axios.get(`${url}/messages?m.Id_PostAnswer=${req.params.id}`)
@@ -101,6 +125,11 @@ class TreatmentPosts {
         }
     }
 
+    /**
+     * Handle to like a post
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
     static async LikePost(req, res) {
         try {
             const Id_Post = req.params.id
@@ -133,6 +162,11 @@ class TreatmentPosts {
         }
     }
 
+    /**
+     * Handle to unlike a post
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
     static async UnLikePost(req, res) {
         try {
             const Id_Post = req.params.id
@@ -165,6 +199,11 @@ class TreatmentPosts {
         }
     }
 
+    /**
+     * Handle to delete a post
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
     static async DeletePost(req, res) {
         try {
             const token = req.cookies.Token;

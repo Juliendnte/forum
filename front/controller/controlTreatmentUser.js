@@ -157,16 +157,21 @@ class TreatmentUser {
         }
     }
 
+    /**
+     * Handle the follow of a user
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
     static async FollowUser(req, res) {
         try {
             const id = req.params.id;
             if (!id) {
-                return res.status(400).send("No user found");
+                return  res.redirect('back');
             }
 
             const token = req.cookies.Token;
             if (!token) {
-                return res.status(400).send("No token found");
+                return  res.redirect('back');
             }
 
             await axios.post(`${url}/follow`, {id}, {
@@ -188,7 +193,10 @@ class TreatmentUser {
         }
     }
 
-    static async GetAdmin(req, res) {
+    /**
+     * Getting the admin and moderators
+     */
+    static async GetAdmin() {
         try {
             const response = await axios.get(`${url}/admin/`);
             return response.data.admin; // Return the array of admin and moderators
@@ -199,6 +207,9 @@ class TreatmentUser {
         }
     }
 
+    /**
+     * Getting all tags
+     */
     static async GetTags() {
         try {
             const response = await axios.get(`${url}/tags`);
@@ -214,12 +225,17 @@ class TreatmentUser {
         }
     }
 
+    /**
+     * Handle the update of a user
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
     static async UpdateUser(req, res) {
         try {
             const token = req.cookies.Token;
 
             if (!token) {
-                return res.status(400).send("No token found");
+                return res.redirect('/coder/user/' + req.body.Name);
             }
             const formData = new FormData();
             let blobFile;
@@ -249,7 +265,11 @@ class TreatmentUser {
         }
     }
 
-    static async GetLiked(req, res) {
+    /**
+     * Getting the liked post of the user
+     * @param {Object} req - The request object.
+     */
+    static async GetLiked(req) {
         try {
             const token = req.cookies.Token;
 
@@ -269,6 +289,11 @@ class TreatmentUser {
         }
     }
 
+    /**
+     * Adding a post to the favorite
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
     static async AddFavorite(req, res) {
         try {
             const Id = req.params.id;
@@ -292,6 +317,11 @@ class TreatmentUser {
         }
     }
 
+    /**
+     * Removing a post from the favorite
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
     static async RemoveFavorite(req, res) {
         try {
             const Id = req.params.id;
@@ -315,6 +345,11 @@ class TreatmentUser {
         }
     }
 
+    /**
+     * Getting all favorite
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
     static async GetFavorite(req, res) {
         try {
             const token = req.cookies.Token;

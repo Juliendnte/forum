@@ -19,7 +19,7 @@ class ControlTemplate {
                 controlUser.TreatmentUser.GetUser(req, res),
                 controlPost.GetPosts(req, res),
                 controlUser.TreatmentUser.GetLiked(req, res),
-                controlTopic.GetTags(req, res)
+                controlTopic.GetTags()
             ]);
 
             let query
@@ -150,7 +150,7 @@ class ControlTemplate {
     }
 
     /**
-     * Render the create topic profile page
+     * Render the topic page
      * @param {Object} req - The request object.
      * @param {Object} res - The response object.
      */
@@ -161,7 +161,7 @@ class ControlTemplate {
             const [dataUser, dataTopic, dataAdmin, dataTags] = await Promise.all([
                 controlUser.TreatmentUser.GetUser(req, res),
                 controlTopic.GetTopic(topicName),
-                controlUser.TreatmentUser.GetAdmin(req, res),
+                controlUser.TreatmentUser.GetAdmin(),
                 controlTopic.GetTags(req, res)
             ]);
 
@@ -193,7 +193,7 @@ class ControlTemplate {
     }
 
     /**
-     * Render the create topic profile page
+     * Render the post page
      * @param {Object} req - The request object.
      * @param {Object} res - The response object.
      */
@@ -237,6 +237,11 @@ class ControlTemplate {
         }
     }
 
+    /**
+     * Render the message page
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
     static async GetMessage(req, res) {
         try {
             const id = req.params.id
@@ -269,6 +274,11 @@ class ControlTemplate {
         }
     }
 
+    /**
+     * Render the create page for a post
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
     static async CreatePost(req, res) {
         try {
             const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
@@ -288,6 +298,11 @@ class ControlTemplate {
         }
     }
 
+    /**
+     * Render the create page for a message responding to a post
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
     static async CreateMessageForPost(req, res) {
         try {
             const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
@@ -310,6 +325,11 @@ class ControlTemplate {
         }
     }
 
+    /**
+     * Render the create page for a message responding to a message
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
     static async CreateMessageForMessage(req, res) {
         try {
             const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
@@ -331,6 +351,11 @@ class ControlTemplate {
         }
     }
 
+    /**
+     * Render the update profil page
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
     static async UpdateProfil(req, res) {
         try {
             const token = req.cookies.Token;
@@ -352,6 +377,11 @@ class ControlTemplate {
         }
     }
 
+    /**
+     * Render the update topic page
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
     static async UpdateTopic(req, res) {
         try {
             const token = req.cookies.Token;
@@ -375,6 +405,11 @@ class ControlTemplate {
         }
     }
 
+    /**
+     * Render the update post page
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
     static async UpdatePost(req, res) {
         try {
             const token = req.cookies.Token;
@@ -396,6 +431,11 @@ class ControlTemplate {
         }
     }
 
+    /**
+     * Render the update message page
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
     static async UpdateMessage(req, res) {
         try {
             const token = req.cookies.Token;
@@ -417,6 +457,11 @@ class ControlTemplate {
         }
     }
 
+    /**
+     * Render the search page
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
     static async SearchGlobal(req, res) {
         try {
             const query = req.query.search;
@@ -451,6 +496,11 @@ class ControlTemplate {
         }
     }
 
+    /**
+     * Render the search page of tags
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
     static async SearchTag(req, res) {
         try {
             const tag = req.params.tag;
@@ -487,6 +537,11 @@ class ControlTemplate {
         }
     }
 
+    /**
+     * Render the Conditions page
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
     static async Conditions (req,res) {
         try {
             const [dataUser, dataTags] = await Promise.all([
@@ -514,6 +569,7 @@ class ControlTemplate {
             res.redirect("/coder/err")
         }
     }
+
     /**
      * Render the error page.
      * @param {Object} req - The request object.
