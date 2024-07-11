@@ -199,7 +199,7 @@ class TreatmentUser {
         }
     }
 
-    static async GetTags() {
+    static async GetTags(req, res) {
         try {
             const response = await axios.get(`${url}/tags`);
 

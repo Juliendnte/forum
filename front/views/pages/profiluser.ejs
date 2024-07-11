@@ -23,7 +23,7 @@
                         <span><%= dataUser.utilisateur.Name %></span>
                         <span><%= dataUser.utilisateur.Email %></span>
                         <% if (Own) { %>
-                            <% if (dataUser.utilisateur.Biography === null ) { %>
+                            <% if (dataUser.utilisateur.Biography === null || dataUser.utilisateur.Biography.length === 0 ) { %>
                                 <div class="biographie-text">
                                     <p>Ajouter une biographie</p>
                                 </div>
