@@ -269,55 +269,12 @@ class TreatmentUser {
         }
     }
 
-    static async AddFavorite(req, res) {
-        try {
-            const Id = req.params.id;
-            const token = req.cookies.Token;
-
-            const response = await axios.post(`${url}/postFav`,
-                {
-                    Id
-                },
-                {
-                    headers: {
-                        "Authorization": token,
-                        "Content-Type": "application/json"
-                    },
-                });
-
-            return response.data
-        } catch (err) {
-            errorHandler.handleRequestError(err);
-            res.redirect("/coder/err")
-        }
-    }
-
-    static async RemoveFavorite(req, res) {
-        try {
-            const Id = req.params.id;
-            const token = req.cookies.Token;
-
-            const response = await axios.delete(`${url}/deleteFav`,
-                {
-                    Id
-                },
-                {
-                    headers: {
-                        "Authorization": token,
-                        "Content-Type": "application/json"
-                    },
-                });
-
-            return response.data
-        } catch (err) {
-            errorHandler.handleRequestError(err);
-            res.redirect("/coder/err")
-        }
-    }
-
     static async GetFavorite(req, res) {
         try {
             const token = req.cookies.Token;
+            if (!token) {
+                return undefined
+            }
 
             const response = await axios.get(`${url}/getFav`,
                 {
@@ -327,13 +284,89 @@ class TreatmentUser {
                     },
                 });
 
-            return response.data
+            if (response.status === 200) {
+                return response.data;
+            } else {
+                errorHandler.setError("Failed to fetch topic data", 401)
+                return undefined;
+            }
         } catch (err) {
             errorHandler.handleRequestError(err);
             res.redirect("/coder/err")
         }
     }
 
+    static async AddFavoritePost(req, res) {
+        try {
+            const idPost = req.params.id;
+            if (!idPost) {
+                return undefined;
+            }
+
+            const token = req.cookies.Token;
+            if (!token) {
+                return undefined;
+            }
+
+            const response = await axios.post(`${url}/FavPost`,
+                {
+                    idPost
+                },
+                {
+                    headers: {
+                        "Authorization": token,
+                        "Content-Type": "application/json"
+                    },
+                });
+
+            if (response.status === 200) {
+                res.redirect(`back`);
+                return response.data;
+            } else {
+                errorHandler.setError("Failed to fetch topic data", 401)
+                return undefined;
+            }
+        } catch (err) {
+            errorHandler.handleRequestError(err);
+            res.redirect("/coder/err")
+        }
+    }
+
+    static async RemoveFavoritePost(req, res) {
+        try {
+            const idPost = req.params.id;
+            if (!idPost) {
+                return undefined;
+            }
+
+            const token = req.cookies.Token;
+            if (!token) {
+                return undefined;
+            }
+
+            const response = await axios.delete(`${url}/FavPost`,
+                {
+                    idPost
+                },
+                {
+                    headers: {
+                        "Authorization": token,
+                        "Content-Type": "application/json"
+                    },
+                });
+
+            if (response.status === 200) {
+                res.redirect(`back`);
+                return response.data;
+            } else {
+                errorHandler.setError("Failed to fetch topic data", 401)
+                return undefined;
+            }
+        } catch (err) {
+            errorHandler.handleRequestError(err);
+            res.redirect("/coder/err")
+        }
+    }
 }
 
 module.exports = {TreatmentUser};
