@@ -20,8 +20,8 @@ routeur.post("/treatment/register", controllerUser.TreatmentUser.RegisterTreatme
 routeur.get("/treatment/disconnect", controllerUser.TreatmentUser.DisconnectTreatment);
 routeur.get("/treatment/follow/:id", controllerUser.TreatmentUser.FollowUser)
 routeur.post("/treatment/update/user", upload.single('ProfileImage') ,controllerUser.TreatmentUser.UpdateUser);
-routeur.get("/treatment/add/:id/favorite", controllerUser.TreatmentUser.AddFavorite);
-routeur.get("/treatment/remove/:id/favorite", controllerUser.TreatmentUser.RemoveFavorite);
+routeur.get("/treatment/add/:id/favorite", controllerUser.TreatmentUser.AddFavoritePost);
+routeur.get("/treatment/remove/:id/favorite", controllerUser.TreatmentUser.RemoveFavoritePost);
 
 // Pour que nos routes soient accessibles
 module.exports = routeur;

@@ -166,12 +166,12 @@ class TreatmentUser {
         try {
             const id = req.params.id;
             if (!id) {
-                return  res.redirect('back');
+                return res.redirect('back');
             }
 
             const token = req.cookies.Token;
             if (!token) {
-                return  res.redirect('back');
+                return res.redirect('back');
             }
 
             await axios.post(`${url}/follow`, {id}, {
@@ -210,7 +210,7 @@ class TreatmentUser {
     /**
      * Getting all tags
      */
-    static async GetTags() {
+    static async GetTags(res) {
         try {
             const response = await axios.get(`${url}/tags`);
 
@@ -290,62 +290,6 @@ class TreatmentUser {
     }
 
     /**
-     * Adding a post to the favorite
-     * @param {Object} req - The request object.
-     * @param {Object} res - The response object.
-     */
-    static async AddFavorite(req, res) {
-        try {
-            const Id = req.params.id;
-            const token = req.cookies.Token;
-
-            const response = await axios.post(`${url}/postFav`,
-                {
-                    Id
-                },
-                {
-                    headers: {
-                        "Authorization": token,
-                        "Content-Type": "application/json"
-                    },
-                });
-
-            return response.data
-        } catch (err) {
-            errorHandler.handleRequestError(err);
-            res.redirect("/coder/err")
-        }
-    }
-
-    /**
-     * Removing a post from the favorite
-     * @param {Object} req - The request object.
-     * @param {Object} res - The response object.
-     */
-    static async RemoveFavorite(req, res) {
-        try {
-            const Id = req.params.id;
-            const token = req.cookies.Token;
-
-            const response = await axios.delete(`${url}/deleteFav`,
-                {
-                    Id
-                },
-                {
-                    headers: {
-                        "Authorization": token,
-                        "Content-Type": "application/json"
-                    },
-                });
-
-            return response.data
-        } catch (err) {
-            errorHandler.handleRequestError(err);
-            res.redirect("/coder/err")
-        }
-    }
-
-    /**
      * Getting all favorite
      * @param {Object} req - The request object.
      * @param {Object} res - The response object.
@@ -353,6 +297,9 @@ class TreatmentUser {
     static async GetFavorite(req, res) {
         try {
             const token = req.cookies.Token;
+            if (!token) {
+                return undefined
+            }
 
             const response = await axios.get(`${url}/getFav`,
                 {
@@ -369,6 +316,68 @@ class TreatmentUser {
         }
     }
 
+    static async AddFavoritePost(req, res) {
+        try {
+            const idPost = req.params.id;
+            if (!idPost) {
+                return undefined;
+            }
+
+            const token = req.cookies.Token;
+            if (!token) {
+                return undefined;
+            }
+
+            const response = await axios.post(`${url}/FavPost`,
+                {
+                    idPost
+                },
+                {
+                    headers: {
+                        "Authorization": token,
+                        "Content-Type": "application/json"
+                    },
+                });
+
+            if (response.status === 200) {
+                res.redirect(`back`);
+                return response.data;
+            } else {
+                errorHandler.setError("Failed to fetch topic data", 401)
+                return undefined;
+            }
+        } catch (err) {
+            errorHandler.handleRequestError(err);
+            res.redirect("/coder/err")
+        }
+    }
+    static async RemoveFavoritePost(req, res) {
+            const idPost = req.params.id;
+            if (!idPost) {
+                return undefined;
+            }
+
+        const token = req.cookies.Token;
+
+        if (!token) {
+                return undefined;
+            }
+            const response = await axios.delete(`${url}/FavPost`,
+                {
+                    idPost
+                }, {
+                    headers: {
+                        "Authorization": token,
+                        "Content-Type": "application/json"
+                    },
+                });
+            if (response.status === 200) {
+                res.redirect(`back`);
+                return response.data;
+            } else {
+                errorHandler.setError("Failed to fetch topic data", 401)
+                return undefined;
+            }
 }
 
 module.exports = {TreatmentUser};
