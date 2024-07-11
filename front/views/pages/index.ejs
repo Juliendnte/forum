@@ -9,7 +9,7 @@
 <body>
 <%- include('../components/header', {PathUserLog: PathUserLog}); %>
 <section class="section-global">
-    <%- include('../components/aside', {dataTags: dataTags}); %>
+    <%- include('../components/aside', {dataTags: dataTags, dataTopicOwn: dataTopicOwn}); %>
     <section class="section-post">
         <% function timeAgo(date) {
             const now = new Date();
@@ -160,59 +160,63 @@
                 <div class="pop-up_post-ctn" id="pop-up_post-ctn">
                     <% if (dataUser) { %>
                         <%
-                            const isFavorite = dataFav.fav.some(favorite => favorite.Type === "Post" && favorite.Id === item.Post.Id);
+                            const isFavorite = dataFav ? dataFav.fav.some(favorite => favorite.Type === "Post" && favorite.Id === item.Post.Id) : false ;
                         %>
                         <% if (isFavorite) { %>
-                            <a href="/treatment/remove/<%= item.Post.Id %>/favorite">
+                            <a href="/treatment/post/remove/<%= item.Post.Id %>/favorite">
                                 <button>
                                     <span class="pop-up_post-btn-span">
                                         <span>
-                                            <svg rpl="" fill="Black" height="20" icon-name="save-outline" viewBox="0 0 20 20"
+                                            <svg rpl="" fill="Black" height="20" icon-name="save-outline"
+                                                 viewBox="0 0 20 20"
                                                  width="20" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M4.114 20A1.117 1.117 0 0 1 3 18.884V2.628A1.629 1.629 0 0 1 4.628 1h10.744A1.63 1.63 0 0 1 17 2.628v16.245a1.12 1.12 0 0 1-1.718.946L10 16.479l-5.291 3.346a1.11 1.11 0 0 1-.595.175Zm.514-17.75a.378.378 0 0 0-.378.378v16.009L10 15l5.75 3.636V2.628a.378.378 0 0 0-.378-.378H4.628Z"></path>
+                                                <path d="M15.372 1H4.628A1.629 1.629 0 0 0 3 2.628v16.256a1.113 1.113 0 0 0 1.709.941L10 16.479l5.282 3.34A1.12 1.12 0 0 0 17 18.873V2.628A1.63 1.63 0 0 0 15.372 1Z"></path>
                                             </svg>
                                         </span>
                                         <span>
-                                            Retirer des favoris
+                                            Retirer Favoris
                                         </span>
                                     </span>
                                 </button>
                             </a>
                         <% } else { %>
-                            <a href="/treatment/add/<%= item.Post.Id %>/favorite">
+                            <a href="/treatment/post/add/<%= item.Post.Id %>/favorite">
                                 <button>
                                     <span class="pop-up_post-btn-span">
                                         <span>
-                                            <svg rpl="" fill="currentColor" height="20" icon-name="save-outline" viewBox="0 0 20 20"
+                                            <svg rpl="" fill="currentColor" height="20" icon-name="save-outline"
+                                                 viewBox="0 0 20 20"
                                                  width="20" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M4.114 20A1.117 1.117 0 0 1 3 18.884V2.628A1.629 1.629 0 0 1 4.628 1h10.744A1.63 1.63 0 0 1 17 2.628v16.245a1.12 1.12 0 0 1-1.718.946L10 16.479l-5.291 3.346a1.11 1.11 0 0 1-.595.175Zm.514-17.75a.378.378 0 0 0-.378.378v16.009L10 15l5.75 3.636V2.628a.378.378 0 0 0-.378-.378H4.628Z"></path>
                                             </svg>
                                         </span>
                                         <span>
-                                            Ajouter aux favoris
+                                            Favoris
                                         </span>
                                     </span>
                                 </button>
                             </a>
                         <% } %>
                     <% } else { %>
-                        <button>
-                            <span class="pop-up_post-btn-span">
-                                <span>
-                                    <svg rpl="" fill="currentColor" height="20" icon-name="save-outline"
-                                         viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M4.114 20A1.117 1.117 0 0 1 3 18.884V2.628A1.629 1.629 0 0 1 4.628 1h10.744A1.63 1.63 0 0 1 17 2.628v16.245a1.12 1.12 0 0 1-1.718.946L10 16.479l-5.291 3.346a1.11 1.11 0 0 1-.595.175Zm.514-17.75a.378.378 0 0 0-.378.378v16.009L10 15l5.75 3.636V2.628a.378.378 0 0 0-.378-.378H4.628Z">
-                                        </path>
-                                    </svg>
+                        <a href="/coder/login">
+                            <button>
+                                <span class="pop-up_post-btn-span">
+                                    <span>
+                                        <svg rpl="" fill="currentColor" height="20" icon-name="save-outline"
+                                             viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M4.114 20A1.117 1.117 0 0 1 3 18.884V2.628A1.629 1.629 0 0 1 4.628 1h10.744A1.63 1.63 0 0 1 17 2.628v16.245a1.12 1.12 0 0 1-1.718.946L10 16.479l-5.291 3.346a1.11 1.11 0 0 1-.595.175Zm.514-17.75a.378.378 0 0 0-.378.378v16.009L10 15l5.75 3.636V2.628a.378.378 0 0 0-.378-.378H4.628Z">
+                                            </path>
+                                        </svg>
+                                    </span>
+                                    <span>
+                                        Favoris
+                                    </span>
                                 </span>
-                                <span>
-                                    Favoris
-                                </span>
-                            </span>
-                        </button>
+                            </button>
+                        </a>
                     <% } %>
                     <% if (dataUser && dataUser.utilisateur.Role === 'Admin') { %>
-                        <a href="/coder/post/<%= item.PostId %>/update">
+                        <a href="/coder/post/<%= item.Post.Id %>/update">
                             <button>
                                 <span class="pop-up_post-btn-span">
                                     <span>
@@ -228,7 +232,7 @@
                                 </span>
                             </button>
                         </a>
-                        <a href="/treatment/delete/post/<%= item.PostId %>">
+                        <a href="/treatment/delete/post/<%= item.Post.Id %>">
                             <button style="border-radius: 0px; border: none; color: red;">
                                 <span class="pop-up_post-btn-span">
                                     <span>

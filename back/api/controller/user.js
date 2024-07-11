@@ -425,9 +425,10 @@ class UserController {
         try {
             const fav = await user.getFav(id)
             if (fav.length === 0) {
-                return res.status(404).send({
+                return res.status(200).send({
                     message: 'Nous n\'avons pas trouvé de favoris',
-                    status: 404
+                    status: 200,
+                    fav: []
                 })
             }
             fav.forEach((fav) => fav.Type === 'Topic' ? fav.Path = `${url}assets/${fav.Path}` : null)
@@ -479,7 +480,6 @@ class UserController {
             })
         }
     }
-
 
     static async deleteFavTopic(req, res) {
         const id = req.user.Sub
@@ -546,10 +546,11 @@ class UserController {
         }
     }
 
-
     static async deleteFavPost(req, res) {
         const id = req.user.Sub
         const idPost = req.body.idPost
+
+        console.log("caca"+id)
 
         if (!idPost){
             return res.status(404).send({
