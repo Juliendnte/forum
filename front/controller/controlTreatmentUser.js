@@ -157,16 +157,21 @@ class TreatmentUser {
         }
     }
 
+    /**
+     * Handle the follow of a user
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
     static async FollowUser(req, res) {
         try {
             const id = req.params.id;
             if (!id) {
-                return res.status(400).send("No user found");
+                return res.redirect('back');
             }
 
             const token = req.cookies.Token;
             if (!token) {
-                return res.status(400).send("No token found");
+                return res.redirect('back');
             }
 
             await axios.post(`${url}/follow`, {id}, {
@@ -188,7 +193,10 @@ class TreatmentUser {
         }
     }
 
-    static async GetAdmin(req, res) {
+    /**
+     * Getting the admin and moderators
+     */
+    static async GetAdmin() {
         try {
             const response = await axios.get(`${url}/admin/`);
             return response.data.admin; // Return the array of admin and moderators
@@ -199,7 +207,10 @@ class TreatmentUser {
         }
     }
 
-    static async GetTags(req, res) {
+    /**
+     * Getting all tags
+     */
+    static async GetTags(res) {
         try {
             const response = await axios.get(`${url}/tags`);
 
@@ -214,12 +225,17 @@ class TreatmentUser {
         }
     }
 
+    /**
+     * Handle the update of a user
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
     static async UpdateUser(req, res) {
         try {
             const token = req.cookies.Token;
 
             if (!token) {
-                return res.status(400).send("No token found");
+                return res.redirect('/coder/user/' + req.body.Name);
             }
             const formData = new FormData();
             let blobFile;
@@ -249,7 +265,11 @@ class TreatmentUser {
         }
     }
 
-    static async GetLiked(req, res) {
+    /**
+     * Getting the liked post of the user
+     * @param {Object} req - The request object.
+     */
+    static async GetLiked(req) {
         try {
             const token = req.cookies.Token;
 
@@ -269,6 +289,11 @@ class TreatmentUser {
         }
     }
 
+    /**
+     * Getting all favorite
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
     static async GetFavorite(req, res) {
         try {
             const token = req.cookies.Token;
@@ -284,12 +309,7 @@ class TreatmentUser {
                     },
                 });
 
-            if (response.status === 200) {
-                return response.data;
-            } else {
-                errorHandler.setError("Failed to fetch topic data", 401)
-                return undefined;
-            }
+            return response.data
         } catch (err) {
             errorHandler.handleRequestError(err);
             res.redirect("/coder/err")

@@ -918,6 +918,28 @@ class userModel {
         });
     }
 
+    static getFavIdPost(idUser, id) {
+        return new Promise((resolve, reject) => {
+          const sql = `
+                SELECT *
+                FROM favposts
+                WHERE Id_User = ? AND Id_Post = ?;
+          `
+            connection.query(sql, [idUser, id], (err, results) => err ? reject(err) : resolve(results));
+        })
+    }
+
+    static getFavIdTopic(idUser, id) {
+        return new Promise((resolve, reject) => {
+            const sql = `
+                SELECT *
+                FROM favtopics
+                WHERE Id_User = ? AND Id_topics = ?;
+          `
+            connection.query(sql, [idUser, id], (err, results) => err ? reject(err) : resolve(results));
+        })
+    }
+
     static postFavTopic(idUser, idTopic) {
         return new Promise((resolve, reject) => {
             const sql = `  INSERT INTO favtopics(Id_User, Id_topics) VALUES (?, ?)`

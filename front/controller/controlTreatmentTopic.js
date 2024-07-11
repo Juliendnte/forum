@@ -43,6 +43,10 @@ class TreatmentTopic {
         }
     }
 
+    /**
+     * Handle getting a topic.
+     * @param name Name of the topic
+     */
     static async GetTopic(name) {
         try {
             const response = await axios.get(`${url}/topic/${name}`)
@@ -53,6 +57,11 @@ class TreatmentTopic {
         }
     }
 
+    /**
+     * Handle updating a topic.
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
     static async UpdateTopic(req, res) {
         try {
             const token = req.cookies.Token;
@@ -92,7 +101,10 @@ class TreatmentTopic {
         }
     }
 
-    static async GetTags(req, res) {
+    /**
+     * Hanqle getting all tags.
+     */
+    static async GetTags() {
         try {
             const response = await axios.get(`${url}/tags`);
             return response.data
@@ -102,6 +114,10 @@ class TreatmentTopic {
         }
     }
 
+    /**
+     * Handle getting all topics by search
+     * @param query The search query
+     */
     static async Search(query) {
         try {
             const response = await axios.get(`${url}/search?search=${query}`);
@@ -112,6 +128,10 @@ class TreatmentTopic {
         }
     }
 
+    /**
+     * Handle getting all topics by tags
+     * @param tag The tag to search
+     */
     static async SearchTags(tag) {
         try {
             const response = await axios.get(`${url}/topics?tags=${tag}`);
