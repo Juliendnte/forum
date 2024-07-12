@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon server.js",
-    "database": "node init_db.js"
+    "database": "node db/init_db.js"
   },
   "author": "julien dante",
   "license": "ISC",

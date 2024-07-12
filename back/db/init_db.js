@@ -1,25 +1,25 @@
 /**
  * @fileoverview This module initializes the database for the application.
  * @module init_db
- * @requires module:api/config/authBDD
- * @requires module:dotenv
+ * @requires module:../api/config/authBDD
+ * @requires module:../dotenv
  * @requires module:fs
  * @requires module:path
  */
 
-const connection = require("./api/config/authBDD");
+const connection = require("../api/config/authBDD");
 const fs = require("fs");
 const path = require("path");
 require('dotenv').config();
 
-const migrationDir = path.join(__dirname, 'db', 'migration');
+const migrationDir = path.join(__dirname, 'migration');
 const migrations = fs.readdirSync(migrationDir).sort().map(file => {
     const filePath = path.join(migrationDir, file);
     const fileContent = fs.readFileSync(filePath, 'utf8');
     return fileContent.split(';').map(command => command.trim()).filter(command => command.length > 0);
 }).flat();
 
-const insertionDir = path.join(__dirname, 'db', 'insertion');
+const insertionDir = path.join(__dirname, 'insertion');
 const insertions = fs.readdirSync(insertionDir).sort().map(file => {
     const filePath = path.join(insertionDir, file);
     const fileContent = fs.readFileSync(filePath, 'utf8');

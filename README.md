@@ -1,52 +1,54 @@
-<h1 align="center">Welcome to CODER 👋</h1>
+<h1 align="center">Welcome to CODER <img src="front/assets/images/icon/Logo.png" alt="coder" width="30" height="23"></h1>
 <p>
   <a href="https://www.npmjs.com/package/forum" target="_blank">
     <img alt="Version" src="https://img.shields.io/npm/v/forum.svg">
   </a>
 </p>
 
-> Coder is a programation forum with a lot of topics, posts, messages with admin or modo to administrate the website
 
-## Sommaire
-1. [Prérequis](#prérequis)
-2. [Installation](#install)
-   - [Cloner le dépôt](#cloner-le-dépôt)
-    - [Installer les dépendances](#installer-les-dépendances)
-   - [Configurer les variables d'environnement](#configurer-les-variables-denvironnement)
-   - [Configurer la base de données](#configurer-la-base-de-données)
-   - [Démarrer les serveurs](#démarrer-les-serveurs)
-   - [Accéder à l'application](#accéder-à-lapplication)
-3. [Fonctionnalités](#fonctionnalités)
-4. [Structure du projet](#structure-du-projet)
+> Coder is a programming forum featuring numerous topics, posts, and messages, managed by admins and moderators to ensure smooth operation and community engagement.
+
+## Table of Contents
+1. [Prerequisites](#prerequisites)
+2. [Installation](#installation)
+   - [Clone the Repository](#clone-the-repository)
+   - [Install Dependencies](#install-dependencies)
+   - [Configure Environment Variables](#configure-environment-variables)
+   - [Set Up the Database](#set-up-the-database)
+   - [Start the Servers](#start-the-servers)
+   - [Access the Application](#access-the-application)
+3. [Features](#features)
+4. [Project Structure](#project-structure)
    - [Backend](#backend)
-    - [Frontend](#frontend)
-5. [Utilisation](#usage)
-6. [Contributeurs](#author)
+   - [Frontend](#frontend)
+5. [Usage](#usage)
+6. [Contributors](#contributors)
 7. [Contact](#contact)
-8. [Retours d'expérience](#retours-dexpérience)
+8. [User Experiences](#user-experiences)
+9. [Show Your Support](#show-your-support)
 
-## Prérequis
+## Prerequisites
 
-Avant de commencer, assurez-vous d'avoir installé :
+Before you begin, ensure you have the following installed:
 
 - [Node.js](https://nodejs.org/)
 - [phpMyAdmin](https://www.phpmyadmin.net/)
 
-## Install
+## Installation
 
-Suivez ces étapes pour installer et configurer le projet :
+Follow these steps to install and set up the project:
 
-### Cloner le dépôt
+### Clone the Repository
 
-Clonez le dépôt depuis GitHub :
+Clone the repository from GitHub:
 
 ```bash
 git clone https://github.com/Juliendnte/forum.git
 cd forum
 ```
-### Installer les dépendances
+### Install Dependencies
 
-Installez les dépendances nécessaires pour les serveurs backend et frontend :
+Install the necessary dependencies for the backend and frontend servers:
 
 **Backend**
 
@@ -61,16 +63,16 @@ cd ../front
 npm i
 ```
 
-## Configurer les variables d'environnement
+### Configure Environment Variables
 
-Dans le dossier back, copiez le fichier .env.example et renommez-le .env :
+In the back directory, copy the .env.example file to .env:
 
 ```bash
 cp .env.example .env
 ```
-Modifiez les valeurs dans le fichier .env avec vos informations :
+Edit the values in the .env file with your information:
 
-Exemple de configuration .env pour le backend :
+Example configuration for the backend .env:
 
 ```dotenv
 DB_HOST='localhost'
@@ -86,91 +88,89 @@ PORT=4000
 EMAIL='coder.ynov@gmail.com'
 PASSWORD='dpwc kjua blct kqtz'
 ```
-## Configurer la base de données
+## Set Up the Database
 
-Créez la base de données dans phpMyAdmin :
+Create the database in phpMyAdmin:
 
->    Ouvrez phpMyAdmin et créez une nouvelle base de données nommée your_database_name (ex: coderforum).
+> Open phpMyAdmin and create a new database named your_database_name (e.g., coderforum).
 
-
-Dans le dossier back, exécutez le script pour effectuer les migrations et insertions de données :
+In the back directory, run the script to perform database migrations and data insertions:
 
 ```bash
 cd back
 npm run database
 ```
-## Démarrer les serveurs
+## Start the Servers
+### Start the backend and frontend servers:
 
-### Démarrez les serveurs backend et frontend :
-
-Démarrer le serveur backend :
+Start the backend server:
 
 ```bash
 cd back
 npm start
 ```
-Démarrer le serveur frontend :
+
+Start the frontend server:
 
 ```bash
 cd ../front
 npm start
 ```
 
-### Accéder à l'application
+### Access the Application
 
-Ouvrez votre navigateur et accédez à l'URL suivante :
+Open your browser and go to the following URL:
 
 http://localhost:3000/coder
 
-## Fonctionnalités
+## Features
 
-- Gestion des utilisateurs : Inscription, connexion et gestion des profils utilisateur.
--  Forums et discussions : Création de forums, publication de discussions et réponses. 
-- Administration : Interface pour gérer les forums, discussions et utilisateurs.
+    User Management: Registration, login, and profile management.
+    Forums and Discussions: Topic creation, posting discussions, and replying.
+    Administration: Interface for managing forums, discussions, and users.
 
-## Structure du projet
+## Project Structure
 
-Le projet est divisé en deux parties principales :
+The project is divided into two main parts:
 
 ### Backend
 
-Technologies utilisées : Node.js, Express.js, MySQL. 
-Rôles : Gestion des API, authentification, communication avec la base de données. 
-Dépendances clés :
- - cors 
- - dotenv
- - express
- - express-rate-limit 
- - jsonwebtoken 
- - mysql2 
- - nodemailer 
- - path
+Technologies used: Node.js, Express.js, MySQL.
+Roles: API management, authentication, and database communication.
+Key dependencies:
+- cors
+- dotenv 
+- express 
+- express-rate-limit 
+- jsonwebtoken 
+- mysql2 
+- nodemailer 
+- path
 
-Arborescence des fichiers du backend :
+Backend file structure:
 
 ```
 back/
 ├── api/
+│   ├── assets/
+│   │   │...
 │   ├── config/
 │   │   └── authBDD.js
 │   ├── controller/
-│   │   ├── forum.js
-│   │   └── user.js
+│   │   │...
 │   ├── middlewares/
-│   │   ├── forumExist.js
-│   │   ├── auth.js
-│   │   └── rate-limit.js
+│   │   │...
 │   ├── models/
-│   │   ├── forumModel.js
-│   │   └── userModel.js
-│   ├── routes/
-│   │   ├── forumRoute.js
-│   │   └── userRoute.js
-│   └── scriptSQL/
-│       ├── insertion/
-│       │   └── insertion.sql
-│       └── migration/
-│           └── migration.sql
+│   │   │...
+│   ├── routeur/
+│   │   │...
+│   └── app.js
+├── db/
+│   ├── insertions/
+│   │   │...
+│   ├── migrations/
+│   │   │...
+│   └── init_db.js
 ├── node_modules/
 │   │...
 ├── .env
@@ -181,9 +181,10 @@ back/
 ```
 ### Frontend
 
-Technologies utilisées : EJS, CSS, JavaScript. 
-Rôles : Rendu des vues, interactions utilisateur, communication avec le backend. 
-Dépendances clés :
+Technologies used: EJS, CSS, JavaScript.
+Roles: View rendering, user interactions, backend communication.
+Key dependencies:
+
 - axios 
 - body-parser 
 - cookie-parser 
@@ -191,7 +192,7 @@ Dépendances clés :
 - express 
 - ejs
 
-Arborescence des fichiers du frontend :
+Frontend file structure:
 
 ```
 front/
@@ -202,19 +203,16 @@ front/
 │   │   │...
 │   ├── img/
 │   │   │...
-│   ├── js/
-│   │   │...
-│   └── video/
+│   └── js/
 │       │...
 ├── controller/
-│   ├── control.js
-│   └── errorHandle.js
+│   │...
 ├── routes/
-│   └── route.js
+│   │...
 ├── views/
-│   ├── partials/
+│   ├── components/
 │   │   │...
-│   └── index.ejs
+│   └── pages/
 │       │...
 ├── main.js
 ├── package.json
@@ -222,26 +220,26 @@ front/
 ```
 ## Usage
 
-Utilisateurs
+Users
 
-- Inscription : Les utilisateurs peuvent s'inscrire en fournissant leur nom, email et mot de passe.
-- Connexion : Les utilisateurs peuvent se connecter avec leur email et mot de passe.
-- Profil : Les utilisateurs peuvent consulter et mettre à jour leurs informations de profil.
+- Registration: Users can register by providing their name, email, and password. 
+- Login: Users can log in with their email and password. 
+- Profile: Users can view and update their profile information.
 
-Forums et Discussions
- 
-- Créer un forum : Les utilisateurs peuvent créer de nouveaux forums. 
-- Publier une discussion : Les utilisateurs peuvent publier des discussions dans les forums.
-- Répondre à une discussion : Les utilisateurs peuvent répondre aux discussions existantes.
+Forums and Discussions
+
+-  Create a Topic: Users can create new topics. 
+- Post a Discussion: Users can post discussions in the forums. 
+- Reply to a Discussion: Users can reply to existing discussions.
 
 ## Contact
 
-Pour toute question ou suggestion, veuillez contacter :
+For any questions or suggestions, please contact:
 
 [Email](mailto:coder.ynov@gmail.com)
 
 
-## Author
+## Contributors
 
 👤 **[Julien](https://github.com/Juliendnte)**
 👤 **[Kantin](https://github.com/KANTIN-FAGN)**
@@ -249,7 +247,11 @@ Pour toute question ou suggestion, veuillez contacter :
 
 * Website: Coder
 
-## Show your support
+## User Experiences
+
+> This project has been an excellent opportunity to apply our web development skills. We worked on both frontend and backend aspects using various technologies to create a functional and interactive application. We also learned to collaborate effectively as a team, sharing ideas, solving problems, and making decisions together. We are proud of the final result and hope you enjoy our work!
+
+## Show Your Support
 
 Give a ⭐️ if this project helped you!
 
