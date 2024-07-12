@@ -339,13 +339,8 @@ class TreatmentUser {
                     },
                 });
 
-            if (response.status === 200) {
-                res.redirect(`back`);
-                return response.data;
-            } else {
-                errorHandler.setError("Failed to fetch topic data", 401)
-                return undefined;
-            }
+            res.redirect(`back`);
+            return response.data;
         } catch (err) {
             errorHandler.handleRequestError(err);
             res.redirect("/coder/err")
@@ -375,13 +370,8 @@ class TreatmentUser {
                     },
                 });
 
-            if (response.status === 200) {
-                res.redirect(`back`);
-                return response.data;
-            } else {
-                errorHandler.setError("Failed to fetch topic data", 401)
-                return undefined;
-            }
+            res.redirect(`back`);
+            return response.data;
         } catch (err) {
             console.log(err)
             errorHandler.handleRequestError(err);
@@ -389,7 +379,7 @@ class TreatmentUser {
         }
     }
 
-    static async AddFavoriteTopic(req, res){
+    static async AddFavoriteTopic(req, res) {
         try {
             const idTopic = req.params.id
             if (!idTopic) {
@@ -412,22 +402,15 @@ class TreatmentUser {
                     },
                 });
 
-            if (response.status === 200) {
-                res.redirect(`back`);
-                return response.data;
-            } else {
-                errorHandler.setError("Failed to fetch topic data", 401)
-                return undefined;
-            }
-
-
+            res.redirect(`back`);
+            return response.data;
         } catch (err) {
             errorHandler.handleRequestError(err);
             res.redirect("/coder/err")
         }
     }
 
-    static async RemoveFavoriteTopic(req, res){
+    static async RemoveFavoriteTopic(req, res) {
         try {
             const idTopic = req.params.id
             if (!idTopic) {
@@ -450,15 +433,8 @@ class TreatmentUser {
                     },
                 });
 
-            if (response.status === 200) {
-                res.redirect(`back`);
-                return response.data;
-            } else {
-                errorHandler.setError("Failed to fetch topic data", 401)
-                return undefined;
-            }
-
-
+            res.redirect(`back`);
+            return response.data;
         } catch (err) {
             errorHandler.handleRequestError(err);
             res.redirect("/coder/err")
