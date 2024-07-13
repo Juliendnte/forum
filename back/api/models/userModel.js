@@ -904,7 +904,7 @@ class userModel {
     static getFav(id) {
         return new Promise((resolve, reject) => {
             const sql = `
-                SELECT 'Topic' AS Type, t.Id , t.Title, t.Content, t.Path, t.Create_at, t.Id_User, s.Label AS Status
+                SELECT 'Topic' AS Type, t.Id , t.Title, t.Content, t.Path, t.Create_at, t.Id_User, s.Label AS Status, NULL AS TopicTitle, NULL AS TopicPath
                 FROM topics t
                          LEFT JOIN status s ON t.Id_Status = s.Id
                          LEFT JOIN tagstopics tp ON t.Id = tp.Id_topics
@@ -914,7 +914,7 @@ class userModel {
                         
                 UNION ALL
                 
-                SELECT 'Post' AS Type ,p.Id , p.Title, p.Content, NULL AS Path, p.Create_post, p.Id_User, s.Label AS Status
+                SELECT 'Post' AS Type ,p.Id , p.Title, p.Content, NULL AS Path, p.Create_post, p.Id_User, s.Label AS Status, t.Title AS TopicTitle, t.Path AS TopicPath
                 FROM posts p
                             LEFT JOIN topics t ON p.Id_topics = t.Id
                             LEFT JOIN status s ON t.Id_Status = s.Id

@@ -15,7 +15,7 @@ routeur.post("/login", controllerUser.Login);
 routeur.post("/register", controllerUser.Register);
 routeur.post("/forgotPassword", controllerUser.ForgotPassword)
 routeur.post("/resetPassword", [middleware.auth.validateToken], controllerUser.ResetPassword);
-routeur.get("/ban",[middleware.auth.isAdmin], controllerUser.Ban);
+routeur.get("/ban",[middleware.auth.validateToken, middleware.auth.isAdmin], controllerUser.Ban);
 routeur.post("/follow", [middleware.auth.validateToken], controllerUser.Follow);
 routeur.post("/searchFriend", controllerUser.SearchFriend)
 routeur.post("/searchFollow", controllerUser.SearchFollow)

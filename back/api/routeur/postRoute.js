@@ -9,13 +9,13 @@ const middleware = {
 }
 
 //Configuration des routes
-routeur.get("/postsMiddleware" ,middleware.auth.validateToken ,PostController.getPostsMiddleware);
+routeur.get("/postsMiddleware" ,[middleware.auth.validateToken] ,PostController.getPostsMiddleware);
 routeur.get("/posts", PostController.getPosts);
-routeur.get("/post/:id",middleware.postExists , PostController.getPost);
-routeur.get("/getLiked",middleware.auth.validateToken , PostController.getLiked);
-routeur.post("/like", middleware.auth.validateToken, PostController.Like);
-routeur.post("/unlike", middleware.auth.validateToken, PostController.UnLike);
-routeur.post("/post", middleware.auth.validateToken ,PostController.postPost);
+routeur.get("/post/:id",[middleware.postExists] , PostController.getPost);
+routeur.get("/getLiked",[middleware.auth.validateToken] , PostController.getLiked);
+routeur.post("/like", [middleware.auth.validateToken], PostController.Like);
+routeur.post("/unlike", [middleware.auth.validateToken], PostController.UnLike);
+routeur.post("/post", [middleware.auth.validateToken] ,PostController.postPost);
 routeur.patch("/post/:id",[middleware.auth.validateToken, middleware.postExists, middleware.Owner.postOwn],PostController.patchPost)
 routeur.delete("/post/:id",[middleware.auth.validateToken, middleware.postExists, middleware.Owner.everyRight] ,PostController.deletePost);
 

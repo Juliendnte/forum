@@ -18,6 +18,5 @@ routeur.post("/topic",[middleware.auth.validateToken] ,TopicController.postTopic
 routeur.patch("/topic/:name",[middleware.auth.validateToken, middleware.topicExists, middleware.Owner.topicOwn, middleware.upload('topic','TopicImage')],TopicController.patchTopic);
 routeur.delete("/topic/:id",[middleware.auth.validateToken, middleware.topicExists, middleware.Owner.everyRight] ,TopicController.deleteTopic);
 
-
 //Exportation des routes
 module.exports = routeur;

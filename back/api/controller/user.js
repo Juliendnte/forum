@@ -447,7 +447,7 @@ class UserController {
                     fav: []
                 })
             }
-            fav.forEach((fav) => fav.Type === 'Topic' ? fav.Path = `${url}assets/${fav.Path}` : null)
+            fav.forEach((fav) => fav.Type === 'Topic' ? fav.Path = `${url}assets/${fav.Path}` : fav.TopicPath = `${url}assets/${fav.TopicPath}`)
             res.status(200).send({
                 message: 'Fav found',
                 status: 200,
