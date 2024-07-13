@@ -225,6 +225,22 @@ class UserController {
         }
     }
 
+    static async Ban(req, res) {
+        const id = req.query.id;
+        try {
+            await user.ban(id)
+            res.status(200).send({
+                message: `User banned successfully`,
+                status: 200
+            })
+        } catch (err) {
+            res.status(500).send({
+                message: err,
+                status: 500
+            })
+        }
+    }
+
     static async UpdateUser(req, res) {
 
         const id = req.user.Sub;

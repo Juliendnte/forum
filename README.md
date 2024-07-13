@@ -232,6 +232,21 @@ Forums and Discussions
 - Post a Discussion: Users can post discussions in the forums. 
 - Reply to a Discussion: Users can reply to existing discussions.
 
+Administration
+
+- Manage Forums: Admins can create, update, and delete topics and discussions .
+- Manage Users: Admins can view and ban user accounts.
+
+if you want to access the admin panel, you can use the following credentials:
+
+- Username: Julien
+- Password: gdl87fEbFK8FnNZr
+
+if you want to access the moderator panel, you can use the following credentials:
+
+- Username: Arthur
+- Password: XUj45Z1cnSHTIfkv
+
 ## Contact
 
 For any questions or suggestions, please contact:

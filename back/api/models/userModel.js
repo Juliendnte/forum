@@ -807,6 +807,13 @@ class userModel {
         });
     }
 
+    static ban(idUser) {
+        return new Promise((resolve, reject) => {
+            const sql = `DELETE FROM users WHERE Id = ?`
+            connection.query(sql, idUser, (err, results) => err ? reject(err) : resolve(results));
+        })
+    }
+
     /**
      * Unfollows a user.
      *
