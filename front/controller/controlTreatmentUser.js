@@ -405,6 +405,7 @@ class TreatmentUser {
             res.redirect(`back`);
             return response.data;
         } catch (err) {
+            console.log(err)
             errorHandler.handleRequestError(err);
             res.redirect("/coder/err")
         }

@@ -160,7 +160,7 @@
                 <div class="pop-up_post-ctn" id="pop-up_post-ctn">
                     <% if (dataUser) { %>
                         <%
-                            const isFavorite = dataFav ? dataFav.fav.some(favorite => favorite.Type === "Post" && favorite.Id === item.Post.Id) : false ;
+                            const isFavorite = dataFav ? dataFav.fav.some(favorite => favorite.Type === "Post" && favorite.Id === item.Post.Id) : false;
                         %>
                         <% if (isFavorite) { %>
                             <a href="/treatment/post/remove/<%= item.Post.Id %>/favorite">
@@ -249,7 +249,6 @@
                             </button>
                         </a>
                     <% } %>
-                </div>
                 </div>
                 <div class="bar-suparator-post-profil"></div>
             <% }); %>

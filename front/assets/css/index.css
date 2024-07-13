@@ -531,3 +531,34 @@ tr:nth-child(even) {
     display: flex;
     align-items: center;
 }
+
+.content > div {
+    display: none;
+}
+.content > div.active {
+    display: block;
+}
+
+.topic-fav-ctn {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.topic-fav-img {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+}
+
+.topic-fav-img img {
+    width: 50px;
+    border-radius: 999px;
+}
+
+.topic-fav-img span {
+    font-weight: bold;
+    font-size: 1.2rem;
+}

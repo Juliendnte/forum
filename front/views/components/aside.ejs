@@ -13,7 +13,7 @@
                 </a>
             </div>
         </div>
-        <% if (dataUser) { %>
+        <% if (dataUser && dataFav.fav.length > 0) { %>
             <div class="nav-posts">
                 <div class="svg-nav">
                     <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
@@ -22,7 +22,9 @@
                     </svg>
                 </div>
                 <div class="text-nav">
-                    <p>Favoris</p>
+                    <a href="/coder/vos_favoris">
+                        <p>Favoris</p>
+                    </a>
                 </div>
             </div>
         <% } %>

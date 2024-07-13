@@ -1146,7 +1146,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
     </schema>
     <schema id="293" parent="1" name="forum">
       <Current>1</Current>
-      <LastIntrospectionLocalTimestamp>2024-07-11.21:09:47</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2024-07-13.18:40:49</LastIntrospectionLocalTimestamp>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
     <user id="294" parent="1" name="kantin_db">

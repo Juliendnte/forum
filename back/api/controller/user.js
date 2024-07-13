@@ -245,7 +245,7 @@ class UserController {
 
         const id = req.user.Sub;
         const body = req.body;
-        while (typeof body.Tags == 'string'){
+        while (typeof body.Tags == 'string') {
             body.Tags = JSON.parse(body.Tags);
         }
         if (!isValidEmail(body.Email)) {
@@ -260,7 +260,7 @@ class UserController {
             })
         }
 
-         let filePath;
+        let filePath;
 
         if (req.file) {
             filePath = req.file.path;
@@ -338,11 +338,11 @@ class UserController {
         const searchQuery = req.query.search
         try {
             const search = await user.search(searchQuery)
-            search.forEach((search) =>{
-                if (search.Type === 'post'){
+            search.forEach((search) => {
+                if (search.Type === 'post') {
                     search.Post.User.Path = `${url}assets/${search.Post.User.Path}`
                     search.Topic.Path = `${url}assets/${search.Topic.Path}`
-                }else {
+                } else {
                     search.Path = `${url}assets/${search.Path}`
                 }
             })
@@ -461,35 +461,31 @@ class UserController {
         }
     }
 
-    static async postFavTopic (req, res){
+    static async postFavTopic(req, res) {
         const idUser = req.user.Sub;
         const idTopic = req.body.idTopic;
-        if (!idTopic){
+        if (!idTopic) {
             return res.status(404).send({
                 message: 'Topic not found',
                 status: 404
             })
         }
-        const fav = user.getFavIdTopic(idUser, idTopic)
-        if (fav.length !== 0){
+        const fav = await user.getFavIdTopic(idUser, idTopic)
+        if (fav.length !== 0) {
             return res.status(400).send({
                 message: 'Fav already exist',
                 status: 400
             })
         }
         try {
-            const fav = user.postFavTopic(idUser, idTopic)
-            if (fav.length  === 0){
-                return res.status(404).send({
-                    message: 'Fav not found',
-                    status: 404
-                })
-            }
+            await user.postFavTopic(idUser, idTopic)
+
             res.status(200).send({
                 message: 'fav insert',
                 status: 200
             })
-        }catch (err){
+
+        } catch (err) {
             res.status(500).send({
                 message: err,
                 status: 500
@@ -501,7 +497,7 @@ class UserController {
         const id = req.user.Sub
         const idTopic = req.body.idTopic
 
-        if (!idTopic){
+        if (!idTopic) {
             return res.status(404).send({
                 message: 'Topic not found',
                 status: 404
@@ -523,11 +519,11 @@ class UserController {
         }
     }
 
-    static async postFavPost (req, res){
+    static async postFavPost(req, res) {
         const idUser = req.user.Sub;
         const idPost = req.body.idPost;
 
-        if (!idPost){
+        if (!idPost) {
             return res.status(404).send({
                 message: 'Post not found',
                 status: 404
@@ -539,7 +535,7 @@ class UserController {
 
         const fav = await user.getFavIdPost(idUser, idPost)
         console.log(fav)
-        if (fav.length !== 0){
+        if (fav.length !== 0) {
             return res.status(400).send({
                 message: 'Fav already exist',
                 status: 400
@@ -548,7 +544,7 @@ class UserController {
 
         try {
             const fav = await user.postFavPost(idUser, idPost)
-            if (fav.length  === 0){
+            if (fav.length === 0) {
                 return res.status(404).send({
                     message: 'Fav not found',
                     status: 404
@@ -558,7 +554,7 @@ class UserController {
                 message: 'fav insert',
                 status: 200
             })
-        }catch (err){
+        } catch (err) {
             res.status(500).send({
                 message: err,
                 status: 500
@@ -570,7 +566,7 @@ class UserController {
         const id = req.user.Sub
         const idPost = req.body.idPost
 
-        if (!idPost){
+        if (!idPost) {
             return res.status(404).send({
                 message: 'Post not found',
                 status: 404

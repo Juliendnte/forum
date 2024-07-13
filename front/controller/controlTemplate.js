@@ -23,7 +23,7 @@ class ControlTemplate {
                 controlUser.TreatmentUser.GetFavorite(req, res)
             ]);
 
-            const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser.utilisateur.Id);
+            const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser ? dataUser.utilisateur.Id : undefined);
 
             let query
 
@@ -115,7 +115,7 @@ class ControlTemplate {
                 }
             });
 
-            const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser.utilisateur.Id);
+            const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser ? dataUser.utilisateur.Id : undefined);
 
             const dataLike = await controlUser.TreatmentUser.GetLiked(req, res);
             let query
@@ -184,7 +184,7 @@ class ControlTemplate {
                 dataTopic.topic.Create_at_formatted = date.toLocaleDateString('fr-FR', options);
             }
 
-            const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser.utilisateur.Id);
+            const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser ? dataUser.utilisateur.Id : undefined);
 
             const dataLike = await controlUser.TreatmentUser.GetLiked(req, res);
             let query
@@ -223,7 +223,7 @@ class ControlTemplate {
                 controlUser.TreatmentUser.GetLiked(req, res)
             ]);
 
-            const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser.utilisateur.Id);
+            const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser ? dataUser.utilisateur.Id : undefined);
 
             if (dataUser && dataUser.utilisateur) {
                 PathUserLog = dataUser.utilisateur.Path
@@ -267,7 +267,7 @@ class ControlTemplate {
             const dataMessage = await controlMessage.GetMessage(id)
             const dataMessages = await controlMessage.GetMessagestoMessage(req, res)
             const dataTags = await controlTopic.GetTags(req, res);
-            const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser.utilisateur.Id);
+            const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser ? dataUser.utilisateur.Id : undefined);
             let query
 
             const PathUserLog = dataUser.utilisateur.Path
@@ -492,7 +492,7 @@ class ControlTemplate {
                 controlTopic.Search(query)
             ]);
 
-            const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser.utilisateur.Id);
+            const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser ? dataUser.utilisateur.Id : undefined);
 
             const token = req.cookies.Token;
             let PathUserLog = null;
@@ -534,7 +534,7 @@ class ControlTemplate {
                 controlTopic.SearchTags(tag)
             ]);
 
-            const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser.utilisateur.Id);
+            const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser ? dataUser.utilisateur.Id : undefined);
 
             const token = req.cookies.Token;
             let PathUserLog = null;
@@ -587,6 +587,48 @@ class ControlTemplate {
                 dataUser,
                 dataTags,
                 PathUserLog,
+                query
+            });
+        }catch (err){
+            errorHandler.handleRequestError(err);
+            res.redirect("/coder/err")
+        }
+    }
+
+    /**
+     * Render the FavPage page
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
+    static async FavPage (req,res) {
+        try {
+            const [dataUser, dataPost, dataLike, dataTags, dataFav] = await Promise.all([
+                controlUser.TreatmentUser.GetUser(req, res),
+                controlPost.GetPosts(req, res),
+                controlUser.TreatmentUser.GetLiked(req, res),
+                controlTopic.GetTags(),
+                controlUser.TreatmentUser.GetFavorite(req, res)
+            ]);
+
+            const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser ? dataUser.utilisateur.Id : undefined);
+
+            let query
+
+            const token = req.cookies.Token;
+            let PathUserLog = null;
+
+            if (token && dataUser && dataUser.utilisateur) {
+                PathUserLog = dataUser.utilisateur.Path;
+            }
+
+            res.render('../views/pages/favpage', {
+                dataUser,
+                dataPost,
+                dataLike,
+                dataTags,
+                PathUserLog,
+                dataFav,
+                dataTopicOwn,
                 query
             });
         }catch (err){
