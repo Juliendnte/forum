@@ -809,7 +809,9 @@ class userModel {
 
     static ban(idUser) {
         return new Promise((resolve, reject) => {
-            const sql = `DELETE FROM users WHERE Id = ?`
+            const sql = `DELETE
+                         FROM users
+                         WHERE Id = ?`
             connection.query(sql, idUser, (err, results) => err ? reject(err) : resolve(results));
         })
     }
@@ -904,34 +906,62 @@ class userModel {
     static getFav(id) {
         return new Promise((resolve, reject) => {
             const sql = `
-                SELECT 'Topic' AS Type, t.Id , t.Title, t.Content, t.Path, t.Create_at, t.Id_User, s.Label AS Status, NULL AS TopicTitle, NULL AS TopicPath
+                SELECT 'Topic' AS Type,
+                       t.Id,
+                       t.Title,
+                       t.Content,
+                       t.Path,
+                       t.Create_at,
+                       t.Id_User,
+                       s.Label AS Status,
+                       NULL    AS TopicTitle,
+                       NULL    AS TopicPath,
+                       NULL    AS PostLikes,
+                       NULL    AS MessageCount
                 FROM topics t
                          LEFT JOIN status s ON t.Id_Status = s.Id
                          LEFT JOIN tagstopics tp ON t.Id = tp.Id_topics
                          LEFT JOIN tags ON tp.Id_Tag = tags.Id
-                        INNER JOIN favtopics ft ON ft.Id_topics = t.Id
+                         INNER JOIN favtopics ft ON ft.Id_topics = t.Id
                 WHERE ft.Id_User = ?
-                        
+
                 UNION ALL
-                
-                SELECT 'Post' AS Type ,p.Id , p.Title, p.Content, NULL AS Path, p.Create_post, p.Id_User, s.Label AS Status, t.Title AS TopicTitle, t.Path AS TopicPath
+
+                SELECT 'Post'                                                            AS Type,
+                       p.Id,
+                       p.Title,
+                       p.Content,
+                       NULL                                                              AS Path,
+                       p.Create_post,
+                       p.Id_User,
+                       s.Label                                                           AS Status,
+                       t.Title                                                           AS TopicTitle,
+                       t.Path                                                            AS TopicPath,
+                       COALESCE(pl.PostLikes, 0)                                         AS PostLikes,
+                       (SELECT COUNT(*) FROM message WHERE message.Id_PostAnswer = p.Id) AS MessageCount
+
                 FROM posts p
-                            LEFT JOIN topics t ON p.Id_topics = t.Id
-                            LEFT JOIN status s ON t.Id_Status = s.Id
-                            INNER JOIN favposts fp ON fp.Id_Post = p.Id
+                         LEFT JOIN topics t ON p.Id_topics = t.Id
+                         LEFT JOIN status s ON t.Id_Status = s.Id
+                         INNER JOIN favposts fp ON fp.Id_Post = p.Id
+                         LEFT JOIN (SELECT lp.Id_Post,
+                                           SUM(CASE WHEN lp.Like = 1 THEN 1 WHEN lp.Like = 0 THEN -1 ELSE 0 END) AS PostLikes
+                                    FROM likepost lp
+                                    GROUP BY lp.Id_Post) pl ON p.Id = pl.Id_Post
                 WHERE fp.Id_User = ?
             `;
-            connection.query(sql, [id,id], (err, results) => err ? reject(err) : resolve(results));
+            connection.query(sql, [id, id], (err, results) => err ? reject(err) : resolve(results));
         });
     }
 
     static getFavIdPost(idUser, id) {
         return new Promise((resolve, reject) => {
-          const sql = `
+            const sql = `
                 SELECT *
                 FROM favposts
-                WHERE Id_User = ? AND Id_Post = ?;
-          `
+                WHERE Id_User = ?
+                  AND Id_Post = ?;
+            `
             connection.query(sql, [idUser, id], (err, results) => err ? reject(err) : resolve(results));
         })
     }
@@ -941,15 +971,17 @@ class userModel {
             const sql = `
                 SELECT *
                 FROM favtopics
-                WHERE Id_User = ? AND Id_topics = ?;
-          `
+                WHERE Id_User = ?
+                  AND Id_topics = ?;
+            `
             connection.query(sql, [idUser, id], (err, results) => err ? reject(err) : resolve(results));
         })
     }
 
     static postFavTopic(idUser, idTopic) {
         return new Promise((resolve, reject) => {
-            const sql = `  INSERT INTO favtopics(Id_User, Id_topics) VALUES (?, ?)`
+            const sql = `  INSERT INTO favtopics(Id_User, Id_topics)
+                           VALUES (?, ?)`
             connection.query(sql, [idUser, idTopic], (err, results) => err ? reject(err) : resolve(results));
         })
     }
@@ -962,18 +994,19 @@ class userModel {
     }
 
     static postFavPost(idUser, Id_Post) {
-            return new Promise((resolve, reject) => {
-                const sql = `  INSERT INTO favposts(Id_User, Id_Post) VALUES (?, ?)`
-                connection.query(sql, [idUser, Id_Post], (err, results) => err ? reject(err) : resolve(results));
-            })
-        }
+        return new Promise((resolve, reject) => {
+            const sql = `  INSERT INTO favposts(Id_User, Id_Post)
+                           VALUES (?, ?)`
+            connection.query(sql, [idUser, Id_Post], (err, results) => err ? reject(err) : resolve(results));
+        })
+    }
 
-        static deleteFavPost(idUser, Id_Post) {
-            return new Promise((resolve, reject) => {
-                const sql = 'DELETE FROM favposts WHERE Id_User = ? AND Id_Post = ?'
-                connection.query(sql, [idUser, Id_Post], (err, results) => err ? reject(err) : resolve(results));
-            })
-        }
+    static deleteFavPost(idUser, Id_Post) {
+        return new Promise((resolve, reject) => {
+            const sql = 'DELETE FROM favposts WHERE Id_User = ? AND Id_Post = ?'
+            connection.query(sql, [idUser, Id_Post], (err, results) => err ? reject(err) : resolve(results));
+        })
+    }
 }
 
 module.exports = userModel;
