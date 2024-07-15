@@ -118,6 +118,9 @@ class ControlTemplate {
             const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser ? dataUser.utilisateur.Id : undefined);
 
             const dataLike = await controlUser.TreatmentUser.GetLiked(req, res);
+
+            const dataFav = await controlUser.TreatmentUser.GetFavorite(req, res);
+
             let query
 
             res.render('../views/pages/profiluser', {
@@ -131,6 +134,7 @@ class ControlTemplate {
                 PathUserLog,
                 dataLike,
                 dataTopicOwn,
+                dataFav,
                 query
             });
 
@@ -140,7 +144,6 @@ class ControlTemplate {
             res.redirect("/coder/err")
         }
     }
-
 
     /**
      * Render the create topic profile page
@@ -187,6 +190,7 @@ class ControlTemplate {
             const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser ? dataUser.utilisateur.Id : undefined);
 
             const dataLike = await controlUser.TreatmentUser.GetLiked(req, res);
+
             let query
 
             res.render('../views/pages/topic', {
@@ -236,6 +240,8 @@ class ControlTemplate {
                 dataPost.topic.Create_at_formatted = date.toLocaleDateString('fr-FR', options);
             }
 
+            const dataFav = await controlUser.TreatmentUser.GetFavorite(req, res);
+
 
             res.render('../views/pages/detailPost', {
                 dataUser,
@@ -245,6 +251,7 @@ class ControlTemplate {
                 dataMessages,
                 PathUserLog,
                 dataTopicOwn,
+                dataFav,
                 query
             });
         } catch (err) {
@@ -278,6 +285,8 @@ class ControlTemplate {
                 dataMessage.topic.Create_at_formatted = date.toLocaleDateString('fr-FR', options);
             }
 
+            const dataFav = await controlUser.TreatmentUser.GetFavorite(req, res);
+
             res.render('../views/pages/detailMessage', {
                 dataUser,
                 dataMessage,
@@ -285,6 +294,7 @@ class ControlTemplate {
                 dataTags,
                 PathUserLog,
                 dataTopicOwn,
+                dataFav,
                 query
             });
         } catch (err) {
@@ -501,6 +511,8 @@ class ControlTemplate {
                 PathUserLog = dataUser.utilisateur.Path;
             }
 
+            const dataFav = await controlUser.TreatmentUser.GetFavorite(req, res);
+
             // Rendre la page de recherche avec les données récupérées
             res.render('../views/pages/searchPage', {
                 dataUser,
@@ -509,6 +521,7 @@ class ControlTemplate {
                 dataTags,
                 PathUserLog,
                 dataTopicOwn,
+                dataFav,
                 query
             });
 
@@ -544,6 +557,8 @@ class ControlTemplate {
             }
             let query
 
+            const dataFav = await controlUser.TreatmentUser.GetFavorite(req, res);
+
             // Rendre la page de recherche avec les données récupérées
             res.render('../views/pages/searchTopicTags', {
                 dataUser,
@@ -553,6 +568,7 @@ class ControlTemplate {
                 PathUserLog,
                 dataTopicOwn,
                 tag,
+                dataFav,
                 query
             });
 
