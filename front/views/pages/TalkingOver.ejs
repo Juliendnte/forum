@@ -19,7 +19,7 @@
         </div>
         <div class="bar-suparator-post"></div>
     </section>
-    <section class="section-post" style="position: relative">
+    <section class="section-post chat-ctn" style="position: relative;">
         <ul id="messages"></ul>
         <form id="form" action="">
             <input id="input" autocomplete="off"/>
@@ -83,9 +83,9 @@
         bubble.classList.add('message-bubble', type);
 
         if (type === 'sent') {
-            bubble.innerHTML = `${message} <img class="avatar" src="${pseudo}" />`;
+            bubble.innerHTML = `<div class="msg-own">${message}</div> <img class="avatar" src="${pseudo}" />`;
         } else {
-            bubble.innerHTML = `<img class="avatar" src="${pseudo}" /> ${message}`;
+            bubble.innerHTML = `<img class="avatar" src="${pseudo}" /> <div class="msg-other">${message}</div>`;
         }
 
         item.appendChild(bubble);

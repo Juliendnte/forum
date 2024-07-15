@@ -698,3 +698,23 @@ tr:nth-child(even) {
 #messages > li.received {
     justify-content: flex-start;
 }
+
+.msg-own {
+    background: #0185ff;
+    padding: 10px;
+    border-radius: 20px;
+    color: white;
+}
+
+.msg-other {
+    background: #e6e4ee;
+    padding: 10px;
+    border-radius: 20px;
+}
+
+.chat-ctn {
+    position: relative;
+    background-image: url('/public/images/sprite/background-chat-over.jpg');
+    background-size: contain;
+    background-position: center;
+}
