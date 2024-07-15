@@ -590,3 +590,111 @@ tr:nth-child(even) {
 .chat-public-ctn:hover {
     background-color: #F6F8F9;
 }
+
+#form {
+    padding: 0.25rem;
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    height: 3rem;
+    box-sizing: border-box;
+    backdrop-filter: blur(10px);
+    width: 100%;
+}
+
+#input {
+    border: none;
+    padding: 0 1rem;
+    flex-grow: 1;
+    border-radius: 2rem;
+    margin: 0.25rem;
+    border: 1px solid var(--color-line);
+}
+
+#input:focus {
+    outline: none;
+}
+
+#form > button {
+    background: transparent;
+    border: none;
+    border-radius: 999px;
+    outline: none;
+    color: rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    height: 40px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s, color 0.3s;
+}
+
+#form > button:hover {
+    background: #DBE4E9;
+}
+
+#form > button:disabled {
+    cursor: auto;
+    background: transparent;
+}
+
+.message-bubble {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    max-width: 70%;
+    padding: 8px;
+    border-radius: 8px;
+    word-wrap: break-word;
+}
+
+.message-bubble.sent {
+    justify-content: flex-end;
+}
+
+.message-bubble.received {
+    justify-content: flex-start;
+}
+
+.message-bubble.sent .avatar {
+    margin-left: 8px; /* Ajustez selon votre mise en page */
+}
+
+.message-bubble.received .avatar {
+    margin-right: 8px; /* Ajustez selon votre mise en page */
+}
+
+.avatar {
+    width: 30px; /* Ajustez la taille de l'image selon votre mise en page */
+    height: 30px;
+    border-radius: 50%;
+}
+
+/* Styles pour les messages et leur conteneur */
+#messages {
+    list-style-type: none;
+    margin: 0;
+    padding: 10px;
+    display: flex;
+    max-height: 85vh;
+    overflow-y: scroll;
+    flex-direction: column;
+}
+
+#messages::-webkit-scrollbar {
+    display: none;
+}
+
+#messages > li {
+    display: flex;
+    padding: 0.5rem 1rem;
+}
+
+#messages > li.sent {
+    justify-content: flex-end;
+}
+
+#messages > li.received {
+    justify-content: flex-start;
+}

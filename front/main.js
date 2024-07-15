@@ -38,12 +38,8 @@ app.use(routeAnnexe);
 
 // Configuration de Socket.IO
 io.on('connection', (socket) => {
-    console.log('a user connected');
     socket.on('chat message', (msg) => {
         socket.broadcast.emit('chat message', msg);
-    });
-    socket.on('disconnect', () => {
-        console.log('user disconnected');
     });
 });
 
