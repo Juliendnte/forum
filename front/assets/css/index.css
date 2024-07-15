@@ -562,3 +562,31 @@ tr:nth-child(even) {
     font-weight: bold;
     font-size: 1.2rem;
 }
+
+.chat-public-ctn {
+    margin-top: 25px;
+    padding: 16px;
+    width: 60%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    cursor: pointer;
+    align-items: center;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+}
+
+.chat-public-ctn .svg {
+    background-color: rgb(183 202 212 / 1 );
+    padding: .5rem;
+    color: #576F76;
+    border-radius: 624.9375rem;
+    font-size: .75rem;
+    line-height: 1rem;
+    display: flex;
+
+}
+
+.chat-public-ctn:hover {
+    background-color: #F6F8F9;
+}

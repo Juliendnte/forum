@@ -653,6 +653,44 @@ class ControlTemplate {
         }
     }
 
+    static async TalkingOver(req ,res) {
+        try {
+            const [dataUser, dataPost, dataLike, dataTags, dataFav] = await Promise.all([
+                controlUser.TreatmentUser.GetUser(req, res),
+                controlPost.GetPosts(req, res),
+                controlUser.TreatmentUser.GetLiked(req, res),
+                controlTopic.GetTags(),
+                controlUser.TreatmentUser.GetFavorite(req, res)
+            ]);
+
+            const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser ? dataUser.utilisateur.Id : undefined);
+
+            let query
+
+            const token = req.cookies.Token;
+            let PathUserLog = null;
+
+            if (token && dataUser && dataUser.utilisateur) {
+                PathUserLog = dataUser.utilisateur.Path;
+            }
+
+            res.render('../views/pages/TalkingOver', {
+                dataUser,
+                dataPost,
+                dataLike,
+                dataTags,
+                PathUserLog,
+                dataFav,
+                dataTopicOwn,
+                query
+            });
+        } catch (err) {
+            console.log(err)
+            errorHandler.handleRequestError(err);
+            res.redirect('/coder/error');
+        }
+    }
+
     /**
      * Render the error page.
      * @param {Object} req - The request object.
