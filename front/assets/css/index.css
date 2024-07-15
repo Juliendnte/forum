@@ -668,7 +668,9 @@ tr:nth-child(even) {
 .avatar {
     width: 30px; /* Ajustez la taille de l'image selon votre mise en page */
     height: 30px;
+    object-fit: cover;
     border-radius: 50%;
+    cursor: pointer;
 }
 
 /* Styles pour les messages et leur conteneur */
