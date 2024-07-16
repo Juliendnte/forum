@@ -70,10 +70,16 @@
                                 </a>
                             </div>
                             <div class="user-header-post-btn">
-                                <a href="/coder/post/<%= item.Id %>/create/message/message">
-                                    <span>Répondre</span>
-                                </a>
-                                <% if (dataUser.utilisateur.Name === item.User.Name) { %>
+                                <% if (dataUser) { %>
+                                    <a href="/coder/post/<%= item.Id %>/create/message/message">
+                                        <span>Répondre</span>
+                                    </a>
+                                <% } else { %>
+                                        <a href="/coder/post/<%= item.Id %>/create/message/message">
+                                            <span>Répondre</span>
+                                        </a>
+                                <% } %>
+                                <% if (dataUser && dataUser.utilisateur.Name === item.User.Name) { %>
                                     <button class="btn-dots-post" id="btn-dots-message">
                                         <svg rpl="" fill="black" height="16" icon-name="overflow-horizontal-fill"
                                              viewBox="0 0 20 20" width="16" xmlns="http://www.w3.org/2000/svg">

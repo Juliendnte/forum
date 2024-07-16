@@ -80,6 +80,7 @@ class ControlTemplate {
         try {
             let dataUser = await controlUser.TreatmentUser.GetUser(req, res);
             const dataTags = await controlTopic.GetTags(req, res);
+            const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser ? dataUser.utilisateur.Id : undefined);
             let Name
             let IdUserLog
             let PathUserLog
@@ -114,8 +115,6 @@ class ControlTemplate {
                     totalLikes += parseInt(post.PostLikes, 10);
                 }
             });
-
-            const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser ? dataUser.utilisateur.Id : undefined);
 
             const dataLike = await controlUser.TreatmentUser.GetLiked(req, res);
 
@@ -270,14 +269,19 @@ class ControlTemplate {
         try {
             const id = req.params.id
 
+            let PathUserLog
+
             const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
             const dataMessage = await controlMessage.GetMessage(id)
             const dataMessages = await controlMessage.GetMessagestoMessage(req, res)
             const dataTags = await controlTopic.GetTags(req, res);
             const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser ? dataUser.utilisateur.Id : undefined);
+
             let query
 
-            const PathUserLog = dataUser.utilisateur.Path
+            if (dataUser && dataUser.utilisateur) {
+                PathUserLog = dataUser.utilisateur.Path
+            }
 
             if (dataMessage && dataMessage.topic && dataMessage.topic.Create_at) {
                 const date = new Date(dataMessage.topic.Create_at);

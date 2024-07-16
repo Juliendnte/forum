@@ -13,7 +13,7 @@
                 </a>
             </div>
         </div>
-        <% if (dataUser && dataFav.fav.length > 0) { %>
+        <% if (dataUser && dataFav && dataFav.fav.length > 0) { %>
             <div class="nav-posts">
                 <div class="svg-nav">
                     <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
@@ -28,7 +28,7 @@
                 </div>
             </div>
         <% } %>
-        <% if (dataUser) { %>
+        <% if (dataUser && PathUserLog === dataUser.utilisateur.Path) { %>
             <div class="nav-posts">
                 <div class="svg-nav">
                     <svg rpl="" fill="currentColor" height="20" icon-name="chat-outline" viewBox="0 0 20 20" width="20"
