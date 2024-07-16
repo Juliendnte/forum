@@ -371,9 +371,10 @@ class userModel {
                         WHERE m2.Id_PostAnswer = p.Id) AS MessageCount
                 FROM posts p
                          LEFT JOIN topics t ON p.Id_topics = t.Id
+                         INNER JOIN status s ON t.Id_Status = s.Id
                          LEFT JOIN likepost lp ON p.Id = lp.Id_Post
                          LEFT JOIN users u ON p.Id_User = u.Id
-                WHERE u.Name = ?
+                WHERE u.Name = ? AND s.Label NOT LIKE 'Archived'
                 GROUP BY p.Id, p.Title, p.Content, p.Create_post, p.Id_User, t.Title, t.Path, t.Id
 
                 UNION ALL
@@ -555,7 +556,7 @@ class userModel {
                                            SUM(CASE WHEN lp.Like = 1 THEN 1 WHEN lp.Like = 0 THEN -1 ELSE 0 END) AS PostLikes
                                     FROM likepost lp
                                     GROUP BY lp.Id_Post) pl ON p.Id = pl.Id_Post
-                WHERE p.Title LIKE ?
+                WHERE p.Title LIKE ? AND s.Label NOT LIKE 'Archived'
                 GROUP BY p.Id, u.Name, t.Id, s.Label, pl.PostLikes
 
                 UNION
@@ -578,7 +579,8 @@ class userModel {
                        NULL        AS TopicUserId,
                        NULL        AS Status
                 FROM topics t
-                WHERE t.Title LIKE ?
+                INNER JOIN status s ON t.Id_Status = s.Id
+                WHERE t.Title LIKE ? AND s.Label NOT LIKE 'Archived'
 
                 ORDER BY CreateAt DESC;
 
@@ -919,11 +921,11 @@ class userModel {
                        NULL    AS PostLikes,
                        NULL    AS MessageCount
                 FROM topics t
-                         LEFT JOIN status s ON t.Id_Status = s.Id
+                         INNER JOIN status s ON t.Id_Status = s.Id
                          LEFT JOIN tagstopics tp ON t.Id = tp.Id_topics
                          LEFT JOIN tags ON tp.Id_Tag = tags.Id
                          INNER JOIN favtopics ft ON ft.Id_topics = t.Id
-                WHERE ft.Id_User = ?
+                WHERE ft.Id_User = ? AND (s.Label NOT LIKE 'Archived' OR t.Id_User = ?)
 
                 UNION ALL
 
@@ -948,9 +950,9 @@ class userModel {
                                            SUM(CASE WHEN lp.Like = 1 THEN 1 WHEN lp.Like = 0 THEN -1 ELSE 0 END) AS PostLikes
                                     FROM likepost lp
                                     GROUP BY lp.Id_Post) pl ON p.Id = pl.Id_Post
-                WHERE fp.Id_User = ?
-            `;
-            connection.query(sql, [id, id], (err, results) => err ? reject(err) : resolve(results));
+                WHERE fp.Id_User = ? AND (s.Label NOT LIKE 'Archived' OR p.Id_User = ?)
+                `;
+            connection.query(sql, [id, id, id, id], (err, results) => err ? reject(err) : resolve(results));
         });
     }
 

@@ -131,10 +131,8 @@ class UserController {
     static async getUser(req, res) {
         const {name: userName} = req.params;
         let userId;
-        try {
-            userId = req.user.Sub;
-        } catch (e) {
-        }
+        if (req.user) userId = req.user.Sub;
+
         try {
             const utilisateur = userName ? await user.getUserByName(userName) : await user.getUserById(userId);
             if (!utilisateur) {
@@ -530,11 +528,7 @@ class UserController {
             })
         }
 
-        console.log(idPost)
-        console.log(idUser)
-
         const fav = await user.getFavIdPost(idUser, idPost)
-        console.log(fav)
         if (fav.length !== 0) {
             return res.status(400).send({
                 message: 'Fav already exist',

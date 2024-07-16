@@ -18,17 +18,15 @@ class ControlTemplate {
             const [dataUser, dataPost, dataLike, dataTags, dataFav] = await Promise.all([
                 controlUser.TreatmentUser.GetUser(req, res),
                 controlPost.GetPosts(req, res),
-                controlUser.TreatmentUser.GetLiked(req, res),
+                controlUser.TreatmentUser.GetLiked(req),
                 controlTopic.GetTags(),
                 controlUser.TreatmentUser.GetFavorite(req, res)
             ]);
-
             const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser ? dataUser.utilisateur.Id : undefined);
-
             let query
 
             const token = req.cookies.Token;
-            let PathUserLog = null;
+            let PathUserLog
 
             if (token && dataUser && dataUser.utilisateur) {
                 PathUserLog = dataUser.utilisateur.Path;
