@@ -125,6 +125,31 @@ class TopicController {
         }
     }
 
+    static async getTopicMiddleware(req, res) {
+        try {
+            const topicById = await topic.getTopicByNameMiddleware(req.params.name, req.user.Sub);
+
+            if (!topicById){
+                return res.status(404).send({
+                    message: `Topic with name ${req.params.name} not found`,
+                    status: 404,
+                })
+            }
+
+            topicById.User.Path = `${baseUrl}/assets/${topicById.User.Path}`;
+            topicById.TopicPath = `${baseUrl}/assets/${topicById.TopicPath}`;
+            topicById.Tag.forEach(tag => tag.Path = `${baseUrl}/assets${tag.Path}`);
+            topicById.Posts.forEach(post => post.User.Path = `${baseUrl}/assets/${post.User.Path}`);
+            return res.status(200).send({
+                message: `Topic with name ${req.params.name} successfully found`,
+                status: 200,
+                topic: topicById,
+            });
+        } catch (err) {
+            res.status(500).send({message: err, status: 500});
+        }
+    }
+
     /**
      * Get all tags.
      * @param {Object} req - The request object.

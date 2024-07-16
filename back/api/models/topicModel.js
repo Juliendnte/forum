@@ -52,7 +52,7 @@ class topicModel {
                          LEFT JOIN posts p ON t.Id = p.Id_topics
                          LEFT JOIN likepost lp ON p.Id = lp.Id_Post
                          LEFT JOIN users u ON p.Id_User = u.Id
-                WHERE t.Title = ?
+                WHERE t.Title = ? AND s.Label NOT LIKE 'Archived'
                 GROUP BY p.Create_post
                 ORDER BY p.Create_post DESC;`
             connection.query(sql, [title], (err, results) => {
@@ -111,6 +111,107 @@ class topicModel {
         });
     }
 
+    /**
+     * Get a topic by its title.
+     *
+     * @param {string} title - The title of the topic.
+     * @param {int} idUser - The id of the user.
+     * @returns {Promise} - A promise that resolves with the topic.
+     */
+    static getTopicByNameMiddleware(title, idUser) {
+        return new Promise((resolve, reject) => {
+            const sql = `
+                SELECT t.Id        AS TopicId,
+                       t.Title,
+                       t.Content   AS TopicContent,
+                       t.Path      AS TopicPath,
+                       t.Create_at,
+                       t.Id_User,
+                       u2.Name     AS UserName,
+                       u2.Path     AS UserPath,
+                       s.Label     AS Status,
+                       tags.Id     AS TagId,
+                       tags.Path   AS TagPath,
+                       tags.Label  AS TagLabel,
+                       p.Id        AS PostId,
+                       p.Title     AS PostTitle,
+                       p.Create_post,
+                       p.Content,
+                       u.Name      AS UserNamePost,
+                       u.Path      AS UserPathPost,
+                       u.Id        AS UserIdPost,
+                       SUM(CASE
+                               WHEN lp.Like = 1 THEN 1
+                               WHEN lp.Like = 0 THEN -1
+                               ELSE 0
+                           END)    AS PostLikes,
+                       (SELECT COUNT(*) FROM message WHERE message.Id_PostAnswer = p.Id) AS MessageCount
+                FROM topics t
+                         INNER JOIN status s ON t.Id_Status = s.Id
+                         INNER JOIN users u2 ON t.Id_User = u2.Id
+                         LEFT JOIN tagstopics tp ON t.Id = tp.Id_topics
+                         LEFT JOIN tags ON tp.Id_Tag = tags.Id
+                         LEFT JOIN posts p ON t.Id = p.Id_topics
+                         LEFT JOIN likepost lp ON p.Id = lp.Id_Post
+                         LEFT JOIN users u ON p.Id_User = u.Id
+                WHERE t.Title = ? AND (s.Label NOT LIKE 'Archived' OR t.Id_User = ?)
+                GROUP BY p.Create_post
+                ORDER BY p.Create_post DESC;`
+            connection.query(sql, [title, idUser], (err, results) => {
+                if (err) {
+                    return reject(err);
+                }
+
+                if (results.length === 0) {
+                    return resolve(null);
+                }
+
+                const user = {
+                    TopicId: results[0].TopicId,
+                    Title: results[0].Title,
+                    TopicPath: results[0].TopicPath,
+                    Create_at: results[0].Create_at,
+                    Status: results[0].Status,
+                    Content: results[0].TopicContent,
+                    Tag: [],
+                    User: {
+                        Name: results[0].UserName,
+                        Path: results[0].UserPath,
+                        Id: results[0].Id_User
+                    },
+                    Posts: []
+                };
+                if (results[0].PostId) {
+                    results.forEach(row => {
+                        if (!(user.Tag.some(tag => tag.Id === row.TagId))) {
+                            user.Tag.push({
+                                Id: row.TagId,
+                                Label: row.TagLabel,
+                                Path: row.TagPath,
+                            })
+                        }
+                        user.Posts.push({
+                            User: {
+                                Name: row.UserNamePost,
+                                Path: row.UserPathPost,
+                                Id: row.UserIdPost
+                            },
+                            Post: {
+                                Id: row.PostId,
+                                Title: row.PostTitle,
+                                Create_post: row.Create_post,
+                                Content: row.Content,
+                                Likes: row.PostLikes,
+                                MessageCount: row.MessageCount
+
+                            },
+                        });
+                    });
+                }
+                resolve(user);
+            });
+        });
+    }
 
     /**
      * Get all topics based on a query.
