@@ -1,15 +1,13 @@
 function addTagToUser(tagId) {
-    const userTags = document.getElementById('user-tags');
-    const availableTags = document.getElementById('available-tags');
-
     tagId = parseInt(tagId, 10);
+    const tagElement = document.getElementById('available-tags').querySelector(`[data-id="${tagId}"]`);
 
-    const tagElement = availableTags.querySelector(`[data-id="${tagId}"]`);
     if (tagElement) {
-        userTags.appendChild(tagElement);
+        document.getElementById('user-tags').appendChild(tagElement);
 
         const img = tagElement.querySelector('img');
         img.setAttribute('onclick', `removeTagFromUser(${tagId})`);
+
         const svg = tagElement.querySelector('.form-tags-hover-add');
         svg.className = 'form-tags-hover-remove';
         svg.setAttribute('onclick', `removeTagFromUser(${tagId})`);
@@ -22,17 +20,15 @@ function addTagToUser(tagId) {
 }
 
 function removeTagFromUser(tagId) {
-    const userTags = document.getElementById('user-tags');
-    const availableTags = document.getElementById('available-tags');
-
     tagId = parseInt(tagId, 10);
+    const tagElement = document.getElementById('user-tags').querySelector(`[data-id="${tagId}"]`);
 
-    const tagElement = userTags.querySelector(`[data-id="${tagId}"]`);
     if (tagElement) {
-        availableTags.appendChild(tagElement);
+        document.getElementById('available-tags').appendChild(tagElement);
 
         const img = tagElement.querySelector('img');
         img.setAttribute('onclick', `addTagToUser(${tagId})`);
+
         const svg = tagElement.querySelector('.form-tags-hover-remove');
         svg.className = 'form-tags-hover-add';
         svg.setAttribute('onclick', `addTagToUser(${tagId})`);
@@ -50,8 +46,7 @@ function submitForm() {
     userTags.forEach(tag => {
         selectedTags.push(parseInt(tag.getAttribute('data-id'), 10));
     });
-    const tagsValue = "[" + selectedTags.join(',') + "]";
-    document.getElementById('selected-tags').value = tagsValue;
+    document.getElementById('selected-tags').value = "[" + selectedTags.join(',') + "]";
     document.getElementById('tags-form').submit();
 }
 
@@ -59,9 +54,7 @@ document.getElementById('profileImageInput').addEventListener('change', function
     const file = event.target.files[0];
     if (file) {
         const reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById('profileImagePreview').src = e.target.result;
-        }
+        reader.onload = (e) => document.getElementById('profileImagePreview').src = e.target.result;
         reader.readAsDataURL(file);
     }
 });

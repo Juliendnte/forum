@@ -45,31 +45,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 document.addEventListener("DOMContentLoaded", function () {
-    const BtnFriend = document.getElementById("btnFriend");
-    const BtnCloseFriend = document.getElementById("btnClosePopUPFriend");
     const PopupFriend = document.getElementById("UserFriendPopup");
-
-    BtnFriend.addEventListener("click", function () {
-        PopupFriend.classList.add('active');
-    });
-
-    BtnCloseFriend.addEventListener("click", function () {
-        PopupFriend.classList.remove('active');
-    });
+    document.getElementById("btnFriend").addEventListener("click", () =>
+        PopupFriend.classList.add('active')
+    );
+    document.getElementById("btnClosePopUPFriend").addEventListener("click", () =>
+        PopupFriend.classList.remove('active')
+    );
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-    const BtnFollow = document.getElementById("btnFollow");
-    const BtnCloseFollow = document.getElementById("btnClosePopUPFollow");
     const PopupFollow = document.getElementById("UserFollowPopup");
-
-    BtnFollow.addEventListener("click", function () {
-        PopupFollow.classList.add('active');
-    });
-
-    BtnCloseFollow.addEventListener("click", function () {
-        PopupFollow.classList.remove('active');
-    });
+    document.getElementById("btnFollow").addEventListener("click", () => PopupFollow.classList.add('active'));
+    document.getElementById("btnClosePopUPFollow").addEventListener("click", () => PopupFollow.classList.remove('active'));
 });
 
 

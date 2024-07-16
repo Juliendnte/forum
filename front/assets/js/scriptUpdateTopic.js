@@ -2,9 +2,7 @@ document.getElementById('profileImageInput').addEventListener('change', function
     const file = event.target.files[0];
     if (file) {
         const reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById('profileImagePreview').src = e.target.result;
-        }
+        reader.onload = (e) => document.getElementById('profileImagePreview').src = e.target.result;
         reader.readAsDataURL(file);
     }
 });

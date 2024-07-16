@@ -5,7 +5,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const cookieParser = require('cookie-parser');
-const http = require('http'); // Importer le module http
+const http = require('http');
 const { Server } = require('socket.io');
 
 // Reglage du serveur
@@ -19,8 +19,6 @@ app.use(cors());
 
 // Création du serveur HTTP
 const server = http.createServer(app);
-
-// Attacher Socket.IO au serveur HTTP
 const io = new Server(server);
 
 //Importation des routes
@@ -37,10 +35,9 @@ app.use(routeAnnexe);
 
 // Configuration de Socket.IO
 io.on('connection', (socket) => {
-    console.log('a user connected');
+    console.log('user connected');
 
     socket.on('chat message', (msg) => {
-        console.log('message received: ', msg);
         socket.broadcast.emit('chat message', msg);
     });
 

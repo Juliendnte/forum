@@ -1,4 +1,3 @@
-// Sélectionner tous les éléments de sous-menu
 const subMenus = document.querySelectorAll('.sousMenu');
 
 // Parcourir tous les éléments de sous-menu et ajouter un gestionnaire d'événement de clic
@@ -22,9 +21,9 @@ document.querySelector(".form .btn-close").addEventListener("click", function ()
 
 // fonction pour mouve le login/register
 document.addEventListener('DOMContentLoaded', function() {
-    var x = document.getElementById("login");
-    var y = document.getElementById("register");
-    var z = document.getElementById("btn");
+    const x = document.getElementById("login");
+    const y = document.getElementById("register");
+    const z = document.getElementById("btn");
 
     function register() {
         x.style.left = "-400px";

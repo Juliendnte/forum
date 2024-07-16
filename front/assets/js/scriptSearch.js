@@ -15,13 +15,8 @@ async function handleInput(event) {
         try {
             const response = await fetch(`${url}/search?search=${query}`);
             const data = await response.json();
-            if (data.status === 200) {
-                displaySuggestions(data.search);
-            } else {
-                clearSuggestions();
-            }
+            displaySuggestions(data.search);
         } catch (err) {
-            console.error('Erreur lors de la recherche:', err);
             clearSuggestions();
         }
     } else {
@@ -83,10 +78,8 @@ document.addEventListener('DOMContentLoaded', function() {
     filterResults('topic');
 
     categoryButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const type = this.getAttribute('data-type');
-            filterResults(type);
-        });
+        button.addEventListener('click', () =>
+            filterResults(this.getAttribute('data-type')));
     });
 
     function filterResults(type) {
@@ -101,13 +94,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        categoryButtons.forEach(button => {
-            if (button.getAttribute('data-type') === type) {
-                button.classList.add('active-search');
-            } else {
-                button.classList.remove('active-search');
-            }
-        });
+        categoryButtons.forEach(button =>
+            button.getAttribute('data-type') === type ? button.classList.add('active-search') : button.classList.remove('active-search')
+        );
     }
 });
 
