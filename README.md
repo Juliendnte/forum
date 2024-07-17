@@ -137,6 +137,7 @@ The project is divided into two main parts:
 
 Technologies used: Node.js, Express.js, MySQL.
 Roles: API management, authentication, and database communication.
+
 Key dependencies:
 - cors
 - dotenv 
@@ -183,6 +184,7 @@ back/
 
 Technologies used: EJS, CSS, JavaScript.
 Roles: View rendering, user interactions, backend communication.
+
 Key dependencies:
 
 - axios 
@@ -255,12 +257,11 @@ if you want to access the moderator panel, you can use the following credentials
 
 If you want to access the chat feature, you can use the following credentials:
 - Make in your terminal
-
 ```bash
    ipconfig
 ``` 
 - Copy the IPv4 address
-- And access the chat feature in another device with the following URL: http://your_IPv4_address:3000/coder/talking_over
+- And access the chat feature in another device with the following URL: http://your_IPv4_address:3000/coder
 
 ## Contact
 
