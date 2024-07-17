@@ -45,7 +45,6 @@ class messageController {
      */
     static getMessage(req, res) {
         const messageById = req.message;
-        console.log(messageById);
         try {
             messageById.forEach((message) => message.User.Path = `${baseUrl}/assets/${message.User.Path}`);
 

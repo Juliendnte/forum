@@ -218,11 +218,7 @@ class TopicController {
         try {
             await topic.updatePatchTopic(id, body);
             if (req.file) {
-                return res.download(filePath, (err) => {
-                    if (err) {
-                        console.log(err);
-                    }
-                });
+                return res.download(filePath);
             }
             return res.status(200).send({message: `Topic with id ${id} successfully updated`, status: 200});
         } catch (err) {

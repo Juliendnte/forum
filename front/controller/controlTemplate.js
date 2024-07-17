@@ -43,7 +43,6 @@ class ControlTemplate {
                 query
             });
         } catch (err) {
-            console.log(err)
             errorHandler.handleRequestError(err);
             res.redirect('/coder/error');
         }
@@ -136,7 +135,6 @@ class ControlTemplate {
             });
 
         } catch (err) {
-            console.log(err)
             errorHandler.handleRequestError(err);
             res.redirect("/coder/err")
         }
@@ -252,7 +250,6 @@ class ControlTemplate {
                 query
             });
         } catch (err) {
-            console.log(err)
             errorHandler.handleRequestError(err);
             res.redirect("/coder/err")
         }
@@ -317,8 +314,6 @@ class ControlTemplate {
             const topicName = req.params.nametopic;
             const dataTopic = await controlTopic.GetTopic(topicName);
 
-            console.log("dataTopic:", dataTopic);
-
             res.render('../views/pages/createPost', {
                 dataUser,
                 dataTopic
@@ -343,8 +338,6 @@ class ControlTemplate {
 
             let dataMessage = false
 
-            console.log("dataTopic:", dataPost);
-
             res.render('../views/pages/createMessage', {
                 dataUser,
                 dataMessage,
@@ -368,8 +361,6 @@ class ControlTemplate {
             const id = req.params.id;
             const dataMessage = await controlMessage.GetMessage(id);
             let dataPost = false
-
-            console.log(dataMessage);
 
             res.render('../views/pages/createMessage', {
                 dataUser,
@@ -687,7 +678,6 @@ class ControlTemplate {
                 query
             });
         } catch (err) {
-            console.log(err)
             errorHandler.handleRequestError(err);
             res.redirect('/coder/error');
         }

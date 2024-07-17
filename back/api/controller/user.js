@@ -268,11 +268,7 @@ class UserController {
         try {
             await user.updatePatchUser(id, body)
             if (req.file) {
-                return res.download(filePath, (err) => {
-                    if (err) {
-                        console.error(err);
-                    }
-                });
+                return res.download(filePath);
             }
             return res.status(200).send({
                 message: "User successfully updated",

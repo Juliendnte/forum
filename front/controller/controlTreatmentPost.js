@@ -20,8 +20,6 @@ class TreatmentPosts {
 
             const {Title, Content, Id_topics, NameTopic} = req.body;
 
-            console.log("Data received:", Title, Content, Id_topics, NameTopic);
-
             await axios.post(`${url}/post`, {
                 Title,
                 Content,
