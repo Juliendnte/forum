@@ -11,6 +11,8 @@ const middleware = {
 //Configuration des routes
 routeur.get("/messages", messageController.getMessages);
 routeur.get("/message/:id",[middleware.messageExist] , messageController.getMessage);
+routeur.get("/messagesMiddleware", [middleware.auth.validateToken],  messageController.getMessagesMiddleware);
+routeur.get("/messageMiddleware/:id",[middleware.auth.validateToken] , messageController.getMessageMidlleware);
 routeur.post("/message",[middleware.auth.validateToken] ,messageController.postMessage);
 routeur.patch("/message/:id",[middleware.auth.validateToken ,middleware.messageExist, middleware.Owner.messageOwn],messageController.patchMessage)
 routeur.delete("/message/:id",[middleware.auth.validateToken, middleware.messageExist, middleware.Owner.everyRight] ,messageController.deleteMessage);

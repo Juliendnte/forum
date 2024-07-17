@@ -118,6 +118,24 @@ class PostController {
         }
     }
 
+    static async getPostMiddleware(req, res) {
+        const postById = await post.getpostByIdWithMiddleware(req.params.id, req.user.Sub);
+        try {
+            postById.User.Path = `${baseUrl}/assets/${postById.User.Path}`;
+
+            return res.status(200).send({
+                message: `Article with id ${req.params.id} successfully found`,
+                status: 200,
+                post: postById,
+            });
+        } catch (err) {
+            res.status(500).send({
+                message: err,
+                status: 500
+            });
+        }
+    }
+
     static async getLiked(req, res){
         const id = req.user.Sub
         try {
