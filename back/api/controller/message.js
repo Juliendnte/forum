@@ -61,6 +61,64 @@ class messageController {
             });
         }
     }
+    /**
+     * Retrieves all messages based on the provided query parameters.
+     *
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     * @returns {Object} - The response object.
+     */
+    static async getMessagesMiddleware(req, res) {
+    try {
+            const messages = await message.getAllMessageMiddleware(req.query, req.user.Sub);
+            messages.forEach((message) => message.User.Path = `${baseUrl}/assets/${message.User.Path}`);
+
+            if (!messages) {
+                return res.status(404).send({
+                    message: `messages not found`,
+                    status: 404
+                });
+            }
+
+            return res.status(200).send({
+                message: `messages successfully found`,
+                status: 200,
+                items: messages
+            });
+
+        } catch (err) {
+            res.status(500).send({
+                message: err,
+                status: 500
+            });
+        }
+    }
+
+    /**
+     * Retrieves a specific message by its ID and returns it in the response.
+     *
+     * @param {Object} req - The request object, containing the message ID in the parameters.
+     * @param {Object} res - The response object.
+     * @returns {Object} - The response object, containing the retrieved message.
+     */
+    static async getMessageMidlleware(req, res) {
+        const messageById = await message.getMessageByIdMiddleware(req.params.id, req.user.Sub);
+
+        try {
+            messageById.forEach((message) => message.User.Path = `${baseUrl}/assets/${message.User.Path}`);
+
+            return res.status(200).send({
+                message: `Article with id ${req.params.id} successfully found`,
+                status: 200,
+                commentaire: messageById,
+            });
+        } catch (err) {
+            res.status(500).send({
+                message: err,
+                status: 500
+            });
+        }
+    }
 
    /**
      * Creates a new message with the provided content, post ID, and message ID.

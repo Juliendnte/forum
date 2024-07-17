@@ -140,6 +140,157 @@ class messageModel {
             });
         });
     }
+    /**
+     * Get a message by its ID.
+     *
+     * @param {number} id - The ID of the message.
+     * @param {number} userId - The ID of the user.
+     * @returns {Promise} - A promise that resolves with the message.
+     */
+    static getMessageByIdMiddleware(id, userId) {
+        return new Promise((resolve, reject) => {
+            const sql = `
+                SELECT m.*,
+                       u.Name,
+                       u.Path,
+                       u.Id         AS Id_User,
+                       r.Label      AS Role,
+                       COUNT(m2.Id) AS MessageCount
+                FROM message m
+                         INNER JOIN
+                     users u ON m.Id_User = u.Id
+                         INNER JOIN
+                     role r ON u.Id_role = r.Id
+                    INNER JOIN
+                    posts p ON m.Id_PostAnswer = p.Id
+                    INNER JOIN
+                    topics t ON p.Id_topics = t.Id
+                    INNER JOIN
+                    status s ON t.Id_status = s.Id
+                         LEFT JOIN
+                     message m2 ON m.Id = m2.Id_MessageAnswer
+                WHERE m.Id_MessageAnswer = ?
+                   OR m.Id = ? AND (s.Label NOT LIKE 'Archived' OR t.Id_User = ?)
+                GROUP BY m.Id, u.Name, u.Path, u.Id, r.Label
+                ORDER BY m.Id;
+                ;`
+            connection.query(sql, [id, id, userId], (err, results) => {
+                if (err) {
+                    return reject(err);
+                }
+                if (results.length === 0) {
+                    return resolve(null);
+                }
+                const messages = results.map((message) => ({
+                    Id: message.Id,
+                    Content: message.Content,
+                    Create_message: message.Create_message,
+                    Update_message: message.Update_message,
+                    Id_PostAnswer: message.Id_PostAnswer,
+                    Id_MessageAnswer: message.Id_MessageAnswer,
+                    CountMessage: message.MessageCount,
+                    User: {
+                        Id: message.Id_User,
+                        Name: message.Name,
+                        Path: message.Path,
+                        Role: message.Role,
+                    }
+                }));
+                return resolve(messages);
+            });
+        });
+    }
+
+    /**
+     * Get all messages based on a query.
+     *
+     * @param {Object} query - The query parameters.
+     * @param {number} userId - The ID of the user.
+     * @returns {Promise} - A promise that resolves with the messages.
+     */
+    static getAllMessageMiddleware(query, userId) {
+        return new Promise(async (resolve, reject) => {
+            let sql = `SELECT m.*,
+                              users.Name,
+                              users.Path,
+                              COUNT(m2.Id) AS MessageCount
+                       FROM message m
+                                INNER JOIN
+                            users ON m.Id_User = users.Id
+                                LEFT JOIN
+                            message m2 ON m.Id = m2.Id_MessageAnswer
+                       INNER JOIN
+                           posts p ON m.Id_PostAnswer = p.Id
+                          INNER JOIN
+                            topics t ON p.Id_topics = t.Id
+                            INNER JOIN
+                            status s ON t.Id_status = s.Id
+                        WHERE (s.Label NOT LIKE 'Archived' OR t.Id_User = ?)
+            `
+
+            const values = [userId];
+            const whereClauses = [];
+            let limitClause = "";
+            let offsetClause = "";
+
+            // Construire les clauses WHERE, LIMIT et OFFSET
+            Object.entries(query).forEach(([key, value]) => {
+                if (key.toLowerCase() === "limit") {
+                    limitClause = ` LIMIT ?`;
+                    values.push(parseInt(value));
+                } else if (key.toLowerCase() === "offset") {
+                    offsetClause = ` OFFSET ?`;
+                    values.push(parseInt(value));
+                } else {
+                    const valuesArray = value.split(",");
+                    const placeholders = valuesArray.map(() => "?").join(",");
+                    whereClauses.push(valuesArray.length > 1 ? `${key} IN (${placeholders})` : `${key} = ?`);
+                    values.push(...valuesArray);
+                }
+            });
+
+            // Ajouter les clauses WHERE à la requête SQL
+            if (whereClauses.length > 0) {
+                sql += " WHERE " + whereClauses.join(" AND ");
+            }
+
+
+            // Ajouter limit et offset à la requête principale
+
+            sql += ' GROUP BY m.Id, users.Name, users.Path ' + limitClause + offsetClause;
+            // Exécuter la requête avec les valeurs
+            connection.query(sql, values, (err, results) => {
+                if (err) {
+                    return reject(err);
+                }
+
+                if (results.length === 0) {
+                    return resolve([]);
+                }
+
+                const messages = results.map((message) => {
+                    if (!message.Id_MessageAnswer) {
+                        return {
+                            Id: message.Id,
+                            Content: message.Content,
+                            Create_message: message.Create_message,
+                            Update_message: message.Update_message,
+                            Id_PostAnswer: message.Id_PostAnswer,
+                            Id_MessageAnswer: message.Id_MessageAnswer,
+                            CountMessage: message.MessageCount,
+                            User: {
+                                Id: message.Id_User,
+                                Name: message.Name,
+                                Path: message.Path,
+                            }
+                        };
+                    }
+                    return null;
+                }).filter(message => message !== null);
+                resolve(messages)
+            });
+        });
+    }
 
     /**
      * Create a new message.
