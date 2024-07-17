@@ -11,7 +11,7 @@
 <%- include('../components/Pop-up-Follower'); %>
 <%- include('../components/header', {Name: Name, PathUserLog: PathUserLog, dataTags: dataTags}); %>
 <section class="section-global">
-    <%- include('../components/aside', {dataTopicOwn: dataTopicOwn}); %>
+    <%- include('../components/aside', {dataTopicOwn: dataTopicOwn, dataFav: dataFav}); %>
     <section class="profil-user-global">
         <section class="info-user-global-ctn">
             <div class="img-user-global">
@@ -75,30 +75,36 @@
                         </div>
                     </div>
                     <div class="btn-follow-profil">
-                        <% if (Own) { %>
-                            <a href="/coder/profil/<%= dataUser.utilisateur.Name %>/update">
-                                <button>Modifier le profil</button>
-                            </a>
-                        <% } else { %>
-                            <%
-                                const currentUserId = IdUserLog;
-                                const isFollowing = dataUser.utilisateur.Follow.some(follow => follow.Id == currentUserId);
-                                const isFollowedBy = dataUser.utilisateur.Suivie.some(suivie => suivie.Id == currentUserId);
-                                const isFriends = dataUser.utilisateur.Friends.some(friend => friend.Id == currentUserId)
-                            %>
-                            <% if (isFriends || isFollowing) { %>
-                                <a href="/treatment/follow/<%= dataUser.utilisateur.Id %>">
-                                    <button class="btn-suivie">Suivi (e)</button>
-                                </a>
-                            <% } else if (!isFollowing && isFollowedBy) { %>
-                                <a href="/treatment/follow/<%= dataUser.utilisateur.Id %>">
-                                    <button class="btn-suivre-en-retour">Suivre en retour</button>
+                        <% if (dataUser && PathUserLog === dataUser.utilisateur.Path) { %>
+                            <% if (Own) { %>
+                                <a href="/coder/profil/<%= dataUser.utilisateur.Name %>/update">
+                                    <button>Modifier le profil</button>
                                 </a>
                             <% } else { %>
-                                <a href="/treatment/follow/<%= dataUser.utilisateur.Id %>">
+                                <%
+                                    const currentUserId = IdUserLog;
+                                    const isFollowing = dataUser.utilisateur.Follow.some(follow => follow.Id == currentUserId);
+                                    const isFollowedBy = dataUser.utilisateur.Suivie.some(suivie => suivie.Id == currentUserId);
+                                    const isFriends = dataUser.utilisateur.Friends.some(friend => friend.Id == currentUserId)
+                                %>
+                                <% if (isFriends || isFollowing) { %>
+                                    <a href="/treatment/follow/<%= dataUser.utilisateur.Id %>">
+                                        <button class="btn-suivie">Suivi (e)</button>
+                                    </a>
+                                <% } else if (!isFollowing && isFollowedBy) { %>
+                                    <a href="/treatment/follow/<%= dataUser.utilisateur.Id %>">
+                                        <button class="btn-suivre-en-retour">Suivre en retour</button>
+                                    </a>
+                                <% } else { %>
+                                    <a href="/treatment/follow/<%= dataUser.utilisateur.Id %>">
+                                        <button class="btn-suivre">Suivre</button>
+                                    </a>
+                                <% } %>
+                            <% } %>
+                        <% } else { %>
+                                <a href="/coder/login">
                                     <button class="btn-suivre">Suivre</button>
                                 </a>
-                            <% } %>
                         <% } %>
                     </div>
                 </div>
