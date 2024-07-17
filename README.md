@@ -220,19 +220,21 @@ front/
 ```
 ## Usage
 
-Users
+### Users
 
 - Registration: Users can register by providing their name, email, and password. 
 - Login: Users can log in with their email and password. 
 - Profile: Users can view and update their profile information.
 
-Forums and Discussions
+### Forums and Comments
 
 -  Create a Topic: Users can create new topics. 
-- Post a Discussion: Users can post discussions in the forums. 
-- Reply to a Discussion: Users can reply to existing discussions.
+- Post a Comments: Users can post discussions in the forums. 
+- Reply to a Discussions: Users can reply to existing discussions.
+- Post : Users can like or dislike a post.
 
-Administration
+
+### Administration
 
 - Manage Forums: Admins can create, update, and delete topics and discussions .
 - Manage Users: Admins can view and ban user accounts.
@@ -246,6 +248,19 @@ if you want to access the moderator panel, you can use the following credentials
 
 - Username: Arthur
 - Password: XUj45Z1cnSHTIfkv
+
+### Discussion
+
+- Users can chat with each other in real-time (users in the same network) using the chat feature.
+
+If you want to access the chat feature, you can use the following credentials:
+- Make in your terminal
+
+```bash
+   ipconfig
+``` 
+- Copy the IPv4 address
+- And access the chat feature in another device with the following URL: http://your_IPv4_address:3000/coder/talking_over
 
 ## Contact
 
