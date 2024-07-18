@@ -66,9 +66,6 @@ class TreatmentMessages {
             }
 
             const dataUpdate = req.body;
-
-            console.log(dataUpdate)
-
             const id = req.params.id;
 
             await axios.patch(`${url}/message/${id}`, dataUpdate,

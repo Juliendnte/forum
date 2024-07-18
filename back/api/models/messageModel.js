@@ -26,8 +26,14 @@ class messageModel {
                      role r ON u.Id_role = r.Id
                          LEFT JOIN
                      message m2 ON m.Id = m2.Id_MessageAnswer
+                         INNER JOIN
+                     posts p ON m.Id_PostAnswer = p.Id
+                         INNER JOIN
+                     topics t ON p.Id_topics = t.Id
+                         INNER JOIN
+                     status s ON t.Id_status = s.Id
                 WHERE m.Id_MessageAnswer = ?
-                   OR m.Id = ?
+                   OR m.Id = ? AND s.Label NOT LIKE 'Archived'
                 GROUP BY m.Id, u.Name, u.Path, u.Id, r.Label
                 ORDER BY m.Id;
                 ;`
@@ -75,6 +81,13 @@ class messageModel {
                             users ON m.Id_User = users.Id
                                 LEFT JOIN
                             message m2 ON m.Id = m2.Id_MessageAnswer
+                                INNER JOIN
+                            posts p ON m.Id_PostAnswer = p.Id
+                                INNER JOIN
+                            topics t ON p.Id_topics = t.Id
+                                INNER JOIN
+                            status s ON t.Id_status = s.Id
+                        WHERE s.Label NOT LIKE 'Archived'
             `
 
             const values = [];

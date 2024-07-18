@@ -83,8 +83,7 @@ class TreatmentTopic {
             }
 
             const name = req.params.name;
-            console.log(name)
-            console.log(formData)
+
             await axios.patch(`${url}/topic/${name}`, formData,
                 {
                     headers: {

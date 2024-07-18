@@ -49,6 +49,8 @@ class postModel {
                         INNER JOIN
                     users u ON p.Id_User = u.Id
                         INNER JOIN
+                    status s ON t.Id_Status = s.Id
+                        INNER JOIN
                     role r ON u.Id_role = r.Id
                         LEFT JOIN (
                         SELECT
@@ -60,7 +62,7 @@ class postModel {
                             lp.Id_Post
                     ) pl ON p.Id = pl.Id_Post
                 WHERE
-                    p.Id = ?
+                    p.Id = ? AND s.Label NOT LIKE 'Archived'
                 GROUP BY
                     p.Id, t.Id, u.Id, r.Label, t.Title, t.Path, t.Create_at, t.Id_User, u.Name, u.Path
             `
@@ -190,6 +192,7 @@ class postModel {
                                 LEFT JOIN (SELECT lp.Id_Post,
                                                   SUM(CASE WHEN lp.Like = 1 THEN 1 WHEN lp.Like = 0 THEN -1 ELSE 0 END) AS PostLikes
                                            FROM likepost lp
+                                           WHERE s.Label NOT LIKE 'Archived'
                                            GROUP BY lp.Id_Post) pl ON posts.Id = pl.Id_Post`;
 
             const values = [];
