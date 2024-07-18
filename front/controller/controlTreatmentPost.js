@@ -72,12 +72,11 @@ class TreatmentPosts {
      */
     static async GetPost(id) {
         try {
-            const response = await axios.get(`${url}/post/${id}`)
+            const response = await axios.get(`${url}/postMiddleware/${id}`)
             return response.data;
 
         } catch (err) {
-            errorHandler.setError("Failed to fetch topic data", 401)
-            return undefined;
+            return (await axios.get(`${url}/post/${id}`)).data
         }
     }
 
