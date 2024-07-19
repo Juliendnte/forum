@@ -49,11 +49,10 @@ class TreatmentTopic {
      */
     static async GetTopic(name) {
         try {
-            const response = await axios.get(`${url}/topic/${name}`)
+            const response = await axios.get(`${url}/topicMiddleware/${name}`)
             return response.data;
         } catch (err) {
-            errorHandler.setError("Failed to fetch topic data", 401);
-            return undefined;
+            return (await axios.get(`${url}/topic/${name}`)).data
         }
     }
 
