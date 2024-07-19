@@ -10,7 +10,7 @@ const controllerUser = require("../controller/controlTreatmentUser");
 // Routes Template
 routeur.get("/coder", controllerTemplate.Index);
 routeur.get("/coder/login", controllerTemplate.Login);
-routeur.get("/coder/accounts/password/reset/", controllerTemplate.ForgotPwd);
+routeur.get("/coder/accounts/password/reset", controllerTemplate.ForgotPwd);
 routeur.get("/coder/user/:name", controllerTemplate.ProfilUser);
 routeur.get("/coder/profil/:name/update", controllerTemplate.UpdateProfil);
 
@@ -20,6 +20,7 @@ routeur.post("/treatment/register", controllerUser.TreatmentUser.RegisterTreatme
 routeur.get("/treatment/disconnect", controllerUser.TreatmentUser.DisconnectTreatment);
 routeur.get("/treatment/follow/:id", controllerUser.TreatmentUser.FollowUser)
 routeur.post("/treatment/update/user", upload.single('ProfileImage') ,controllerUser.TreatmentUser.UpdateUser);
+routeur.post("/treatment/reset_password", controllerUser.TreatmentUser.ForgotPwd)
 
 // Pour que nos routes soient accessibles
 module.exports = routeur;

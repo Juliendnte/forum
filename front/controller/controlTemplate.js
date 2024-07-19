@@ -65,7 +65,16 @@ class ControlTemplate {
      * @param {Object} res - The response object.
      */
     static async ForgotPwd(req, res) {
-        res.render('../views/pages/forgotpwd');
+        let send
+        res.render('../views/pages/forgotpwd', {
+            send
+        });
+    }
+
+    static async ResetPassword(req, res) {
+        res.render('../views/pages/resetPassword', {
+            token: req.query.token,
+        });
     }
 
     /**
@@ -86,7 +95,7 @@ class ControlTemplate {
                 Name = dataUser.utilisateur.Name;
                 IdUserLog = dataUser.utilisateur.Id;
                 PathUserLog = dataUser.utilisateur.Path
-            }else {
+            } else {
                 dataUser = await controlUser.TreatmentUser.GetUsers(req, res);
                 Own = false;
             }
@@ -98,7 +107,7 @@ class ControlTemplate {
 
             if (dataUser && dataUser.utilisateur && dataUser.utilisateur.Create_at) {
                 const date = new Date(dataUser.utilisateur.Create_at);
-                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                const options = {year: 'numeric', month: 'long', day: 'numeric'};
                 dataUser.utilisateur.Create_at_formatted = date.toLocaleDateString('fr-FR', options);
             }
 
@@ -390,9 +399,9 @@ class ControlTemplate {
             const dataTags = await controlUser.TreatmentUser.GetTags();
 
             res.render('../views/pages/UpdateProfil', {
-                    dataUser,
-                    dataTags
-                });
+                dataUser,
+                dataTags
+            });
         } catch (err) {
             errorHandler.handleRequestError(err);
             res.redirect("/coder/err")
@@ -565,7 +574,7 @@ class ControlTemplate {
                 query
             });
 
-        } catch(err) {
+        } catch (err) {
             errorHandler.handleRequestError(err);
             res.redirect("/coder/err")
         }
@@ -576,7 +585,7 @@ class ControlTemplate {
      * @param {Object} req - The request object.
      * @param {Object} res - The response object.
      */
-    static async Conditions (req,res) {
+    static async Conditions(req, res) {
         try {
             const [dataUser, dataTags] = await Promise.all([
                 controlUser.TreatmentUser.GetUser(req, res),
@@ -598,7 +607,7 @@ class ControlTemplate {
                 PathUserLog,
                 query
             });
-        }catch (err){
+        } catch (err) {
             errorHandler.handleRequestError(err);
             res.redirect("/coder/err")
         }
@@ -609,7 +618,7 @@ class ControlTemplate {
      * @param {Object} req - The request object.
      * @param {Object} res - The response object.
      */
-    static async FavPage (req,res) {
+    static async FavPage(req, res) {
         try {
             const [dataUser, dataPost, dataLike, dataTags, dataFav] = await Promise.all([
                 controlUser.TreatmentUser.GetUser(req, res),
@@ -640,13 +649,18 @@ class ControlTemplate {
                 dataTopicOwn,
                 query
             });
-        }catch (err){
+        } catch (err) {
             errorHandler.handleRequestError(err);
             res.redirect("/coder/err")
         }
     }
 
-    static async TalkingOver(req ,res) {
+    /**
+     * Render the TalkingOver page
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
+    static async TalkingOver(req, res) {
         try {
             const [dataUser, dataPost, dataLike, dataTags, dataFav] = await Promise.all([
                 controlUser.TreatmentUser.GetUser(req, res),
@@ -681,6 +695,10 @@ class ControlTemplate {
             errorHandler.handleRequestError(err);
             res.redirect('/coder/error');
         }
+    }
+
+    static async ValidPassword(req, res) {
+        res.render('../views/pages/validPassword')
     }
 
     /**

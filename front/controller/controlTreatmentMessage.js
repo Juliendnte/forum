@@ -35,7 +35,16 @@ class TreatmentMessages {
      */
     static async GetMessagestoMessage(req, res) {
         try {
-            const response = await axios.get(`${url}/messages?m.Id_MessageAnswer=${req.params.id}`)
+            const token = req.cookies.Token;
+            if (!token) {
+                return res.status(400).send("No token found");
+            }
+            const response = await axios.get(`${url}/messagesMiddleware?m.Id_MessageAnswer=${req.params.id}`,{
+                headers: {
+                    "Authorization": token,
+                    "Content-Type": "application/json"
+                },
+            })
 
             if (response.status === 200) {
                 return response.data;
@@ -44,8 +53,7 @@ class TreatmentMessages {
                 return undefined;
             }
         } catch (err) {
-            errorHandler.handleRequestError(err);
-            res.redirect("/coder/err")
+            return (await axios.get(`${url}/messages?m.Id_MessageAnswer=${req.params.id}`)).data
         }
     }
 

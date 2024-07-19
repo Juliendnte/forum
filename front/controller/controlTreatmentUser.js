@@ -2,6 +2,7 @@ const url = "http://localhost:4000";
 const axios = require("axios");
 const ErrorHandler = require("./ErrorHandler");
 const {Blob} = require('blob-polyfill');
+const res = require("express/lib/response");
 
 let user
 
@@ -437,6 +438,44 @@ class TreatmentUser {
         } catch (err) {
             errorHandler.handleRequestError(err);
             res.redirect("/coder/err")
+        }
+    }
+
+    static async ForgotPwd(req, res) {
+        const email = req.body.email;
+        try {
+            await axios.post(`${url}/forgotPassword`, {
+                email
+            })
+            res.render(`../views/pages/forgotpwd`, {
+                send: "Email envoyé !"
+            });
+        } catch (err) {
+            res.render(`../views/pages/forgotpwd`, {
+                send: "Email introuvable !"
+            });
+        }
+    }
+
+    static async resetPwd(req, res) {
+        const password = req.body.password;
+        const token = req.params.token
+        console.log(req.query)
+        try {
+            await axios.post(`${url}/resetPassword`, {
+                    password
+                },
+                {
+                    headers: {
+                        "Authorization": token,
+                        "Content-Type": "application/json"
+                    },
+                })
+            res.render(`../views/pages/validPassword`);
+        } catch (err) {
+            console.log(err)
+            errorHandler.handleRequestError(err);
+            res.redirect("/coder/err");
         }
     }
 }

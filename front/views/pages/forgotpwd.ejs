@@ -9,7 +9,7 @@
 
 <body class="body-login">
 <div class="btn-back-login">
-    <a href="javascript:history.back()">
+    <a href="/coder/login">
         <button class="Btn">
             <svg height="1.2em" class="arrow" viewBox="0 0 512 512">
                 <path
@@ -23,9 +23,14 @@
 <div class="container" id="container">
     <div class="form-container sign-in">
         <form action="/treatment/forgotpwd" method="POST">
+            <% if (send === 'Email envoyé !') { %>
+                <p class="message-email-true"><%= send %></p>
+            <% } else { %>
+                <p class="message-email-false"><%= send %></p>
+            <% } %>
             <h1>Mot de passe oublié ?</h1>
             <span>Utilisez votre email</span>
-            <input type="email" name="name" placeholder="Email" required>
+            <input type="email" name="email" placeholder="Email *" required>
             <button type="submit">Envoyer un lien de récupération</button>
         </form>
     </div>

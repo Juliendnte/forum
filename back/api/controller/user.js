@@ -173,8 +173,10 @@ class UserController {
 
     static async ForgotPassword(req, res) {
         const {email} = req.body;
+        console.log(req.body)
         try {
             const utilisateur = await user.getUserByEmail(email);
+            console.log(email)
             if (!utilisateur) {
                 return res.status(400).send({
                     message: 'No user with that email',
@@ -182,12 +184,12 @@ class UserController {
                 });
             }
             const token = jwt.sign({Sub: utilisateur.Id}, jwtkey, {expiresIn: '1h'});
-            const resetURL = `http://localhost:3000/resetPassword?token=${token}`;
+            const resetURL = `http://localhost:3000/coder/resetPassword?token=${token}`;
 
             await transporter.sendMail({
                 from: process.env.EMAIL,
                 to: utilisateur.Email,
-                subject: '[Horo-Haven] Réinitialisation du mot de passe',
+                subject: '[CODER] Réinitialisation du mot de passe',
                 html: `<p>Bonjour ${utilisateur.Name},</p>
                 <p>Vous avez demandé à réinitialiser votre mot de passe.</p>
                 <p>Cliquez sur ce <a href="${resetURL}">lien</a> pour réinitialiser votre mot de passe.</p>

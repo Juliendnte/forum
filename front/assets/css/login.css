@@ -67,6 +67,15 @@
     flex-direction: column;
     padding: 0 40px;
     height: 100%;
+    position: relative;
+}
+
+.message-email-true {
+    color: var(--color-green);
+}
+
+.message-email-false {
+    color: #D93900;
 }
 
 .container input {
