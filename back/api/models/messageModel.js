@@ -87,11 +87,10 @@ class messageModel {
                             topics t ON p.Id_topics = t.Id
                                 INNER JOIN
                             status s ON t.Id_status = s.Id
-                        WHERE s.Label NOT LIKE 'Archived'
             `
 
             const values = [];
-            const whereClauses = [];
+            const whereClauses = ["s.Label  LIKE 'Public'"];
             let limitClause = "";
             let offsetClause = "";
 

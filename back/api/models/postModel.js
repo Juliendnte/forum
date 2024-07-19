@@ -192,12 +192,10 @@ class postModel {
                                 LEFT JOIN (SELECT lp.Id_Post,
                                                   SUM(CASE WHEN lp.Like = 1 THEN 1 WHEN lp.Like = 0 THEN -1 ELSE 0 END) AS PostLikes
                                            FROM likepost lp
-                                           WHERE s.Label NOT LIKE 'Archived'
                                            GROUP BY lp.Id_Post) pl ON posts.Id = pl.Id_Post`;
 
             const values = [];
-            const whereClauses = ['s.Label = ?'];
-            values.push('Public');
+            const whereClauses = ["s.Label  LIKE 'Public'"];
             let limitClause = "";
             let offsetClause = "";
 
