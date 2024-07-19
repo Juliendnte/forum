@@ -422,15 +422,15 @@ class topicModel {
     /**
      * Delete a topic.
      *
-     * @param {number} id - The ID of the topic to delete.
+     * @param {string} name - The Name of the topic to delete.
      * @returns {Promise} - A promise that resolves when the topic is deleted.
      */
-    static deleteTopic(id) {
+    static deleteTopic(name) {
         return new Promise((resolve, reject) => {
             const sql = `DELETE
                          FROM topics
-                         WHERE Id = ?`
-            connection.query(sql, [id], (err, results) => err ? reject(err) : resolve(results[0]))
+                         WHERE Title = ?`
+            connection.query(sql, [name], (err, results) => err ? reject(err) : resolve(results[0]))
 
         })
     }

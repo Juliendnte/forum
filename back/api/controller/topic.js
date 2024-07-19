@@ -233,12 +233,14 @@ class TopicController {
      * @returns {Object} - The response object, containing a success message.
      */
     static async deleteTopic(req, res) {
-        const id = req.params.id;
+        const name = req.params.name;
 
         try {
-            await topic.deleteTopic(id);
-
-            return res.status(200).send({message: `Topic with id ${id} successfully delete`, status: 200});
+            await topic.deleteTopic(name);
+            return res.status(200).send({
+                message: `topic with id ${name} successfully delete`,
+                status: 200,
+            })
         } catch (err) {
             res.status(500).send({message: err, status: 500});
         }

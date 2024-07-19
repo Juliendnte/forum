@@ -13,6 +13,7 @@ const topicExists = async (req, res, next) => {
             });
         }
         req.topic = topicById;
+        console.log("ok 2")
         next();
     } catch (err) {
         res.status(500).json({

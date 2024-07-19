@@ -215,16 +215,14 @@ class TreatmentPosts {
 
             await axios.delete(`${url}/post/${id}`, {
                 headers: {
-                    "Authorization": `Bearer ${token}`, // Assurez-vous d'utiliser le format correct pour le token
+                    "Authorization": token,
                     "Content-Type": "application/json"
                 }
             });
 
-            return res.status(200).send({
-                message: `Post with id ${id} successfully deleted`,
-                status: 200
-            });
+            res.redirect(`back`);
         } catch (err) {
+            console.log(err)
             errorHandler.handleRequestError(err);
             res.redirect("/coder/err")
         }

@@ -18,5 +18,6 @@ routeur.post("/treatment/createTopic", controllerTopic.CreateTopicTreatment);
 routeur.post("/treatment/update/topic/:name", upload.single('TopicImage'), controllerTopic.UpdateTopic);
 routeur.get("/treatment/topic/add/:id/favorite", controllerUser.TreatmentUser.AddFavoriteTopic);
 routeur.get("/treatment/topic/remove/:id/favorite", controllerUser.TreatmentUser.RemoveFavoriteTopic);
+routeur.get("/treatment/delete/topic/:name", controllerTopic.DeleteTopic);
 
 module.exports = routeur;

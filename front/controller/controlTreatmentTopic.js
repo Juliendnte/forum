@@ -149,6 +149,32 @@ class TreatmentTopic {
             return undefined;
         }
     }
+
+    static async DeleteTopic(req, res) {
+        try {
+            const token = req.cookies.Token;
+            if (!token) {
+                return res.status(401).send({
+                    message: 'No token provided',
+                    status: 401
+                });
+            }
+
+            const name = req.params.name;
+
+            await axios.delete(`${url}/topic/${name}`, {
+                headers: {
+                    "Authorization": token,
+                    "Content-Type": "application/json"
+                }
+            });
+
+            res.redirect(`/coder`);
+        } catch (err) {
+            errorHandler.handleRequestError(err);
+            res.redirect("/coder/err")
+        }
+    }
 }
 
 module.exports = TreatmentTopic;

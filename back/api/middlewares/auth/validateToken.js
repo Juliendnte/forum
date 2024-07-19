@@ -11,7 +11,8 @@ function validateToken(req, res, next) {
         }
 
         req.user = user;
-        next();//Prochain middleware
+        console.log("ok 1")
+        next();// Prochain middleware
     });
 }
 
