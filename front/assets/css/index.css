@@ -207,8 +207,8 @@ textarea {
 }
 
 .topic-page-search-img {
-    width: 24px;
-    height: 24px;
+    width: 50px;
+    height: 50px;
 }
 
 .user-page-search-img {
@@ -237,7 +237,6 @@ textarea {
 .topic-page-search-title {
     display: flex;
     gap: 5px;
-    font-size: 12px;
 }
 
 .topic-page-search-title span:first-child:hover {
