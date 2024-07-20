@@ -142,8 +142,9 @@ class TreatmentMessages {
                         "Content-Type": "application/json"
                     },
                 })
-            res.redirect('/coder/p/' + id);
+            res.redirect('back');
         } catch (err) {
+            console.log(err)
             errorHandler.handleRequestError(err);
             res.redirect("/coder/err")
         }
