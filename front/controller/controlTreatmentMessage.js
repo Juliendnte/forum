@@ -125,6 +125,29 @@ class TreatmentMessages {
             res.redirect("/coder/err")
         }
     }
+
+    static async DeleteMessage(req, res) {
+        try {
+            const token = req.cookies.Token;
+            if (!token) {
+                return res.status(400).send("No token found");
+            }
+
+            const id = req.params.id;
+
+            await axios.delete(`${url}/message/${id}`,
+                {
+                    headers: {
+                        "Authorization": token,
+                        "Content-Type": "application/json"
+                    },
+                })
+            res.redirect('/coder/p/' + id);
+        } catch (err) {
+            errorHandler.handleRequestError(err);
+            res.redirect("/coder/err")
+        }
+    }
 }
 
 module.exports = TreatmentMessages;

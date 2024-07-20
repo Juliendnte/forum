@@ -11,7 +11,6 @@ const everyRight = async (req, res, next) => {
     if (req.topic.User.Id !== user.Sub && !user.IsAdmin && !user.IsModo){
         return res.status(403).send("Forbidden");
     }
-    console.log("ok 3")
     next();
 }
 

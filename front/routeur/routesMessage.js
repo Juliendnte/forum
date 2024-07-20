@@ -14,5 +14,6 @@ routeur.get("/coder/message/:id/update", controllerTemplate.UpdateMessage);
 // Route Treatment en rapport avec les Messages
 routeur.post("/treatment/update/message/:id", controllerMessage.UpdateMessage)
 routeur.post("/treatment/create/message", controllerMessage.CreateMessage)
+routeur.get("/treatment/delete/message/:id", controllerMessage.DeleteMessage)
 
 module.exports = routeur;

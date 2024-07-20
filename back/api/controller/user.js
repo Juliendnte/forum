@@ -226,7 +226,7 @@ class UserController {
     }
 
     static async Ban(req, res) {
-        const id = req.query.id;
+        const id = req.params.id;
         try {
             await user.ban(id)
             res.status(200).send({

@@ -54,7 +54,6 @@
                                 <% dataUser.utilisateur.Tags.forEach(function(tag) { %>
                                     <img src="<%= tag %>" alt="Tag Icon"/>
                                 <% }); %>
-                            <% } else { %>
                             <% } %>
                         </div>
                     </div>
@@ -102,11 +101,20 @@
                                 <% } %>
                             <% } %>
                         <% } else { %>
-                                <a href="/coder/login">
-                                    <button class="btn-suivre">Suivre</button>
-                                </a>
+                            <a href="/coder/login">
+                                <button class="btn-suivre">Suivre</button>
+                            </a>
                         <% } %>
                     </div>
+                    <% if (IdUserLog !== dataUser.utilisateur.Id) { %>
+                        <% if (RoleUserLog === 'Admin') { %>
+                            <div class="btn-follow-profil">
+                                <a href="/treatment/ban/user/<%= dataUser.utilisateur.Id %>">
+                                    <button class="btn-suivre" style="background: red !important; color: white !important;">Bannir l'utilisateur</button>
+                                </a>
+                            </div>
+                        <% } %>
+                    <% } %>
                 </div>
             </div>
         </section>

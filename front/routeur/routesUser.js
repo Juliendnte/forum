@@ -21,6 +21,7 @@ routeur.get("/treatment/disconnect", controllerUser.TreatmentUser.DisconnectTrea
 routeur.get("/treatment/follow/:id", controllerUser.TreatmentUser.FollowUser)
 routeur.post("/treatment/update/user", upload.single('ProfileImage') ,controllerUser.TreatmentUser.UpdateUser);
 routeur.post("/treatment/reset_password", controllerUser.TreatmentUser.ForgotPwd)
+routeur.get("/treatment/ban/user/:id", controllerUser.TreatmentUser.BanUser)
 
 // Pour que nos routes soient accessibles
 module.exports = routeur;

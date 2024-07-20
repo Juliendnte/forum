@@ -457,6 +457,24 @@ class TreatmentUser {
         }
     }
 
+    static async BanUser(req, res) {
+        const id = req.params.id;
+        const token = req.cookies.Token;
+        try {
+            await axios.get(`${url}/ban/${id}`, {
+                headers: {
+                    "Authorization": token,
+                    "Content-Type": "application/json"
+                }
+            });
+            res.redirect('/coder');
+        } catch (err) {
+            console.log(err)
+            errorHandler.handleRequestError(err);
+            res.redirect("/coder/err")
+        }
+    }
+
     static async resetPwd(req, res) {
         const password = req.body.password;
         const token = req.params.token

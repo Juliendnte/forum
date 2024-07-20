@@ -309,7 +309,7 @@
                         </div>
                         <div class="pop-up_post-ctn" id="pop-up_post-ctn">
                             <% if (dataUser && dataUser.utilisateur.Role === 'Admin') { %>
-                                <a href="/coder/post/<%= dataPost.post.Id %>/update">
+                                <a href="/coder/post/<%= item.Id %>/update">
                                     <button>
                                 <span class="pop-up_post-btn-span">
                                     <span>
@@ -325,7 +325,7 @@
                                 </span>
                                     </button>
                                 </a>
-                                <a href="/treatment/delete/post/<%= dataPost.post.Id %>">
+                                <a href="/treatment/delete/message/<%= item.Id %>">
                                     <button style="border-radius: 0px; border: none; color: red;">
                                 <span class="pop-up_post-btn-span">
                                     <span>

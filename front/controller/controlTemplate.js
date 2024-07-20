@@ -44,7 +44,7 @@ class ControlTemplate {
             });
         } catch (err) {
             errorHandler.handleRequestError(err);
-            res.redirect('/coder/error');
+            res.redirect('/coder/err');
         }
     };
 
@@ -89,12 +89,14 @@ class ControlTemplate {
             const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser ? dataUser.utilisateur.Id : undefined);
             let Name
             let IdUserLog
+            let RoleUserLog
             let PathUserLog
             let Own = true;
             if (dataUser) {
                 Name = dataUser.utilisateur.Name;
                 IdUserLog = dataUser.utilisateur.Id;
-                PathUserLog = dataUser.utilisateur.Path
+                PathUserLog = dataUser.utilisateur.Path;
+                RoleUserLog = dataUser.utilisateur.Role
             } else {
                 dataUser = await controlUser.TreatmentUser.GetUsers(req, res);
                 Own = false;
@@ -140,6 +142,7 @@ class ControlTemplate {
                 dataLike,
                 dataTopicOwn,
                 dataFav,
+                RoleUserLog,
                 query
             });
 
