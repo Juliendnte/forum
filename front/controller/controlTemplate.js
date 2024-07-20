@@ -60,7 +60,7 @@ class ControlTemplate {
     }
 
     /**
-     * Render the forgot password page
+     * Render the ForgotPwd password page
      * @param {Object} req - The request object.
      * @param {Object} res - The response object.
      */
@@ -71,6 +71,11 @@ class ControlTemplate {
         });
     }
 
+    /**
+     * Render the ResetPassword password page
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
     static async ResetPassword(req, res) {
         res.render('../views/pages/resetPassword', {
             token: req.query.token,
@@ -147,8 +152,13 @@ class ControlTemplate {
             });
 
         } catch (err) {
-            errorHandler.handleRequestError(err);
-            res.redirect("/coder/err")
+            const error = errorHandler.getError();
+            errorHandler.setError(
+                error.message || "L'utilisateur que vous cherchez est introuvable.",
+                error.status || 404
+            );
+            res.render("../views/pages/error", {error: errorHandler.getError()});
+            errorHandler.resetError();
         }
     }
 
@@ -174,6 +184,7 @@ class ControlTemplate {
      * @param {Object} res - The response object.
      */
     static async GetTopic(req, res) {
+        const error = errorHandler.getError();
         try {
             const topicName = req.params.name;
             let PathUserLog
@@ -212,8 +223,13 @@ class ControlTemplate {
                 query
             });
         } catch (err) {
-            errorHandler.handleRequestError(err);
-            res.redirect("/coder/err")
+            const error = errorHandler.getError();
+            errorHandler.setError(
+                error.message || "Nous n'avons pas trouvé le topic que vous cherchez",
+                error.status || 404
+            );
+            res.render("../views/pages/error", {error: errorHandler.getError()});
+            errorHandler.resetError();
         }
     }
 
@@ -262,8 +278,13 @@ class ControlTemplate {
                 query
             });
         } catch (err) {
-            errorHandler.handleRequestError(err);
-            res.redirect("/coder/err")
+            const error = errorHandler.getError();
+            errorHandler.setError(
+                error.message || "Nous n'avons pas trouvé la publication que vous cherchez",
+                error.status || 404
+            );
+            res.render("../views/pages/error", {error: errorHandler.getError()});
+            errorHandler.resetError();
         }
     }
 
@@ -309,8 +330,13 @@ class ControlTemplate {
                 query
             });
         } catch (err) {
-            errorHandler.handleRequestError(err);
-            res.redirect("/coder/err")
+            const error = errorHandler.getError();
+            errorHandler.setError(
+                error.message || "Nous n'avons pas trouvé le commentaire que vous cherchez",
+                error.status || 404
+            );
+            res.render("../views/pages/error", {error: errorHandler.getError()});
+            errorHandler.resetError();
         }
     }
 
@@ -478,18 +504,19 @@ class ControlTemplate {
                 return res.redirect('/coder/login');
             }
 
-            const id = req.params.id
+            const id = req.params.id;
 
             const dataMessage = await controlMessage.GetMessage(id);
 
             res.render('../views/pages/UpdateMessage', {
-                dataMessage
+                commentaire: dataMessage.commentaire[0]
             });
         } catch (err) {
             errorHandler.handleRequestError(err);
-            res.redirect("/coder/err")
+            res.redirect("/coder/err");
         }
     }
+
 
     /**
      * Render the search page

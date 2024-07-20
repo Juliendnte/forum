@@ -39,7 +39,7 @@ class TreatmentMessages {
             if (!token) {
                 return res.status(400).send("No token found");
             }
-            const response = await axios.get(`${url}/messagesMiddleware?m.Id_MessageAnswer=${req.params.id}`,{
+            const response = await axios.get(`${url}/messagesMiddleware?m.Id_MessageAnswer=${req.params.id}`, {
                 headers: {
                     "Authorization": token,
                     "Content-Type": "application/json"
@@ -76,19 +76,19 @@ class TreatmentMessages {
             const dataUpdate = req.body;
             const id = req.params.id;
 
-            await axios.patch(`${url}/message/${id}`, dataUpdate,
-                {
-                    headers: {
-                        "Authorization": token,
-                        "Content-Type": "application/json"
-                    },
-                })
+            await axios.patch(`${url}/message/${id}`, dataUpdate, {
+                headers: {
+                    "Authorization": token,
+                    "Content-Type": "application/json"
+                }
+            });
             res.redirect('/coder/m/' + id);
         } catch (err) {
             errorHandler.handleRequestError(err);
-            res.redirect("/coder/err")
+            res.redirect("/coder/err");
         }
     }
+
 
     /**
      * Creates a new message.
