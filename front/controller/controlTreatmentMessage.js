@@ -14,16 +14,11 @@ class TreatmentMessages {
     static async GetMessage(id) {
         try {
             const response = await axios.get(`${url}/message/${id}`)
+            return response.data;
 
-            if (response.status === 200) {
-                return response.data;
-            } else {
-                errorHandler.setError("Failed to fetch topic data", 401)
-                return undefined;
-            }
         } catch (err) {
             errorHandler.handleRequestError(err);
-            res.redirect("/coder/err")
+            return undefined;
         }
     }
 
@@ -45,13 +40,7 @@ class TreatmentMessages {
                     "Content-Type": "application/json"
                 },
             })
-
-            if (response.status === 200) {
-                return response.data;
-            } else {
-                errorHandler.setError("Failed to fetch topic data", 401)
-                return undefined;
-            }
+            return response.data;
         } catch (err) {
             return (await axios.get(`${url}/messages?m.Id_MessageAnswer=${req.params.id}`)).data
         }
@@ -144,7 +133,6 @@ class TreatmentMessages {
                 })
             res.redirect('back');
         } catch (err) {
-            console.log(err)
             errorHandler.handleRequestError(err);
             res.redirect("/coder/err")
         }

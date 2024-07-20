@@ -108,9 +108,16 @@ class TopicController {
      * @param {Object} res - The response object.
      * @returns {Object} - The response object, containing a specific topic.
      */
-    static getTopic(req, res) {
+    static async getTopic(req, res) {
         try {
-            const topicById = req.topic;
+            const topicById = await topic.getTopicByName(req.params.name);
+
+            if (!topicById){
+                return res.status(404).send({
+                    message: `Topic with name ${req.params.name} not found`,
+                    status: 404,
+                })
+            }
             topicById.User.Path = `${baseUrl}/assets/${topicById.User.Path}`;
             topicById.TopicPath = `${baseUrl}/assets/${topicById.TopicPath}`;
             topicById.Tag.forEach(tag => tag.Path = `${baseUrl}/assets${tag.Path}`);
@@ -125,17 +132,9 @@ class TopicController {
         }
     }
 
-    static async getTopicMiddleware(req, res) {
+    static getTopicMiddleware(req, res) {
         try {
-            const topicById = await topic.getTopicByNameMiddleware(req.params.name, req.user.Sub);
-
-            if (!topicById){
-                return res.status(404).send({
-                    message: `Topic with name ${req.params.name} not found`,
-                    status: 404,
-                })
-            }
-
+            const topicById = req.topic;
             topicById.User.Path = `${baseUrl}/assets/${topicById.User.Path}`;
             topicById.TopicPath = `${baseUrl}/assets/${topicById.TopicPath}`;
             topicById.Tag.forEach(tag => tag.Path = `${baseUrl}/assets${tag.Path}`);
@@ -202,20 +201,21 @@ class TopicController {
     static async patchTopic(req, res) {
         const id = req.user.Sub;
         const body = req.body;
-        while (typeof body.Tags == 'string'){
-            body.Tags = JSON.parse(body.Tags);
-        }
-
-        if (body.Title.includes(' ')) {
-            return res.status(400).send({message: "Le titre ne doit pas contenir d'espace.", status: 400});
-        }
-
-        let filePath;
-        if (req.file) {
-            filePath = req.file.path;
-            body.Path = filePath.replace('api\\assets', '');
-        }
         try {
+            while (typeof body.Tags == 'string'){
+                body.Tags = JSON.parse(body.Tags);
+            }
+
+            if (body.Title.includes(' ')) {
+                return res.status(400).send({message: "Le titre ne doit pas contenir d'espace.", status: 400});
+            }
+
+            let filePath;
+            if (req.file) {
+                filePath = req.file.path;
+                body.Path = filePath.replace('api\\assets', '');
+            }
+
             await topic.updatePatchTopic(id, body);
             if (req.file) {
                 return res.download(filePath);
@@ -246,7 +246,5 @@ class TopicController {
         }
     }
 }
-
-module.exports = TopicController;
 
 module.exports = TopicController

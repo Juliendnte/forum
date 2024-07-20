@@ -21,7 +21,7 @@ class TreatmentTopic {
 
         const {Title, Status, Content} = req.body;
         try {
-            const response = await axios.post(`${url}/topic`, {
+            await axios.post(`${url}/topic`, {
                     Title,
                     Status,
                     Content,
@@ -32,11 +32,7 @@ class TreatmentTopic {
                         "Content-Type": "application/json"
                     }
                 });
-            if (response.status === 201) {
-                res.redirect(`/coder/t/${Title}`);
-            } else {
-                res.status(response.status).send(response.data);
-            }
+            res.redirect(`/coder/t/${Title}`);
         } catch (err) {
             errorHandler.handleRequestError(err);
             res.redirect("/coder/err")
@@ -45,11 +41,17 @@ class TreatmentTopic {
 
     /**
      * Handle getting a topic.
+     * @param req The request object
      * @param name Name of the topic
      */
-    static async GetTopic(name) {
+    static async GetTopic(req, name) {
         try {
-            const response = await axios.get(`${url}/topicMiddleware/${name}`)
+            const response = await axios.get(`${url}/topicMiddleware/${name}`, {
+                headers: {
+                    "Authorization": req.cookies.Token,
+                    "Content-Type": "application/json"
+                }
+            })
             return response.data;
         } catch (err) {
             return (await axios.get(`${url}/topic/${name}`)).data
@@ -133,16 +135,21 @@ class TreatmentTopic {
     static async SearchTags(tag) {
         try {
             const response = await axios.get(`${url}/topics?tags=${tag}`);
-
             return response.data;
         } catch (err) {
             errorHandler.setError('Erreur lors de la recherche', 500)
+            return undefined;
         }
     }
 
-    static async GetTopicOwn(idUser) {
+    static async GetTopicOwn(req, idUser) {
         try {
-            const response = await axios.get(`${url}/topics?Id_User=${idUser}`)
+            const response = await axios.get(`${url}/topicsMiddleware?Id_User=${idUser}`, {
+                headers: {
+                    "Authorization": req.cookies.Token,
+                    "Content-Type": "application/json"
+                }
+            })
             return response.data
         } catch(err) {
             errorHandler.setError('Erreur lors de la recherche', 500)

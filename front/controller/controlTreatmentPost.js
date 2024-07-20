@@ -52,13 +52,7 @@ class TreatmentPosts {
                     "Content-Type": "application/json"
                 }
             });
-
-            if (response.status === 200) {
-                return response.data;
-            } else {
-                errorHandler.setError("Failed to fetch topic data", 401)
-                return undefined;
-            }
+            return response.data;
         } catch (err) {
             return (await axios.get(`${url}/posts`)).data
         }
@@ -72,7 +66,6 @@ class TreatmentPosts {
         try {
             const response = await axios.get(`${url}/postMiddleware/${id}`)
             return response.data;
-
         } catch (err) {
             return (await axios.get(`${url}/post/${id}`)).data
         }
@@ -145,14 +138,8 @@ class TreatmentPosts {
                     "Content-Type": "application/json"
                 }
             });
-
-            if (response.status === 201) {
-                res.redirect(`back`);
-                return response.data;
-            } else {
-                errorHandler.setError("Failed to fetch topic data", 401)
-                return undefined;
-            }
+             res.redirect(`back`);
+             return response.data;
         } catch (err) {
             errorHandler.handleRequestError(err);
             res.redirect("/coder/err")
@@ -182,14 +169,9 @@ class TreatmentPosts {
                     "Content-Type": "application/json"
                 }
             });
+            res.redirect(`back`);
+            return response.data;
 
-            if (response.status === 201) {
-                res.redirect(`back`);
-                return response.data;
-            } else {
-                errorHandler.setError("Failed to fetch topic data", 401)
-                return undefined;
-            }
         } catch (err) {
             errorHandler.handleRequestError(err);
             res.redirect("/coder/err")
@@ -222,7 +204,6 @@ class TreatmentPosts {
 
             res.redirect(`back`);
         } catch (err) {
-            console.log(err)
             errorHandler.handleRequestError(err);
             res.redirect("/coder/err")
         }
@@ -230,5 +211,4 @@ class TreatmentPosts {
 
 }
 
-module
-    .exports = TreatmentPosts;
+module.exports = TreatmentPosts;

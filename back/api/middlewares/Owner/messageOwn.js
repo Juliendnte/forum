@@ -9,8 +9,6 @@ const messageOwn = async (req, res, next) => {
 
 const everyRight = async (req, res, next) => {
     const user = req.user;
-console.log(user)
-    console.log(req.message.User)
     if (req.message[0].User.Id  !== user.Sub && !user.IsAdmin && !user.IsModo){
         return res.status(403).send("Forbidden");
     }

@@ -12,21 +12,21 @@ class messageController {
      */
     static async getMessages(req, res) {
     try {
-            const messages = await message.getAllMessage(req.query);
-            messages.forEach((message) => message.User.Path = `${baseUrl}/assets/${message.User.Path}`);
+        const messages = await message.getAllMessage(req.query);
+        messages.forEach((message) => message.User.Path = `${baseUrl}/assets/${message.User.Path}`);
 
-            if (!messages) {
-                return res.status(404).send({
-                    message: `messages not found`,
-                    status: 404
-                });
-            }
-
-            return res.status(200).send({
-                message: `messages successfully found`,
-                status: 200,
-                items: messages
+        if (!messages) {
+            return res.status(404).send({
+                message: `messages not found`,
+                status: 404
             });
+        }
+
+        return res.status(200).send({
+            message: `messages successfully found`,
+            status: 200,
+            items: messages
+        });
 
         } catch (err) {
             res.status(500).send({
@@ -69,22 +69,21 @@ class messageController {
      */
     static async getMessagesMiddleware(req, res) {
     try {
-            const messages = await message.getAllMessageMiddleware(req.query, req.user.Sub);
-            messages.forEach((message) => message.User.Path = `${baseUrl}/assets/${message.User.Path}`);
+        const messages = await message.getAllMessageMiddleware(req.query, req.user.Sub);
+        messages.forEach((message) => message.User.Path = `${baseUrl}/assets/${message.User.Path}`);
 
-            if (!messages) {
-                return res.status(404).send({
-                    message: `messages not found`,
-                    status: 404
-                });
-            }
-
-            return res.status(200).send({
-                message: `messages successfully found`,
-                status: 200,
-                items: messages
+        if (!messages) {
+            return res.status(404).send({
+                message: `messages not found`,
+                status: 404
             });
+        }
 
+        return res.status(200).send({
+            message: `messages successfully found`,
+            status: 200,
+            items: messages
+        });
         } catch (err) {
             res.status(500).send({
                 message: err,
@@ -101,9 +100,8 @@ class messageController {
      * @returns {Object} - The response object, containing the retrieved message.
      */
     static async getMessageMidlleware(req, res) {
-        const messageById = await message.getMessageByIdMiddleware(req.params.id, req.user.Sub);
-
         try {
+            const messageById = await message.getMessageByIdMiddleware(req.params.id, req.user.Sub);
             messageById.forEach((message) => message.User.Path = `${baseUrl}/assets/${message.User.Path}`);
 
             return res.status(200).send({

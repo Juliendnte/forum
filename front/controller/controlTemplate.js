@@ -22,7 +22,7 @@ class ControlTemplate {
                 controlTopic.GetTags(),
                 controlUser.TreatmentUser.GetFavorite(req, res)
             ]);
-            const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser ? dataUser.utilisateur.Id : undefined);
+            const dataTopicOwn = await controlTopic.GetTopicOwn(req, dataUser ? dataUser.utilisateur.Id : undefined);
             let query
 
             const token = req.cookies.Token;
@@ -65,9 +65,8 @@ class ControlTemplate {
      * @param {Object} res - The response object.
      */
     static async ForgotPwd(req, res) {
-        let send
         res.render('../views/pages/forgotpwd', {
-            send
+            send: null
         });
     }
 
@@ -91,7 +90,7 @@ class ControlTemplate {
         try {
             let dataUser = await controlUser.TreatmentUser.GetUser(req, res);
             const dataTags = await controlTopic.GetTags(req, res);
-            const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser ? dataUser.utilisateur.Id : undefined);
+            const dataTopicOwn = await controlTopic.GetTopicOwn(req, dataUser ? dataUser.utilisateur.Id : undefined);
             let Name
             let IdUserLog
             let RoleUserLog
@@ -129,10 +128,8 @@ class ControlTemplate {
                 }
             });
 
-            const dataLike = await controlUser.TreatmentUser.GetLiked(req, res);
-
+            const dataLike = await controlUser.TreatmentUser.GetLiked(req);
             const dataFav = await controlUser.TreatmentUser.GetFavorite(req, res);
-
             let query
 
             res.render('../views/pages/profiluser', {
@@ -170,7 +167,6 @@ class ControlTemplate {
     static async CreateTopic(req, res) {
         try {
             const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
-
             res.render('../views/pages/createTopic', {dataUser});
         } catch (err) {
             errorHandler.handleRequestError(err);
@@ -184,13 +180,12 @@ class ControlTemplate {
      * @param {Object} res - The response object.
      */
     static async GetTopic(req, res) {
-        const error = errorHandler.getError();
         try {
             const topicName = req.params.name;
             let PathUserLog
             const [dataUser, dataTopic, dataAdmin, dataTags, dataFav] = await Promise.all([
                 controlUser.TreatmentUser.GetUser(req, res),
-                controlTopic.GetTopic(topicName),
+                controlTopic.GetTopic(req, topicName),
                 controlUser.TreatmentUser.GetAdmin(),
                 controlTopic.GetTags(req, res),
                 controlUser.TreatmentUser.GetFavorite(req, res)
@@ -205,9 +200,8 @@ class ControlTemplate {
                 dataTopic.topic.Create_at_formatted = date.toLocaleDateString('fr-FR', options);
             }
 
-            const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser ? dataUser.utilisateur.Id : undefined);
-
-            const dataLike = await controlUser.TreatmentUser.GetLiked(req, res);
+            const dataTopicOwn = await controlTopic.GetTopicOwn(req, dataUser ? dataUser.utilisateur.Id : undefined);
+            const dataLike = await controlUser.TreatmentUser.GetLiked(req);
 
             let query
 
@@ -247,10 +241,10 @@ class ControlTemplate {
                 controlTopic.GetTags(req, res),
                 controlPost.GetMessagesPost(req, res),
                 controlPost.GetPost(postId),
-                controlUser.TreatmentUser.GetLiked(req, res)
+                controlUser.TreatmentUser.GetLiked(req)
             ]);
 
-            const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser ? dataUser.utilisateur.Id : undefined);
+            const dataTopicOwn = await controlTopic.GetTopicOwn(req,dataUser ? dataUser.utilisateur.Id : undefined);
 
             if (dataUser && dataUser.utilisateur) {
                 PathUserLog = dataUser.utilisateur.Path
@@ -303,7 +297,7 @@ class ControlTemplate {
             const dataMessage = await controlMessage.GetMessage(id)
             const dataMessages = await controlMessage.GetMessagestoMessage(req, res)
             const dataTags = await controlTopic.GetTags(req, res);
-            const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser ? dataUser.utilisateur.Id : undefined);
+            const dataTopicOwn = await controlTopic.GetTopicOwn(req, dataUser ? dataUser.utilisateur.Id : undefined);
 
             let query
 
@@ -350,7 +344,7 @@ class ControlTemplate {
             const dataUser = await controlUser.TreatmentUser.GetUser(req, res);
 
             const topicName = req.params.nametopic;
-            const dataTopic = await controlTopic.GetTopic(topicName);
+            const dataTopic = await controlTopic.GetTopic(req, topicName);
 
             res.render('../views/pages/createPost', {
                 dataUser,
@@ -452,7 +446,7 @@ class ControlTemplate {
 
             const name = req.params.name
 
-            const dataTopic = await controlTopic.GetTopic(name);
+            const dataTopic = await controlTopic.GetTopic(req, name);
             const dataTags = await controlUser.TreatmentUser.GetTags();
 
             res.render('../views/pages/UpdateTopic', {
@@ -479,7 +473,6 @@ class ControlTemplate {
             }
 
             const id = req.params.id
-
             const dataPost = await controlPost.GetPost(id);
 
             res.render('../views/pages/UpdatePost', {
@@ -505,7 +498,6 @@ class ControlTemplate {
             }
 
             const id = req.params.id;
-
             const dataMessage = await controlMessage.GetMessage(id);
 
             res.render('../views/pages/UpdateMessage', {
@@ -529,12 +521,12 @@ class ControlTemplate {
 
             const [dataUser, dataLike, dataTags, dataSearch] = await Promise.all([
                 controlUser.TreatmentUser.GetUser(req, res),
-                controlUser.TreatmentUser.GetLiked(req, res),
+                controlUser.TreatmentUser.GetLiked(req),
                 controlTopic.GetTags(req, res),
                 controlTopic.Search(query)
             ]);
 
-            const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser ? dataUser.utilisateur.Id : undefined);
+            const dataTopicOwn = await controlTopic.GetTopicOwn(req, dataUser ? dataUser.utilisateur.Id : undefined);
 
             const token = req.cookies.Token;
             let PathUserLog = null;
@@ -574,12 +566,12 @@ class ControlTemplate {
 
             const [dataUser, dataLike, dataTags, dataSearch] = await Promise.all([
                 controlUser.TreatmentUser.GetUser(req, res),
-                controlUser.TreatmentUser.GetLiked(req, res),
+                controlUser.TreatmentUser.GetLiked(req),
                 controlTopic.GetTags(req, res),
                 controlTopic.SearchTags(tag)
             ]);
 
-            const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser ? dataUser.utilisateur.Id : undefined);
+            const dataTopicOwn = await controlTopic.GetTopicOwn(req, dataUser ? dataUser.utilisateur.Id : undefined);
 
             const token = req.cookies.Token;
             let PathUserLog = null;
@@ -653,12 +645,12 @@ class ControlTemplate {
             const [dataUser, dataPost, dataLike, dataTags, dataFav] = await Promise.all([
                 controlUser.TreatmentUser.GetUser(req, res),
                 controlPost.GetPosts(req, res),
-                controlUser.TreatmentUser.GetLiked(req, res),
+                controlUser.TreatmentUser.GetLiked(req),
                 controlTopic.GetTags(),
                 controlUser.TreatmentUser.GetFavorite(req, res)
             ]);
 
-            const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser ? dataUser.utilisateur.Id : undefined);
+            const dataTopicOwn = await controlTopic.GetTopicOwn(req, dataUser ? dataUser.utilisateur.Id : undefined);
 
             let query
 
@@ -695,12 +687,12 @@ class ControlTemplate {
             const [dataUser, dataPost, dataLike, dataTags, dataFav] = await Promise.all([
                 controlUser.TreatmentUser.GetUser(req, res),
                 controlPost.GetPosts(req, res),
-                controlUser.TreatmentUser.GetLiked(req, res),
+                controlUser.TreatmentUser.GetLiked(req),
                 controlTopic.GetTags(),
                 controlUser.TreatmentUser.GetFavorite(req, res)
             ]);
 
-            const dataTopicOwn = await controlTopic.GetTopicOwn(dataUser ? dataUser.utilisateur.Id : undefined);
+            const dataTopicOwn = await controlTopic.GetTopicOwn(req, dataUser ? dataUser.utilisateur.Id : undefined)
 
             let query
 
@@ -727,6 +719,11 @@ class ControlTemplate {
         }
     }
 
+    /**
+     * Render the valid password page.
+     * @param req - The request object.
+     * @param res - The response object.
+     */
     static async ValidPassword(req, res) {
         res.render('../views/pages/validPassword')
     }

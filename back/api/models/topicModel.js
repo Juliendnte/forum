@@ -183,7 +183,7 @@ class topicModel {
                 };
                 if (results[0].PostId) {
                     results.forEach(row => {
-                        if (!(user.Tag.some(tag => tag.Id === row.TagId))) {
+                        if ( row.TagId && !(user.Tag.some(tag => tag.Id === row.TagId))) {
                             user.Tag.push({
                                 Id: row.TagId,
                                 Label: row.TagLabel,

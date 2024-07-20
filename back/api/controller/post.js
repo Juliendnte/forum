@@ -119,8 +119,8 @@ class PostController {
     }
 
     static async getPostMiddleware(req, res) {
-        const postById = await post.getpostByIdWithMiddleware(req.params.id, req.user.Sub);
         try {
+            const postById = await post.getpostByIdWithMiddleware(req.params.id, req.user.Sub);
             postById.User.Path = `${baseUrl}/assets/${postById.User.Path}`;
 
             return res.status(200).send({

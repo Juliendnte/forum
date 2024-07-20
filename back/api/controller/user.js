@@ -173,10 +173,9 @@ class UserController {
 
     static async ForgotPassword(req, res) {
         const {email} = req.body;
-        console.log(req.body)
         try {
             const utilisateur = await user.getUserByEmail(email);
-            console.log(email)
+
             if (!utilisateur) {
                 return res.status(400).send({
                     message: 'No user with that email',
@@ -466,14 +465,14 @@ class UserController {
                 status: 404
             })
         }
-        const fav = await user.getFavIdTopic(idUser, idTopic)
-        if (fav.length !== 0) {
-            return res.status(400).send({
-                message: 'Fav already exist',
-                status: 400
-            })
-        }
         try {
+            const fav = await user.getFavIdTopic(idUser, idTopic)
+            if (fav.length !== 0) {
+                return res.status(400).send({
+                    message: 'Fav already exist',
+                    status: 400
+                })
+            }
             await user.postFavTopic(idUser, idTopic)
 
             res.status(200).send({
@@ -533,7 +532,6 @@ class UserController {
                 status: 400
             })
         }
-
         try {
             const fav = await user.postFavPost(idUser, idPost)
             if (fav.length === 0) {

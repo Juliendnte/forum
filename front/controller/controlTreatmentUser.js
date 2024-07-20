@@ -42,29 +42,24 @@ class TreatmentUser {
                 email,
                 remember,
             });
-            if (response.status === 200) {
-                const {Token} = response.data;
+            const {Token} = response.data;
 
-                if (Token) {
-                    res.cookie("Token", Token, {
-                        maxAge: remember ? 365 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000,
-                        httpOnly: true,
-                        secure: false, // Change to true if using HTTPS
-                        sameSite: "Lax",
-                    });
-                    const userResponse = await axios.get(`${url}/user`, {
-                        headers: {
-                            "Authorization": Token,
-                            "Content-Type": "application/json"
-                        }
-                    });
-                    // Assuming you do something with the userResponse
-                } else {
-                    errorHandler.setError("Login failed: No Token received", 401);
-                    TreatmentUser.error = errorHandler.getError();
-                }
+            if (Token) {
+                res.cookie("Token", Token, {
+                    maxAge: remember ? 365 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000,
+                    httpOnly: true,
+                    secure: false, // Change to true if using HTTPS
+                    sameSite: "Lax",
+                });
+                await axios.get(`${url}/user`, {
+                    headers: {
+                        "Authorization": Token,
+                        "Content-Type": "application/json"
+                    }
+                });
+                // Assuming you do something with the userResponse
             } else {
-                errorHandler.setError(response.data.message, response.data.status);
+                errorHandler.setError("Login failed: No Token received", 401);
                 TreatmentUser.error = errorHandler.getError();
             }
         } catch (err) {
@@ -84,18 +79,14 @@ class TreatmentUser {
         const {username, password, email} = req.body;
 
         try {
-            const response = await axios.post(`${url}/register`, {
+            await axios.post(`${url}/register`, {
                 username,
                 password,
                 email,
             });
-            if (response.data.status === 201) {
-                return res.redirect("/coder/login");
-            }
         } catch (err) {
             errorHandler.handleRequestError(err);
             TreatmentUser.error = errorHandler.getError();
-            return res.redirect("/coder/login");
         }
         res.redirect("/coder/login");
     }
@@ -201,7 +192,6 @@ class TreatmentUser {
         try {
             const response = await axios.get(`${url}/admin/`);
             return response.data.admin; // Return the array of admin and moderators
-
         } catch (err) {
             errorHandler.handleRequestError(err);
             return [];
@@ -214,12 +204,7 @@ class TreatmentUser {
     static async GetTags(res) {
         try {
             const response = await axios.get(`${url}/tags`);
-
-            if (response.status === 200) {
-                return response.data;
-            } else {
-                errorHandler.setError("Failed to fetch user data", 401)
-            }
+            return response.data;
         } catch (err) {
             errorHandler.handleRequestError(err);
             res.redirect("/coder/err")
@@ -478,7 +463,7 @@ class TreatmentUser {
     static async resetPwd(req, res) {
         const password = req.body.password;
         const token = req.params.token
-        console.log(req.query)
+
         try {
             await axios.post(`${url}/resetPassword`, {
                     password
@@ -491,7 +476,6 @@ class TreatmentUser {
                 })
             res.render(`../views/pages/validPassword`);
         } catch (err) {
-            console.log(err)
             errorHandler.handleRequestError(err);
             res.redirect("/coder/err");
         }
