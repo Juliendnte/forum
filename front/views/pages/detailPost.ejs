@@ -153,7 +153,7 @@
                 <div class="pop-up_post-ctn" id="pop-up_post-ctn">
                     <% if (dataUser) { %>
                         <%
-                            const isFavorite = dataFav ? dataFav.fav.some(favorite => favorite.Type === "Post" && favorite.Id === item.Post.Id) : false;
+                            const isFavorite = dataFav ? dataFav.fav.some(favorite => favorite.Type === "Post" && favorite.Id === dataPost.post.Id) : false;
                         %>
                         <% if (isFavorite) { %>
                             <a href="/treatment/post/remove/<%= dataPost.post.Id %>/favorite">
