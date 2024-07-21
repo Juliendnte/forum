@@ -1,51 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <title>CODER</title>
     <%- include('../components/head'); %>
-</head>
+    <style>
+        /* Add necessary styles here */
+    </style>
+    <script>
+        const url = "http://localhost:4000";
 
-<% function timeAgo(date) {
-    const now = new Date();
-    const past = new Date(date);
-    const seconds = Math.floor((now - past) / 1000);
+        document.addEventListener('click', function(event) {
+            const suggestions = document.getElementById('suggestions');
+            const searchInput = document.getElementById('search-input');
+            if (!suggestions.contains(event.target) && event.target !== searchInput) {
+                clearSuggestions();
+            }
+        });
 
-    const intervals = {
-        annee: 31536000,
-        mois: 2592000,
-        semaine: 604800,
-        jour: 86400,
-        heure: 3600,
-        minute: 60,
-        seconde: 1
-    };
-
-    for (const key in intervals) {
-        const interval = intervals[key];
-        if (seconds >= interval) {
-            const count = Math.floor(seconds / interval);
-            switch (key) {
-                case 'annee':
-                    return `il y a ${count} an${count > 1 ? 's' : ''}`;
-                case 'mois':
-                    return `il y a ${count} mois`;
-                case 'semaine':
-                    return `il y a ${count} semaine${count > 1 ? 's' : ''}`;
-                case 'jour':
-                    return `il y a ${count} jour${count > 1 ? 's' : ''}`;
-                case 'heure':
-                    return `il y a ${count} heure${count > 1 ? 's' : ''}`;
-                case 'minute':
-                    return `il y a ${count} minute${count > 1 ? 's' : ''}`;
-                case 'seconde':
-                    return `il y a ${count} seconde${count > 1 ? 's' : ''}`;
+        async function handleInput(event) {
+            const query = event.target.value;
+            if (query.length > 0) {
+                try {
+                    const response = await fetch(`${url}/search?search=${query}`);
+                    const data = await response.json();
+                    displaySuggestions(data.search);
+                } catch (err) {
+                    clearSuggestions();
+                }
+            } else {
+                clearSuggestions();
             }
         }
-    }
-    return 'à l\'instant';
-} %>
 
+        function displaySuggestions(results) {
+            const suggestions = document.getElementById('suggestions');
+            suggestions.innerHTML = '';
+
+            let topicsAdded = false;
+            let usersAdded = false;
+
+            const limitedTopics = results.filter(result => result.Type === 'topic').slice(0, 5);
+            const users = results.filter(result => result.Type === 'user').slice(0, 1);
+
+            limitedTopics.forEach(topic => {
+                if (!topicsAdded) {
+                    const header = document.createElement('div');
+                    header.className = 'suggestion-header';
+                    header.textContent = 'Topics';
+                    suggestions.appendChild(header);
+                    topicsAdded = true;
+                }
+                const item = document.createElement('div');
+                item.className = 'suggestion-item';
+                item.innerHTML = `<a href="/coder/t/${topic.Title}"><img src="${topic.Path}" alt="${topic.Title}"> <span>${topic.Title}</span></a>`;
+                suggestions.appendChild(item);
+            });
+
+            users.forEach(user => {
+                if (!usersAdded) {
+                    const header = document.createElement('div');
+                    header.className = 'suggestion-header';
+                    header.textContent = 'Personnes';
+                    suggestions.appendChild(header);
+                    usersAdded = true;
+                }
+                const item = document.createElement('div');
+                item.className = 'suggestion-item';
+                item.innerHTML = `<a href="/coder/user/${user.Title}"><img src="${user.Path}" alt="${user.Title}"> <span>${user.Title}</span></a>`;
+                suggestions.appendChild(item);
+            });
+
+            suggestions.classList.add('active');
+        }
+
+        function clearSuggestions() {
+            const suggestions = document.getElementById('suggestions');
+            suggestions.innerHTML = '';
+            suggestions.classList.remove('active');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const categoryButtons = document.querySelectorAll('.header-btn-search-categorie-global span');
+            const sections = document.querySelectorAll('#search-results section');
+
+            filterResults('topic');
+
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    filterResults(this.getAttribute('data-type'));
+                });
+            });
+
+            function filterResults(type) {
+                sections.forEach(section => {
+                    if (section.getAttribute('data-type') === type || type === 'global') {
+                        section.style.display = 'block';
+                        section.style.display = 'flex';
+                        section.style.justifyContent = 'center';
+                        section.style.alignItems = 'center';
+                    } else {
+                        section.style.display = 'none';
+                    }
+                });
+
+                categoryButtons.forEach(button =>
+                    button.getAttribute('data-type') === type ? button.classList.add('active-search') : button.classList.remove('active-search')
+                );
+            }
+        });
+    </script>
+</head>
 <body>
 <%- include('../components/header', {PathUserLog: PathUserLog}); %>
 <section class="section-global">
