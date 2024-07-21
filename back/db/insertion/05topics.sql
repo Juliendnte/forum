@@ -9,15 +9,4 @@ VALUES
     ('singlePageApplications', 'Développement de Single Page Applications avec différents frameworks', 1, 4),
     ('progressiveWebApps', 'Création de Progressive Web Apps pour améliorer l\'expérience utilisateur', 1, 5),
     ('serverSideRendering', 'Avantages et techniques de rendu côté serveur', 1, 7),
-    ('lazyLoading', 'Optimisation du chargement des ressources avec le lazy loading', 1, 3),
-    ('webSockets', 'Utilisation des WebSockets pour des communications en temps réel', 1, 5),
-    ('contentManagement', 'Systèmes de gestion de contenu (CMS) et leur utilisation', 1, 4),
-    ('searchEngineOptimization', 'Techniques pour optimiser le référencement de vos sites web', 1, 1),
-    ('webAccessibility', 'Garantir l\'accessibilité web pour tous les utilisateurs', 1, 5),
-    ('crossBrowserCompatibility', 'Assurer la compatibilité entre différents navigateurs', 1, 3),
-    ('performanceOptimization', 'Optimisation des performances web pour un chargement rapide', 1, 3),
-    ('microservices', 'Développement et gestion d\'architectures de microservices', 1, 6),
-    ('unitTesting', 'Importance et techniques des tests unitaires en développement', 1, 1),
-    ('endToEndTesting', 'Tests de bout en bout pour assurer la qualité des applications', 1, 7),
-    ('databaseDesign', 'Conception et optimisation des bases de données pour les applications web', 1, 2),
-    ('versionControl', 'Utilisation de systèmes de contrôle de version pour gérer le code source', 1, 6);
+    ('lazyLoading', 'Optimisation du chargement des ressources avec le lazy loading', 1, 3);
